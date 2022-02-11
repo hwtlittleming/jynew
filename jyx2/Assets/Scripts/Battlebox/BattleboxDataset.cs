@@ -56,6 +56,7 @@ namespace Jyx2
 
         private BattleboxDataset() { }
 
+        //战斗格子数据
         public BattleboxDataset(string scene, string name, float length, float width, float minx, float miny)
         {
             SceneName = scene;

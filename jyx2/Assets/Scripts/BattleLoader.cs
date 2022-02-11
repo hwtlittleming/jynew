@@ -92,8 +92,9 @@ public class BattleLoader : MonoBehaviour
     //}
     
     async UniTask LoadJyx2Battle(int id, Action<BattleResult> callback)
-    {   //todo 得改成预先配置的参战角色，免得每次战斗都要选麻烦
+    {   //todo 得改成预先配置的参战角色，免得每次战斗都要选麻烦 
         Debug.Log("-----------BattleLoader.LoadJyx2Battle");
+        //单例的从存档读取的GameRuntimeData
         if (GameRuntimeData.Instance == null)
         {
             GameRuntimeData.CreateNew();
@@ -210,8 +211,9 @@ public class BattleLoader : MonoBehaviour
     //初始化战斗
     async UniTask InitBattle(Action<BattleResult> callback, Jyx2ConfigBattle battleData)
     {
-        //上中下三排5*3半透明格子，宠物中(最多三个，三种站位),在第一排才能普攻，普攻是锁定到人的，魔法可以躲，人物在中下，可控制移动到邻近一格，消耗行动力，行动力用完，行动按钮组置灰，行动力决定于一口气的长度 
+        //todo 上中下三排5*3半透明格子，宠物中(最多三个，三种站位),在第一排才能普攻，普攻是锁定到人的，魔法可以躲，人物在中下，可控制移动到邻近一格，消耗行动力，行动力用完，行动按钮组置灰，行动力决定于一口气的长度 
         //攻击先点击选择攻击格子，再按普攻和魔法，则会以选中点为中心实时攻击，魔法会有延迟；未因什么而阻断时怪物和帮手都是按行动力即时开始攻击
+        //被打对象无受击动画，额外施加受击掉血效果
         // 1.画战场 2.加载战斗单位 3.加载战斗UI 4.战斗进行 5.战斗结束，根据结果增改数据
         // todo 在战斗场景中预设 4*5每个格子一个节点位置，若是随机遇怪或是固定战斗，都从battleData读取战斗信息，生成怪物，分配位置；
         Debug.Log("-----------BattleLoader.InitBattle");
