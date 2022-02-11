@@ -1,0 +1,306 @@
+/*
+ * 金庸群侠传3D重制版
+ * https://github.com/jynew/jynew
+ *
+ * 这是本开源项目文件头，所有代码均使用MIT协议。
+ * 但游戏内资源和第三方插件、dll等请仔细阅读LICENSE相关授权协议文档。
+ *
+ * 金庸老先生千古！
+ */
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using Cysharp.Threading.Tasks;
+using i18n.TranslatorDef;
+using Jyx2;
+
+using Jyx2;
+using Jyx2Configs;
+using Sirenix.OdinInspector;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
+/// <summary>
+/// 战斗启动器
+/// </summary>
+public class MyBattleLoader : MonoBehaviour
+{
+    [LabelText("载入战斗ID")] public int m_BattleId = 0;
+
+
+    [HideInInspector] public Action<BattleResult> Callback;
+
+
+    public bool IsTestCase = false;
+
+    public struct BattlePosRole
+    {
+        public string pos;
+
+        public int team;
+
+        public int roleKey;
+    }
+
+    public List<BattlePosRole> m_Roles;
+
+    void CycleLoadBattle()
+    {
+        LevelLoader.LoadBattle(m_BattleId, (ret) => { CycleLoadBattle(); });
+    }
+
+    // Start is called before the first frame update
+    async void Start()
+    {
+        await BeforeSceneLoad.loadFinishTask;
+
+        if (IsTestCase)
+        {
+            await LoadJyx2Battle(m_BattleId, (ret) => { CycleLoadBattle(); });
+        }
+        else
+        {
+            await LoadJyx2Battle(m_BattleId, Callback);
+        }
+    }
+
+
+    GameRuntimeData runtime
+    {
+        get { return GameRuntimeData.Instance; }
+    }
+
+    //void OnTest()
+    //{
+    //    m_Roles = new List<BattlePosRole>();
+    //    m_Roles.Add(new BattlePosRole() { pos = "1", team = 0, roleKey = "0" });
+    //    m_Roles.Add(new BattlePosRole() { pos = "2", team = 1, roleKey = "1" });
+    //    m_Roles.Add(new BattlePosRole() { pos = "1", team = 1, roleKey = "3" });
+    //    m_Roles.Add(new BattlePosRole() { pos = "1", team = 1, roleKey = "4" });
+    //    m_Roles.Add(new BattlePosRole() { pos = "2", team = 0, roleKey = "5" });
+    //    m_Roles.Add(new BattlePosRole() { pos = "2", team = 0, roleKey = "51" });
+
+    //    GameRuntimeData.CreateNew();  //选一个没有用过的id
+    //    MapRuntimeData.Instance.Clear();
+
+
+    //    //测试等级
+    //    runtime.TeamLevel = 10;
+
+    //    InitBattle(null);
+    //}
+    
+    async UniTask LoadJyx2Battle(int id, Action<BattleResult> callback)
+    {   //todo 得改成预先配置的参战角色，免得每次战斗都要选麻烦 
+        Debug.Log("-----------BattleLoader.LoadJyx2Battle");
+        //单例的从存档读取的GameRuntimeData
+        if (GameRuntimeData.Instance == null)
+        {
+            GameRuntimeData.CreateNew();
+        }
+
+        m_Roles = new List<BattlePosRole>();
+        //todo 战场仅几种通用类型，特殊再设计，模糊化当前场景，再实化战斗要素
+        Jyx2ConfigBattle battle = Jyx2ConfigBattle.Get(id);
+        if (battle == null)
+        {
+            Debug.LogError("载入了未定义的战斗，id=" + id);
+            return;
+        }
+        
+        AudioManager.PlayMusic(battle.Music);
+
+        //设置了自动战斗人物
+        if (battle.AutoTeamMates.Count > 0)
+        {
+            foreach (var v in battle.AutoTeamMates)
+            {
+                var roleId = v.Id;
+                if (roleId == -1) continue;
+                AddRole(roleId, 0); //TODO IS AUTO
+                for (var i = 0; i < m_Roles.Count; i++)
+                {
+                    if (m_Roles[i].roleKey == roleId)
+                    {
+                        RoleInstance roleInstance = runtime.GetRoleInTeam(roleId);
+                        if (roleInstance!=null && roleInstance.Hp <= 0) roleInstance.Hp = 1;
+                    }
+                }
+            }
+
+            await LoadJyx2BattleStep2(battle, null, callback);
+        }
+        else //否则让玩家选择
+        {
+            //必选人物
+            bool MustRoleFunc(RoleInstance r)
+            {
+                return battle.TeamMates.Exists(t => t.Id == r.Key);
+            }
+
+            SelectRoleParams selectPram = new SelectRoleParams();
+            selectPram.roleList = runtime.GetTeam().ToList();
+            selectPram.mustSelect = MustRoleFunc;
+            //---------------------------------------------------------------------------
+            //selectPram.title = "选择上场角色";
+            //---------------------------------------------------------------------------
+            //特定位置的翻译【战斗中选择上场角色的文字显示】
+            //---------------------------------------------------------------------------
+            selectPram.title = "选择上场角色".GetContent(nameof(BattleLoader));
+            //---------------------------------------------------------------------------
+            //---------------------------------------------------------------------------
+            selectPram.maxCount = GameConst.MAX_BATTLE_TEAMMATE_COUNT; //TODO 最大上场人数
+            selectPram.canCancel = false;
+
+            //弹出选择人物面板
+            await Jyx2_UIManager.Instance.ShowUIAsync(nameof(SelectRolePanel), selectPram);
+            var rst = await SelectRolePanel.Open(selectPram);
+            await LoadJyx2BattleStep2(battle, rst, callback);
+        }
+    }
+
+    UniTask LoadJyx2BattleStep2(Jyx2ConfigBattle battle, List<RoleInstance> selectRoles, Action<BattleResult> callback)
+    {
+        if (selectRoles != null)
+        {
+            foreach (var role in selectRoles)
+            {
+                AddRole(role.GetJyx2RoleId(), 0);
+            }
+        }
+
+        //预配置队友
+        foreach (var v in battle.TeamMates)
+        {
+            AddRole(v.Id, 0);
+        }
+
+        foreach (var v in battle.Enemies)
+        {
+            AddRole(v.Id, 1);
+        }
+
+        return InitBattle(callback, battle);
+    }
+
+    //用于存储各个队伍已经放置的角色编号
+    private Dictionary<int, int> teamRoleIndex = new Dictionary<int, int>();
+
+    void AddRole(int id, int team)
+    {
+        if (id == -1)
+            return;
+
+        //已经添加过了
+        if (m_Roles.Exists(r => r.roleKey == id && r.team == team))
+            return;
+
+        if (!teamRoleIndex.ContainsKey(team))
+        {
+            teamRoleIndex[team] = 0; //编号从0开始
+        }
+
+        //命名方式为：战斗地图号/队伍_序号，目前0是己方队伍，1是敌方队伍
+        string posKey = $"battle{m_BattleId}/{team}_{teamRoleIndex[team]}";
+        teamRoleIndex[team]++;
+
+        m_Roles.Add(new BattlePosRole() {pos = posKey, team = team, roleKey = id});
+    }
+
+    //初始化战斗
+    async UniTask InitBattle(Action<BattleResult> callback, Jyx2ConfigBattle battleData)
+    {
+        //todo 上中下三排5*3半透明格子，宠物中(最多三个，三种站位),在第一排才能普攻，普攻是锁定到人的，魔法可以躲，人物在中下，可控制移动到邻近一格，消耗行动力，行动力用完，行动按钮组置灰，行动力决定于一口气的长度 
+        //下能打上中下(后期地图变化红黄蓝格代替)，有弓等才能配置在中下，上:普攻只能打中上，魔法不限制
+        //攻击先点击选择攻击格子，再按普攻和魔法，则会以选中点为中心实时攻击，魔法会有延迟；未因什么而阻断时怪物和帮手都是按行动力即时开始攻击
+        //白色格子可到，黑色不可到
+        //被打对象无受击动画，额外施加受击掉血效果
+        // 1.画战场 2.加载战斗单位 3.加载战斗UI 4.战斗进行 5.战斗结束，根据结果增改数据
+        // todo 在战斗场景中预设 4*5每个格子一个节点位置，若是随机遇怪或是固定战斗，都从battleData读取战斗信息，生成怪物，分配位置；
+        Debug.Log("-----------BattleLoader.InitBattle");
+        List<RoleInstance> roles = new List<RoleInstance>();
+        foreach (var r in m_Roles)
+        {
+            //队友取队伍实例，敌人新生成
+            RoleInstance roleInstance = runtime.GetRoleInTeam(r.roleKey);
+            if (roleInstance == null)
+            {
+                roleInstance = new RoleInstance(r.roleKey); 
+            }
+
+            //开始位置
+            var pos = FindSpawnPosition(r.pos, r.team);
+            if (pos == null)
+            {
+                Debug.LogError("未定义的POS:" + r.pos);
+                continue;
+            }
+ 
+            roleInstance.ExpGot = 0;
+
+            await CreateRole(roleInstance, r.team, pos);
+            roles.Add(roleInstance);
+        }
+
+        //LevelMaster.Instance.TryBindPlayer(); //尝试绑定角色
+        //await UniTask.WaitForEndOfFrame();
+        BattleStartParams startParam = new BattleStartParams()
+        {
+            roles = roles,
+            battleData = battleData,
+            callback = callback,
+        };
+        await BattleManager.Instance.StartBattle(startParam);
+    }
+
+
+    //寻找定义的出生点
+    Transform FindSpawnPosition(string posKey, int team)
+    {
+        var obj = GameObject.Find("Level/BattlePos/" + posKey);
+
+        //如果找不到，则用默认的队伍出生点
+        if (obj == null)
+        {
+            obj = GameObject.Find("Level/BattlePos/" + team.ToString());
+        }
+
+        if (obj == null) return null;
+        return obj.transform;
+    }
+
+    bool setPlayer = false;
+
+    UniTask CreateRole(RoleInstance role, int team, Transform pos)
+    {
+        //Debug.Log($"--------BattleLoader.CreateRole, role={role.Name}, team={team}, pos={pos.name}");
+        role.LeaveBattle();
+        //find or create
+        GameObject npcRoot = GameObject.Find("BattleRoles");
+        if (npcRoot == null)
+        {
+            npcRoot = new GameObject("BattleRoles");
+        }
+
+        MapRole roleView;
+        //JYX2苟且逻辑：找第一个能找到的角色设置为主角
+        if (!setPlayer)
+        {
+            setPlayer = true;
+            roleView = role.CreateRoleView("Player");
+        }
+        else
+        {
+            roleView = role.CreateRoleView();
+        }
+
+        roleView.IsInBattle = true;
+        
+        roleView.transform.SetParent(npcRoot.transform, false);
+        roleView.transform.position = pos.position;
+
+        role.team = team;
+        return roleView.RefreshModel(); //刷新模型
+    }
+}
