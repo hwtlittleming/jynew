@@ -9,6 +9,7 @@
  */
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Jyx2.Middleware;
@@ -407,10 +408,31 @@ namespace Jyx2.Battle
             public bool isWait = false;
             public bool isAuto = false;
         }
-        
+        /*private async Task<String> fun()
+        {
+            Debug.Log("22222222222222");
+            Task tt = new Task( async () =>
+            {
+                Debug.Log("aaa");
+                await UniTask.Delay(3000);
+                Debug.Log("bbb");
+            });
+            tt.Start();
+            Debug.Log("3333333333333");
+            return "s";
+        }*/
+        private async UniTask fun2(UniTaskCompletionSource u)
+        {
+            Debug.Log("wait");
+            Debug.Log("begin");
+        }
         //等待玩家输入
         async UniTask<ManualResult> WaitForPlayerInput(RoleInstance role, List<BattleBlockVector> moveRange, bool isSelectMove)
         {
+            UniTaskCompletionSource u = new UniTaskCompletionSource();
+            Debug.Log("111");
+            fun2(u).Forget();
+            Debug.Log("222");
             UniTaskCompletionSource<ManualResult> t = new UniTaskCompletionSource<ManualResult>();
             Action<ManualResult> callback = delegate(ManualResult result) { t.TrySetResult(result); };
             
