@@ -20,21 +20,20 @@ MonoBehaviour:
     m_SubObjectName: 
     m_SubObjectType: 
     m_EditorAssetChanged: 0
-  PicUri: Assets/BuildSource/head/0.png
   Pinde: 50
   IQ: 39
   Skills:
   - id: 0
   Items:
   - Item: {fileID: 11400000, guid: e48b1e789c05d664b90adf395dc9436b, type: 2}
-    Count: 3
+    Count: 2
   - Item: {fileID: 11400000, guid: 6b9de4f4a7a64af4482a4472b17db8eb, type: 2}
     Count: 3
   - Item: {fileID: 11400000, guid: 31170ecdf069866458a2fe77b34ada21, type: 2}
     Count: 3
   - Item: {fileID: 11400000, guid: b9d0b0a2e2d59c94bbdcb0f4b3832cbf, type: 2}
     Count: 3
-  MaxHp: 38
+  MaxHp: 3800
   MaxMp: 26
   HpInc: 3
   Level: 1
@@ -43,6 +42,7 @@ MonoBehaviour:
   Attack: 27
   Qinggong: 27
   Defence: 27
+  MagicDefence: 0
   Heal: 30
   UsePoison: 30
   DePoison: 23
@@ -57,6 +57,7 @@ MonoBehaviour:
   Zuoyouhubo: 0
   Weapon: {fileID: 0}
   Armor: {fileID: 0}
+  Shoes: {fileID: 0}
   LeaveStoryId: 
   Model: {fileID: 11400000, guid: a04197a5f95a83c4e899063c285998c3, type: 2}
   references:

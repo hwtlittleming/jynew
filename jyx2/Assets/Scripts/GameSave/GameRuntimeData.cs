@@ -94,7 +94,7 @@ namespace Jyx2
                         int skillId = int.Parse(skill.Split(',')[0]);
                         string level = skill.Split(',')[1];
                         player.LearnMagic(skillId);
-                        var s = player.Wugongs.Find(p => p.Key == skillId);
+                        var s = player.skills.Find(p => p.Key == skillId);
                         if (s != null)
                         {
                             s.Level = int.Parse(level);

@@ -110,14 +110,17 @@ namespace Jyx2Configs
         [BoxGroup(CGroup2)][LabelText("攻击力")]
         public int Attack; //攻击力
         
-        [BoxGroup(CGroup2)][LabelText("轻功")]
+        [BoxGroup(CGroup2)][LabelText("速度")]
         public int Qinggong; //轻功
         
         [BoxGroup(CGroup2)][LabelText("防御力")]
         public int Defence; //防御力
         
-        [BoxGroup(CGroup2)][LabelText("医疗")]
-        public int Heal; //医疗
+        [BoxGroup(CGroup2)][LabelText("魔抗")]
+        public int MagicDefence; //魔抗
+        
+        [BoxGroup(CGroup2)][LabelText("回复力")]
+        public int Heal; //回复力
         
         [BoxGroup(CGroup2)][LabelText("用毒")]
         public int UsePoison; //用毒
@@ -131,11 +134,11 @@ namespace Jyx2Configs
         [BoxGroup(CGroup2)][LabelText("拳掌")]
         public int Quanzhang; //拳掌
         
-        [BoxGroup(CGroup2)][LabelText("御剑")]
-        public int Yujian; //御剑
+        [BoxGroup(CGroup2)][LabelText("剑法")]
+        public int Yujian; //剑法
         
-        [BoxGroup(CGroup2)][LabelText("耍刀")]
-        public int Shuadao; //耍刀
+        [BoxGroup(CGroup2)][LabelText("刀法")]
+        public int Shuadao; //刀法
         
         [BoxGroup(CGroup2)][LabelText("特殊兵器")]
         public int Qimen;//特殊兵器
@@ -157,10 +160,11 @@ namespace Jyx2Configs
         [BoxGroup(CGroup3)][LabelText("武器")][SerializeReference]
         public Jyx2ConfigItem Weapon;
         
-        [BoxGroup(CGroup3)][LabelText("防具")][SerializeReference]
+        [BoxGroup(CGroup3)][LabelText("衣服")][SerializeReference]
         public Jyx2ConfigItem Armor;
         
-        
+        [BoxGroup(CGroup3)][LabelText("鞋子")][SerializeReference]
+        public Jyx2ConfigItem Shoes;
         /* ------- 分割线 --------*/
 
         [BoxGroup("其他")][LabelText("队友离场对话")] 

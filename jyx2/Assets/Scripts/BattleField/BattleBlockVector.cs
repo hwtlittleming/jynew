@@ -36,7 +36,7 @@ namespace Jyx2
         //求两点的距离
         public int GetDistance(BattleBlockVector pos)
         {
-            return GetDistance(X, Y, pos.X, pos.Y);
+            return 1;
         }
 
         public static int GetDistance(int x1, int y1, int x2, int y2)

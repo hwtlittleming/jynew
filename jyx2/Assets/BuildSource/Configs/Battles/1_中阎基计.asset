@@ -30,3 +30,26 @@ MonoBehaviour:
   AutoTeamMates: []
   Enemies:
   - {fileID: 11400000, guid: 79db212632dad954fa3c8d18fe92c52f, type: 2}
+  BattleKind: 0
+  CountLevel: 1-3
+  RoleRate:
+  - id: 0
+  - id: 1
+  - id: 2
+  references:
+    version: 1
+    00000000:
+      type: {class: SamepleRate, ns: Jyx2Configs, asm: Assembly-CSharp}
+      data:
+        Sameple: 3
+        Rate: 10
+    00000001:
+      type: {class: SamepleRate, ns: Jyx2Configs, asm: Assembly-CSharp}
+      data:
+        Sameple: 4
+        Rate: 20
+    00000002:
+      type: {class: SamepleRate, ns: Jyx2Configs, asm: Assembly-CSharp}
+      data:
+        Sameple: 5
+        Rate: 70

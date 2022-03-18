@@ -38,6 +38,9 @@ namespace Jyx2Configs
             消耗品 = 3, 
             暗器 = 4, 
         }
+
+        public int bestDistance;//最佳攻击距离
+        public String attackRange;//攻击范围，名武器独有,最多仅横纵
         
         private const string EXTEND_GROUP = "扩展属性";
         private const string EFFECT_GROUP = "使用效果";

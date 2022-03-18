@@ -14,10 +14,12 @@ using Jyx2;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Cysharp.Threading.Tasks;
 using Jyx2.Middleware;
 using Jyx2Configs;
 using UnityEngine;
+using Random = System.Random;
 
 //AI计算相关
 public class AIManager
@@ -43,6 +45,14 @@ public class AIManager
             return BattleManager.Instance.GetRangeLogic();
         }
     }
+    BattleManager _battleManager 
+    {
+        get 
+        {
+            return BattleManager.Instance;
+        }
+    }
+    
     BattleFieldModel BattleModel 
     {
         get 
@@ -50,31 +60,78 @@ public class AIManager
             return BattleManager.Instance.GetModel();
         }
     }
-
     private void Init()
     {
     }
+
+    public void normalAttack(RoleInstance fromRole,RoleInstance toRole)
+    {
+        Jyx2ConfigItem weapon = fromRole.GetWeapon();
+        int dis = weapon.bestDistance; //获得持有武器的最佳攻击距离
+        fromRole.View.LookAtBattleBlock(toRole.blockData.WorldPos); //先面向目标
+        fromRole.SwitchAnimationToSkill(fromRole.skills[0]); //切换普攻姿势
+    }
+
     public async UniTask<AIResult> GetAIResult(RoleInstance role)
     {
-        //初始化范围逻辑
-        //rangeLogic = new RangeLogic(BattleboxHelper.Instance.IsBlockExists, BattleModel.BlockHasRole);
+        var Enermys = _battleManager.Enermys;
+        var Teammates = _battleManager.Teammates;
+        if (role.team == 1) //如果是敌方 相对关系转换
+        {
+            var temp = Enermys;
+            Enermys = Teammates;
+            Teammates = temp;
+        }
 
-        //获得角色移动能力
-        int moveAbility = role.GetMoveAbility();
+        int iq = role.IQ;
+        
+        //AI可执行的策略组
+        List<String> strategies = new List<String>();
+        strategies.Add("normalAttack");
+        strategies.Add("useSkill");
+        strategies.Add("useItem");
+        strategies.Add("throw");
 
-        //行动范围
-        var range = rangeLogic.GetMoveRange(role.Pos.X, role.Pos.Y, moveAbility - role.movedStep, false, false);
-
+        var range = new List<BattleBlockVector>();
         //可使用招式
         var zhaoshis = role.GetZhaoshis(false);
         
         //AI算法：穷举每个点，使用招式，取最大收益
         AIResult result = null;
         double maxscore = 0;
+        
+        //低智 随机决策
+        if (iq < 40)
+        {
+            strategies.Remove("throw");
+            Random r = new Random();
+            int ran = r.Next(1, strategies.Count + 1);
+            String str = strategies[ran];
+            //随机获取一个敌人位置
+            if ("normalAttack|useSkill".IndexOf(str) >= 0)
+            {
+                RoleInstance enermyRole = Enermys[r.Next(0,Enermys.Count)];
+                if (str == "normalAttack")
+                {
+                    normalAttack(role, enermyRole);
+                }
+                else
+                {
+                    await _battleManager.RoleCastSkill(role, role.GetZhaoshis(false).FirstOrDefault(), new BattleBlockVector(enermyRole.blockData.x, enermyRole.blockData.y));
+                }
 
+            }else if ("useItem".IndexOf(str) >= 0)
+            {
+                //随机获取己方位置
+                
+            }
 
-        //优先考虑吃药，更正角色中毒不退问题
-        if (role.Items.Count > 0 && (role.Hp < 0.2 * role.MaxHp || role.Mp < 0.2 * role.MaxMp || role.Tili < 0.2 * GameConst.MAX_ROLE_TILI))
+            
+            
+        }
+
+        //优先考虑吃药,智障不吃药
+        if (iq>= 60 && role.Items.Count > 0 && (role.Hp < 0.2 * role.MaxHp || role.Mp < 0.2 * role.MaxMp || role.Tili < 0.2 * GameConst.MAX_ROLE_TILI))
         {
             List<Jyx2ConfigItem> items = GetAvailableItems(role, 3); //只使用药物
             foreach (var item in items)
@@ -92,11 +149,6 @@ public class AIManager
                 if (item.AddTili > 0)
                 {
                     score += Mathf.Min(item.AddTili, GameConst.MAX_ROLE_TILI - role.Tili) - item.AddTili / 10;
-                }
-
-                if (score > 0)
-                {
-                    score *= 1.5;//自保系数大
                 }
 
                 if (score > maxscore)
@@ -192,11 +244,11 @@ public class AIManager
         }
 
         //否则靠近自己最近的敌人
-        result = MoveToNearestEnemy(role, range);
+        /*result = MoveToNearestEnemy(role, range);
         if (result != null)
         {
             return result;
-        }
+        }*/
 
         //否则原地休息
         return Rest(role);
@@ -208,11 +260,11 @@ public class AIManager
         double score = 0;
         var coverSize = skill.GetCoverSize();
         var coverType = skill.GetCoverType();
-        var coverBlocks = rangeLogic.GetSkillCoverBlocks(coverType, castx, casty, movex, movey, coverSize);
+        var coverBlocks = rangeLogic.GetSkillCoverBlocks(coverType, castx, casty,0, movex, movey, coverSize);
 
         foreach (var blockVector in coverBlocks)
         {
-            var targetRole = BattleModel.GetAliveRole(blockVector);
+            var targetRole = BattleModel.GetAliveRole(new Vector3(blockVector.X, blockVector.Y, 0));
             //还活着
             if (targetRole == null || targetRole.IsDead()) continue;
             //打敌人的招式
@@ -220,7 +272,7 @@ public class AIManager
             //“打”自己人的招式
             if (!skill.IsCastToEnemy() && caster.team != targetRole.team) continue;
 
-            var result = GetSkillResult(caster, targetRole, skill, blockVector);
+            var result = GetSkillResult(caster, targetRole, skill);
             score += result.GetTotalScore();
 
             //暗器算分
@@ -322,11 +374,11 @@ public class AIManager
                     var coverSize = zhaoshi.GetCoverSize();
                     var tx = castBlock.X;
                     var ty = castBlock.Y;
-                    var coverBlocks = rangeLogic.GetSkillCoverBlocks(coverType, tx, ty, sx, sy, coverSize);
-
+                    var coverBlocks = rangeLogic.GetSkillCoverBlocks(coverType, tx, ty, sx, sy,0, coverSize);
+                    
                     foreach (var coverBlock in coverBlocks)
                     {
-                        var targetSprite = BattleModel.GetAliveRole(coverBlock);
+                        var targetSprite = BattleModel.GetAliveRole(new Vector3(coverBlock.X, coverBlock.Y, 0));
                         //位置没人
                         if (targetSprite == null) continue;
 
@@ -458,9 +510,9 @@ public class AIManager
     /// <param name="skill"></param>
     /// <param name="blockVector"></param>
     /// <returns></returns>
-    public SkillCastResult GetSkillResult(RoleInstance r1, RoleInstance r2, BattleZhaoshiInstance skill, BattleBlockVector blockVector)
+    public SkillCastResult GetSkillResult(RoleInstance r1, RoleInstance r2, BattleZhaoshiInstance skill)
     {        
-        SkillCastResult rst = new SkillCastResult(r1, r2, skill, blockVector.X, blockVector.Y);
+        SkillCastResult rst = new SkillCastResult(r1, r2, skill);
         var magic = skill.Data.GetSkill();
         int level_index = skill.Data.GetLevel()-1;//此方法返回的是显示的武功等级，1-10。用于calMaxLevelIndexByMP时需要先-1变为数组index再使用
         level_index = skill.calMaxLevelIndexByMP(r1.Mp, level_index)+1;//此处计算是基于武功等级数据index，0-9.用于GetSkillLevelInfo时需要+1，因为用于GetSkillLevelInfo时需要里是基于GetLevel计算的，也就是1-10.
@@ -508,10 +560,10 @@ public class AIManager
             
             //点、线、十字的伤害，距离就是两人相差的格子数，最小为1。
             //面攻击时，距离是两人相差的格子数＋敌人到攻击点的距离。
-            int dist = r1.Pos.GetDistance(r2.Pos);
+            int dist = 1;
             if (skill.GetCoverType() == SkillCoverType.RECT)
             {
-                dist += blockVector.GetDistance(r2.Pos);
+                dist += 1; //blockVector.GetDistance(r2.Pos);
             }
 
             //9、if 双方距离 <= 10 then

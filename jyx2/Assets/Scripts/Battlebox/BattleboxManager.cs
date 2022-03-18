@@ -20,6 +20,7 @@ using ProtoBuf;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class BattleboxManager : MonoBehaviour
 {
@@ -55,7 +56,7 @@ public class BattleboxManager : MonoBehaviour
         InitCollider();
 
         if (m_Dataset == null)
-            InitFromFile();
+            //InitFromFile();
 
         if (m_Dataset == null || !CheckSize())
             CreateDataset();
@@ -148,59 +149,44 @@ public class BattleboxManager : MonoBehaviour
     public void CreateDataset()
     {
         m_Dataset = null;
-        InitCollider();
-        if (_colliders == null || _colliders.Length == 0)
-        {
-            Debug.LogError($"没有找到子碰撞盒，无法初始化战斗盒子");
-            return;
-        }
-
-        var bound = GetBounds();
         var sceneName = SceneManager.GetActiveScene().name;
         var objName = gameObject.name;
-        var length = bound.size.x;
-        var width = bound.size.z;
-        var minx = bound.min.x;
-        var miny = bound.min.z;
-
-        m_Dataset = new BattleboxDataset(sceneName, objName, length, width, minx, miny);
-        Debug.Log($"重新生成格子，x轴格子数{m_Dataset.CountX}, y轴格子数{m_Dataset.CountY}，理论总格子数目{m_Dataset.GetSizeCount()}");
-
-        var height = bound.size.y;
-        var maxHeight = bound.min.y + height;
-        for (int i = 0; i < m_Dataset.CountX; i++)
+        m_Dataset = new BattleboxDataset( sceneName,  objName,  10,  8,  0,  0);
+        Transform trans = GameObject.Find("block_parent").transform;
+        foreach ( Transform child in trans)
         {
-            for (int j = 0; j < m_Dataset.CountY; j++)
+            String side = child.name.Split('-')[0];
+            int x = int.Parse(child.name.Split('-')[1]);
+            int y = int.Parse(child.name.Split('-')[2]);
+            var obj = GameObject.Find("block_parent/" + side + "-" + x + "-" + y).GetComponent<EasyDecal>();
+            obj.Quality = 2;
+            obj.Distance = 0.05f;
+            Component c = obj.gameObject.GetComponent<Button>();
+            var block = new BattleboxBlock
             {
-                //计算格子的x和z坐标
-                var tempPos = m_Dataset.CalcPos(i, j);
-                //该格子在box顶层的投影点
-                var topProj = new Vector3(tempPos.X, maxHeight, tempPos.Y);
-
-                Vector3 pos, normal;
-                var bFlag = JudgeCoord(topProj, height, out pos, out normal);
-                if (bFlag)
-                {
-                    //该格子有效，存入dataset
-                    var block = new BattleboxBlock
-                    {
-                        XIndex = i,
-                        YIndex = j,
-                        WorldPosX = pos.x,
-                        WorldPosY = pos.y,
-                        WorldPosZ = pos.z,
-                        NormalX = normal.x,
-                        NormalY = normal.y,
-                        NormalZ = normal.z,
-                        IsValid = true,
-                    };
-                    m_Dataset.Blocks.Add(block);
-                }
-            }
+                XIndex = x,
+                YIndex = y,
+                WorldPosX = obj.transform.position.x,
+                WorldPosY = obj.transform.position.y,
+                WorldPosZ = obj.transform.position.z,
+                IsValid = true,
+                button = c,
+                side = side
+            };
+            m_Dataset.Blocks.Add(block);
+            var bPos = new BattleBlockVector(x, y);
+            var bbd = new BattleBlockData();
+            var pos = new Vector3(obj.transform.position.x, obj.transform.position.y, obj.transform.position.z);
+            bbd.BattlePos = bPos;
+            bbd.WorldPos = pos;
+            bbd.gameObject = obj.gameObject;
+            bbd.BoxBlock = block;
+            _battleBlocks.Add(bbd);
         }
-        Debug.Log($"重新生成格子结束：一共生成了{m_Dataset.GetCount()}个格子");
 
-        if(Application.isEditor) SaveToFile();
+        Debug.Log($"重新生成格子结束：一共生成了{m_Dataset.GetCount()}个格子");
+        //ShowAllValidBlocks();
+        //if(Application.isEditor) SaveToFile();
     }
 
     public List<BattleBlockData> GetBattleBlocks()
@@ -365,58 +351,6 @@ public class BattleboxManager : MonoBehaviour
         data.IsValid = !data.IsValid;
         //var sp = block.gameObject.GetComponent<SpriteRenderer>();
         //sp.color = block.BoxBlock.IsValid ? Color.white : m_InvalidColor;
-    }
-    
-    public void DrawAllBlocks(bool showAll = false)
-    {
-        for (int i = 0; i < m_Dataset.CountX; i++)
-        {
-            for (int j = 0; j < m_Dataset.CountY; j++)
-            {
-                if (!m_Dataset.Exist(i, j)) continue;
-                var data = m_Dataset.GetBLock(i, j);
-                var pos = new Vector3(data.WorldPosX, data.WorldPosY, data.WorldPosZ);
-                var normal = new Vector3(data.NormalX, data.NormalY, data.NormalZ);
-                DrawBattleBlock(pos, data.IsValid ? Color.white : m_InvalidColor, i, j, normal, data);
-            }
-        }
-
-        if(showAll) ShowAllBlocks();
-    }
-
-    public void DrawAreaBlocks(Vector3 center, int range, bool show = false)
-    {
-        var xy = m_Dataset.GetXYIndex(center.x, center.z);
-        var centerX = (int) xy.X;
-        var centerY = (int) xy.Y;
-        _battleBoxBlockList.Clear();
-        CreateBlockMap(centerX, centerY, centerX, centerY, range);
-        foreach(var b in _battleBoxBlockList)
-        {
-            if (!m_Dataset.Exist(b.X, b.Y)) continue;
-            var data = m_Dataset.GetBLock(b.X, b.Y);
-            if (!data.IsValid) continue;
-            var pos = new Vector3(data.WorldPosX, data.WorldPosY, data.WorldPosZ);
-            var normal = new Vector3(data.NormalX, data.NormalY, data.NormalZ);
-            DrawBattleBlock(pos, data.IsValid ? Color.white : m_InvalidColor, b.X, b.Y, normal, data);
-            DrawBattleBlock(pos, Color.blue, b.X, b.Y, normal, data, true);
-        }
-        //for (int i = centerX - range; i < centerX + range; i++)
-        //{
-        //    if (i < 0 || i >= m_Dataset.CountX) continue;
-        //    for (int j = centerY - range; j < centerY + range; j++)
-        //    {
-        //        if (j < 0 || j >= m_Dataset.CountY) continue;
-        //        if (!m_Dataset.Exist(i, j)) continue;
-        //        var data = m_Dataset.GetBLock(i, j);
-        //        if (!data.IsValid) continue;
-        //        var pos = new Vector3(data.WorldPosX, data.WorldPosY, data.WorldPosZ);
-        //        var normal = new Vector3(data.NormalX, data.NormalY, data.NormalZ);
-        //        DrawBattleBlock(pos, data.IsValid ? Color.white : m_InvalidColor, i, j, normal, data);
-        //    }
-        //}
-
-        if (show) ShowAllValidBlocks();
     }
 
     public void ShowBlocksCenterDist(Vector3 center, int range)

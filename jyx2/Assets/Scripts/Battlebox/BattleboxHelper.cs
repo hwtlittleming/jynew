@@ -75,7 +75,7 @@ public class BattleboxHelper : MonoBehaviour
 	//如果该位置可以战斗，则设置当前战斗盒子
 	//初始化当前战斗盒子
 	//生成所有战斗格子（默认为inactive）
-	public bool EnterBattle(Vector3 pos)
+	public bool BlockInit(Vector3 pos)
 	{
 		ClearAllBlocks();
 		foreach (var box in _boxList)
@@ -85,25 +85,11 @@ public class BattleboxHelper : MonoBehaviour
 				Debug.Log($"找到了战斗盒子，玩家坐标：{pos.x}：{pos.y}：{pos.z}");
 				_currentBattlebox = box;
 				_currentBattlebox.Init();
-				_currentBattlebox.DrawAreaBlocks(pos, m_MoveZoneDrawRange);
+				//_currentBattlebox.DrawAreaBlocks(pos, m_MoveZoneDrawRange);
 				return true;
 			}
 		}
 		return false;
-	}
-
-	public void OnTestControl(Vector3 pos)
-	{
-		if (Input.GetKey("g"))
-		{
-			if (!CanEnterBattle(pos)) return;
-			EnterBattle(pos);
-			ShowMoveZone(GameRuntimeData.Instance.Player.View.transform.position);
-		}
-		else if (Input.GetKey("h"))
-		{
-			HideAllBlocks();
-		}
 	}
 
 	public BattleBlockData GetBlockData(int xindex, int yindex)

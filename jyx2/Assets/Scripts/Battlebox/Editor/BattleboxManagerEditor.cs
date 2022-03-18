@@ -56,7 +56,7 @@ public class BattleboxManagerEditor : Editor
         if (IsSceneEditing)
         {
             myScript.Init();
-            myScript.DrawAllBlocks(true);
+            //myScript.DrawAllBlocks(true);
         }
         else myScript.ClearAllBlocks(); 
     }

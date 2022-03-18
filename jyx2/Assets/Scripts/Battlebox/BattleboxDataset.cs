@@ -12,15 +12,15 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Numerics;
-
-
 using ProtoBuf;
+using UnityEngine;
+using UnityEngine.UI;
+using Vector2 = System.Numerics.Vector2;
 
 namespace Jyx2
 {
     [ProtoContract]
-    public class BattleboxDataset
+    public class BattleboxDataset : MonoBehaviour
     {
         //相邻格子x方向的偏移
         public static float BlockLength = 1.5f;
@@ -29,7 +29,8 @@ namespace Jyx2
         //相邻两行y轴的距离
         public static float RowYDiff = 1.5f; //1.25f;
 
-
+        public String _chooseBlock; 
+            
         [ProtoMember(1)]
         public string SceneName { get; set; }
 
@@ -113,22 +114,11 @@ namespace Jyx2
         {
             return CountX * CountY;
         }
-
-        //格子编号从0,0开始
-        //x轴的buff是m_BlockLength+
-        //y轴的buff是m_RowYDiff
-        public Vector2 CalcPos(int xindex, int yindex)
+        
+        public void button_click(GameObject sender)
         {
-            var rst = new Vector2(0, 0);
-
-            if (xindex < 0 || yindex < 0) return rst;
-
-            if (xindex >= CountX || yindex >= CountY) return rst;
-
-            rst.X = BlockLength * 0.5f + xindex * BlockLength + MinX + RowXDiff;
-            rst.Y = RowYDiff * 0.5f + yindex * RowYDiff + MinY;
-            if (yindex % 2 == 0) rst.X -= RowXDiff;
-            return rst;
+            _chooseBlock = sender.name;
+            Debug.Log("dssssssssssssssssss111" + sender.name);
         }
 
         public System.Numerics.Vector2 GetXYIndex(float x, float z)
@@ -149,7 +139,7 @@ namespace Jyx2
     }
 
     [ProtoContract]
-    public class BattleboxBlock
+    public class BattleboxBlock 
     {
         //box collider 中的坐标序号
         [ProtoMember(1)]
@@ -157,6 +147,8 @@ namespace Jyx2
         //box collider 中的坐标序号
         [ProtoMember(2)]
         public int YIndex;
+        //we:我方;they:敌方;
+        public String side;
 
         //世界坐标，用来画格子
         [ProtoMember(3)]
@@ -165,14 +157,8 @@ namespace Jyx2
         public float WorldPosY;
         [ProtoMember(5)]
         public float WorldPosZ;
-
-        //法线，用来画格子
-        [ProtoMember(6)]
-        public float NormalX;
-        [ProtoMember(7)]
-        public float NormalY;
-        [ProtoMember(8)]
-        public float NormalZ;
+        
+        public Component button;
 
         //是否为有效格子，给策划编辑用
         [ProtoMember(9)]

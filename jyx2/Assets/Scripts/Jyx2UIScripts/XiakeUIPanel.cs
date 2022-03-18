@@ -208,7 +208,7 @@ public partial class XiakeUIPanel : Jyx2_UIBase
 	string GetSkillText(RoleInstance role)
 	{
 		StringBuilder sb = new StringBuilder();
-		foreach (var skill in role.Wugongs)
+		foreach (var skill in role.skills)
 		{
 			sb.AppendLine(skill.Name + " " + skill.GetLevel());
 		}
@@ -440,7 +440,7 @@ public partial class XiakeUIPanel : Jyx2_UIBase
 			var selectRole = cbParam.selectList[0]; //默认只会选择一个
 			var zhaoshi = new HealZhaoshiInstance(m_currentRole.Heal);
 			var result =
-				AIManager.Instance.GetSkillResult(m_currentRole, selectRole, zhaoshi, new BattleBlockVector(0, 0));
+				AIManager.Instance.GetSkillResult(m_currentRole, selectRole, zhaoshi);
 			result.Run();
 			if (result.heal > 0)
 			{
@@ -474,7 +474,7 @@ public partial class XiakeUIPanel : Jyx2_UIBase
 			var selectRole = cbParam.selectList[0]; //默认只会选择一个
 			var zhaoshi = new DePoisonZhaoshiInstance(m_currentRole.DePoison);
 			var result =
-				AIManager.Instance.GetSkillResult(m_currentRole, selectRole, zhaoshi, new BattleBlockVector(0, 0));
+				AIManager.Instance.GetSkillResult(m_currentRole, selectRole, zhaoshi);
 			result.Run();
 			if (result.depoison < 0)
 			{

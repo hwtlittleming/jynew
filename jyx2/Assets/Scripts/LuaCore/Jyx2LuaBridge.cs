@@ -590,15 +590,15 @@ namespace Jyx2
                     return;
                 }
 
-                if(magicIndexRole >= role.Wugongs.Count)
+                if(magicIndexRole >= role.skills.Count)
                 {
                     Debug.LogError("SetOneMagic调用错误，index越界");
                     Next();
                     return;
                 }
 
-                role.Wugongs[magicIndexRole].Key = magicId;
-                role.Wugongs[magicIndexRole].Level = level;
+                role.skills[magicIndexRole].Key = magicId;
+                role.skills[magicIndexRole].Level = level;
                 Next();
             });
             Wait();

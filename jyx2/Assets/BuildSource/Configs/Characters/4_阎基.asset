@@ -39,9 +39,10 @@ MonoBehaviour:
   Level: 4
   Exp: 300
   MpType: 1
-  Attack: 40
+  Attack: 2
   Qinggong: 30
   Defence: 45
+  MagicDefence: 0
   Heal: 40
   UsePoison: 53
   DePoison: 30
@@ -56,6 +57,7 @@ MonoBehaviour:
   Zuoyouhubo: 0
   Weapon: {fileID: 0}
   Armor: {fileID: 0}
+  Shoes: {fileID: 0}
   LeaveStoryId: 
   Model: {fileID: 11400000, guid: e153caf95a62d874998eead69937aa95, type: 2}
   references:

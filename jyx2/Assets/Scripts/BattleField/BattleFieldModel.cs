@@ -88,17 +88,17 @@ namespace Jyx2
 
         public int BlockRoleTeam(int x, int y)
         {
-            var role = GetAliveRole(new BattleBlockVector(x, y));
+            var role = GetAliveRole(new Vector3(x, y));
             if (role != null) return role.team;
             return -1;
         }
 
-        public RoleInstance GetAliveRole(BattleBlockVector vec)
+        public RoleInstance GetAliveRole(Vector3 vec)
         {
             foreach(var r in Roles)
             {
                 if (r.IsDead()) continue;
-                if(r.Pos.Equals(vec))
+                if(r.Block.Equals(vec))
                 {
                     return r;
                 }

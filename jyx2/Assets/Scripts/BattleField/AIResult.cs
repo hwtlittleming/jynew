@@ -64,18 +64,13 @@ namespace Jyx2
     {
         public SkillCastResult() { }
 
-        public SkillCastResult(RoleInstance sprite, RoleInstance target, BattleZhaoshiInstance tzhaoshi, int targetx, int targety)
+        public SkillCastResult(RoleInstance sprite, RoleInstance target, BattleZhaoshiInstance tzhaoshi)
         {
             //self = new SkillCastRoleEffect(sprite);
             r1 = sprite;
             r2 = target;
             zhaoshi = tzhaoshi;
-            skilltarget_x = targetx;
-            skilltarget_y = targety;
         }
-
-        public int skilltarget_x;
-        public int skilltarget_y;
 
         [XmlIgnore]
         public BattleZhaoshiInstance zhaoshi;

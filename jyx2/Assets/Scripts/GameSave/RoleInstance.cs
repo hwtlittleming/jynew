@@ -48,11 +48,11 @@ namespace Jyx2
         [SerializeField] public int AttackPoison; //攻击带毒
         [SerializeField] public int Zuoyouhubo; //左右互搏
         [SerializeField] public int Shengwang; //声望
-        [SerializeField] public int IQ; //资质
+        [SerializeField] public int IQ; //智商
 
 
         [SerializeField] public int ExpForItem; //修炼点数
-        [SerializeField] public List<SkillInstance> Wugongs = new List<SkillInstance>(); //武功
+        [SerializeField] public List<SkillInstance> skills = new List<SkillInstance>(); //武功
         [SerializeField] public List<Jyx2ConfigCharacterItem> Items = new List<Jyx2ConfigCharacterItem>(); //道具
         
         [SerializeField] public int Mp;
@@ -72,6 +72,11 @@ namespace Jyx2
 
         [SerializeField] public int CurrentSkill = 0; //当前技能
         #endregion
+
+        public int currentMotivation  = 10; //当前行动力，可赋初始值
+        public int motivationPerSecond = 10;//每秒获得的行动力
+        public BattleBlockData blockData = new BattleBlockData();//当前所处格子坐标
+        public Vector3 Block;
 
         public RoleInstance()
         {
@@ -96,11 +101,11 @@ namespace Jyx2
             
             //初始化武功列表
             //Wugongs.Clear();			
-            if (Wugongs.Count == 0)
+            if (skills.Count == 0)
             {
                 foreach (var wugong in _data.Skills)
                 {
-                    Wugongs.Add(new SkillInstance(wugong));
+                    skills.Add(new SkillInstance(wugong));
                 }
             }
 
@@ -292,7 +297,7 @@ namespace Jyx2
             AttackPoison = Tools.Limit(AttackPoison, 0, GameConst.MAX_ROLE_ATK_POISON);
             Hurt = Tools.Limit(Hurt, 0, GameConst.MAX_HURT);
 
-            foreach (var wugong in Wugongs)
+            foreach (var wugong in skills)
             {
                 wugong.Level = Tools.Limit(wugong.Level, 0, GameConst.MAX_SKILL_LEVEL);
             }
@@ -375,7 +380,7 @@ namespace Jyx2
                 Zhaoshis.Clear();
             }
 
-            foreach (var wugong in Wugongs)
+            foreach (var wugong in skills)
             {
                 Zhaoshis.Add(new BattleZhaoshiInstance(wugong));
             }
@@ -475,7 +480,7 @@ namespace Jyx2
                 //此处注意，如果有可制成物品的秘籍，则武学满级之后不会再制药了，请尽量避免这样的设置
                 if (item.Skill != null)
                 {
-                    foreach (var wugong in Wugongs)
+                    foreach (var wugong in skills)
                     {
                         if (wugong.Key == item.Skill.Id)
                             return true;
@@ -485,7 +490,7 @@ namespace Jyx2
                     //{
                     //    return true;
                     //}
-                    if (level < 0 && this.Wugongs.Count >= GameConst.MAX_ROLE_WUGONG_COUNT)
+                    if (level < 0 && this.skills.Count >= GameConst.MAX_ROLE_WUGONG_COUNT)
                     {
                         return false;
                     }
@@ -734,7 +739,7 @@ namespace Jyx2
 
         public int GetWugongLevel(int wugongId)
         {
-            foreach (var wugong in Wugongs)
+            foreach (var wugong in skills)
             {
                 if (wugong.Key == wugongId)
                     return wugong.GetLevel();
@@ -814,11 +819,11 @@ namespace Jyx2
             View.LazyInitAnimator();
 
             //修复当前武功
-            if (CurrentSkill >= Wugongs.Count)
+            if (CurrentSkill >= skills.Count)
             {
                 CurrentSkill = 0;
             }
-            _currentSkill = Wugongs[CurrentSkill];
+            _currentSkill = skills[CurrentSkill];
             SwitchAnimationToSkill(_currentSkill, true);
         }
 
@@ -959,7 +964,7 @@ namespace Jyx2
             if (magicId <= 0)
                 return -1;
 
-            foreach (var skill in Wugongs)
+            foreach (var skill in skills)
             {
                 if (skill.Key == magicId)
                 {
@@ -975,12 +980,12 @@ namespace Jyx2
                 }
             }
 
-            if (Wugongs.Count >= GameConst.MAX_SKILL_COUNT)
+            if (skills.Count >= GameConst.MAX_SKILL_COUNT)
                 return -3; //武学已满
 
 
             SkillInstance w = new SkillInstance(magicId);
-            Wugongs.Add(w);
+            skills.Add(w);
             ResetZhaoshis();
             return 0;
         }

@@ -282,6 +282,11 @@ public partial class BattleActionUIPanel : Jyx2_UIBase
 		blockConfirm(block, true);
 	}
 
+	public void sss()
+	{
+		Debug.Log("sdsfasdfasfasfasssss");
+	}
+
 	private void showZhaoshiHitRange(BattleBlockData block = null)
 	{
 		if (!isSelectMove)
@@ -290,8 +295,8 @@ public partial class BattleActionUIPanel : Jyx2_UIBase
 			if (overBlock != null && overBlock != _lastHitRangeOverBlock)
 			{
 				_lastHitRangeOverBlock = overBlock;
-				var range = BattleManager.Instance.GetSkillCoverBlocks(currentZhaoshi, overBlock.BattlePos, m_currentRole.Pos);
-				BattleboxHelper.Instance.ShowRangeBlocks(range);
+				var range = BattleManager.Instance.GetSkillCoverBlocks(currentZhaoshi, overBlock.BattlePos, m_currentRole.Block);
+				//BattleboxHelper.Instance.ShowRangeBlocks(range);
 			}
 		}
 	}

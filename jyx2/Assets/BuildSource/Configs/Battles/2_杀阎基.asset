@@ -31,3 +31,5 @@ MonoBehaviour:
   AutoTeamMates: []
   Enemies:
   - {fileID: 11400000, guid: 79db212632dad954fa3c8d18fe92c52f, type: 2}
+  MapKind: 
+  BattleKind: 

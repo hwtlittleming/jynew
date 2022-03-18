@@ -392,6 +392,7 @@ MonoBehaviour:
   win: {fileID: 0}
   lose: {fileID: 0}
   BattleId: 132
+  loseGameOver: 0
 --- !u!114 &6712288621895360282
 MonoBehaviour:
   m_ObjectHideFlags: 0

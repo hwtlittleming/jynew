@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using i18n.TranslatorDef;
 using Jyx2;
@@ -37,6 +39,11 @@ namespace Jyx2Configs
 
         [LabelText("标签")] 
         public string Tags;
+        
+        //陆地天空河流各一种战斗地图 或者 每个大城镇 每种小地形一种地图;
+        [LabelText("地图类型")] 
+        public String MapKind;
+
 
         [HideInInspector] public int ForceSetLeaveMusicId = -1;
         

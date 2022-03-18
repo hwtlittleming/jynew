@@ -8,18 +8,29 @@
  * 金庸老先生千古！
  */
 
+using System;
 using UnityEngine;
 
 namespace Jyx2
 {
     public class BattleBlockData
     {
-        //战场逻辑位置
+        //战场逻辑位置 待去掉
         public BattleBlockVector BattlePos; 
 
         //实际对应的世界坐标系的点
         public Vector3 WorldPos; 
 
+        //当前所处格子编号
+        public int x;
+        public int y;
+        
+        //格子名称
+        public String blockName;
+        
+        //格子上的角色
+        public RoleInstance role;
+        
         //对应绘制的对象
         public GameObject gameObject;
 

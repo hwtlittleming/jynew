@@ -490,10 +490,10 @@ public class MapRole : Jyx2AnimationBattleRole
     /// 使人物朝向一个方向，根据战场格子计算
     /// </summary>
     /// <param name="pos">朝向的格子位置坐标</param>
-    public void LookAtBattleBlock(BattleBlockData pos)
+    public void LookAtBattleBlock(Vector3 WorldPos)
     {
         //平视，所以y轴和自身一致
-        transform.LookAt(new Vector3(pos.WorldPos.x, transform.position.y, pos.WorldPos.z));
+        transform.LookAt(WorldPos);
     }
 
     /// <summary>
@@ -624,7 +624,7 @@ public class MapRole : Jyx2AnimationBattleRole
         if (IsInBattle)
         {
             //直接用第一个武功的姿势
-            DataInstance.SwitchAnimationToSkill(DataInstance.Wugongs[0]);
+            DataInstance.SwitchAnimationToSkill(DataInstance.skills[0]);
         }
         else
         {

@@ -9,6 +9,7 @@
  */
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
@@ -26,10 +27,35 @@ namespace Jyx2.Battle
         public BattleLoop(BattleManager manager)
         {
             _manager = manager;
+            _instance = this;
         }
-
+        private static BattleLoop _instance;
+        public static BattleLoop Instance
+        {
+            get
+            {
+                if (_instance == null)
+                {
+                    GameObject go = new GameObject("BattleLoop");
+                }
+                return _instance;
+            }
+        }
         private BattleManager _manager;
         private GameObject m_roleFocusRing;
+        public int t = 1;
+        public async void Test(RoleInstance u)
+        {
+            Debug.Log("1");
+            await UniTask.Run(() =>
+            {
+                UniTask.SwitchToMainThread();
+                u.View.Idle();  
+                Debug.Log("222");
+            });
+            //await UniTask.Delay(1000);
+            Debug.Log("2");
+        }
 
         /// <summary>
         /// 开始战斗主循环
@@ -41,6 +67,22 @@ namespace Jyx2.Battle
 
             //生成当前角色高亮环
             m_roleFocusRing = Jyx2ResourceHelper.CreatePrefabInstance("CurrentBattleRoleTag");
+            
+            //敌人开始自由攻击
+            List<RoleInstance> roles = _manager.roles;
+            foreach (var r in roles)
+            {
+                if (r.team == 1)
+                {
+                    var transform = GameObject.Find(r.blockData.blockName).transform;
+                    transform.gameObject.AddComponent<BattleUnit>();
+
+                    //给格子上的战斗单元脚本初始化属性
+                    transform.gameObject.GetComponent<BattleUnit>()._role = r;
+                    Debug.Log("3");
+                }
+            }
+
 
             //战斗逻辑的主循环
             while (true)
@@ -55,13 +97,13 @@ namespace Jyx2.Battle
 
                 //寻找下一个行动的人
                 var role = model.GetNextActiveRole();
-
+                //|| role.team == 0
                 if (role == null)
                 {
                     GameUtil.LogError("错误：BattleModel.GetNextActiveRole() 返回了空角色");
                     continue;
                 }
-
+                role.Attack = 1;
                 //当前行动角色 UI相关展示
                 await SetCurrentRole(role);
 
@@ -146,7 +188,7 @@ namespace Jyx2.Battle
             var aiResult = await AIManager.Instance.GetAIResult(role);
             
             //先移动
-            await RoleMove(role, new BattleBlockVector(aiResult.MoveX, aiResult.MoveY));
+            //await RoleMove(role, new BattleBlockVector(aiResult.MoveX, aiResult.MoveY));
 
             //再执行具体逻辑
             await ExecuteAIResult(role, aiResult);
@@ -215,7 +257,7 @@ namespace Jyx2.Battle
             }
 
             var block = BattleboxHelper.Instance.GetBlockData(skillTo.X, skillTo.Y); //获取攻击目标点
-            role.View.LookAtBattleBlock(block); //先面向目标
+            role.View.LookAtBattleBlock(block.WorldPos); //先面向目标
             role.SwitchAnimationToSkill(skill.Data); //切换姿势
             skill.CastCD(); //技能CD
             skill.CastCost(role); //技能消耗（左右互搏体力消耗一次，内力消耗两次）
@@ -234,7 +276,7 @@ namespace Jyx2.Battle
         {
             List<RoleInstance> beHitAnimationList = new List<RoleInstance>();
             //获取攻击范围
-            var coverBlocks = BattleManager.Instance.GetSkillCoverBlocks(skill, skillTo, role.Pos);
+            var coverBlocks = BattleManager.Instance.GetSkillCoverBlocks(skill, skillTo, role.Block);
             //处理掉血
             foreach (var blockVector in coverBlocks)
             {
@@ -246,7 +288,7 @@ namespace Jyx2.Battle
                 //“打”自己人的招式
                 if (!skill.IsCastToEnemy() && rolei.team != role.team) continue;
 
-                var result = AIManager.Instance.GetSkillResult(role, rolei, skill, blockVector);
+                var result = AIManager.Instance.GetSkillResult(role, rolei, skill);
 
                 result.Run();
 
@@ -261,11 +303,13 @@ namespace Jyx2.Battle
                     rolei.View.MarkHpBarIsDirty();
                 }
             }
-
+            var zjPosition = GameObject.Find("block_parent/we-3-2");
+            IEnumerable<Transform> it = new List<Transform>();
+            it.Append(zjPosition.transform);
             SkillCastHelper castHelper = new SkillCastHelper
             {
                 Source = role.View,
-                CoverBlocks = coverBlocks.ToTransforms(),
+                CoverBlocks = it,
                 Zhaoshi = skill,
                 Targets = beHitAnimationList.ToMapRoles(),
             };
@@ -378,7 +422,7 @@ namespace Jyx2.Battle
                 else if (ret.movePos != null && isSelectMove) //移动
                 {
                     isSelectMove = false;
-                    role.movedStep += originalPos.GetDistance(ret.movePos);
+                    role.movedStep += 1;
                     await RoleMove(role, ret.movePos);
                 }else if (ret.isWait) //等待
                 {
