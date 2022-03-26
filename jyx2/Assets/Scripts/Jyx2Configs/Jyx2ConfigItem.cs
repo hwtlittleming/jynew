@@ -130,47 +130,14 @@ namespace Jyx2Configs
         public int Attack;
 
         [BoxGroup(EFFECT_GROUP)][LabelText("加轻功")]
-        public int Qinggong;
+        public int Speed;
 
         [BoxGroup(EFFECT_GROUP)][LabelText("加防御力")]
         public int Defence;
 
         [BoxGroup(EFFECT_GROUP)][LabelText("加医疗")]
         public int Heal;
-
-        [BoxGroup(EFFECT_GROUP)][LabelText("加使毒")]
-        public int UsePoison;
-
-        [BoxGroup(EFFECT_GROUP)][LabelText("加解毒")]
-        public int DePoison;
-
-        [BoxGroup(EFFECT_GROUP)][LabelText("加抗毒")]
-        public int AntiPoison;
-
-        [BoxGroup(EFFECT_GROUP)][LabelText("加拳掌")]
-        public int Quanzhang;
-
-        [BoxGroup(EFFECT_GROUP)][LabelText("加御剑")]
-        public int Yujian;
-
-        [BoxGroup(EFFECT_GROUP)][LabelText("加耍刀")]
-        public int Shuadao;
-
-        [BoxGroup(EFFECT_GROUP)][LabelText("加特殊兵器")]
-        public int Qimen;
-
-        [BoxGroup(EFFECT_GROUP)][LabelText("加暗器技巧")]
-        public int Anqi;
-
-        [BoxGroup(EFFECT_GROUP)][LabelText("加武学常识")]
-        public int Wuxuechangshi;
-
-        [BoxGroup(EFFECT_GROUP)][LabelText("加品德")]
-        public int AddPinde;
-
-        [BoxGroup(EFFECT_GROUP)][LabelText("左右互搏")]
-        public int Zuoyouhubo;
-
+        
         [BoxGroup(EFFECT_GROUP)][LabelText("加功夫带毒")]
         public int AttackPoison;
 
@@ -179,8 +146,8 @@ namespace Jyx2Configs
         public int OnlySuitableRole;
 
         [ShowIf(nameof(IsItemBook))]
-        [BoxGroup(CONDITION_GROUP)][LabelText("需内力性质")][EnumToggleButtons]
-        public Jyx2ConfigCharacter.MpTypeEnum NeedMPType;
+        [BoxGroup(CONDITION_GROUP)][LabelText("需种族")][EnumToggleButtons]
+        public Jyx2ConfigCharacter.RateTypeEnum NeedMPType;
 
         bool IsItemBook()
         {
@@ -195,39 +162,12 @@ namespace Jyx2Configs
 
         [BoxGroup(CONDITION_GROUP)][LabelText("需轻功")]
         public int ConditionQinggong;
-
-        [BoxGroup(CONDITION_GROUP)][LabelText("需用毒")]
-        public int ConditionPoison;
-
-        [BoxGroup(CONDITION_GROUP)][LabelText("需医疗")]
-        public int ConditionHeal;
-
-        [BoxGroup(CONDITION_GROUP)][LabelText("需解毒")]
-        public int ConditionDePoison;
-
-        [BoxGroup(CONDITION_GROUP)][LabelText("需拳掌")]
-        public int ConditionQuanzhang;
-
-        [BoxGroup(CONDITION_GROUP)][LabelText("需御剑")]
-        public int ConditionYujian;
-
-        [BoxGroup(CONDITION_GROUP)][LabelText("需耍刀")]
-        public int ConditionShuadao;
-
-        [BoxGroup(CONDITION_GROUP)][LabelText("需特殊兵器")]
-        public int ConditionQimen;
-
-        [BoxGroup(CONDITION_GROUP)][LabelText("需暗器")]
-        public int ConditionAnqi;
-
-        [BoxGroup(CONDITION_GROUP)][LabelText("需资质")]
+        
+        [BoxGroup(CONDITION_GROUP)][LabelText("需智商")]
         public int ConditionIQ;
 
         [BoxGroup(CONDITION_GROUP)][LabelText("需经验")]
         public int NeedExp;
-
-        [BoxGroup(CONDITION_GROUP)][LabelText("需自宫")]
-        public bool NeedCastration;
 
         [ShowIf(nameof(IsItemBook))]
         [BoxGroup(EFFECT_GROUP)][LabelText("练出物品需经验")]

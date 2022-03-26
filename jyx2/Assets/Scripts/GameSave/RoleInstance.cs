@@ -10,6 +10,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Jyx2.Middleware;
 using UnityEngine;
 using UniRx;
@@ -24,17 +25,8 @@ namespace Jyx2
     public class RoleInstance : IComparable<RoleInstance>
     {
         #region 存档数据定义
-        [SerializeField] public int Key; //ID
-        [SerializeField] public string Name; //姓名
-
-        [SerializeField] public int Sex; //性别
-        [SerializeField] public int Level = 1; //等级
-        [SerializeField] public int Exp; //经验
         
-        [SerializeField] public int Attack; //攻击力
-        [SerializeField] public int Qinggong; //轻功
-        [SerializeField] public int Defence; //防御力
-        [SerializeField] public int Heal; //医疗
+        //废弃待删除
         [SerializeField] public int UsePoison; //用毒
         [SerializeField] public int DePoison; //解毒
         [SerializeField] public int AntiPoison; //抗毒
@@ -44,25 +36,50 @@ namespace Jyx2
         [SerializeField] public int Qimen; //特殊兵器
         [SerializeField] public int Anqi; //暗器技巧
         [SerializeField] public int Wuxuechangshi; //武学常识
-        [SerializeField] public int Pinde; //品德
-        [SerializeField] public int AttackPoison; //攻击带毒
         [SerializeField] public int Zuoyouhubo; //左右互搏
         [SerializeField] public int Shengwang; //声望
-        [SerializeField] public int IQ; //智商
-
-
         [SerializeField] public int ExpForItem; //修炼点数
-        [SerializeField] public List<SkillInstance> skills = new List<SkillInstance>(); //武功
-        [SerializeField] public List<Jyx2ConfigCharacterItem> Items = new List<Jyx2ConfigCharacterItem>(); //道具
-        
-        [SerializeField] public int Mp;
-        [SerializeField] public int MaxMp;
+        [SerializeField] public int Level = 1; //等级
+        [SerializeField] public int Tili; //体力
         [SerializeField] public int MpType; //内力性质
+        [SerializeField] public int Exp; //经验
+        [SerializeField] public int Poison; //中毒程度
+        [SerializeField] public int Heal; //恢复
+        //--------------分割线
+        
+        [SerializeField] public int Key; //ID
+        [SerializeField] public string Name; //姓名
+
+        [SerializeField] public int Sex; //性别
+        [SerializeField] public int Rate; //种族
+        [SerializeField] public String Describe; //描述
+        
         [SerializeField] public int Hp;
         [SerializeField] public int MaxHp;
+        [SerializeField] public int Mp;
+        [SerializeField] public int MaxMp;
         [SerializeField] public int Hurt; //受伤程度
-        [SerializeField] public int Poison; //中毒程度
-        [SerializeField] public int Tili; //体力
+       
+        
+        [SerializeField] public int Attack; //攻击力
+        [SerializeField] public int MagicAttack; //法术攻击
+        [SerializeField] public int Defense; //防御力
+        [SerializeField] public int Speed; //速度
+        [SerializeField] public int MagicDefence; //魔抗
+        [SerializeField] public String Attach; //攻击附带
+        [SerializeField] public int Critical; //暴击
+        [SerializeField] public int CriticalLevel; //暴击伤害系数
+        [SerializeField] public int Miss; //闪避
+        [SerializeField] public int Luck; //幸运
+        
+        [SerializeField] public int Moral; //品德
+        [SerializeField] public int AttackPoison; //攻击带毒
+
+        [SerializeField] public int IQ; //智商
+        
+        [SerializeField] public List<SkillInstance> skills = new List<SkillInstance>(); //武功
+        [SerializeField] public List<Jyx2ConfigCharacterItem> Items = new List<Jyx2ConfigCharacterItem>(); //道具
+
         [SerializeField] public int ExpForMakeItem; //物品修炼点
         
         [SerializeField] public int Weapon; //武器
@@ -73,6 +90,8 @@ namespace Jyx2
         [SerializeField] public int CurrentSkill = 0; //当前技能
         #endregion
 
+        public int bestAttackDistance = 1;//最佳攻击距离，决定站位前后
+        public bool isReadyToBattle = true;//是否参战
         public int currentMotivation  = 10; //当前行动力，可赋初始值
         public int motivationPerSecond = 10;//每秒获得的行动力
         public BattleBlockData blockData = new BattleBlockData();//当前所处格子坐标
@@ -99,7 +118,7 @@ namespace Jyx2
                 Assert.Fail();
             }
             
-            //初始化武功列表
+            //初始化武功列表 读取配置的技能
             //Wugongs.Clear();			
             if (skills.Count == 0)
             {
@@ -109,42 +128,55 @@ namespace Jyx2
                 }
             }
 
-            //每次战斗前reset一次
+            //每次战斗前reset一次 将存档里的技能和物品id在战斗中获得技能实例
             ResetForBattle();
         }
-
+        public static T DeepCopy<T>(T obj)
+        {
+            //如果是字符串或值类型则直接返回
+            if (obj is string || obj.GetType().IsValueType) return obj;
+ 
+            object retval = Activator.CreateInstance(obj.GetType());
+            FieldInfo[] fields = obj.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
+            foreach (FieldInfo field in fields)
+            {
+                try { field.SetValue(retval, DeepCopy(field.GetValue(obj))); }
+                catch { }
+            }
+            return (T)retval;
+        }
 
         void InitData()
         {
+            
             //CG 初始化
             Name = Data.Name;
             Sex = (int)Data.Sexual;
-            Level = Data.Level;
-            Exp = Data.Exp;
             Hp = Data.MaxHp;
             MaxHp = Data.MaxHp;
             Mp = Data.MaxMp;
             MaxMp = Data.MaxMp;
-            Tili = GameConst.MAX_ROLE_TILI;
-            Weapon = Data.Weapon != null ? Data.Weapon.Id : -1;
-            Armor = Data.Armor != null ? Data.Armor.Id : -1;
-            MpType = (int)Data.MpType;
+            Rate = (int)Data.Rate;
+            Moral = Data.Moral;
+            Describe = Data.Descripe;
+            
             Attack = Data.Attack;
-            Qinggong = Data.Qinggong;
-            Defence = Data.Defence;
+            MagicAttack = Data.MagicAttack;
+            Speed = Data.Speed;
+            Defense = Data.Defense;
             Heal = Data.Heal;
-            UsePoison = Data.UsePoison;
-            DePoison = Data.DePoison;
-            AntiPoison = Data.AntiPoison;
-            Quanzhang = Data.Quanzhang;
-            Yujian = Data.Yujian;
-            Shuadao = Data.Shuadao;
-            Qimen = Data.Qimen;
-            Anqi = Data.Anqi;
-            Wuxuechangshi = Data.Wuxuechangshi;
-            Pinde = Data.Pinde;
-            AttackPoison = Data.AttackPoison;
-            Zuoyouhubo = Data.Zuoyouhubo;
+            Attach = Data.Attach;
+            Critical = Data.Critical;
+            CriticalLevel = Data.CriticalLevel;
+            Miss = Data.Miss;
+            Luck = Data.Luck;
+            
+        
+            Weapon = Data.Weapon != null ? Data.Weapon.Id : -1;
+            Armor = Data.Armor != null ? Data.Shoes.Id : -1;
+            Armor = Data.Shoes != null ? Data.Shoes.Id : -1;
+            Armor = Data.Treasure != null ? Data.Treasure.Id : -1;
+
             IQ = Data.IQ;
 
             ResetItems();
@@ -169,14 +201,6 @@ namespace Jyx2
                 Poison = 0;
             }
         }
-
-        public int HpInc
-        {
-            get { return Data.HpInc; }
-        }
-
-
-
 
         public int GetJyx2RoleId()
         {
@@ -222,7 +246,7 @@ namespace Jyx2
         {
             Level++;
             Tili = GameConst.MAX_ROLE_TILI;
-            MaxHp += (Data.HpInc + Random.Range(0, 3)) * 3;
+            //MaxHp += (Data.HpInc + Random.Range(0, 3)) * 3;
             SetHPAndRefreshHudBar(this.MaxHp);
             //当0 <= 资质 < 30, a = 2;
             //当30 <= 资质 < 50, a = 3;
@@ -238,8 +262,8 @@ namespace Jyx2
             Poison = 0;
 
             Attack += a;
-            Qinggong += a;
-            Defence += a;
+            Speed += a;
+            Defense += a;
 
             Heal = checkUp(Heal, 20, 3);
             DePoison = checkUp(DePoison, 20, 3);
@@ -249,58 +273,9 @@ namespace Jyx2
             Yujian = checkUp(Yujian, 20, 3);
             Shuadao = checkUp(Shuadao, 20, 3);
             Anqi = checkUp(Anqi, 20, 3);
-
-            this.Limit(1, 1, 1);
+            
 
             Debug.Log($"{this.Name}升到{this.Level}级！");
-        }
-
-        /// <summary>
-        /// 限制属性范围
-        /// 
-        /// Attack、Defence、Qinggong为最终状态：原始属性 + 此刻使用的装备属性的总值
-        /// 
-        /// </summary>
-        void Limit(int attackTime, int defenceTime, int qinggongTime)
-        {
-            Exp = Tools.Limit(Exp, 0, GameConst.MAX_EXP);
-            ExpForItem = Tools.Limit(ExpForItem, 0, GameConst.MAX_EXP);
-            ExpForMakeItem = Tools.Limit(ExpForMakeItem, 0, GameConst.MAX_EXP);
-            Poison = Tools.Limit(Poison, 0, GameConst.MAX_POISON);
-            MaxHp = Tools.Limit(MaxHp, 0, GameConst.MAX_ROLE_HP);
-            MaxMp = Tools.Limit(MaxMp, 0, GameConst.MAX_ROLE_MP);
-            Hp = Tools.Limit(Hp, 0, MaxHp);
-            Mp = Tools.Limit(Mp, 0, MaxMp);
-            Tili = Tools.Limit(Tili, 0, GameConst.MAX_ROLE_TILI);
-
-            var equipAttack = GetWeaponProperty("Attack") + GetArmorProperty("Attack");
-            var equipDefence = GetWeaponProperty("Defence") + GetArmorProperty("Defence");
-            var equipQinggong = GetWeaponProperty("Qinggong") + GetArmorProperty("Qinggong");
-            Attack = Tools.Limit(Attack, 0, GameConst.MAX_ROLE_ATTACK + equipAttack * attackTime);
-            Defence = Tools.Limit(Defence, 0, GameConst.MAX_ROLE_DEFENCE + equipDefence * defenceTime);
-            Qinggong = Tools.Limit(Qinggong, 0, GameConst.MAX_ROLE_QINGGONG + equipQinggong * qinggongTime);
-            
-            UsePoison = Tools.Limit(UsePoison, 0, GameConst.MAX_USE_POISON);
-            DePoison = Tools.Limit(DePoison, 0, GameConst.MAX_DEPOISON);
-            Heal = Tools.Limit(Heal, 0, GameConst.MAX_HEAL);
-            AntiPoison = Tools.Limit(AntiPoison, 0, GameConst.MAX_ANTIPOISON);
-
-            Quanzhang = Tools.Limit(Quanzhang, 0, GameConst.MAX_ROLE_WEAPON_ATTR);
-            Yujian = Tools.Limit(Yujian, 0, GameConst.MAX_ROLE_WEAPON_ATTR);
-            Shuadao = Tools.Limit(Shuadao, 0, GameConst.MAX_ROLE_WEAPON_ATTR);
-            Qimen = Tools.Limit(Qimen, 0, GameConst.MAX_ROLE_WEAPON_ATTR);
-            Anqi =Tools.Limit(Anqi, 0, GameConst.MAX_ROLE_WEAPON_ATTR);
-
-            IQ = Tools.Limit(IQ, 0, GameConst.MAX_ROLE_ZIZHI);
-            Pinde = Tools.Limit(Pinde, 0, GameConst.MAX_ROLE_PINDE);
-            Shengwang = Tools.Limit(Shengwang, 0, GameConst.MAX_ROLE_SHENGWANG);
-            AttackPoison = Tools.Limit(AttackPoison, 0, GameConst.MAX_ROLE_ATK_POISON);
-            Hurt = Tools.Limit(Hurt, 0, GameConst.MAX_HURT);
-
-            foreach (var wugong in skills)
-            {
-                wugong.Level = Tools.Limit(wugong.Level, 0, GameConst.MAX_SKILL_LEVEL);
-            }
         }
 
         int checkUp(int value, int limit, int max_inc)
@@ -341,7 +316,7 @@ namespace Jyx2
         /// <summary>
         /// 战斗中使用的招式
         /// </summary>
-        private List<BattleZhaoshiInstance> Zhaoshis;
+        public List<BattleZhaoshiInstance> Zhaoshis;
 
 
         /// <summary>
@@ -350,16 +325,12 @@ namespace Jyx2
         /// <returns></returns>
         public IEnumerable<BattleZhaoshiInstance> GetZhaoshis(bool forceAttackZhaoshi)
         {
-            //金庸DOS版逻辑，体力大于等于10且有武功最低等级所需内力值才可以使用技能
-            if (this.Tili >= 10)
+            foreach (var zhaoshi in Zhaoshis)
             {
-                foreach (var zhaoshi in Zhaoshis)
-                {
-                    if (this.Mp >= zhaoshi.Data.GetSkill().MpCost)
-                        yield return zhaoshi;
-                }
+                if (this.Mp >= zhaoshi.Data.GetSkill().MpCost)
+                    yield return zhaoshi;
             }
-
+            
             if (forceAttackZhaoshi)
                 yield break;
 
@@ -503,15 +474,7 @@ namespace Jyx2
 
                 //上面的判断未确定则进入下面的判断链
                 return testAttr(this.Attack - GetWeaponProperty("Attack") - GetArmorProperty("Attack"), item.ConditionAttack)
-                       && testAttr(this.Qinggong - GetWeaponProperty("Qinggong") - GetArmorProperty("Qinggong"), item.ConditionQinggong)
-                       && testAttr(this.Heal, item.ConditionHeal)
-                       && testAttr(this.UsePoison, item.ConditionPoison)
-                       && testAttr(this.DePoison, item.ConditionDePoison)
-                       && testAttr(this.Quanzhang, item.ConditionQuanzhang)
-                       && testAttr(this.Yujian, item.ConditionYujian)
-                       && testAttr(this.Shuadao, item.ConditionShuadao)
-                       && testAttr(this.Qimen, item.ConditionQimen)
-                       && testAttr(this.Anqi, item.ConditionAnqi)
+                       && testAttr(this.Speed - GetWeaponProperty("Qinggong") - GetArmorProperty("Qinggong"), item.ConditionQinggong)
                        && testAttr(this.MaxMp, item.ConditionMp)
                        && testAttr(this.IQ, item.ConditionIQ);
             }
@@ -600,31 +563,16 @@ namespace Jyx2
             this.MaxMp += item.AddMaxMp;
             this.Poison += item.ChangePoisonLevel / 2;
             this.Heal += item.Heal;
-            this.DePoison += item.DePoison;
-            this.AntiPoison += item.AntiPoison;
-            this.UsePoison += item.UsePoison;
 
             this.Attack += item.Attack;
-            this.Defence += item.Defence;
-            this.Qinggong += item.Qinggong;
+            this.Defense += item.Defence;
+            this.Speed += item.Speed;
             
-            this.Quanzhang += item.Quanzhang;
-            this.Yujian += item.Yujian;
-            this.Shuadao += item.Shuadao;
-            this.Qimen += item.Qimen;
-            this.Anqi += item.Anqi;
-
-            this.Pinde += item.AddPinde;
             this.AttackPoison += item.AttackPoison;
 
             if (item.ChangeMPType == 2)
             {
                 this.MpType = 2;
-            }
-
-            if (item.Zuoyouhubo == 1)
-            {
-                this.Zuoyouhubo = 1;
             }
 
             if (CanFinishedItem())
@@ -636,8 +584,6 @@ namespace Jyx2
 
                 this.ExpForItem = 0;
             }
-
-            this.Limit(1, 1, 1);
         }
 
         /// <summary>
@@ -657,26 +603,14 @@ namespace Jyx2
             this.MaxMp -= item.AddMaxMp;
             this.Poison -= item.ChangePoisonLevel;
             this.Heal -= item.Heal;
-            this.DePoison -= item.DePoison;
-            this.AntiPoison -= item.AntiPoison;
-            this.UsePoison -= item.UsePoison;
 
             this.Attack -= item.Attack;
-            this.Defence -= item.Defence;
-            this.Qinggong -= item.Qinggong;
-
-            this.Quanzhang -= item.Quanzhang;
-            this.Yujian -= item.Yujian;
-            this.Shuadao -= item.Shuadao;
-            this.Qimen -= item.Qimen;
-
-            this.Pinde -= item.AddPinde;
+            this.Defense -= item.Defence;
+            this.Speed -= item.Speed;
             this.AttackPoison -= item.AttackPoison;
 
             int defenceTime = item.Defence < 0 ? 0 : 1;
-            int qinggongTime = item.Qinggong < 0 ? 0 : 1;
-            // 装备攻击永远为正，防御、轻功可能为负
-            this.Limit(1, defenceTime, qinggongTime);
+            int qinggongTime = item.Speed < 0 ? 0 : 1;
         }
 
         public bool CanFinishedItem()
@@ -859,7 +793,7 @@ namespace Jyx2
         //集气槽增长 根据轻功来增加
         public void IncSp()
         {
-            sp += this.Qinggong / 4; //1f;
+            sp += this.Speed / 4; //1f;
         }
 
         //获得行动力
@@ -868,7 +802,7 @@ namespace Jyx2
         {
             if (Tili <= 5)
                 return 0; //金庸DOS版逻辑，体力小于等于5无法移动
-            int speed = this.Qinggong;
+            int speed = this.Speed;
 
             speed = speed / 15 - this.Hurt / 40;
 
@@ -934,7 +868,7 @@ namespace Jyx2
         public void StopStun()
         {
             _isStun = false;
-            View.StopStun(_isInBattle);
+            View.StopStun();
         }
 
         //TODO:由于探索地图没有实例，所以晕眩状态暂时由UI决定 by Cherubinxxx

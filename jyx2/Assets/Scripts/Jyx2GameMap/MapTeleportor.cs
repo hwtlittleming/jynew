@@ -84,7 +84,7 @@ public class MapTeleportor : MonoBehaviour
 		{
 			foreach (var role in runtime.GetTeam())
 			{
-				if (role.Qinggong >= 75) return true;
+				if (role.Speed >= 75) return true;
 			}
 		}
 

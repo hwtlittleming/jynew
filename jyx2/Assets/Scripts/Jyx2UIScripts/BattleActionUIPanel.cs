@@ -34,7 +34,7 @@ public partial class BattleActionUIPanel : Jyx2_UIBase
 	ChildGoComponent childMgr;
 
 	private bool isSelectMove;
-	private Action<BattleLoop.ManualResult> callback;
+	//private Action<BattleLoop.ManualResult> callback;
 	private List<BattleBlockVector> moveRange;
 	private BattleFieldModel battleModel;
 	private BattleZhaoshiInstance currentZhaoshi;
@@ -95,7 +95,7 @@ public partial class BattleActionUIPanel : Jyx2_UIBase
 
 		moveRange = (List<BattleBlockVector>)allParams[1];
 		isSelectMove = (bool)allParams[2];
-		callback = (Action<BattleLoop.ManualResult>)allParams[3];
+		//callback = (Action<BattleLoop.ManualResult>)allParams[3];
 		battleModel = BattleManager.Instance.GetModel();
 
 		BattleboxHelper.Instance.analogLeftMovedToBlock += onBattleBlockMove;
@@ -109,7 +109,7 @@ public partial class BattleActionUIPanel : Jyx2_UIBase
 		if (isSelectMove)
 		{
 			_lastHitRangeOverBlock = null;
-			BattleboxHelper.Instance.ShowBlocks(m_currentRole, moveRange, BattleBlockType.MoveZone, false);
+			//BattleboxHelper.Instance.ShowBlocks(m_currentRole, moveRange, BattleBlockType.MoveZone, false);
 		}
 		else
 		{
@@ -153,11 +153,11 @@ public partial class BattleActionUIPanel : Jyx2_UIBase
 		isSelectMove = false;
 
 		BattleboxHelper.Instance.HideAllBlocks();
-		var blockList = BattleManager.Instance.GetSkillUseRange(m_currentRole, zhaoshi);
+		/*var blockList = BattleManager.Instance.GetSkillUseRange(m_currentRole, zhaoshi);
 
 		//prevent reselecting causing not showing hit range
 		_lastHitRangeOverBlock = null;
-		BattleboxHelper.Instance.ShowBlocks(m_currentRole, blockList, BattleBlockType.AttackZone, true);
+		BattleboxHelper.Instance.ShowBlocks(m_currentRole, blockList, BattleboxHelper.BattleBlockType.AttackZone, true);*/
 	}
 
 	private BattleBlockData _lastHitRangeOverBlock = null;
@@ -292,12 +292,12 @@ public partial class BattleActionUIPanel : Jyx2_UIBase
 		if (!isSelectMove)
 		{
 			var overBlock = block ?? InputManager.Instance.GetMouseOverBattleBlock();
-			if (overBlock != null && overBlock != _lastHitRangeOverBlock)
+			/*if (overBlock != null && overBlock != _lastHitRangeOverBlock)
 			{
 				_lastHitRangeOverBlock = overBlock;
 				var range = BattleManager.Instance.GetSkillCoverBlocks(currentZhaoshi, overBlock.BattlePos, m_currentRole.Block);
 				//BattleboxHelper.Instance.ShowRangeBlocks(range);
-			}
+			}*/
 		}
 	}
 
@@ -345,7 +345,7 @@ public partial class BattleActionUIPanel : Jyx2_UIBase
 
 		if (isSelectMove)
 		{
-			TryCallback(new BattleLoop.ManualResult() { movePos = block.BattlePos }); //移动
+			//TryCallback(new BattleLoop.ManualResult() { movePos = block.BattlePos }); //移动
 		}
 		else  //选择攻击
 		{
@@ -355,20 +355,20 @@ public partial class BattleActionUIPanel : Jyx2_UIBase
 
 			rst.Zhaoshi = currentZhaoshi;
 
-			TryCallback(new BattleLoop.ManualResult() { aiResult = rst });
+			//TryCallback(new BattleLoop.ManualResult() { aiResult = rst });
 		}
 	}
 
-	void TryCallback(BattleLoop.ManualResult ret)
+	/*void TryCallback(BattleLoop.ManualResult ret)
 	{
 		BattleboxHelper.Instance.HideAllBlocks(true);
 		callback?.Invoke(ret);
-	}
+	}*/
 
 	//点击了自动
 	public void OnAutoClicked()
 	{
-		TryCallback(new BattleLoop.ManualResult() { isAuto = true });
+		//TryCallback(new BattleLoop.ManualResult() { isAuto = true });
 	}
 
 	protected override void OnHidePanel()
@@ -448,7 +448,7 @@ public partial class BattleActionUIPanel : Jyx2_UIBase
 
 	void OnCancelClick()
 	{
-		TryCallback(new BattleLoop.ManualResult() { isRevert = true });
+		//TryCallback(new BattleLoop.ManualResult() { isRevert = true });
 	}
 
 	void OnMoveClick()
@@ -492,7 +492,7 @@ public partial class BattleActionUIPanel : Jyx2_UIBase
 			{
 				if (m_currentRole.CanUseItem(itemId))
 				{
-					TryCallback(new BattleLoop.ManualResult() { aiResult = new AIResult() { Item = item } });
+					//TryCallback(new BattleLoop.ManualResult() { aiResult = new AIResult() { Item = item } });
 				}
 			}
 			else if ((int)item.ItemType == 4) //使用暗器逻辑
@@ -506,11 +506,11 @@ public partial class BattleActionUIPanel : Jyx2_UIBase
 
 	void OnWaitClick()
 	{
-		TryCallback(new BattleLoop.ManualResult() { isWait = true });
+		//TryCallback(new BattleLoop.ManualResult() { isWait = true });
 	}
 
 	void OnRestClick()
 	{
-		TryCallback(new BattleLoop.ManualResult() { aiResult = new AIResult() { IsRest = true } });
+		//TryCallback(new BattleLoop.ManualResult() { aiResult = new AIResult() { IsRest = true } });
 	}
 }

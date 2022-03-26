@@ -40,7 +40,7 @@ MonoBehaviour:
   Exp: 300
   MpType: 1
   Attack: 2
-  Qinggong: 30
+  Qinggong: 1000
   Defence: 45
   MagicDefence: 0
   Heal: 40

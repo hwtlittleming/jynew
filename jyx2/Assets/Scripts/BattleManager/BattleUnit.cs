@@ -35,13 +35,13 @@ namespace Jyx2.Battle
             if (_role == null || isActing == true) return;
             _role.Attack = 1;
             isActing = true;
-
-            _manager.planAndAttack(_role);
-
-            Debug.Log("dd");
+            _manager.planAndAttack(_role,this);
+            /*await UniTask.Delay(2000);
+            isActing = false;*/
+            /*Debug.Log("dd");
             await UniTask.Delay(2000);
             isActing = false;
-            Debug.Log(_role.Name);
+            Debug.Log(_role.Name);*/
             
         }
         

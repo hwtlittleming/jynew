@@ -33,7 +33,7 @@ MonoBehaviour:
     Count: 3
   - Item: {fileID: 11400000, guid: b9d0b0a2e2d59c94bbdcb0f4b3832cbf, type: 2}
     Count: 3
-  MaxHp: 3800
+  MaxHp: 380000
   MaxMp: 26
   HpInc: 3
   Level: 1

@@ -139,9 +139,9 @@ namespace Jyx2
             {
                 Roles.Sort((roleA, roleB) =>
                 {
-                    if (roleA.Qinggong != roleB.Qinggong)
+                    if (roleA.Speed != roleB.Speed)
                     {
-                        return roleB.Qinggong.CompareTo(roleA.Qinggong);
+                        return roleB.Speed.CompareTo(roleA.Speed);
                     }
                     else
                     {

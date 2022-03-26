@@ -41,8 +41,9 @@ MonoBehaviour:
   Exp: -9036
   MpType: 1
   Attack: 99
-  Qinggong: 70
+  Qinggong: 3000
   Defence: 99
+  MagicDefence: 0
   Heal: 10
   UsePoison: 10
   DePoison: 15
@@ -57,6 +58,7 @@ MonoBehaviour:
   Zuoyouhubo: 0
   Weapon: {fileID: 0}
   Armor: {fileID: 0}
+  Shoes: {fileID: 0}
   LeaveStoryId: 
   Model: {fileID: 11400000, guid: a9303c3a6fe1c734c85755138d14c1f2, type: 2}
   references:

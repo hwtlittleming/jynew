@@ -91,19 +91,4 @@ namespace Jyx2
             return X * 10000 + Y;
         }
     }
-
-    static public class BattleBlockVectorTools
-    {
-        public static IEnumerable<Transform> ToTransforms(this IEnumerable<BattleBlockVector> blocks)
-        {
-            foreach(var block in blocks)
-            {
-                var tempBlock = BattleboxHelper.Instance.GetBlockData(block.X, block.Y);
-                if (tempBlock != null && tempBlock.gameObject != null)
-                {
-                    yield return tempBlock.gameObject.transform;
-                }
-            }
-        }
-    }
 }

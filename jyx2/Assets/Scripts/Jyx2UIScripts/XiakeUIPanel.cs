@@ -188,8 +188,8 @@ public partial class XiakeUIPanel : Jyx2_UIBase
 		sb.AppendLine(string.Format("经验 {0}/{1}".GetContent(nameof(XiakeUIPanel)), role.Exp, role.GetLevelUpExp()));
 		sb.AppendLine();
 		sb.AppendLine(string.Format("攻击 {0}".GetContent(nameof(XiakeUIPanel)), role.Attack));
-		sb.AppendLine(string.Format("防御 {0}".GetContent(nameof(XiakeUIPanel)), role.Defence));
-		sb.AppendLine(string.Format("轻功 {0}".GetContent(nameof(XiakeUIPanel)), role.Qinggong));
+		sb.AppendLine(string.Format("防御 {0}".GetContent(nameof(XiakeUIPanel)), role.Defense));
+		sb.AppendLine(string.Format("轻功 {0}".GetContent(nameof(XiakeUIPanel)), role.Speed));
 		sb.AppendLine(string.Format("医疗 {0}".GetContent(nameof(XiakeUIPanel)), role.Heal));
 		sb.AppendLine(string.Format("解毒 {0}".GetContent(nameof(XiakeUIPanel)), role.DePoison));
 		sb.AppendLine(string.Format("用毒 {0}".GetContent(nameof(XiakeUIPanel)), role.UsePoison));
@@ -359,33 +359,14 @@ public partial class XiakeUIPanel : Jyx2_UIBase
 			}
 			else
 			{
-				if (item.NeedCastration) //辟邪剑谱和葵花宝典
+				if (m_currentRole.GetXiulianItem() != null)
 				{
-					await GameUtil.ShowYesOrNoCastrate(m_currentRole, () =>
-					{
-						if (m_currentRole.GetXiulianItem() != null)
-						{
-							runtime.SetItemUser(m_currentRole.Xiulianwupin, -1);
-							m_currentRole.ExpForItem = 0;
-						}
-
-						m_currentRole.Xiulianwupin = itemId;
-						runtime.SetItemUser(item.Id, m_currentRole.GetJyx2RoleId());
-
-						RefreshCurrent();
-					});
+					runtime.SetItemUser(m_currentRole.Xiulianwupin, -1);
+					m_currentRole.ExpForItem = 0;
 				}
-				else
-				{
-					if (m_currentRole.GetXiulianItem() != null)
-					{
-						runtime.SetItemUser(m_currentRole.Xiulianwupin, -1);
-						m_currentRole.ExpForItem = 0;
-					}
 
-					m_currentRole.Xiulianwupin = itemId;
-					runtime.SetItemUser(item.Id, m_currentRole.GetJyx2RoleId());
-				}
+				m_currentRole.Xiulianwupin = itemId;
+				runtime.SetItemUser(item.Id, m_currentRole.GetJyx2RoleId());
 			}
 		}
 

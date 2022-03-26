@@ -22,8 +22,8 @@ namespace ES3Types
 			writer.WriteProperty("Level", instance.Level, ES3Type_int.Instance);
 			writer.WriteProperty("Exp", instance.Exp, ES3Type_int.Instance);
 			writer.WriteProperty("Attack", instance.Attack, ES3Type_int.Instance);
-			writer.WriteProperty("Qinggong", instance.Qinggong, ES3Type_int.Instance);
-			writer.WriteProperty("Defence", instance.Defence, ES3Type_int.Instance);
+			writer.WriteProperty("Speed", instance.Speed, ES3Type_int.Instance);
+			writer.WriteProperty("Defense", instance.Defense, ES3Type_int.Instance);
 			writer.WriteProperty("Heal", instance.Heal, ES3Type_int.Instance);
 			writer.WriteProperty("UsePoison", instance.UsePoison, ES3Type_int.Instance);
 			writer.WriteProperty("DePoison", instance.DePoison, ES3Type_int.Instance);
@@ -34,7 +34,7 @@ namespace ES3Types
 			writer.WriteProperty("Qimen", instance.Qimen, ES3Type_int.Instance);
 			writer.WriteProperty("Anqi", instance.Anqi, ES3Type_int.Instance);
 			writer.WriteProperty("Wuxuechangshi", instance.Wuxuechangshi, ES3Type_int.Instance);
-			writer.WriteProperty("Pinde", instance.Pinde, ES3Type_int.Instance);
+			writer.WriteProperty("Moral", instance.Moral, ES3Type_int.Instance);
 			writer.WriteProperty("AttackPoison", instance.AttackPoison, ES3Type_int.Instance);
 			writer.WriteProperty("Zuoyouhubo", instance.Zuoyouhubo, ES3Type_int.Instance);
 			writer.WriteProperty("Shengwang", instance.Shengwang, ES3Type_int.Instance);
@@ -83,11 +83,11 @@ namespace ES3Types
 					case "Attack":
 						instance.Attack = reader.Read<System.Int32>(ES3Type_int.Instance);
 						break;
-					case "Qinggong":
-						instance.Qinggong = reader.Read<System.Int32>(ES3Type_int.Instance);
+					case "Speed":
+						instance.Speed = reader.Read<System.Int32>(ES3Type_int.Instance);
 						break;
-					case "Defence":
-						instance.Defence = reader.Read<System.Int32>(ES3Type_int.Instance);
+					case "Defense":
+						instance.Defense = reader.Read<System.Int32>(ES3Type_int.Instance);
 						break;
 					case "Heal":
 						instance.Heal = reader.Read<System.Int32>(ES3Type_int.Instance);
@@ -119,8 +119,8 @@ namespace ES3Types
 					case "Wuxuechangshi":
 						instance.Wuxuechangshi = reader.Read<System.Int32>(ES3Type_int.Instance);
 						break;
-					case "Pinde":
-						instance.Pinde = reader.Read<System.Int32>(ES3Type_int.Instance);
+					case "Moral":
+						instance.Moral = reader.Read<System.Int32>(ES3Type_int.Instance);
 						break;
 					case "AttackPoison":
 						instance.AttackPoison = reader.Read<System.Int32>(ES3Type_int.Instance);

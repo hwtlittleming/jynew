@@ -202,32 +202,7 @@ public partial class MainUIPanel : Jyx2_UIBase, IUIAnimator
 					//修炼
 					else if ((int)item.ItemType == 2)
 					{
-						if (item.NeedCastration) //辟邪剑谱和葵花宝典
-						{
-							await GameUtil.ShowYesOrNoCastrate(selectRole, () =>
-							{
-								if (runtime.GetItemUser(item.Id) != -1)
-								{
-									RoleInstance roleInstance = runtime.GetRoleInTeam(runtime.GetItemUser(item.Id));
-									runtime.SetItemUser(item.Id, -1);
-									roleInstance.ExpForItem = 0;
-									roleInstance.Xiulianwupin = -1;
-								}
-
-								if (selectRole.GetXiulianItem() != null)
-								{
-									runtime.SetItemUser(selectRole.Xiulianwupin, -1);
-									selectRole.ExpForItem = 0;
-								}
-
-								selectRole.Xiulianwupin = id;
-								runtime.SetItemUser(item.Id, selectRole.GetJyx2RoleId());
-								GameUtil.DisplayPopinfo($"{selectRole.Name}使用了{item.Name}");
-							});
-						}
-						else
-						{
-							if (runtime.GetItemUser(item.Id) != -1)
+						if (runtime.GetItemUser(item.Id) != -1)
 							{
 								RoleInstance roleInstance = runtime.GetRoleInTeam(runtime.GetItemUser(item.Id));
 								runtime.SetItemUser(item.Id, -1);
@@ -244,7 +219,6 @@ public partial class MainUIPanel : Jyx2_UIBase, IUIAnimator
 							selectRole.Xiulianwupin = id;
 							runtime.SetItemUser(item.Id, selectRole.GetJyx2RoleId());
 							GameUtil.DisplayPopinfo($"{selectRole.Name}使用了{item.Name}");
-						}
 					}
 					//药品
 					else if ((int)item.ItemType == 3)

@@ -18,6 +18,7 @@ using System.Linq;
 using Cysharp.Threading.Tasks;
 using Jyx2.Middleware;
 using Jyx2Configs;
+using Sirenix.Utilities;
 using UnityEngine;
 using Random = System.Random;
 
@@ -64,442 +65,155 @@ public class AIManager
     {
     }
 
-    public void normalAttack(RoleInstance fromRole,RoleInstance toRole)
+    public async UniTask GetAIResult(RoleInstance role)
     {
-        Jyx2ConfigItem weapon = fromRole.GetWeapon();
-        int dis = weapon.bestDistance; //获得持有武器的最佳攻击距离
-        fromRole.View.LookAtBattleBlock(toRole.blockData.WorldPos); //先面向目标
-        fromRole.SwitchAnimationToSkill(fromRole.skills[0]); //切换普攻姿势
-    }
-
-    public async UniTask<AIResult> GetAIResult(RoleInstance role)
-    {
-        var Enermys = _battleManager.Enermys;
+        var Enermies = _battleManager.Enermys;
         var Teammates = _battleManager.Teammates;
+
         if (role.team == 1) //如果是敌方 相对关系转换
         {
-            var temp = Enermys;
-            Enermys = Teammates;
+            var temp = Enermies;
+            Enermies = Teammates;
             Teammates = temp;
+        }
+        //去除已死目标
+        foreach (var e in Enermies)
+        {
+            if (e.IsDead())
+            {
+                Enermies.Remove(e);
+            }
+        }
+        foreach (var e in Teammates)
+        {
+            if (e.IsDead())
+            {
+                Teammates.Remove(e);
+            }
+        }
+
+        if (Teammates.IsNullOrEmpty() || Enermies.IsNullOrEmpty())
+        {
+            var model = _battleManager.GetModel();
+            //判断战斗是否结束
+            var rst = model.GetBattleResult();
+            if (rst != BattleResult.InProgress)
+            {
+                _battleManager.OnBattleEnd(rst);
+                return;
+            }
         }
 
         int iq = role.IQ;
         
         //AI可执行的策略组
         List<String> strategies = new List<String>();
-        strategies.Add("normalAttack");
-        strategies.Add("useSkill");
-        strategies.Add("useItem");
-        strategies.Add("throw");
-
-        var range = new List<BattleBlockVector>();
-        //可使用招式
-        var zhaoshis = role.GetZhaoshis(false);
+        strategies.Add("normalAttack");//普攻
+        strategies.Add("useSkill");//技能
+        strategies.Add("useItem");//吃药
+        strategies.Add("throw"); //弃剑 或 投掷物品 扔武器是最后一击 高智快死之前会扔武器或自杀式袭击
         
-        //AI算法：穷举每个点，使用招式，取最大收益
-        AIResult result = null;
         double maxscore = 0;
         
-        //低智 随机决策
-        if (iq < 40)
+        //iq 0~30 30~60 >60 >90
+        Random r = new Random();
+        BattleBlockData toBlockData = Enermies[r.Next(0,Enermies.Count)].blockData;//随机获取一个存活敌人位置
+        BattleBlockData weBlockData = Teammates[r.Next(0,Teammates.Count)].blockData;//随机获取一个存活队友位置
+        IEnumerable<BattleZhaoshiInstance> skills = role.GetZhaoshis(false);//所有技能
+        var skill = skills.ElementAt(0);//默认的普攻
+        if (iq < 30)//低智 完全随机 技能使用率 0.2
         {
-            strategies.Remove("throw");
-            Random r = new Random();
-            int ran = r.Next(1, strategies.Count + 1);
-            String str = strategies[ran];
-            //随机获取一个敌人位置
-            if ("normalAttack|useSkill".IndexOf(str) >= 0)
+            if ( r.Next(1, 11) > 8) 
             {
-                RoleInstance enermyRole = Enermys[r.Next(0,Enermys.Count)];
-                if (str == "normalAttack")
+                skill = skills.ElementAt(r.Next(1,skills.Count()));//随机选择一个技能
+            }
+            //随机选择一个技能攻击(包括普攻和投掷)
+            await _battleManager.AttackOnce(role,skill,toBlockData);
+            return;
+        }
+        else if (iq < 60) //初智 低血吃药 不会给对面加血 技能使用率 0.4
+        {
+            if ((role.Hp < role.Hp * 0.2 || role.Mp < role.Mp * 0.2) && role.Items.Count > 0)
+            {
+                List<Jyx2ConfigItem> items = GetAvailableItems(role, 3); //获得携带物品
+                Jyx2ConfigItem item = items.ElementAt(r.Next(1,items.Count()));
+                //使用道具
+                await _battleManager.RoleUseItem(role,item,toBlockData.role);
+                return;
+            }
+            if (r.Next(1, 11) > 6)
+            {
+                skill = skills.ElementAt(r.Next(1, skills.Count())); //随机选择一个技能
+                if (skill.IsCastToEnemy() == true)
                 {
-                    normalAttack(role, enermyRole);
+                    await _battleManager.AttackOnce(role, skill, toBlockData);
                 }
                 else
                 {
-                    await _battleManager.RoleCastSkill(role, role.GetZhaoshis(false).FirstOrDefault(), new BattleBlockVector(enermyRole.blockData.x, enermyRole.blockData.y));
+                    await _battleManager.AttackOnce(role, skill, weBlockData);
                 }
-
-            }else if ("useItem".IndexOf(str) >= 0)
-            {
-                //随机获取己方位置
-                
-            }
-
-            
-            
-        }
-
-        //优先考虑吃药,智障不吃药
-        if (iq>= 60 && role.Items.Count > 0 && (role.Hp < 0.2 * role.MaxHp || role.Mp < 0.2 * role.MaxMp || role.Tili < 0.2 * GameConst.MAX_ROLE_TILI))
-        {
-            List<Jyx2ConfigItem> items = GetAvailableItems(role, 3); //只使用药物
-            foreach (var item in items)
-            {
-                double score = 0;
-                //尽量吃刚刚好的药
-                if (item.AddHp > 0)
-                {
-                    score += Mathf.Min(item.AddHp, role.MaxHp - role.Hp) - item.AddHp / 10;
-                }
-                if (item.AddMp > 0)
-                {
-                    score += Mathf.Min(item.AddMp, role.MaxMp - role.Mp) / 2 - item.AddMp / 10;
-                }
-                if (item.AddTili > 0)
-                {
-                    score += Mathf.Min(item.AddTili, GameConst.MAX_ROLE_TILI - role.Tili) - item.AddTili / 10;
-                }
-
-                if (score > maxscore)
-                {
-                    maxscore = score;
-                    var tmp = GetFarestEnemyBlock(role, range);
-                    result = new AIResult
-                    {
-                        MoveX = tmp.X,
-                        MoveY = tmp.Y,
-                        IsRest = false,
-                        Item = item
-                    };
-                }
-            }
-        }
-
-        if (result != null)
-        {
-            return result;
-        }
-
-        foreach (var zhaoshi in zhaoshis)
-        {
-            if (zhaoshi.GetStatus() != BattleZhaoshiInstance.ZhaoshiStatus.OK)
-                continue;
-
-            BattleBlockVector[] tmp = await GetMoveAndCastPos(role, zhaoshi, range);
-            if (tmp != null && tmp.Length == 2 && tmp[0] != null)
-            {
-                BattleBlockVector movePos = tmp[0];
-                BattleBlockVector castPos = tmp[1];
-                double score = GetSkillCastResultScore(role, zhaoshi, movePos.X, movePos.Y, castPos.X, castPos.Y, true);
-                if (score > maxscore)
-                {
-                    maxscore = score;
-                    result = new AIResult
-                    {
-                        AttackX = castPos.X,
-                        AttackY = castPos.Y,
-                        MoveX = movePos.X,
-                        MoveY = movePos.Y,
-                        Zhaoshi = zhaoshi,
-                        IsRest = false
-                    };
-                }
-                
-                await UniTask.WaitForEndOfFrame();
-            }
-        }
-
-        List<Jyx2ConfigItem> anqis = GetAvailableItems(role, 4); //获取暗器
-        //使用暗器
-        if(anqis.Count > 0)
-        {
-            foreach(var anqi in anqis)
-            {
-                BattleZhaoshiInstance anqizhaoshi = new AnqiZhaoshiInstance(role.Anqi, anqi);
-
-                if (anqizhaoshi.GetStatus() != BattleZhaoshiInstance.ZhaoshiStatus.OK)
-                    continue;
-
-                BattleBlockVector[] tmp = await GetMoveAndCastPos(role, anqizhaoshi, range);
-                
-                if (tmp != null && tmp.Length == 2 && tmp[0] != null)
-                {
-                    BattleBlockVector movePos = tmp[0];
-                    BattleBlockVector castPos = tmp[1];
-                    double score = GetSkillCastResultScore(role, anqizhaoshi, movePos.X, movePos.Y, castPos.X, castPos.Y, true);
-
-                    if (score > maxscore)
-                    {
-                        maxscore = score;
-                        result = new AIResult
-                        {
-                            AttackX = castPos.X,
-                            AttackY = castPos.Y,
-                            MoveX = movePos.X,
-                            MoveY = movePos.Y,
-                            Zhaoshi = anqizhaoshi,
-                            IsRest = false
-                        };
-                    }
-                }
-            }
-        }
-
-        //Debug.Log(Time.realtimeSinceStartup);
-
-        if (result != null)
-        {
-            return result;
-        }
-
-        //否则靠近自己最近的敌人
-        /*result = MoveToNearestEnemy(role, range);
-        if (result != null)
-        {
-            return result;
-        }*/
-
-        //否则原地休息
-        return Rest(role);
-    }
-
-    public double GetSkillCastResultScore(RoleInstance caster, BattleZhaoshiInstance skill,
-            int movex, int movey, int castx, int casty, bool isAIComputing)
-    {
-        double score = 0;
-        var coverSize = skill.GetCoverSize();
-        var coverType = skill.GetCoverType();
-        var coverBlocks = rangeLogic.GetSkillCoverBlocks(coverType, castx, casty,0, movex, movey, coverSize);
-
-        foreach (var blockVector in coverBlocks)
-        {
-            var targetRole = BattleModel.GetAliveRole(new Vector3(blockVector.X, blockVector.Y, 0));
-            //还活着
-            if (targetRole == null || targetRole.IsDead()) continue;
-            //打敌人的招式
-            if (skill.IsCastToEnemy() && caster.team == targetRole.team) continue;
-            //“打”自己人的招式
-            if (!skill.IsCastToEnemy() && caster.team != targetRole.team) continue;
-
-            var result = GetSkillResult(caster, targetRole, skill);
-            score += result.GetTotalScore();
-
-            //暗器算分
-            if (skill is AnqiZhaoshiInstance)
-            {
-                if (score > targetRole.Hp)
-                {
-                    score = targetRole.Hp * 1.25;
-                }
-                score *= 0.5;//暗器分值略低
-            }
-        }
-
-        return score;
-    }
-
-
-    /// <summary>
-    /// 靠近自己最近的敌人
-    /// </summary>
-    /// <returns>The to nearest enemy.</returns>
-    /// <param name="sprite">Sprite.</param>
-    /// <param name="moverange">Moverange.</param>
-    public AIResult MoveToNearestEnemy(RoleInstance sprite, List<BattleBlockVector> range)
-    {
-        var tmp = GetNearestEnemyBlock(sprite, range);
-        if (tmp == null) return null;
-
-        AIResult rst = new AIResult
-        {
-            Zhaoshi = null,
-            MoveX = tmp.X,
-            MoveY = tmp.Y,
-            IsRest = true //靠近对手
-        };
-        return rst;
-    }
-
-    /// <summary>
-    /// 原地休息
-    /// </summary>
-    /// <param name="sprite">Sprite.</param>
-    public AIResult Rest(RoleInstance sprite)
-    {
-        AIResult rst = new AIResult
-        {
-            MoveX = sprite.Pos.X,
-            MoveY = sprite.Pos.Y,
-            IsRest = true
-        };
-        return rst;
-    }
-
-    public async UniTask<BattleBlockVector[]> GetMoveAndCastPos(RoleInstance role, BattleZhaoshiInstance zhaoshi, List<BattleBlockVector> moveRange)
-    {
-        BattleBlockVector[] rst = new BattleBlockVector[2];
-        
-        //丢给自己的，随便乱跑一个地方丢
-        if (zhaoshi.GetCoverType() == SkillCoverType.POINT && zhaoshi.GetCastSize() == 0 && zhaoshi.GetCoverSize() == 0)
-        {
-            BattleBlockVector targetBlock = null;
-            if ((float)role.Hp / role.MaxHp > 0.5)
-            {
-                targetBlock = GetNearestEnemyBlock(role, moveRange); //生命大于50%前进
+                return;
             }
             else
             {
-                targetBlock = GetFarestEnemyBlock(role, moveRange); //生命小于50%后退
+                await _battleManager.AttackOnce(role, skill, toBlockData);
+                return;
             }
-            
-            
-            rst[0] = targetBlock;
-            rst[1] = targetBlock;
-            return rst;
-        }
-
-        bool isAttack = zhaoshi.IsCastToEnemy();
-        double maxScore = 0;
-
-        Dictionary<int,float > cachedScore = new Dictionary<int, float>();
-        //带攻击范围的，找最多人丢
-        foreach (var moveBlock in moveRange)
+        } 
+        else //有智商的敌人(一般AI) 技能使用率 0.6 决策增加自爆 吃刚好的药 投掷物品决定于收益最大； 攻击弱者；技能覆盖范围最大; iq 60以上攻击加成
         {
-            var coverType = zhaoshi.GetCoverType();
-            var sx = moveBlock.X;
-            var sy = moveBlock.Y;
-            var castBlocks = rangeLogic.GetSkillCastBlocks(sx, sy, zhaoshi, role);
-
-            int splitFrame = 0;//分帧
-            foreach (var castBlock in castBlocks)
+            //优先给队伍吃药
+            foreach (var teammate in Teammates)
             {
-                float score = 0;
-                if (cachedScore.ContainsKey(castBlock.ToInt()))
+                if (teammate.Items.Count > 0 && (teammate.Hp < 0.2 * teammate.MaxHp || teammate.Mp < 0.2 * teammate.MaxMp))
                 {
-                    score = cachedScore[castBlock.ToInt()];
+                    List<Jyx2ConfigItem> items = GetAvailableItems(role, 3);
+                    Jyx2ConfigItem _item = items.FirstOrDefault();
+                    foreach (var item in items)
+                    {
+                        double score = 0;
+                        //尽量吃刚刚好的药
+                        if (item.AddHp > 0)
+                        {
+                            score += Mathf.Min(item.AddHp, role.MaxHp - role.Hp) - item.AddHp / 10;
+                        }
+                        if (item.AddMp > 0)
+                        {
+                            score += Mathf.Min(item.AddMp, role.MaxMp - role.Mp) / 2 - item.AddMp / 10;
+                        }
+                        if (score > maxscore)
+                        {
+                            maxscore = score;
+                            _item = item;
+                        }
+                    }
+                    await _battleManager.RoleUseItem(role,_item,teammate);
+                    return;
+                }
+            }
+            //伤害技能或普攻  覆盖敌人最多的技能
+            if ( r.Next(1, 11) > 4)
+            {
+                skill = skills.ElementAt(r.Next(1, skills.Count())); //随机选择一个技能
+                if (skill.IsCastToEnemy() == true)
+                {
+                    await _battleManager.AttackOnce(role, skill, toBlockData);
                 }
                 else
                 {
-                    var coverSize = zhaoshi.GetCoverSize();
-                    var tx = castBlock.X;
-                    var ty = castBlock.Y;
-                    var coverBlocks = rangeLogic.GetSkillCoverBlocks(coverType, tx, ty, sx, sy,0, coverSize);
-                    
-                    foreach (var coverBlock in coverBlocks)
-                    {
-                        var targetSprite = BattleModel.GetAliveRole(new Vector3(coverBlock.X, coverBlock.Y, 0));
-                        //位置没人
-                        if (targetSprite == null) continue;
-
-                        //如果判断是施展给原来的自己，但自己已经不在原位置了,相当于没打中
-                        if (targetSprite == role && !(targetSprite.Pos.X == moveBlock.X && targetSprite.Pos.Y == moveBlock.Y)) continue;
-                        //如果是自己的新位置，则相当于施展给自己
-                        if (targetSprite.Pos.X == moveBlock.X && targetSprite.Pos.Y == moveBlock.Y)
-                        {
-                            continue;
-                            //targetSprite = sprite;
-                        }
-                        else if (targetSprite.team != role.team && targetSprite.Hp > 0)
-                        {
-                            score += 0.1f;
-                        }
-                    }
-
-                    cachedScore[castBlock.ToInt()] = score;
+                    await _battleManager.AttackOnce(role, skill, weBlockData);
                 }
-
-                if (score > maxScore)
-                {
-                    maxScore = score;
-
-                    rst[0] = new BattleBlockVector(moveBlock.X, moveBlock.Y);
-                    rst[1] = new BattleBlockVector(castBlock.X, castBlock.Y);
-                }
+                return;
             }
-
-            splitFrame++;
-            if (splitFrame > 5)//分帧
+            await _battleManager.AttackOnce(role, skill, toBlockData);
+            return;
+            
+            if (iq >= 90) //其中聪明绝顶的敌人 范围治疗和增益 技能使用率0.8 血低会 小怪自爆/boss扔武器 技能偏向解除我方增益，法攻高则禁魔，物攻高提升己方防御等  可选:逃跑让损失经验? todo 学习对抗策略
             {
-                splitFrame = 0;
-                await UniTask.WaitForEndOfFrame();
+                
             }
         }
-        
-        if (maxScore == 0)
-        {
-            rst[0] = null;
-            rst[1] = null;
-        }
-
-        return rst;
     }
-
-    public RoleInstance GetNearestEnemy(RoleInstance role)
-    {
-        int minDistance = int.MaxValue;
-        RoleInstance targetRole = null;
-        //寻找离自己最近的敌人
-        foreach (var sp in BattleModel.AliveRoles)
-        {
-            if (sp == role) continue;
-
-            if (sp.team == role.team) continue;
-
-            int distance = BattleBlockVector.GetDistance(sp.Pos.X, sp.Pos.Y, role.Pos.X, role.Pos.Y);
-
-            if (distance < minDistance)
-            {
-                minDistance = distance;
-                targetRole = sp;
-            }
-        }
-        return targetRole;
-    }
-
-    public BattleBlockVector GetNearestEnemyBlock(RoleInstance sprite, List<BattleBlockVector> moverange = null)
-    {
-        var targetRole = GetNearestEnemy(sprite);
-        if (targetRole == null)
-            return null;
-
-        int minDis2 = int.MaxValue;
-        int movex = sprite.Pos.X, movey = sprite.Pos.Y;
-        //寻找离对手最近的一点
-        foreach (var mr in moverange)
-        {
-            int distance = BattleBlockVector.GetDistance(mr.X, mr.Y, targetRole.Pos.X, targetRole.Pos.Y);
-
-            if (distance <= minDis2)
-            {
-                minDis2 = distance;
-                movex = mr.X;
-                movey = mr.Y;
-            }
-        }
-        BattleBlockVector rst = new BattleBlockVector
-        {
-            X = movex,
-            Y = movey
-        };
-        return rst;
-    }
-
-    public BattleBlockVector GetFarestEnemyBlock(RoleInstance sprite, List<BattleBlockVector> range)
-    {
-        int max = 0;
-        BattleBlockVector rst = new BattleBlockVector();
-        //寻找一个点离敌人最远
-        foreach (var r in range)
-        {
-            int min = int.MaxValue;
-            foreach (RoleInstance sp in BattleModel.AliveRoles)
-            {
-                int distance = BattleBlockVector.GetDistance(sp.Pos.X, sp.Pos.Y, r.X, r.Y);
-                if (sp.team != sprite.team && distance < min)
-                {
-                    min = distance;
-                }
-            }
-            if (min > max)
-            {
-                max = min;
-                rst = r;
-            }
-        }
-        return rst;
-    }
-
     /// </summary>
     /// 战斗计算公式可以参考：https://tiexuedanxin.net/thread-365140-1-1.html
     ///
@@ -531,10 +245,10 @@ public class AIManager
                 return rst;
             }
             //总攻击力＝(人物攻击力×3 ＋ 武功当前等级攻击力)/2 ＋武器加攻击力 ＋ 防具加攻击力 ＋ 武器武功配合加攻击力 ＋我方武学常识之和
-            int attack = ((r1.Attack - r1.GetWeaponProperty("Attack") - r1.GetArmorProperty("Attack")) * 3 + skill.Data.GetSkillLevelInfo(level_index).Attack) / 2 + r1.GetWeaponProperty("Attack") + r1.GetArmorProperty("Attack") + r1.GetExtraAttack(magic) + totalWuxue;
+            int attack = ((r1.Attack - r1.GetWeaponProperty("Attack") - r1.GetArmorProperty("Attack")) * 3 ) / 2 + r1.GetWeaponProperty("Attack") + r1.GetArmorProperty("Attack") + r1.GetExtraAttack(magic) + totalWuxue;
             
             //总防御力 ＝ 人物防御力 ＋武器加防御力 ＋ 防具加防御力 ＋ 敌方武学常识之和
-            int defence = r2.Defence + totalWuxue2;
+            int defence = r2.Defense + totalWuxue2;
 
             //伤害 ＝ （总攻击力－总防御×3）×2 / 3 + RND(20) – RND(20)                  （公式1）
             int v = (attack - defence * 3) * 2 / 3 + UnityEngine.Random.Range(0, 20) - UnityEngine.Random.Range(0, 20);
@@ -590,7 +304,7 @@ public class AIManager
 
             //攻击带毒
             //中毒程度＝武功等级×武功中毒点数＋人物攻击带毒
-            int add = level_index * skill.Data.GetSkill().Poison + r1.AttackPoison;
+            int add = 10 + r1.AttackPoison;
             //if 敌人抗毒> 中毒程度 或 敌人抗毒> 90 则不中毒
             //敌人中毒=敌人已中毒＋ 中毒程度/15
             //if 敌人中毒> 100 then 敌人中毒 ＝100
@@ -605,7 +319,7 @@ public class AIManager
         }
         else if ((int)magic.DamageType == 1) //吸内
         {
-            var levelInfo = skill.Data.GetSkillLevelInfo();
+            /*var levelInfo = skill.Data.GetSkillLevelInfo();
             
             //杀伤内力逻辑
             int v = levelInfo.KillMp;
@@ -619,7 +333,7 @@ public class AIManager
                 rst.addMaxMp = UnityEngine.Random.Range(0, addMp / 2);
                 addMp += UnityEngine.Random.Range(0, 3) - UnityEngine.Random.Range(0, 3);
                 rst.addMp = addMp;    
-            }
+            }*/
             
             return rst;
         }

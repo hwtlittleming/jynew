@@ -68,7 +68,7 @@ public partial class BattleActionOrderPanel:Jyx2_UIBase
             
             icon.LoadAsyncForget(role.Data.GetPic());
             
-            qingong.text = string.Format($"轻功:{role.Qinggong}");
+            qingong.text = string.Format($"轻功:{role.Speed}");
 
             Vector3 scale = i==0 ? new Vector3(1.2f,1.2f,1.0f):Vector3.one;
             itemTrans.localScale = scale;

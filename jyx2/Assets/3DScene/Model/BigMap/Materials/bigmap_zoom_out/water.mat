@@ -91,6 +91,7 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    m_Ints: []
     m_Floats:
     - _ASEOutlineWidth: 0.04
     - _BumpScale: 1
@@ -190,7 +191,7 @@ Material:
     - _ShadowColor: {r: 0.3066038, g: 0.45068616, b: 1, a: 1}
     - _SpecColor: {r: 1, g: 1, b: 1, a: 0.5}
     - _TheFlashColor: {r: 0, g: 0, b: 0, a: 0}
-    - _WaterColor: {r: 0.18417111, g: 0.38668418, b: 0.37038952, a: 0}
-    - _WaterShallowColor: {r: 0.19253707, g: 0.24830386, b: 0.36781624, a: 0}
+    - _WaterColor: {r: 0.18417099, g: 0.38668406, b: 0.3703894, a: 0}
+    - _WaterShallowColor: {r: 0.19253695, g: 0.24830374, b: 0.3678161, a: 0}
     - _WaveDirection: {r: 1, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []

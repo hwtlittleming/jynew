@@ -465,33 +465,6 @@ namespace Jyx2
 		}
 
 		/// <summary>
-		/// 返回角色技能的施展距离
-		/// </summary>
-		/// <param name="zhaoshi"></param>
-		/// <param name="source"></param>
-		/// <returns></returns>
-		public int GetCastSize(BattleZhaoshiInstance zhaoshi, RoleInstance source)
-		{
-			if (zhaoshi.GetCastSize() == 0)
-				return 0;
-			var castsize = PreCastSizeAdjust(zhaoshi, source);
-			castsize = PostRoleCastSizeAdjust(castsize, source);
-			return castsize;
-		}
-
-		/// <summary>
-		/// 角色施展技能前调整距离
-		/// </summary>
-		/// <param name="zhaoshi"></param>
-		/// <param name="source"></param>
-		/// <returns></returns>
-		public static int PreCastSizeAdjust(BattleZhaoshiInstance zhaoshi, RoleInstance source)
-		{
-			var castsize = zhaoshi.GetCastSize();
-			return castsize;
-		}
-
-		/// <summary>
 		/// 角色施展技能距离确定前调整距离
 		/// </summary>
 		/// <param name="castsize"></param>
@@ -500,48 +473,6 @@ namespace Jyx2
 		public static int PostRoleCastSizeAdjust(int castsize, RoleInstance source)
 		{
 			return castsize;
-		}
-
-		/// <summary>
-		/// 获取技能施展范围
-		/// </summary>
-		/// <param name="x"></param>
-		/// <param name="y"></param>
-		/// <param name="zhaoshi"></param>
-		/// <param name="source"></param>
-		/// <returns></returns>
-		public IEnumerable<BattleBlockVector> GetSkillCastBlocks(int x, int y, BattleZhaoshiInstance zhaoshi, RoleInstance source)
-		{
-			var castSize = GetCastSize(zhaoshi, source);
-
-			var covertype = zhaoshi.GetCoverType();
-			if (covertype == SkillCoverType.LINE)
-			{
-				foreach (var loc in GetNearBlocks(x, y))
-				{
-					yield return new BattleBlockVector(loc.X, loc.Y);
-				}
-
-				//central is inaccessible, but need to allow selection for gamepad moves
-				yield return new BattleBlockVector(x, y)
-				{
-					Inaccessible = true
-				};
-
-				yield break;
-			}
-
-			yield return new BattleBlockVector(x, y);
-
-			if (castSize == 0)
-			{
-				yield break;
-			}
-
-			foreach (var loc in GetNearBlocks(x, y, castSize))
-			{
-				yield return new BattleBlockVector(loc.X, loc.Y);
-			}
 		}
 
 		/// <summary>

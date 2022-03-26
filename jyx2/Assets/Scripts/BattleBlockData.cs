@@ -16,26 +16,33 @@ namespace Jyx2
     public class BattleBlockData
     {
         //战场逻辑位置 待去掉
-        public BattleBlockVector BattlePos; 
+        public BattleBlockVector BattlePos;
 
         //实际对应的世界坐标系的点
         public Vector3 WorldPos; 
 
+        //格子的队伍 we they
+        public String team;
+        
         //当前所处格子编号
         public int x;
         public int y;
-        
+
         //格子名称
         public String blockName;
         
         //格子上的角色
         public RoleInstance role;
         
+        //格子的游戏对象
+        public GameObject block;
+        
         //对应绘制的对象
         public GameObject gameObject;
 
-        //包含有效信息，世界坐标，法线坐标等
-        public BattleboxBlock BoxBlock;
+        public int maxX = 1;
+
+        public int maxY = 1;
 
         public bool IsActive
         {

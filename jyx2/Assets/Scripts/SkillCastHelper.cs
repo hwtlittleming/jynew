@@ -227,7 +227,7 @@ namespace Jyx2
             //播放对象受击
             foreach (var target in Targets)
             {
-                target.BeHit();
+                //暂时关闭受击动画 伤害>1/5才打开 target.BeHit();
                 //平均分配，每次hit显示掉一次血
                 target.ShowDamage();
 

@@ -36,32 +36,12 @@ public class UIHelper
             result.Add(17, item.AddMaxMp);
         if (item.Attack != 0)//攻击
             result.Add(18, item.Attack);
-        if (item.Qinggong != 0)//轻功
-            result.Add(3, item.Qinggong);
+        if (item.Speed != 0)//轻功
+            result.Add(3, item.Speed);
         if (item.Defence != 0)//防御
             result.Add(4, item.Defence);
         if (item.Heal != 0)//医疗
             result.Add(6, item.Heal);
-        if (item.UsePoison != 0)//用毒
-            result.Add(7, item.UsePoison);
-        if (item.DePoison != 0)//解毒
-            result.Add(8, item.DePoison);
-        if (item.AntiPoison != 0)//抗毒
-            result.Add(19, item.AntiPoison);
-        if (item.Quanzhang != 0)//拳掌
-            result.Add(9, item.Quanzhang);
-        if (item.Yujian != 0)//御剑
-            result.Add(10, item.Yujian);
-        if (item.Shuadao != 0)//耍刀
-            result.Add(11, item.Shuadao);
-        if (item.Qimen != 0)//奇门
-            result.Add(20, item.Qimen);
-        if (item.Anqi != 0)//暗器
-            result.Add(12, item.Anqi);
-        if (item.Wuxuechangshi != 0)//武学常识
-            result.Add(21, item.Wuxuechangshi);
-        if (item.Zuoyouhubo != 0)//左右互搏
-            result.Add(24, item.Zuoyouhubo);
         if (item.AttackPoison != 0)//攻击带毒
             result.Add(23, item.AttackPoison);
         if (item.ChangePoisonLevel != 0)//中毒解毒
@@ -84,22 +64,6 @@ public class UIHelper
             result.Add(18, item.ConditionAttack);
         if (item.ConditionQinggong > 0)
             result.Add(3, item.ConditionQinggong);
-        if (item.ConditionPoison > 0)
-            result.Add(7, item.ConditionPoison);
-        if (item.ConditionHeal > 0)
-            result.Add(6, item.ConditionHeal);
-        if (item.ConditionDePoison > 0)
-            result.Add(8, item.ConditionDePoison);
-        if (item.ConditionQuanzhang > 0)
-            result.Add(9, item.ConditionQuanzhang);
-        if (item.ConditionYujian > 0)
-            result.Add(10, item.ConditionYujian);
-        if (item.ConditionShuadao > 0)
-            result.Add(11, item.ConditionShuadao);
-        if (item.ConditionQimen > 0)
-            result.Add(20, item.ConditionQimen);
-        if (item.ConditionAnqi > 0)
-            result.Add(12, item.ConditionAnqi);
         if (item.ConditionIQ > 0)
             result.Add(25, item.ConditionIQ);
 

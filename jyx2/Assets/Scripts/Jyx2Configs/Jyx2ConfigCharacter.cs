@@ -22,29 +22,34 @@ namespace Jyx2Configs
         public enum SexualType
         {
             男 = 0,
-            女 = 1,
-            太监 = 2,
+            女 = 1
         }
 
         /// <summary>
         /// 设置为中文仅用于odin显示，不要在代码中直接使用
         /// </summary>
         //0:阴 1:阳 2:调和
-        public enum MpTypeEnum
+        public enum RateTypeEnum
         {
-            阴 = 0,
-            阳 = 1,
-            调和 = 2
+            人 = 0,
+            妖 = 1,
+            魔 = 2,
+            仙 = 3,
+            神 = 4
         }
 
         private const string CGroup1 = "基本配置";
-        private const string CGroup2 = "战斗属性";
-        private const string CGroup3 = "装备";
+        private const string CGroup2 = "属性";
+        private const string CGroup3 = "资质";
+        private const string CGroup4 = "装备";
         private const string CGroupSkill = "武功";
         private const string CGroupItems = "道具";
         
         [BoxGroup(CGroup1)][LabelText("性别")][EnumToggleButtons] 
         public SexualType Sexual;
+        
+        [BoxGroup(CGroup1)][LabelText("种族")][EnumToggleButtons]
+        public RateTypeEnum Rate;
         
         [BoxGroup(CGroup1)][LabelText("头像")]
         public AssetReferenceTexture2D Pic;
@@ -58,27 +63,24 @@ namespace Jyx2Configs
             {
                 var path = Jyx2ResourceHelper.GetAssetRefAddress(Pic, typeof(Texture2D)); //先转换到URL
                 _sprite = await MODLoader.LoadAsset<Sprite>(path); //在MOD列表中过滤
-                
-                //下面代码会可能重入导致出错：
-                //https://forum.unity.com/threads/1-15-1-assetreference-not-allow-loadassetasync-twice.959910/
-                
-                //var head = await Pic.LoadAssetAsync().Task;
-                //_sprite = Sprite.Create(head, new Rect(0, 0, head.width, head.height), Vector2.zero);
             }
             return _sprite;
         }
         
-        [BoxGroup(CGroup1)][LabelText("品德")] 
-        public int Pinde; //品德
+        [BoxGroup(CGroup1)][LabelText("善恶")] 
+        public int Moral; //善恶
         
-        [BoxGroup(CGroup1)][LabelText("资质")] 
-        public int IQ; //资质
+        [BoxGroup(CGroup1)][LabelText("智商")] 
+        public int IQ; //智商
+        
+        [BoxGroup(CGroup1)][LabelText("描述")] 
+        public String Descripe; //描述
         
         /* ------- 分割线 ------- */
         
-        [InfoBox("必须至少有一个武功", InfoMessageType.Error, "@this.Skills==null || this.Skills.Count == 0")]
-        [InfoBox("注：等级0：对应1级武功，  等级900：对应10级武功")]
-        [BoxGroup(CGroupSkill)] [LabelText("武功")][SerializeReference][TableList]
+        [InfoBox("必须至少有一个技能", InfoMessageType.Error, "@this.Skills==null || this.Skills.Count == 0")]
+        [InfoBox("注：等级0：对应1级技能，  等级900：对应10级技能")]
+        [BoxGroup(CGroupSkill)] [LabelText("技能")][SerializeReference][TableList]
         public List<Jyx2ConfigCharacterSkill> Skills;
         
         /* ------- 分割线 --------*/
@@ -91,80 +93,69 @@ namespace Jyx2Configs
         [BoxGroup(CGroup2)][LabelText("生命上限")]
         public int MaxHp;
         
-        [BoxGroup(CGroup2)][LabelText("内力上限")]
+        [BoxGroup(CGroup2)][LabelText("能量上限")]
         public int MaxMp;
-
-        [BoxGroup(CGroup2)][LabelText("生命增长")] 
-        public int HpInc;
-        
-        [BoxGroup(CGroup2)][LabelText("开场等级")]
-        public int Level;
-        
-        [BoxGroup(CGroup2)][LabelText("经验")]
-        public int Exp;
-
-        [BoxGroup(CGroup2)][LabelText("内力性质")][EnumToggleButtons]
-        public MpTypeEnum MpType; //内力性质 ,0:阴 1:阳 2:调和
-        
 
         [BoxGroup(CGroup2)][LabelText("攻击力")]
         public int Attack; //攻击力
         
+        [BoxGroup(CGroup2)][LabelText("法术攻击")]
+        public int MagicAttack; //法术攻击
+        
         [BoxGroup(CGroup2)][LabelText("速度")]
-        public int Qinggong; //轻功
+        public int Speed; //轻功
         
         [BoxGroup(CGroup2)][LabelText("防御力")]
-        public int Defence; //防御力
+        public int Defense; //防御力
         
         [BoxGroup(CGroup2)][LabelText("魔抗")]
         public int MagicDefence; //魔抗
         
         [BoxGroup(CGroup2)][LabelText("回复力")]
         public int Heal; //回复力
+
+        [BoxGroup(CGroup2)][LabelText("攻击附带")]
+        public String Attach; //攻击附带
         
-        [BoxGroup(CGroup2)][LabelText("用毒")]
-        public int UsePoison; //用毒
+        [BoxGroup(CGroup2)][LabelText("暴击")]
+        public int Critical; 
         
-        [BoxGroup(CGroup2)][LabelText("解毒")]
-        public int DePoison; //解毒
+        [BoxGroup(CGroup2)][LabelText("暴击伤害系数")]
+        public int CriticalLevel; 
         
-        [BoxGroup(CGroup2)][LabelText("抗毒")]
-        public int AntiPoison; //抗毒
+        [BoxGroup(CGroup2)][LabelText("闪避")]
+        public int Miss; 
         
-        [BoxGroup(CGroup2)][LabelText("拳掌")]
-        public int Quanzhang; //拳掌
+        [BoxGroup(CGroup2)][LabelText("幸运")]
+        public int Luck; 
+
+        /* ------- 分割线 --------*/
         
-        [BoxGroup(CGroup2)][LabelText("剑法")]
-        public int Yujian; //剑法
+        [BoxGroup(CGroup3)][LabelText("力量")][SerializeReference]
+        public int Strength; //中量提高生命，提高物攻
         
-        [BoxGroup(CGroup2)][LabelText("刀法")]
-        public int Shuadao; //刀法
+        [BoxGroup(CGroup3)][LabelText("智慧")][SerializeReference]
+        public int Intelligence;//少量提升生命，提高法攻
         
-        [BoxGroup(CGroup2)][LabelText("特殊兵器")]
-        public int Qimen;//特殊兵器
+        [BoxGroup(CGroup3)][LabelText("根骨")][SerializeReference]
+        public int Constitution;//提高生命和能量，少量物防
         
-        [BoxGroup(CGroup2)][LabelText("暗器技巧")]
-        public int Anqi; //暗器技巧
-        
-        [BoxGroup(CGroup2)][LabelText("武学常识")]
-        public int Wuxuechangshi; //武学常识
-        
-        [BoxGroup(CGroup2)][LabelText("攻击带毒")]
-        public int AttackPoison; //攻击带毒
-        
-        [BoxGroup(CGroup2)][LabelText("左右互搏")]
-        public int Zuoyouhubo; //左右互搏
+        [BoxGroup(CGroup3)][LabelText("敏捷")][SerializeReference]
+        public int Agile;//提高出手速度，少量提升闪避几率
         
         /* ------- 分割线 --------*/
         
-        [BoxGroup(CGroup3)][LabelText("武器")][SerializeReference]
+        [BoxGroup(CGroup4)][LabelText("武器")][SerializeReference]
         public Jyx2ConfigItem Weapon;
         
-        [BoxGroup(CGroup3)][LabelText("衣服")][SerializeReference]
+        [BoxGroup(CGroup4)][LabelText("衣服")][SerializeReference]
         public Jyx2ConfigItem Armor;
         
-        [BoxGroup(CGroup3)][LabelText("鞋子")][SerializeReference]
+        [BoxGroup(CGroup4)][LabelText("鞋子")][SerializeReference]
         public Jyx2ConfigItem Shoes;
+        
+        [BoxGroup(CGroup4)][LabelText("饰品")][SerializeReference]
+        public Jyx2ConfigItem Treasure;
         /* ------- 分割线 --------*/
 
         [BoxGroup("其他")][LabelText("队友离场对话")] 
@@ -190,7 +181,7 @@ namespace Jyx2Configs
     [Serializable]
     public class Jyx2ConfigCharacterSkill
     {
-        [LabelText("武功")][SerializeReference][InlineEditor]
+        [LabelText("技能")][SerializeReference][InlineEditor]
         public Jyx2ConfigSkill Skill;
 
         [LabelText("等级")] 

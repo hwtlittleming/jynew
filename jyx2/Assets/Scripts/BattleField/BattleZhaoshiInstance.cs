@@ -181,19 +181,9 @@ namespace Jyx2
             return true;
         }
 
-        public virtual int GetCastSize()
-        {
-            return Data.CastSize;
-        }
-
         public virtual SkillCoverType GetCoverType()
         {
             return Data.CoverType;
-        }
-
-        public virtual int GetCoverSize()
-        {
-            return Data.CoverSize;
         }
 
         public virtual int GetDamageType()
@@ -224,17 +214,6 @@ namespace Jyx2
         {
             return SkillCoverType.POINT;
         }
-
-        public override int GetCoverSize()
-        {
-            return 1;
-        }
-
-        public override int GetCastSize()
-        {
-            //JYX2 BattleScene.h:virtual int calActionStep(int ability) { return ability / 15 + 1; }     //依据能力值计算行动的范围步数
-            return _level / 15 + 1;
-        }
     }
 
     /// <summary>
@@ -263,17 +242,6 @@ namespace Jyx2
         public override SkillCoverType GetCoverType()
         {
             return SkillCoverType.POINT;
-        }
-
-        public override int GetCoverSize()
-        {
-            return 1;
-        }
-
-        public override int GetCastSize()
-        {
-            //JYX2 BattleScene.h:virtual int calActionStep(int ability) { return ability / 15 + 1; }     //依据能力值计算行动的范围步数
-            return _level / 15 + 1;
         }
     }
 
@@ -304,17 +272,6 @@ namespace Jyx2
         {
             return SkillCoverType.POINT;
         }
-
-        public override int GetCoverSize()
-        {
-            return 1;
-        }
-
-        public override int GetCastSize()
-        {
-            //JYX2 BattleScene.h:virtual int calActionStep(int ability) { return ability / 15 + 1; }     //依据能力值计算行动的范围步数
-            return _level / 15 + 1;  
-        }
     }
 
     /// <summary>
@@ -343,17 +300,6 @@ namespace Jyx2
         public override SkillCoverType GetCoverType()
         {
             return SkillCoverType.POINT;
-        }
-
-        public override int GetCoverSize()
-        {
-            return 1;
-        }
-
-        public override int GetCastSize()
-        {
-            //JYX2 BattleScene.h:virtual int calActionStep(int ability) { return ability / 15 + 1; }     //依据能力值计算行动的范围步数
-            return _level / 15 + 1;
         }
     }
 }

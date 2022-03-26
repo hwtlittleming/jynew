@@ -21,6 +21,7 @@ using UnityEngine.SceneManagement;
 
 public class BattleboxHelper : MonoBehaviour
 {
+	public const float BATTLEBLOCK_DECAL_ALPHA = 0.4f;
 	public static BattleboxHelper Instance
 	{
 		get
@@ -49,49 +50,33 @@ public class BattleboxHelper : MonoBehaviour
 		Init();
 	}
 
-	//某位置是否能触发战斗
-	public bool CanEnterBattle(Vector3 pos)
+	public void initBattleBlockData()
 	{
-		if (!_isInit || _boxList == null || _boxList.Length == 0)
+		//初始化格子
+		Transform all_block = GameObject.Find("block_parent").transform;
+		int maxX = 1;
+		int maxY = 1;
+		foreach (Transform block in all_block)
 		{
-			Debug.Log($"BattleboxHelper还没有初始化成功或者盒子列表为空");
-			return false;
+			BattleBlockData b = new BattleBlockData();
+			b.block = block.gameObject;
+			b.WorldPos = block.position;
+			b.team = block.name.Split('-')[0];
+			b.x = int.Parse(block.name.Split('-')[1]);
+			b.y = int.Parse(block.name.Split('-')[2]);
+			b.blockName = block.name;
+			if(maxX < b.x) b.maxX = b.x;
+			if(maxY < b.y) b.maxX = b.y;
+			BattleManager.Instance.block_list.Add(b);
 		}
-
-		foreach (var box in _boxList)
+        //每个格子都记录整个生成的所有格子的最大长和宽
+		foreach (var block in BattleManager.Instance.block_list)
 		{
-			if (box.ColliderContain(pos))
-			{
-				Debug.Log($"找到了战斗盒子，可以进入战斗；玩家坐标：{pos.x}：{pos.y}：{pos.z}");
-				return true;
-			}
+			block.maxX = maxX;
+			block.maxY = maxY;
 		}
-
-		Debug.Log($"BattleboxHelper找不到合适的战斗盒子");
-		return false;
 	}
-
-	//先清空所有战斗格子
-	//如果该位置可以战斗，则设置当前战斗盒子
-	//初始化当前战斗盒子
-	//生成所有战斗格子（默认为inactive）
-	public bool BlockInit(Vector3 pos)
-	{
-		ClearAllBlocks();
-		foreach (var box in _boxList)
-		{
-			if (box.ColliderContain(pos))
-			{
-				Debug.Log($"找到了战斗盒子，玩家坐标：{pos.x}：{pos.y}：{pos.z}");
-				_currentBattlebox = box;
-				_currentBattlebox.Init();
-				//_currentBattlebox.DrawAreaBlocks(pos, m_MoveZoneDrawRange);
-				return true;
-			}
-		}
-		return false;
-	}
-
+	
 	public BattleBlockData GetBlockData(int xindex, int yindex)
 	{
 		if (!GeneralPreJudge()) return null;
@@ -105,14 +90,6 @@ public class BattleboxHelper : MonoBehaviour
 	{
 		if (_isInit && _currentBattlebox != null)
 			_currentBattlebox.ClearAllBlocks();
-	}
-
-
-	//获取当前战斗格子，待改成实际每个战场预先计算好的
-	public List<BattleBlockData> GetBattleBlocks()
-	{
-		if (!GeneralPreJudge()) return null;
-		return _currentBattlebox.GetBattleBlocks();
 	}
 
 	//获取坐标对应的格子
@@ -132,7 +109,7 @@ public class BattleboxHelper : MonoBehaviour
 		if (!_currentBattlebox.Exist(xindex, yindex)) return false;
 
 		var block = _currentBattlebox.GetBlockData(xindex, yindex);
-		if (block != null && block.BoxBlock != null && !block.BoxBlock.IsValid) return false;
+		if (block != null) return false;
 
 		return true;
 	}
@@ -314,7 +291,7 @@ public class BattleboxHelper : MonoBehaviour
 		foreach (var vector in list)
 		{
 			var block = _currentBattlebox.GetBlockData(vector.X, vector.Y);
-			if (block != null && block.BoxBlock.IsValid)
+			if (block != null)
 			{
 				if (vector.Inaccessible)
 				{
@@ -356,7 +333,7 @@ public class BattleboxHelper : MonoBehaviour
 		foreach (var vector in list)
 		{
 			var block = _currentBattlebox.GetRangelockData(vector.X, vector.Y);
-			if (block != null && block.BoxBlock.IsValid) 
+			if (block != null) 
 				block.Show();
 		}
 
@@ -384,19 +361,6 @@ public class BattleboxHelper : MonoBehaviour
 		if (!GeneralPreJudge()) return;
 
 		_currentBattlebox.ShowAllValidBlocks();
-	}
-
-	public void ShowMoveZone(Vector3 center, int range = -1)
-	{
-		if (!GeneralPreJudge()) return;
-		_currentBattlebox.HideAllBlocks();
-
-		if (range == -1)
-		{
-			range = m_MoveZoneDrawRange;
-		}
-
-		_currentBattlebox.ShowBlocksCenterDist(center, range);
 	}
 
 	private void Init()
@@ -432,5 +396,10 @@ public class BattleboxHelper : MonoBehaviour
 			return false;
 		}
 		return true;
+	}
+	public enum BattleBlockType
+	{
+		MoveZone = 0,
+		AttackZone = 1,
 	}
 }

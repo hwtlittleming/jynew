@@ -128,14 +128,6 @@ public static class Jyx2ResourceHelper
         return Serializer.Deserialize<SceneCoordDataSet>(memory);
     }
 
-    [Obsolete("待修改为tilemap")]
-    public static async UniTask<BattleboxDataset> GetBattleboxDataset(string fullPath)
-    {
-        var result = await MODLoader.LoadAsset<TextAsset>(fullPath);
-        using var memory = new MemoryStream(result.bytes);
-        return Serializer.Deserialize<BattleboxDataset>(memory);
-    }
-
     public static async UniTask<Jyx2NodeGraph> LoadEventGraph(int id)
     {
         string url = $"Assets/BuildSource/EventsGraph/{id}.asset";

@@ -14,41 +14,58 @@ namespace Jyx2Configs
         public enum Jyx2ConfigSkillDamageType
         {
             普通 = 0,
-            吸内 = 1,
+            吸能 = 1,
             用毒 = 2,
             解毒 = 3,
-            医疗 = 4
+            治疗 = 4,
+            封魔 = 5,
+            混乱 = 6,
+            
         }
 
         public enum Jyx2ConfigSkillCoverType
         {
             点攻击 = 0,
-            线攻击 = 1,
-            十字攻击 = 2,
-            面攻击 = 3,
+            横排攻击 = 1,
+            竖排攻击 = 2,
+            随机斜线攻击 = 3,
+            邻近格子攻击 = 4,
+            面攻击 = 5 //每种按能打击的程度，程度max则为全体攻击
+        }
+        
+        public enum ConfigSkillLevelType
+        {
+            初窥门径 = 1,
+            驾轻就熟 = 2,
+            心领神会 = 3,
         }
         
         private const string CGroup1 = "基本配置";
         private const string CGroup2 = "战斗属性";
-        private const string CGroupLevels = "等级配置";
-        
+
         [BoxGroup(CGroup2)][LabelText("伤害类型")][EnumPaging]
         public Jyx2ConfigSkillDamageType DamageType; //伤害类型
         
         [BoxGroup(CGroup2)][LabelText("攻击范围类型")][EnumPaging]
         public Jyx2ConfigSkillCoverType SkillCoverType; //攻击范围
         
-        [BoxGroup(CGroup2)][LabelText("消耗内力点数")]
+        [BoxGroup(CGroup2)][LabelText("消耗能量点数")]
         public int MpCost; 
         
-        [BoxGroup(CGroup2)][LabelText("带毒点数")]
-        public int Poison;
+        [BoxGroup(CGroup2)][LabelText("带毒方法")]
+        public String Poison;
         
-        [InfoBox("错误：必须设置10个等级信息", InfoMessageType.Error, 
-            "@this.Levels == null || this.Levels.Count != 10")]
-        [BoxGroup(CGroupLevels)] [LabelText("技能等级配置")] [SerializeReference][TableList(ShowIndexLabels = true)]
-        [InfoBox("[Attack]攻击力  [SelectRange]选择范围  [AttackRange]杀伤范围  [AddMp]加内力  [KillMp]杀内力")]
-        public List<Jyx2ConfigSkillLevel> Levels ;
+        [BoxGroup(CGroup2)][LabelText("固定伤害")]
+        public int FixedDamage = 0;
+        
+        [BoxGroup(CGroup2)][LabelText("技能伤害系数")]
+        public int DamageLevel;
+        
+        [BoxGroup(CGroup2)][LabelText("技能附加")]
+        public String Attach;
+        
+        [BoxGroup(CGroup2)][LabelText("技能等阶")][EnumToggleButtons]
+        public ConfigSkillLevelType SkillLevel ;
 
         [InlineEditor] [BoxGroup("技能外观")] [SerializeReference]
         public Jyx2SkillDisplayAsset Display;
@@ -57,24 +74,5 @@ namespace Jyx2Configs
         {
             
         }
-    }
-
-    [Serializable]
-    public class Jyx2ConfigSkillLevel 
-    {
-        //[LabelText("攻击力")]
-        public int Attack; //攻击力
-
-        //[LabelText("选择范围")]
-        public int SelectRange; //移动范围
-
-        //[LabelText("杀伤范围")]
-        public int AttackRange; //杀伤范围
-
-        //[LabelText("加内力")]
-        public int AddMp; //加内力
-
-        //[LabelText("杀伤内力")]
-        public int KillMp; //杀伤内力
     }
 }

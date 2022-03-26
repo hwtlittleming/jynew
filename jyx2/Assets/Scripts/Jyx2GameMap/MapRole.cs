@@ -570,11 +570,8 @@ public class MapRole : Jyx2AnimationBattleRole
     /// TODO:此部分配合全局的动作进行了重写，但是寻路操作在技能展示场景会有BUG，因为技能展示场景没有寻路脚本，会报错。
     /// </summary>
     /// <param name="isInBattle">是否在战斗中</param>
-    public void StopStun(bool isInBattle)
+    public void StopStun()
     {
-        if(_navMeshAgent)//TODO:这里之所以加这一行是因为如果在Skill测试场景中没有寻路，建议后期去掉
-            _navMeshAgent.enabled = !isInBattle;
-        
         //重写解除眩晕并且简化逻辑
         AnimationClip clip = null;
         clip = CurDisplay == null?GlobalAssetConfig.Instance.defaultIdleClip:CurDisplay.LoadAnimation(Jyx2SkillDisplayAsset.Jyx2RoleAnimationType.Idle);
@@ -608,29 +605,16 @@ public class MapRole : Jyx2AnimationBattleRole
         if (modelAsset == null) return;
         
         var view = await modelAsset.GetView();
-        //要再等一帧
-        await UniTask.WaitForEndOfFrame();
-        
+
         if (Application.isPlaying)
         {
-            //销毁所有的孩子
+            //销毁所有的孩子 缓存的maprole拿到时其下面还有很多初始的节点不需要的
             HSUnityTools.DestroyChildren(transform);
         }
-        
+
         ModelView = Instantiate(view, transform);
         ModelView.transform.localPosition = Vector3.zero;
-
-        //如果在战斗中
-        if (IsInBattle)
-        {
-            //直接用第一个武功的姿势
-            DataInstance.SwitchAnimationToSkill(DataInstance.skills[0]);
-        }
-        else
-        {
-            //默认是休息状态
-            Idle();
-        }
+        Idle();
     }
     #endregion
 

@@ -114,12 +114,6 @@ namespace Jyx2
         {
             return CountX * CountY;
         }
-        
-        public void button_click(GameObject sender)
-        {
-            _chooseBlock = sender.name;
-            Debug.Log("dssssssssssssssssss111" + sender.name);
-        }
 
         public System.Numerics.Vector2 GetXYIndex(float x, float z)
         {

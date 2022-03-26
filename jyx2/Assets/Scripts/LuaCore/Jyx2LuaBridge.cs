@@ -488,7 +488,7 @@ namespace Jyx2
         {
             RunInMainThread(() =>
             {
-                runtime.Player.Pinde = Tools.Limit(runtime.Player.Pinde + value, 0, 100);
+                runtime.Player.Moral = Tools.Limit(runtime.Player.Moral + value, 0, 100);
                /* storyEngine.DisplayPopInfo((value > 0 ? "增加" : "减少") + "品德:" + Math.Abs(value));*/
                 Next();
             });
@@ -510,7 +510,7 @@ namespace Jyx2
 
         public static bool JudgeEthics(int roleId,int low,int high)
         {
-            return JudgeRoleValue(roleId, (r) => { return r.Pinde >= low && r.Pinde <= high; });
+            return JudgeRoleValue(roleId, (r) => { return r.Moral >= low && r.Moral <= high; });
         }
 
         public static bool JudgeAttack(int roleId,int low,int high)
@@ -631,9 +631,9 @@ namespace Jyx2
             RunInMainThread(() => 
             {
                 var r = runtime.GetRole(roleId);
-                var v0 = r.Qinggong;
-                r.Qinggong = Tools.Limit(v0 + value, 0, GameConst.MAX_ROLE_ATTRITE);
-                storyEngine.DisplayPopInfo(r.Name + "轻功增加" + (r.Qinggong - v0));
+                var v0 = r.Speed;
+                r.Speed = Tools.Limit(v0 + value, 0, GameConst.MAX_ROLE_ATTRITE);
+                storyEngine.DisplayPopInfo(r.Name + "轻功增加" + (r.Speed - v0));
                 Next();
             });
             Wait();
@@ -698,7 +698,7 @@ namespace Jyx2
         public static void ShowEthics()
         {
             RunInMainThread(() => {
-                MessageBox.Create("你现在的品德指数为" + runtime.Player.Pinde, Next);
+                MessageBox.Create("你现在的品德指数为" + runtime.Player.Moral, Next);
             });
             Wait();
         }

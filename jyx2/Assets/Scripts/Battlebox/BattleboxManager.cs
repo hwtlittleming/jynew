@@ -54,12 +54,7 @@ public class BattleboxManager : MonoBehaviour
     public void Init()
     {
         InitCollider();
-
-        if (m_Dataset == null)
-            //InitFromFile();
-
-        if (m_Dataset == null || !CheckSize())
-            CreateDataset();
+        
     }
 
     private void InitCollider()
@@ -72,123 +67,6 @@ public class BattleboxManager : MonoBehaviour
         }
     }
 
-    private Bounds GetBounds()
-    {
-        var bound = _colliders[0].bounds;
-        foreach (var mCollider in _colliders)
-        {
-            bound.Encapsulate(mCollider.bounds);
-        }
-        return bound;
-    }
-
-    public bool ColliderContain(Vector3 pos)
-    {
-        foreach (var mCollider in _colliders)
-        {
-            var temp = mCollider.ClosestPoint(pos);
-            if (Vector3.Distance(pos, temp) < 1e-6) return true;
-        }
-
-        return false;
-    }
-
-    public async UniTask InitFromFile()
-    {
-        var filePath = GetFilePath();
-
-        m_Dataset = await Jyx2ResourceHelper.GetBattleboxDataset(filePath);
-        if(m_Dataset != null)
-            Debug.Log($"载入文件结束：{m_Dataset.GetCount()}个格子中，一共有多少格子有效：{m_Dataset.GetValidCount()}");
-    }
-
-    public void SaveToFile()
-    {
-        if (m_Dataset == null) return;
-
-        var filePath = GetFilePath();
-        byte[] bs;
-        using (var memory = new MemoryStream())
-        {
-            Serializer.Serialize(memory, m_Dataset);
-            bs = memory.ToArray();
-        }
-        
-        Directory.CreateDirectory(ConStr.BattleboxDatasetPath);
-        File.WriteAllBytes(filePath, bs);
-
-        Debug.Log($"保存格子数据完成：{m_Dataset.GetCount()}个格子中，一共有多少格子有效：{m_Dataset.GetValidCount()}");
-    }
-
-    public bool CheckSize()
-    {
-        if (_colliders == null || _colliders.Length == 0)
-        {
-            Debug.LogError($"没有找到子碰撞盒，无法初始化战斗盒子");
-            return false;
-        }
-        
-        var bound = GetBounds();
-        var minx = bound.min.x;
-        var miny = bound.min.z;
-        var length = bound.size.x;
-        var width = bound.size.z;
-
-        if (!Mathf.Approximately(length, m_Dataset.BoxLength) ||
-            !Mathf.Approximately(width, m_Dataset.BoxWidth) ||
-            !Mathf.Approximately(minx, m_Dataset.MinX) ||
-            !Mathf.Approximately(miny, m_Dataset.MinY))
-        {
-            Debug.LogError($"载入的格子数据和当前box的尺寸不匹配，请重新生成格子数据");
-            return false;
-        }
-
-        return true;
-    }
-
-    public void CreateDataset()
-    {
-        m_Dataset = null;
-        var sceneName = SceneManager.GetActiveScene().name;
-        var objName = gameObject.name;
-        m_Dataset = new BattleboxDataset( sceneName,  objName,  10,  8,  0,  0);
-        Transform trans = GameObject.Find("block_parent").transform;
-        foreach ( Transform child in trans)
-        {
-            String side = child.name.Split('-')[0];
-            int x = int.Parse(child.name.Split('-')[1]);
-            int y = int.Parse(child.name.Split('-')[2]);
-            var obj = GameObject.Find("block_parent/" + side + "-" + x + "-" + y).GetComponent<EasyDecal>();
-            obj.Quality = 2;
-            obj.Distance = 0.05f;
-            Component c = obj.gameObject.GetComponent<Button>();
-            var block = new BattleboxBlock
-            {
-                XIndex = x,
-                YIndex = y,
-                WorldPosX = obj.transform.position.x,
-                WorldPosY = obj.transform.position.y,
-                WorldPosZ = obj.transform.position.z,
-                IsValid = true,
-                button = c,
-                side = side
-            };
-            m_Dataset.Blocks.Add(block);
-            var bPos = new BattleBlockVector(x, y);
-            var bbd = new BattleBlockData();
-            var pos = new Vector3(obj.transform.position.x, obj.transform.position.y, obj.transform.position.z);
-            bbd.BattlePos = bPos;
-            bbd.WorldPos = pos;
-            bbd.gameObject = obj.gameObject;
-            bbd.BoxBlock = block;
-            _battleBlocks.Add(bbd);
-        }
-
-        Debug.Log($"重新生成格子结束：一共生成了{m_Dataset.GetCount()}个格子");
-        //ShowAllValidBlocks();
-        //if(Application.isEditor) SaveToFile();
-    }
-
     public List<BattleBlockData> GetBattleBlocks()
     {
         return _battleBlocks;
@@ -198,53 +76,9 @@ public class BattleboxManager : MonoBehaviour
     {
         return m_Dataset.GetXYIndex(x, z);
     }
-
-    //1.一定要打到Ground
-    //2.将交点信息和法线信息拿到
-    public bool JudgeCoord(Vector3 top, float height, out Vector3 pos, out Vector3 normal)
-    {
-        pos = new Vector3(0f, 0f, 0f);
-        normal = new Vector3(0f, 0f, 0f);
-        var ray = new Ray(top, Vector3.down);
-        RaycastHit hitInfo;
-        if (Physics.Raycast(ray, out hitInfo, height, 1 << LayerMask.NameToLayer("Ground")))
-        {
-            if (!ColliderContain(hitInfo.point)) return false;
-
-            //寻找最近的导航网格边缘，排除过于“拥挤”的点
-            NavMeshHit hit;
-            if (NavMesh.FindClosestEdge(hitInfo.point, out hit, NavMesh.AllAreas))
-            {
-                if (hit.distance >= m_DetechRadius)
-                {
-                    pos = hitInfo.point;
-                    normal = hitInfo.normal;
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
     
-    private string GetFilePath()
-    {
-        var scene = SceneManager.GetActiveScene().name;
-        var objName = gameObject.name;
-        return $"{ConStr.BattleboxDatasetPath}{scene}_{objName}_coord_dataset.bytes";
-    }
 
     public void ShowAllValidBlocks()
-    {
-        foreach (var block in _battleBlocks)
-        {
-            if(block.BoxBlock.IsValid)
-                block.Show();
-            else
-                block.Hide();
-        }
-    }
-
-    public void ShowAllBlocks()
     {
         foreach (var block in _battleBlocks)
         {
@@ -283,11 +117,6 @@ public class BattleboxManager : MonoBehaviour
         return m_Dataset.Exist(xindex, yindex);
     }
 
-    public bool IsValid(int xindex, int yindex)
-    {
-        return m_Dataset.IsValid(xindex, yindex);
-    }
-
     //清除所有格子（所有格子的parent为当前box）
     public void ClearAllBlocks()
     {
@@ -310,69 +139,6 @@ public class BattleboxManager : MonoBehaviour
         return _parent;
     }
 
-    //绘制战斗格子，默认不显示
-    void DrawBattleBlock(Vector3 pos, Color c, int x, int y, Vector3 normal, BattleboxBlock boxBlock, bool initRangeBlocks = false)
-    {
-        var parent = FindOrCreateBlocksParent();
-        
-        var block = Resources.Load<GameObject>("BattleboxBlock");
-        var obj = EasyDecal.Project(block, pos, Quaternion.identity);
-        obj.Quality = 2;
-        obj.Distance = 0.05f;
-        if (initRangeBlocks)
-        {
-            obj.Distance = 0.07f;
-        }
-        
-        obj.transform.SetParent(parent.transform, false);
-
-        var bPos = new BattleBlockVector(x, y);
-        var bbd = new BattleBlockData();
-        bbd.BattlePos = bPos;
-        bbd.WorldPos = pos;
-        bbd.gameObject = obj.gameObject;
-        bbd.BoxBlock = boxBlock;
-        
-        if (initRangeBlocks)
-        {
-            _rangeLayerBlocks.Add(bbd);
-            obj.DecalRenderer.material.SetColor("_TintColor", new Color(0, 0, 1, BATTLEBLOCK_DECAL_ALPHA));
-        }
-        else
-        {
-            _battleBlocks.Add(bbd);    
-        }
-    }
-
-    public void ChangeValid(int xindex, int yindex)
-    {
-        var block = GetBlockData(xindex, yindex);
-        var data = block.BoxBlock;
-        data.IsValid = !data.IsValid;
-        //var sp = block.gameObject.GetComponent<SpriteRenderer>();
-        //sp.color = block.BoxBlock.IsValid ? Color.white : m_InvalidColor;
-    }
-
-    public void ShowBlocksCenterDist(Vector3 center, int range)
-    {
-        var xy = m_Dataset.GetXYIndex(center.x, center.z);
-        var centerX = (int) xy.X;
-        var centerY = (int) xy.Y;
-
-        for (int i = centerX - range; i < centerX + range; i++)
-        {
-            if (i < 0 || i >= m_Dataset.CountX) continue;
-            for (int j = centerY - range; j < centerY + range; j++)
-            {
-                if (j < 0 || j >= m_Dataset.CountY) continue;
-                if (!Exist(i, j)) continue;
-                var data = GetBlockData(i, j);
-                if (!data.BoxBlock.IsValid) continue;
-                data.Show();
-            }
-        }
-    }
-
     public void SetAllBlockColor(Color color, bool isRangeBlocks = false)
     {
         foreach (var block in isRangeBlocks ? _rangeLayerBlocks : _battleBlocks)
@@ -391,36 +157,7 @@ public class BattleboxManager : MonoBehaviour
 	{
         setBlockColor(new Color(0, 0, 0, 0), block);
 	}
-
-	private readonly List<BattleBlockVector> _battleBoxBlockList = new List<BattleBlockVector>();
-
-    public void CreateBlockMap(int x, int y, int ox, int oy, int range)
-    {
-        AddToBlockMap(x, y, ox, oy, range);
-    }
-
-    public void AddToBlockMap(int x, int y, int ox, int oy, int range)
-    {
-        if (_battleBoxBlockList.Exists(b => b.X == x && b.Y == y)) return;
-        if (Math.Abs(x - ox) >= range || Math.Abs(y - oy) >= range) return;
-
-        if (m_Dataset.Blocks.Exists(b => b.XIndex == x && b.YIndex == y))
-        {
-            _battleBoxBlockList.Add(new BattleBlockVector(x, y));
-            foreach (var b in GetNearBlocks(x, y))
-            {
-                AddToBlockMap(b.X, b.Y, ox, oy, range);
-            }
-        }
-        else if (x == ox && y == oy)
-        {
-            foreach (var b in GetNearBlocks(x, y))
-            {
-                AddToBlockMap(b.X, b.Y, ox, oy, range);
-            }
-        }
-    }
-
+    
     //y是奇数
     //static readonly int[] dx_odd = new int[] { 1, 1, 1, 0, -1, 0 };
 
@@ -431,28 +168,4 @@ public class BattleboxManager : MonoBehaviour
 
     static readonly int[] dx = new int[] { 1, 0, -1, 0 };
     static readonly int[] dy = new int[] { 0, 1, 0, -1 };
-
-    public IEnumerable<BattleBlockVector> GetNearBlocks(int x, int y)
-    {
-        //int[] dx = y % 2 == 0 ? dx_even : dx_odd;
-        //for (int i = 0; i < 6; ++i)
-        //{
-        //    int xx = x + dx[i];
-        //    int yy = y + dy[i];
-        //    if (xx < 0) continue;
-        //    if (yy < 0) continue;
-
-        //    var rst = new BattleBlockVector(xx, yy);
-        //    yield return rst;
-        //}
-        for (int i = 0; i < 4; ++i)
-        {
-            int xx = x + dx[i];
-            int yy = y + dy[i];
-            if (xx < 0) continue;
-            if (yy < 0) continue;
-            var rst = new BattleBlockVector(xx, yy);
-            yield return rst;
-        }
-    }
 }
