@@ -250,7 +250,7 @@ public class Jyx2_UIManager : MonoBehaviour
         switch (uibase.Layer)
         {
             case UILayer.MainUI:
-                if (m_currentMainUI && m_currentMainUI != uibase)
+                if (m_currentMainUI && m_currentMainUI != uibase && uibase.name != "BattleActionUIPanel")
                 {
                     m_currentMainUI.Hide();
                 }
