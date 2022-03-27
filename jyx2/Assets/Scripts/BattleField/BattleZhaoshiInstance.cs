@@ -246,35 +246,6 @@ namespace Jyx2
     }
 
     /// <summary>
-    /// JYX2：医疗
-    /// </summary>
-    public class HealZhaoshiInstance : BattleZhaoshiInstance
-    {
-        public HealZhaoshiInstance(int lv)
-        {
-            _level = lv;
-            Data = new SkillInstance(95);
-        }
-
-        int _level;
-
-        public override bool IsAttack()
-        {
-            return false;
-        }
-
-        public override bool IsCastToEnemy()
-        {
-            return false;
-        }
-
-        public override SkillCoverType GetCoverType()
-        {
-            return SkillCoverType.POINT;
-        }
-    }
-
-    /// <summary>
     /// JYX2:暗器
     /// </summary>
     public class AnqiZhaoshiInstance : BattleZhaoshiInstance

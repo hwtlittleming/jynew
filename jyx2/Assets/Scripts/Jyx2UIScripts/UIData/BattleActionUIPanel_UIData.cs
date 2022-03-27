@@ -24,7 +24,7 @@ public partial class BattleActionUIPanel
 	private Button Rest_Button;
 	private RectTransform Skills_RectTransform;
 	private RectTransform SkillItem_RectTransform;
-	private Button Cancel_Button;
+	private Button NormalAttack_Button;
 
 	public void InitTrans()
 	{
@@ -38,7 +38,7 @@ public partial class BattleActionUIPanel
 		Rest_Button = transform.Find("LeftActions/Rest").GetComponent<Button>();
 		Skills_RectTransform = transform.Find("Skills").GetComponent<RectTransform>();
 		SkillItem_RectTransform = transform.Find("Prefabs/SkillItem").GetComponent<RectTransform>();
-		Cancel_Button = transform.Find("Cancel").GetComponent<Button>();
+		//NormalAttack_Button = transform.Find("NormalAttack").GetComponent<Button>();
 
 	}
 }

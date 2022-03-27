@@ -148,7 +148,7 @@ public class BattleManager : MonoBehaviour
 
         //生成当前角色高亮环
         m_roleFocusRing = Jyx2ResourceHelper.CreatePrefabInstance("CurrentBattleRoleTag");
-            
+        
         //敌人开始自由攻击
         foreach (var r in enermyRoleList)
         {
@@ -161,17 +161,23 @@ public class BattleManager : MonoBehaviour
         
         foreach (var r in Teammates)
         {
+            if (r.GetJyx2RoleId() == 0)
+            {
+                m_roleFocusRing.transform.position = r.blockData.block.transform.position;
+            }
             var transform = GameObject.Find(r.blockData.blockName).transform;
             transform.gameObject.AddComponent<BattleUnit>();
             //给格子上的战斗单元脚本初始化属性
             transform.gameObject.GetComponent<BattleUnit>()._role = r;
             transform.gameObject.GetComponent<BattleUnit>()._manager = this;
-            UniTask.Delay(1000);
+
+            await UniTask.Delay(1000);
         }
+
     }
-    public bool isact = false;
     public async void planAndAttack(RoleInstance _role,BattleUnit b)
     {
+        
         //如何体现出学习带来的强度:某一招多次使用对其威力下降或闪避提升(天赋效果 魔瓶滚动天赋UI)，我们怎么决策有优势他跟着学习，我们怎么决策给我方带来额外利益 他对抗之(吸蓝，提升自己某防御，封禁某法术，降低普攻)镜像boss
         var motivation = _role.currentMotivation;
         motivation += _role.motivationPerSecond;
@@ -184,6 +190,51 @@ public class BattleManager : MonoBehaviour
         //await ExecuteAIResult(_role, aiResult);
         BattleBlockData bd = block_list.Find((blockData) => blockData.x == 3 && blockData.y == 2 && blockData.team == "we");
         //await AttackOnce(_role, _role.GetZhaoshis(false).FirstOrDefault(), bd);
+    }
+
+    public async void operate(RoleInstance _role,BattleUnit b)
+    {
+        while (true)
+        {
+            ManualResult ret = await WaitForPlayerInput(_role, new List<BattleBlockVector>(), false);
+            if (ret.choose == "normalAttack")
+            {
+                
+            }else if (false)
+            {
+                
+            }
+
+            
+            /*if (ret.isRevert) //点击取消
+            {
+                isSelectMove = true;
+                role.movedStep = 0;
+                role.Pos = originalPos;
+            }
+            else if (ret.movePos != null && isSelectMove) //移动
+            {
+                isSelectMove = false;
+                role.movedStep += originalPos.GetDistance(ret.movePos);
+                await RoleMove(role, ret.movePos);
+            }else if (ret.isWait) //等待
+            {
+                _manager.GetModel().ActWait(role);
+                break;
+            }else if (ret.isAuto) //托管给AI
+            {
+                role.Pos = originalPos;
+                await RoleAIAction(role);
+                break;
+            }
+            else if (ret.aiResult != null) //具体执行行动逻辑（攻击、道具、用毒、医疗等）
+            {
+                role.movedStep = 0;
+                await ExecuteAIResult(role, ret.aiResult);
+                break;
+            }*/
+        }
+
     }
 
     public void OnBattleEnd(BattleResult result)
@@ -670,7 +721,7 @@ public class BattleManager : MonoBehaviour
 
             toRole.UseItem(item);
 
-            if (role.team == 0) //如果是己方角色，则从背包里扣。
+            if (role.team == 0 && role.GetJyx2RoleId() == 0) //如果是己方角色，则从背包里扣。 队友暂时是扔自己配置了携带的物品，是否要改？
             {
                 GameRuntimeData.Instance.AddItem(item.Id, -1);
             }
@@ -736,7 +787,7 @@ public class BattleManager : MonoBehaviour
             {
                 var ret = await WaitForPlayerInput(role, moveRange, isSelectMove);
 
-                if (ret.isRevert) //点击取消
+                /*if (ret.isRevert) //点击取消
                 {
                     isSelectMove = true;
                     role.movedStep = 0;
@@ -762,44 +813,22 @@ public class BattleManager : MonoBehaviour
                     role.movedStep = 0;
                     await ExecuteAIResult(role, ret.aiResult);
                     break;
-                }
+                }*/
             }
         }
         
         //手动控制操作结果
         public class ManualResult
         {
-            public BattleBlockVector movePos = null;
-            public bool isRevert = false;
-            public AIResult aiResult = null;
-            public bool isWait = false;
-            public bool isAuto = false;
+            public String choose;
+            public BattleBlockData BlockData = null;
+            public SkillInstance Skill = null;
+            //public AIResult aiResult = null;
         }
-        /*private async Task<String> fun()
-        {
-            Debug.Log("22222222222222");
-            Task tt = new Task( async () =>
-            {
-                Debug.Log("aaa");
-                await UniTask.Delay(3000);
-                Debug.Log("bbb");
-            });
-            tt.Start();
-            Debug.Log("3333333333333");
-            return "s";
-        }*/
-        private async UniTask fun2(UniTaskCompletionSource u)
-        {
-            Debug.Log("wait");
-            Debug.Log("begin");
-        }
+
         //等待玩家输入
         async UniTask<ManualResult> WaitForPlayerInput(RoleInstance role, List<BattleBlockVector> moveRange, bool isSelectMove)
         {
-            UniTaskCompletionSource u = new UniTaskCompletionSource();
-            Debug.Log("111");
-            fun2(u).Forget();
-            Debug.Log("222");
             UniTaskCompletionSource<ManualResult> t = new UniTaskCompletionSource<ManualResult>();
             Action<ManualResult> callback = delegate(ManualResult result) { t.TrySetResult(result); };
             

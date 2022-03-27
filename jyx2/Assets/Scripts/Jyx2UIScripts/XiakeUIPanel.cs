@@ -419,7 +419,7 @@ public partial class XiakeUIPanel : Jyx2_UIBase
 			}
 
 			var selectRole = cbParam.selectList[0]; //默认只会选择一个
-			var zhaoshi = new HealZhaoshiInstance(m_currentRole.Heal);
+			/*var zhaoshi = new HealZhaoshiInstance(m_currentRole.Heal);
 			var result =
 				AIManager.Instance.GetSkillResult(m_currentRole, selectRole, zhaoshi);
 			result.Run();
@@ -428,7 +428,7 @@ public partial class XiakeUIPanel : Jyx2_UIBase
 				m_currentRole.Tili -= 2;
 			}
 
-			DoRefresh();
+			DoRefresh();*/
 		};
 
 		await Jyx2_UIManager.Instance.ShowUIAsync(nameof(SelectRolePanel), selectParams);

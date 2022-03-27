@@ -35,7 +35,15 @@ namespace Jyx2.Battle
             if (_role == null || isActing == true) return;
             _role.Attack = 1;
             isActing = true;
-            _manager.planAndAttack(_role,this);
+            if (_role.GetJyx2RoleId() == 0)
+            {
+                _manager.operate(_role,this);
+            }
+            else
+            {
+                _manager.planAndAttack(_role,this);
+            }
+
             /*await UniTask.Delay(2000);
             isActing = false;*/
             /*Debug.Log("dd");

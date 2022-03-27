@@ -15,13 +15,15 @@ MonoBehaviour:
   Id: 6
   Name: "\u706D\u7EDD"
   Sexual: 1
+  Rate: 0
   Pic:
     m_AssetGUID: f65790148c1ee0441aea11bcad6d4e96
     m_SubObjectName: 
     m_SubObjectType: 
     m_EditorAssetChanged: 0
-  Pinde: 60
+  Moral: 0
   IQ: 50
+  Descripe: 
   Skills:
   - id: 0
   Items:
@@ -33,27 +35,25 @@ MonoBehaviour:
     Count: 10
   MaxHp: 260
   MaxMp: 400
-  HpInc: 4
-  Level: 20
-  Exp: 16250
-  MpType: 0
   Attack: 80
-  Qinggong: 66
-  Defence: 90
+  MagicAttack: 0
+  Speed: 0
+  Defense: 0
+  MagicDefence: 0
   Heal: 10
-  UsePoison: 0
-  DePoison: 0
-  AntiPoison: 0
-  Quanzhang: 0
-  Yujian: 70
-  Shuadao: 0
-  Qimen: 0
-  Anqi: 40
-  Wuxuechangshi: 0
-  AttackPoison: 0
-  Zuoyouhubo: 0
+  Attach: 
+  Critical: 0
+  CriticalLevel: 0
+  Miss: 0
+  Luck: 0
+  Strength: 0
+  Intelligence: 0
+  Constitution: 0
+  Agile: 0
   Weapon: {fileID: 0}
   Armor: {fileID: 0}
+  Shoes: {fileID: 0}
+  Treasure: {fileID: 0}
   LeaveStoryId: 
   Model: {fileID: 11400000, guid: 4547878c48f59734abd2d44f51ad76aa, type: 2}
   references:

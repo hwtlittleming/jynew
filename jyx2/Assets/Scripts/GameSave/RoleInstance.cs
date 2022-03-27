@@ -173,7 +173,7 @@ namespace Jyx2
             
         
             Weapon = Data.Weapon != null ? Data.Weapon.Id : -1;
-            Armor = Data.Armor != null ? Data.Shoes.Id : -1;
+            Armor = Data.Armor != null ? Data.Armor.Id : -1;
             Armor = Data.Shoes != null ? Data.Shoes.Id : -1;
             Armor = Data.Treasure != null ? Data.Treasure.Id : -1;
 
@@ -320,7 +320,7 @@ namespace Jyx2
 
 
         /// <summary>
-        /// 获取该角色所有的招式，（如果有医疗、用毒、解毒，也封装成招式）
+        /// 用于战斗中获取该角色蓝够的招式，（如果有医疗、用毒、解毒，也封装成招式）
         /// </summary>
         /// <returns></returns>
         public IEnumerable<BattleZhaoshiInstance> GetZhaoshis(bool forceAttackZhaoshi)
@@ -333,11 +333,6 @@ namespace Jyx2
             
             if (forceAttackZhaoshi)
                 yield break;
-
-            //金庸DOS版逻辑，用毒、解毒、医疗
-            if (this.UsePoison >= 20 && this.Tili >= 10) yield return new PoisonZhaoshiInstance(this.UsePoison);
-            if (this.DePoison >= 20 && this.Tili >= 10) yield return new DePoisonZhaoshiInstance(this.DePoison);
-            if (this.Heal >= 20 && this.Tili >= 50) yield return new HealZhaoshiInstance(this.Heal);
         }
 
         public void ResetZhaoshis()

@@ -179,6 +179,7 @@ public abstract class Jyx2_UIBase : MonoBehaviour
 
 	public virtual void BindListener(Button button, Action callback, bool supportGamepadButtonsNav = true)
 	{
+		_buttonList = new Dictionary<Button, Action>();
 		if (button != null)
 		{
 			if (supportGamepadButtonsNav)

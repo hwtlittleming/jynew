@@ -15,15 +15,28 @@ MonoBehaviour:
   Id: 0
   Name: "\u5C0F\u867E\u7C73"
   Sexual: 0
+  Rate: 0
   Pic:
     m_AssetGUID: 2eb4be4006e3e1f40b587b4783cf401f
     m_SubObjectName: 
     m_SubObjectType: 
     m_EditorAssetChanged: 0
-  Pinde: 50
+  Moral: 0
   IQ: 39
+  Descripe: 
   Skills:
   - id: 0
+  - id: 1
+  - id: 2
+  - id: 3
+  - id: 4
+  - id: 5
+  - id: 6
+  - id: 7
+  - id: 8
+  - id: 9
+  - id: 10
+  - id: 11
   Items:
   - Item: {fileID: 11400000, guid: e48b1e789c05d664b90adf395dc9436b, type: 2}
     Count: 2
@@ -35,29 +48,25 @@ MonoBehaviour:
     Count: 3
   MaxHp: 380000
   MaxMp: 26
-  HpInc: 3
-  Level: 1
-  Exp: 0
-  MpType: 0
   Attack: 27
-  Qinggong: 27
-  Defence: 27
+  MagicAttack: 0
+  Speed: 0
+  Defense: 0
   MagicDefence: 0
   Heal: 30
-  UsePoison: 30
-  DePoison: 23
-  AntiPoison: 25
-  Quanzhang: 30
-  Yujian: 28
-  Shuadao: 26
-  Qimen: 24
-  Anqi: 25
-  Wuxuechangshi: 0
-  AttackPoison: 0
-  Zuoyouhubo: 0
+  Attach: 
+  Critical: 0
+  CriticalLevel: 0
+  Miss: 0
+  Luck: 0
+  Strength: 0
+  Intelligence: 0
+  Constitution: 0
+  Agile: 0
   Weapon: {fileID: 0}
   Armor: {fileID: 0}
   Shoes: {fileID: 0}
+  Treasure: {fileID: 0}
   LeaveStoryId: 
   Model: {fileID: 11400000, guid: a04197a5f95a83c4e899063c285998c3, type: 2}
   references:
@@ -65,5 +74,60 @@ MonoBehaviour:
     00000000:
       type: {class: Jyx2ConfigCharacterSkill, ns: Jyx2Configs, asm: Assembly-CSharp}
       data:
-        Skill: {fileID: 11400000, guid: ef78b96d6f8deea4e869462e829fad06, type: 2}
+        Skill: {fileID: 11400000, guid: babd4ea6e36e95943a93c1f72b04f73b, type: 2}
+        Level: 0
+    00000001:
+      type: {class: Jyx2ConfigCharacterSkill, ns: Jyx2Configs, asm: Assembly-CSharp}
+      data:
+        Skill: {fileID: 11400000, guid: 798ccc1e51b35994bbf92a57a4d069c0, type: 2}
+        Level: 0
+    00000002:
+      type: {class: Jyx2ConfigCharacterSkill, ns: Jyx2Configs, asm: Assembly-CSharp}
+      data:
+        Skill: {fileID: 11400000, guid: 78f5d745c66793a49ae68ecac3aa9bcb, type: 2}
+        Level: 0
+    00000003:
+      type: {class: Jyx2ConfigCharacterSkill, ns: Jyx2Configs, asm: Assembly-CSharp}
+      data:
+        Skill: {fileID: 11400000, guid: 9ff9afa094a346d45a51f983715e3bfc, type: 2}
+        Level: 0
+    00000004:
+      type: {class: Jyx2ConfigCharacterSkill, ns: Jyx2Configs, asm: Assembly-CSharp}
+      data:
+        Skill: {fileID: 11400000, guid: 5cd67f17bb1de674e8cfc3fc831c1e06, type: 2}
+        Level: 0
+    00000005:
+      type: {class: Jyx2ConfigCharacterSkill, ns: Jyx2Configs, asm: Assembly-CSharp}
+      data:
+        Skill: {fileID: 11400000, guid: 0533e6d63da4f624992672858a0b6d09, type: 2}
+        Level: 0
+    00000006:
+      type: {class: Jyx2ConfigCharacterSkill, ns: Jyx2Configs, asm: Assembly-CSharp}
+      data:
+        Skill: {fileID: 11400000, guid: f8151c5b9ad3d6f4494274ca4d633af1, type: 2}
+        Level: 0
+    00000007:
+      type: {class: Jyx2ConfigCharacterSkill, ns: Jyx2Configs, asm: Assembly-CSharp}
+      data:
+        Skill: {fileID: 11400000, guid: 057fc96ded3661649a52babad461f385, type: 2}
+        Level: 0
+    00000008:
+      type: {class: Jyx2ConfigCharacterSkill, ns: Jyx2Configs, asm: Assembly-CSharp}
+      data:
+        Skill: {fileID: 11400000, guid: c5c87e0f7e593a64d97add8146b57869, type: 2}
+        Level: 0
+    00000009:
+      type: {class: Jyx2ConfigCharacterSkill, ns: Jyx2Configs, asm: Assembly-CSharp}
+      data:
+        Skill: {fileID: 11400000, guid: 9c89af9444d5608468da1dfcb540174b, type: 2}
+        Level: 0
+    0000000A:
+      type: {class: Jyx2ConfigCharacterSkill, ns: Jyx2Configs, asm: Assembly-CSharp}
+      data:
+        Skill: {fileID: 11400000, guid: 1bfadcaa3e61e9b498b7c4475962a64f, type: 2}
+        Level: 0
+    0000000B:
+      type: {class: Jyx2ConfigCharacterSkill, ns: Jyx2Configs, asm: Assembly-CSharp}
+      data:
+        Skill: {fileID: 11400000, guid: dcf2c2741d5b65648aec0afd1ff50a46, type: 2}
         Level: 0

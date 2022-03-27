@@ -120,7 +120,16 @@ public class AIManager
         BattleBlockData toBlockData = Enermies[r.Next(0,Enermies.Count)].blockData;//随机获取一个存活敌人位置
         BattleBlockData weBlockData = Teammates[r.Next(0,Teammates.Count)].blockData;//随机获取一个存活队友位置
         IEnumerable<BattleZhaoshiInstance> skills = role.GetZhaoshis(false);//所有技能
-        var skill = skills.ElementAt(0);//默认的普攻
+        if (skills.Count() == 0)
+        {
+            Debug.Log(role.Name + "没有技能！");
+            return;
+        }
+        var skill = skills.ElementAt(0);//默认的普攻 配置时要把不耗蓝的普攻放第一个技能，否则默认拿key=0的普攻动作
+        if (skill == null)
+        {
+            skill = new BattleZhaoshiInstance(new SkillInstance(0));
+        }
         if (iq < 30)//低智 完全随机 技能使用率 0.2
         {
             if ( r.Next(1, 11) > 8) 

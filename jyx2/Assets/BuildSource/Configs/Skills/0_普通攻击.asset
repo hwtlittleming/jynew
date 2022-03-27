@@ -16,99 +16,10 @@ MonoBehaviour:
   Name: "\u666E\u901A\u653B\u51FB"
   DamageType: 0
   SkillCoverType: 0
-  MpCost: 1
+  MpCost: 0
   Poison: 0
-  Levels:
-  - id: 0
-  - id: 1
-  - id: 2
-  - id: 3
-  - id: 4
-  - id: 5
-  - id: 6
-  - id: 7
-  - id: 8
-  - id: 9
+  FixedDamage: 0
+  DamageLevel: 0
+  Attach: 
+  SkillLevel: 1
   Display: {fileID: 11400000, guid: a06a43299ba76434c9fab61ccc1c3a52, type: 2}
-  references:
-    version: 1
-    00000000:
-      type: {class: Jyx2ConfigSkillLevel, ns: Jyx2Configs, asm: Assembly-CSharp}
-      data:
-        Attack: 0
-        SelectRange: 1
-        AttackRange: 0
-        AddMp: 0
-        KillMp: 0
-    00000001:
-      type: {class: Jyx2ConfigSkillLevel, ns: Jyx2Configs, asm: Assembly-CSharp}
-      data:
-        Attack: 0
-        SelectRange: 1
-        AttackRange: 0
-        AddMp: 0
-        KillMp: 0
-    00000002:
-      type: {class: Jyx2ConfigSkillLevel, ns: Jyx2Configs, asm: Assembly-CSharp}
-      data:
-        Attack: 0
-        SelectRange: 1
-        AttackRange: 0
-        AddMp: 0
-        KillMp: 0
-    00000003:
-      type: {class: Jyx2ConfigSkillLevel, ns: Jyx2Configs, asm: Assembly-CSharp}
-      data:
-        Attack: 0
-        SelectRange: 1
-        AttackRange: 0
-        AddMp: 0
-        KillMp: 0
-    00000004:
-      type: {class: Jyx2ConfigSkillLevel, ns: Jyx2Configs, asm: Assembly-CSharp}
-      data:
-        Attack: 0
-        SelectRange: 1
-        AttackRange: 0
-        AddMp: 0
-        KillMp: 0
-    00000005:
-      type: {class: Jyx2ConfigSkillLevel, ns: Jyx2Configs, asm: Assembly-CSharp}
-      data:
-        Attack: 0
-        SelectRange: 1
-        AttackRange: 0
-        AddMp: 0
-        KillMp: 0
-    00000006:
-      type: {class: Jyx2ConfigSkillLevel, ns: Jyx2Configs, asm: Assembly-CSharp}
-      data:
-        Attack: 0
-        SelectRange: 1
-        AttackRange: 0
-        AddMp: 0
-        KillMp: 0
-    00000007:
-      type: {class: Jyx2ConfigSkillLevel, ns: Jyx2Configs, asm: Assembly-CSharp}
-      data:
-        Attack: 0
-        SelectRange: 1
-        AttackRange: 0
-        AddMp: 0
-        KillMp: 0
-    00000008:
-      type: {class: Jyx2ConfigSkillLevel, ns: Jyx2Configs, asm: Assembly-CSharp}
-      data:
-        Attack: 0
-        SelectRange: 1
-        AttackRange: 0
-        AddMp: 0
-        KillMp: 0
-    00000009:
-      type: {class: Jyx2ConfigSkillLevel, ns: Jyx2Configs, asm: Assembly-CSharp}
-      data:
-        Attack: 0
-        SelectRange: 1
-        AttackRange: 0
-        AddMp: 0
-        KillMp: 0

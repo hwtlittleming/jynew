@@ -147,6 +147,7 @@ public partial class BattleMainUIPanel:Jyx2_UIBase
     
     protected override void OnHidePanel()
     {
+        Debug.Log("哪里来的？？？？？？");
         base.OnHidePanel();
         AutoBattle_Toggle.isOn = false;
         AutoBattle_Toggle.gameObject.SetActive(false);

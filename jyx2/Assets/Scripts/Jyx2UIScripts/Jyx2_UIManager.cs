@@ -200,8 +200,8 @@ public class Jyx2_UIManager : MonoBehaviour
         string uiName = go.name.Replace("(Clone)", "");
         object[] allParams = _loadingUIParams[uiName];
         Component com = GameUtil.GetOrAddComponent(go.transform, uiName);
+        
         Jyx2_UIBase uibase = com as Jyx2_UIBase;
-
         Transform parent = GetUIParent(uibase.Layer);
         go.transform.SetParent(parent);
 
