@@ -24,7 +24,7 @@ using UnityEngine.UI;
 
 public partial class BattleActionUIPanel : Jyx2_UIBase
 {
-	//public override UILayer Layer => UILayer.NormalUI;
+	public override UILayer Layer => UILayer.NormalUI;
 	public RoleInstance GetCurrentRole()
 	{
 		return m_currentRole;
