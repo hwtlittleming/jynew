@@ -146,9 +146,6 @@ public class BattleManager : MonoBehaviour
         //battleloop
         var model = GetModel();
 
-        //生成当前角色高亮环
-        m_roleFocusRing = Jyx2ResourceHelper.CreatePrefabInstance("CurrentBattleRoleTag");
-        
         //敌人开始自由攻击
         foreach (var r in enermyRoleList)
         {
@@ -161,10 +158,6 @@ public class BattleManager : MonoBehaviour
         
         foreach (var r in Teammates)
         {
-            if (r.GetJyx2RoleId() == 0)
-            {
-                m_roleFocusRing.transform.position = r.blockData.block.transform.position;
-            }
             var transform = GameObject.Find(r.blockData.blockName).transform;
             transform.gameObject.AddComponent<BattleUnit>();
             //给格子上的战斗单元脚本初始化属性
@@ -192,48 +185,62 @@ public class BattleManager : MonoBehaviour
         //await AttackOnce(_role, _role.GetZhaoshis(false).FirstOrDefault(), bd);
     }
 
-    public async void operate(RoleInstance _role,BattleUnit b)
+    public async void operate(RoleInstance _role)
     {
+        
         while (true)
         {
-            ManualResult ret = await WaitForPlayerInput(_role, new List<BattleBlockVector>(), false);
+            UniTaskCompletionSource<ManualResult> t = new UniTaskCompletionSource<ManualResult>();
+            
+            Action<ManualResult> callback = delegate(ManualResult result) { t.TrySetResult(result); };
+            
+            //显示战斗选项面板，等待返回选择的策略; 因异步加载战斗选项UI后 要等点击了某个技能再继续执行所以用到了UniTaskCompletionSource
+            await Jyx2_UIManager.Instance.ShowUIAsync(nameof(BattleActionUIPanel),_role, callback);
+            
+            //等待完成
+            await t.Task;
+            
+            //关闭面板
+            Jyx2_UIManager.Instance.HideUI(nameof(BattleActionUIPanel));
+            
+            //返回
+            ManualResult ret = t.GetResult(0);
+            
             if (ret.choose == "normalAttack")
             {
-                
-            }else if (false)
+                await AttackOnce(_role, _role.GetZhaoshis(false).FirstOrDefault(), ret.BlockData);
+            }else if (ret.choose == "skillAttack")
             {
-                
+                await AttackOnce(_role, ret.Skill, ret.BlockData);
             }
-
-            
-            /*if (ret.isRevert) //点击取消
-            {
-                isSelectMove = true;
-                role.movedStep = 0;
-                role.Pos = originalPos;
-            }
-            else if (ret.movePos != null && isSelectMove) //移动
-            {
-                isSelectMove = false;
-                role.movedStep += originalPos.GetDistance(ret.movePos);
-                await RoleMove(role, ret.movePos);
-            }else if (ret.isWait) //等待
-            {
-                _manager.GetModel().ActWait(role);
-                break;
-            }else if (ret.isAuto) //托管给AI
-            {
-                role.Pos = originalPos;
-                await RoleAIAction(role);
-                break;
-            }
-            else if (ret.aiResult != null) //具体执行行动逻辑（攻击、道具、用毒、医疗等）
-            {
-                role.movedStep = 0;
-                await ExecuteAIResult(role, ret.aiResult);
-                break;
-            }*/
         }
+        /*if (ret.isRevert) //点击取消
+        {
+            isSelectMove = true;
+            role.movedStep = 0;
+            role.Pos = originalPos;
+        }
+        else if (ret.movePos != null && isSelectMove) //移动
+        {
+            isSelectMove = false;
+            role.movedStep += originalPos.GetDistance(ret.movePos);
+            await RoleMove(role, ret.movePos);
+        }else if (ret.isWait) //等待
+        {
+            _manager.GetModel().ActWait(role);
+            break;
+        }else if (ret.isAuto) //托管给AI
+        {
+            role.Pos = originalPos;
+            await RoleAIAction(role);
+            break;
+        }
+        else if (ret.aiResult != null) //具体执行行动逻辑（攻击、道具、用毒、医疗等）
+        {
+            role.movedStep = 0;
+            await ExecuteAIResult(role, ret.aiResult);
+            break;
+        }*/
 
     }
 
@@ -589,27 +596,6 @@ public class BattleManager : MonoBehaviour
             }*/
         }
 
-        //角色施展技能总逻辑
-        public async UniTask RoleCastSkill(RoleInstance role, BattleZhaoshiInstance skill, BattleBlockVector skillTo)
-        {
-            if (role == null || skill == null || skillTo == null)
-            {
-                GameUtil.LogError("RoleCastSkill失败");
-                return;
-            }
-            
-            role.SwitchAnimationToSkill(skill.Data); //切换姿势
-            skill.CastCD(); //技能CD
-            skill.CastCost(role); //技能消耗（左右互搏体力消耗一次，内力消耗两次）
-            skill.CastMP(role);
-
-            //await CastOnce(role, skill, skillTo); //攻击一次
-            if (Zuoyouhubo(role, skill))
-            {
-                skill.CastMP(role);
-                //await CastOnce(role, skill, skillTo); //再攻击一次
-            }
-        }
 
         //做一次施展伤害技能或普攻,普攻也视为一次特殊skill；blockData:攻击选择点所在格子信息
         public async UniTask AttackOnce(RoleInstance role, BattleZhaoshiInstance skill,BattleBlockData blockData)
@@ -628,7 +614,7 @@ public class BattleManager : MonoBehaviour
 
             //获取攻击范围
             List<BattleBlockData> blockList = new List<BattleBlockData>(); //攻击涵盖的格子
-            IEnumerable<Transform> blockTransList = new List<Transform>(); //攻击涵盖的格子位置集合
+            List<Transform> blockTransList = new List<Transform>(); //攻击涵盖的格子位置集合
             List<RoleInstance> toRoleList = new List<RoleInstance>(); //攻击涵盖的角色, todo 角色属性变化 格子上的角色属性是否能跟着变化
             if (skill.Data.Name == "普通攻击")
             {
@@ -641,7 +627,7 @@ public class BattleManager : MonoBehaviour
                 }
 
                 blockList.Add(blockData);
-                blockTransList.Append(blockData.block.transform);
+                blockTransList.Add(blockData.blockObject.transform);
             }
             else
             {
@@ -650,7 +636,7 @@ public class BattleManager : MonoBehaviour
                 var covertype = skill.GetCoverType();
                 // todo 技能的攻击格子
                 blockList.Add(blockData);
-                blockTransList.Append(blockData.block.transform);
+                blockTransList.Add(blockData.blockObject.transform);
             }
 
             foreach (var b in blockList)
@@ -688,12 +674,6 @@ public class BattleManager : MonoBehaviour
             //攻击和受击动画播放
             await castHelper.Play();
             
-        }
-
-        //判断是否可以左右互搏
-        bool Zuoyouhubo(RoleInstance role, BattleZhaoshiInstance skill)
-        {
-            return (role.Zuoyouhubo > 0 && (skill.Data.GetSkill().DamageType == 0 || (int)skill.Data.GetSkill().DamageType == 1));
         }
 
         //使用道具 修改后可用
@@ -753,98 +733,16 @@ public class BattleManager : MonoBehaviour
 
             await UniTask.Delay(TimeSpan.FromSeconds(1f));
         }
-
-
-        /// <summary>
-        /// 手动控制战斗
-        ///
-        /// 手动控制的状态为：
-        /// 1）没有移动的时候可以选择移动或者行动
-        /// 2）移动了之后只能选择行动
-        /// 3）有的行动（如用毒、医疗、攻击等）需要选择目标格，有的不需要（如休息）
-        ///
-        /// 可能存在的状态分别为：
-        /// 
-        /// 1）待移动，显示指令面板。
-        /// 2）已经移动过，待选择攻击目标，显示指令面板
-        /// 3）尚未移动过，待选择攻击目标，显示指令面板
-        /// 4）正在移动，不显示指令面板
-        /// 5）选择待使用的道具（浮于所有面板之上）
-        /// 
-        /// 任何时候点击取消，都回到初始状态1
-        /// 
-        /// </summary>
-        /// <param name="role"></param>
-        /// <returns></returns>
-        async UniTask RoleManualAction(RoleInstance role)
-        {
-            bool isSelectMove = true;
-            var originalPos = role.Pos;
-            //原始的移动范围
-            var moveRange = BattleManager.Instance.GetMoveRange(role, role.movedStep);
-
-            while (true)
-            {
-                var ret = await WaitForPlayerInput(role, moveRange, isSelectMove);
-
-                /*if (ret.isRevert) //点击取消
-                {
-                    isSelectMove = true;
-                    role.movedStep = 0;
-                    role.Pos = originalPos;
-                }
-                else if (ret.movePos != null && isSelectMove) //移动
-                {
-                    isSelectMove = false;
-                    role.movedStep += 1;
-                    await RoleMove(role, ret.movePos);
-                }else if (ret.isWait) //等待
-                {
-                    GetModel().ActWait(role);
-                    break;
-                }else if (ret.isAuto) //托管给AI
-                {
-                    role.Pos = originalPos;
-                    await RoleAIAction(role);
-                    break;
-                }
-                else if (ret.aiResult != null) //具体执行行动逻辑（攻击、道具、用毒、医疗等）
-                {
-                    role.movedStep = 0;
-                    await ExecuteAIResult(role, ret.aiResult);
-                    break;
-                }*/
-            }
-        }
         
         //手动控制操作结果
         public class ManualResult
         {
             public String choose;
             public BattleBlockData BlockData = null;
-            public SkillInstance Skill = null;
+            public BattleZhaoshiInstance Skill = null;
             //public AIResult aiResult = null;
         }
-
-        //等待玩家输入
-        async UniTask<ManualResult> WaitForPlayerInput(RoleInstance role, List<BattleBlockVector> moveRange, bool isSelectMove)
-        {
-            UniTaskCompletionSource<ManualResult> t = new UniTaskCompletionSource<ManualResult>();
-            Action<ManualResult> callback = delegate(ManualResult result) { t.TrySetResult(result); };
-            
-            //显示技能动作面板，同时接受格子输入
-            await Jyx2_UIManager.Instance.ShowUIAsync(nameof(BattleActionUIPanel),role, moveRange, isSelectMove, callback);
-            
-            //等待完成
-            await t.Task;
-            
-            //关闭面板
-            Jyx2_UIManager.Instance.HideUI(nameof(BattleActionUIPanel));
-            
-            //返回
-            return t.GetResult(0);
-        }
-
+        
         public BattleBlockData GetBlockData(int x,int y,String team)
         {
             return block_list.Find(bd => bd.x == x && bd.y == y && bd.team == team);

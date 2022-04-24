@@ -35,7 +35,7 @@ namespace Jyx2
         public RoleInstance role;
         
         //格子的游戏对象
-        public GameObject block;
+        public GameObject blockObject;
         
         //对应绘制的对象
         public GameObject gameObject;

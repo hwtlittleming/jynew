@@ -59,6 +59,7 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    m_Ints: []
     m_Floats:
     - ADDITIONAL_FOAM_DISTORTION_AMOUNT: 1
     - DOWNSAMPLING_SAMPLE_SIZE: 0.33
@@ -361,7 +362,7 @@ Material:
     - _CAUSTIC_PROC_Tiling: {r: 1, g: 1, b: 1, a: 1}
     - _CAUSTIC_Tiling: {r: 1, g: 1, b: 0, a: 0}
     - _CN_TILING: {r: 5, g: 5, b: 1, a: 1}
-    - _Color: {r: 0.9811321, g: 0.94996405, b: 0.72659314, a: 0.75686276}
+    - _Color: {r: 0.123214744, g: 0.05980776, b: 0.6037736, a: 0.75686276}
     - _DetailAnim: {r: 0, g: 1.5, b: 0, a: 0}
     - _DustAnim: {r: 0, g: 0, b: 0, a: 0}
     - _FoamColor: {r: 1, g: 1, b: 1, a: 1}
@@ -427,3 +428,4 @@ Material:
     - _ZDepthBakeLayers: {r: 255, g: 255, b: 255, a: 255}
     - lerped_post_color1: {r: 1, g: 1, b: 1, a: 1}
     - lerped_post_color2: {r: 1, g: 1, b: 1, a: 1}
+  m_BuildTextureStacks: []

@@ -111,7 +111,7 @@ namespace Jyx2
         {
             RunInMainThread(() =>
             {
-
+                
                 bool isCurrentScene = false;
                 //场景ID
                 if (scene == -2) //当前场景
@@ -201,6 +201,30 @@ namespace Jyx2
             Wait();
         }
 
+        //做选择
+        public static int doChoice(string selectMessage,String[] options)
+        {
+            async void Action()
+            {
+                List<string> selectionContent = new List<string>(){};
+                foreach (var ops in options)
+                {
+                    selectionContent.Add(ops);
+                }
+                storyEngine.BlockPlayerControl = true;
+                await Jyx2_UIManager.Instance.ShowUIAsync(nameof(ChatUIPanel), ChatType.Selection, "0", selectMessage, selectionContent, new Action<int>((index) =>
+                {
+                    _selectResult = index;
+                    storyEngine.BlockPlayerControl = false;
+                    Next();
+                }));
+            }
+
+            RunInMainThread(Action);
+
+            Wait();
+            return _selectResult;
+        }
 
         //询问是否战斗
         public static bool AskBattle()

@@ -199,9 +199,9 @@ public partial class ChatUIPanel : Jyx2_UIBase, IUIAnimator
 			NameTxt_Text.text = GetRoleName(headId);
 		}
 
-		Content_RectTransform.anchoredPosition = headId == 0 || !ShowName ? Vector3.zero : new Vector3(450, 0, 0);
+		Content_RectTransform.anchoredPosition = headId == 0 || !ShowName ? Vector3.zero : new Vector3(400, 0, 0);
 
-		Content_RectTransform.sizeDelta = ShowName ? new Vector2(-450, 280) : new Vector2(0, 280);
+		Content_RectTransform.sizeDelta = ShowName ? new Vector2(-400, 280) : new Vector2(0, 280);
 
 
 		HeadAvataPre_RectTransform.anchorMax = headId == 0 ? Vector2.right : Vector2.zero;
@@ -217,7 +217,7 @@ public partial class ChatUIPanel : Jyx2_UIBase, IUIAnimator
 		Name_RectTransform.anchorMax = headId == 0 ? Vector2.right : Vector2.zero;
 		Name_RectTransform.anchorMin = headId == 0 ? Vector2.right : Vector2.zero;
 		Name_RectTransform.pivot = headId == 0 ? Vector2.right : Vector2.zero;
-		Name_RectTransform.anchoredPosition = new Vector2(headId == 0 ? -450 : 450, 280);
+		Name_RectTransform.anchoredPosition = new Vector2(headId == 0 ? -400 : 400, 280);
 	}
 
 	protected override void handleGamepadButtons()

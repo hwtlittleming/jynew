@@ -117,8 +117,8 @@ public class AIManager
         
         //iq 0~30 30~60 >60 >90
         Random r = new Random();
-        BattleBlockData toBlockData = Enermies[r.Next(0,Enermies.Count)].blockData;//随机获取一个存活敌人位置
-        BattleBlockData weBlockData = Teammates[r.Next(0,Teammates.Count)].blockData;//随机获取一个存活队友位置
+        BattleBlockData toBlockData = Enermies[UnityEngine.Random.Range(0,Enermies.Count-1)].blockData;//随机获取一个存活敌人位置
+        BattleBlockData weBlockData = Teammates[UnityEngine.Random.Range(0,Teammates.Count-1)].blockData;//随机获取一个存活队友位置
         IEnumerable<BattleZhaoshiInstance> skills = role.GetZhaoshis(false);//所有技能
         if (skills.Count() == 0)
         {
@@ -134,7 +134,7 @@ public class AIManager
         {
             if ( r.Next(1, 11) > 8) 
             {
-                skill = skills.ElementAt(r.Next(1,skills.Count()));//随机选择一个技能
+                skill = skills.ElementAt(r.Next(0,skills.Count()));//随机选择一个技能
             }
             //随机选择一个技能攻击(包括普攻和投掷)
             await _battleManager.AttackOnce(role,skill,toBlockData);
@@ -145,14 +145,14 @@ public class AIManager
             if ((role.Hp < role.Hp * 0.2 || role.Mp < role.Mp * 0.2) && role.Items.Count > 0)
             {
                 List<Jyx2ConfigItem> items = GetAvailableItems(role, 3); //获得携带物品
-                Jyx2ConfigItem item = items.ElementAt(r.Next(1,items.Count()));
+                Jyx2ConfigItem item = items.ElementAt(r.Next(0,items.Count()));
                 //使用道具
                 await _battleManager.RoleUseItem(role,item,toBlockData.role);
                 return;
             }
             if (r.Next(1, 11) > 6)
             {
-                skill = skills.ElementAt(r.Next(1, skills.Count())); //随机选择一个技能
+                skill = skills.ElementAt(r.Next(0, skills.Count())); //随机选择一个技能
                 if (skill.IsCastToEnemy() == true)
                 {
                     await _battleManager.AttackOnce(role, skill, toBlockData);
@@ -203,7 +203,7 @@ public class AIManager
             //伤害技能或普攻  覆盖敌人最多的技能
             if ( r.Next(1, 11) > 4)
             {
-                skill = skills.ElementAt(r.Next(1, skills.Count())); //随机选择一个技能
+                skill = skills.ElementAt(r.Next(0, skills.Count()-1)); //随机选择一个技能
                 if (skill.IsCastToEnemy() == true)
                 {
                     await _battleManager.AttackOnce(role, skill, toBlockData);

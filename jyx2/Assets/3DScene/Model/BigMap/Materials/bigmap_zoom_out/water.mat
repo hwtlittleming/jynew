@@ -110,10 +110,10 @@ Material:
     - _FlashSpeedX: 0.5
     - _FlashSpeedY: 0
     - _FoamDistortion: 0.45
-    - _FoamOpacity: 0.01
+    - _FoamOpacity: 0.005
     - _FoamSize: 0.313
     - _FoamSpeed: 0.1
-    - _FoamTiling: 2.8899994
+    - _FoamTiling: 1.9900001
     - _Fresnelexponent: 4
     - _Gloss: 0
     - _GlossMapScale: 1
@@ -191,7 +191,7 @@ Material:
     - _ShadowColor: {r: 0.3066038, g: 0.45068616, b: 1, a: 1}
     - _SpecColor: {r: 1, g: 1, b: 1, a: 0.5}
     - _TheFlashColor: {r: 0, g: 0, b: 0, a: 0}
-    - _WaterColor: {r: 0.18417099, g: 0.38668406, b: 0.3703894, a: 0}
-    - _WaterShallowColor: {r: 0.19253695, g: 0.24830374, b: 0.3678161, a: 0}
+    - _WaterColor: {r: 0.2429424, g: 0.43082598, b: 0.5660378, a: 0}
+    - _WaterShallowColor: {r: 0.19250414, g: 0.24826911, b: 0.3677815, a: 0}
     - _WaveDirection: {r: 1, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []

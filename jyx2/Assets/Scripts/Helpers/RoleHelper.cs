@@ -27,6 +27,7 @@ public static class RoleHelper
         var obj = GameObject.Find("Level/Player");
         if (obj != null) return obj.GetComponent<MapRole>();
         obj = GameObject.FindWithTag("Player");
+        
         if (obj == null)
         {
             //Debug.LogError("找不到主角，请设置层级为Level/Player。或者Tag设置为Player");

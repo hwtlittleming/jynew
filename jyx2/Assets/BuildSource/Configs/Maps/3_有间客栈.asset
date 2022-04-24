@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: "3_\u6709\u95F4\u5BA2\u6808"
   m_EditorClassIdentifier: 
   Id: 3
-  Name: "\u6709\u95F4\u5BA2\u6808"
+  Name: "\u6781\u5317\u5BA2\u6808"
   MapScene:
     m_AssetGUID: fab26c0592755db45be2168e5bc27878
     m_SubObjectName: 
@@ -31,4 +31,5 @@ MonoBehaviour:
     m_EditorAssetChanged: 0
   EnterCondition: 0
   Tags: 
+  MapKind: 
   ForceSetLeaveMusicId: -1

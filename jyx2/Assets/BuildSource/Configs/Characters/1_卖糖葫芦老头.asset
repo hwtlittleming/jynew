@@ -1,0 +1,61 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb1f0b3f56141f442b2d23d0f9fe5f39, type: 3}
+  m_Name: "1_\u5356\u7CD6\u846B\u82A6\u8001\u5934"
+  m_EditorClassIdentifier: 
+  Id: 1
+  Name: "\u5356\u7CD6\u846B\u82A6\u8001\u5934"
+  Sexual: 0
+  Rate: 0
+  Pic:
+    m_AssetGUID: e5b538f2db8d36f479701cbe0bf1dfe6
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0
+  Moral: 0
+  IQ: 39
+  Descripe: 
+  Skills:
+  - id: 0
+  Items:
+  - Item: {fileID: 11400000, guid: e48b1e789c05d664b90adf395dc9436b, type: 2}
+    Count: 2
+  MaxHp: 100
+  MaxMp: 100
+  Attack: 1
+  MagicAttack: 0
+  Speed: 0
+  Defense: 0
+  MagicDefence: 0
+  Heal: 0
+  Attach: 
+  Critical: 0
+  CriticalLevel: 0
+  Miss: 0
+  Luck: 0
+  Strength: 0
+  Intelligence: 0
+  Constitution: 0
+  Agile: 0
+  Weapon: {fileID: 0}
+  Armor: {fileID: 0}
+  Shoes: {fileID: 0}
+  Treasure: {fileID: 0}
+  LeaveStoryId: 
+  Model: {fileID: 0}
+  references:
+    version: 1
+    00000000:
+      type: {class: Jyx2ConfigCharacterSkill, ns: Jyx2Configs, asm: Assembly-CSharp}
+      data:
+        Skill: {fileID: 0}
+        Level: 0

@@ -182,6 +182,18 @@ MonoBehaviour:
     m_SerializedLabels: []
     m_MainAsset: {fileID: 0}
     m_TargetAsset: {fileID: 0}
+  - m_GUID: 70e0982a2017d8744aeb16572a33aebc
+    m_Address: Assets/3DScene/Model/Common/Buildings/Wall/Materials/Wall_23.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 57f27be0c8baba54384aa9b657117d3a
+    m_Address: Assets/3DScene/Model/Common/Plant/Tree/Materials/Tree_10.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: a59d22e034499c349a88de9540f026f9, type: 2}
   m_SchemaSet:

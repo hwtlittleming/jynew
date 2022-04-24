@@ -296,24 +296,17 @@ public class LevelMaster : MonoBehaviour
 		}
 		else if (loadPara.loadType == LevelLoadPara.LevelLoadType.Entrance)
 		{
-			if (map.IsWorldMap()) //大地图
+			var entranceObj = GameObject.FindGameObjectWithTag("Entrance"); //找入口
+			if (entranceObj != null)
 			{
-				GetPlayer().LoadWorldInfo();
-			}
-			else
-			{
-				var entranceObj = GameObject.FindGameObjectWithTag("Entrance"); //找入口
-				if (entranceObj != null)
-				{
-					PlayerSpawnAt(entranceObj.transform.position);
-				}
+				PlayerSpawnAt(entranceObj.transform.position);
 			}
 		}
 		else if (loadPara.loadType == LevelLoadPara.LevelLoadType.StartAtTrigger)
 		{
 			Transport(loadPara.triggerName);
 
-			if (_currentMap.IsWorldMap())
+			if (_currentMap.IsWorldMap() && (loadPara.triggerName == null || loadPara.triggerName ==""))
 				GetPlayer().LoadBoat();
 		}
 		else if (loadPara.loadType == LevelLoadPara.LevelLoadType.ReturnFromBattle)

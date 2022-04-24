@@ -14,13 +14,13 @@ using UnityEngine;
 
 public class ChildGoComponent : MonoBehaviour
 {
-    Transform instantiatePrefab;
+    Transform instantiatePrefab_forSkills;
     List<Transform> childGoList = new List<Transform>();
     List<Transform> usingGoList = new List<Transform>();
     Action<Transform> onCreate;
     public void Init(Transform trans,Action<Transform> onCreate = null) 
     {
-        instantiatePrefab = trans;
+        instantiatePrefab_forSkills = trans;
         this.onCreate = onCreate;
         HideAllChild();
     }
@@ -41,7 +41,7 @@ public class ChildGoComponent : MonoBehaviour
         int count = needNum - childGoList.Count;
         for (int i = 0; i < count; i++)
         {
-            Transform trans = Instantiate(instantiatePrefab);
+            Transform trans = Instantiate(instantiatePrefab_forSkills);
             trans.SetParent(transform);
             trans.localScale = Vector3.one;
             trans.localPosition = Vector3.zero;

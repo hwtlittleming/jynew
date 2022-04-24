@@ -34,25 +34,32 @@ public partial class BattleActionUIPanel : Jyx2_UIBase
 
 	List<SkillUIItem> m_curItemList = new List<SkillUIItem>();
 	ChildGoComponent childMgr;
-
-	private bool isSelectMove;
+	
 	private Action<BattleManager.ManualResult> callback;
-	private List<BattleBlockVector> moveRange;
-	private BattleFieldModel battleModel;
 	private BattleZhaoshiInstance currentZhaoshi;
 	private Dictionary<Button, Action> zhaoshiList = new Dictionary<Button, Action>();
-	private GameObject chooseRing = Jyx2ResourceHelper.CreatePrefabInstance("CurrentBattleRoleTag");
+	private GameObject chooseRing;
+	private GameObject chooseEnermyRing;
+	public BattleBlockData currentAttackBlock;
 
 	protected override void OnCreate()
 	{
 		InitTrans();
 		childMgr = GameUtil.GetOrAddComponent<ChildGoComponent>(Skills_RectTransform);
 		childMgr.Init(SkillItem_RectTransform);
+		
+		chooseRing = Jyx2ResourceHelper.CreatePrefabInstance("CurrentBattleRoleTag");
+		Transform pos = GameObject.FindWithTag("Player").transform;
+		chooseRing.transform.position = pos.position;
 		_buttonList = new Dictionary<Button, Action>();
+		
 		BindListener(Move_Button, OnMoveClick);
 		BindListener(Item_Button, OnUseItemClick);
 		BindListener(Rest_Button, OnRestClick);
 		BindListener(NormalAttack_Button, OnNormalAttackClick);
+		
+		/*ShowUIAsync(nameof(BattleMainUIPanel), BattleMainUIState.None);
+		BattleMainUIPanel.*/
 	}
 
 	protected override bool captureGamepadAxis { get { return true; } }
@@ -91,69 +98,11 @@ public partial class BattleActionUIPanel : Jyx2_UIBase
 		m_currentRole = allParams[0] as RoleInstance;
 		if (m_currentRole == null)
 			return;
-
-		moveRange = (List<BattleBlockVector>)allParams[1];
-		isSelectMove = (bool)allParams[2];
-		callback = (Action<BattleManager.ManualResult>)allParams[3];
-		battleModel = BattleManager.Instance.GetModel();
-
-		BattleboxHelper.Instance.analogLeftMovedToBlock += onBattleBlockMove;
-		BattleboxHelper.Instance.blockConfirmed += gamepadBlockConfirmed;
-
-		//Cancel_Button.gameObject.SetActive(false);
-		SetActionBtnState();
+		callback = (Action<BattleManager.ManualResult>)allParams[1];
+		
 		RefreshSkill();
-		//SetPanelState();
-
-		//给对面的格子按钮绑定事件
-		Transform all_block = GameObject.Find("block_parent").transform;
-		foreach (Transform block in all_block)
-		{
-			Button btn = GameUtil.GetOrAddComponent<Button>(block.gameObject);
-			BindListener(btn, () => { onBlockChoose(block.gameObject); }, false);
-		}
-
-		if (isSelectMove)
-		{
-			_lastHitRangeOverBlock = null;
-			//BattleboxHelper.Instance.ShowBlocks(m_currentRole, moveRange, BattleBlockType.MoveZone, false);
-		}
-		else
-		{
-			if (m_curItemList.Count > 0)
-			{
-				//fix issue of mp deplition causes zhaoshi not showing, and previously recorded current index
-				//out of range.
-				if (m_currentRole.CurrentSkill >= m_curItemList.Count)
-					m_currentRole.CurrentSkill = 0;
-
-				var zhaoshi = m_curItemList[m_currentRole.CurrentSkill].GetSkill();
-			}
-		}
 		changeCurrentSelection(-1);
 	}
-	private void onBlockChoose(GameObject block)
-	{
-		//移动攻击指针图标
-		chooseRing.transform.position = block.transform.position;
-		Debug.Log("选择了攻击格子:" + block.transform.name);
-	}
-	private void onBattleBlockMove(BattleBlockData block)
-	{
-		//hide the hilite
-		changeCurrentSelection(-1);
-		//hide the zhaoshi selection
-		changeCurrentZhaoshiSelection(-1);
-	}
-
-	private void gamepadBlockConfirmed(BattleBlockData obj)
-	{
-		blockConfirm(obj, false);
-	}
-
-	private BattleBlockData _lastHitRangeOverBlock = null;
-	private bool rightDpadPressed;
-	private bool leftDpadPressed;
 
 	private int cur_zhaoshi = 0;
 
@@ -209,83 +158,39 @@ public partial class BattleActionUIPanel : Jyx2_UIBase
 
 	protected override bool resetCurrentSelectionOnShow => false;
 
-	protected override void OnDirectionalRight()
-	{
-		if (zhaoshiList.Count == 0)
-			return;
-
-		changeCurrentSelection(-1);
-
-		var nextZhaoshi = (cur_zhaoshi >= zhaoshiList.Count - 1) ?
-			0 :
-			cur_zhaoshi + 1;
-
-		changeCurrentZhaoshiSelection(nextZhaoshi);
-	}
-
-	protected override void OnDirectionalLeft()
-	{
-		if (zhaoshiList.Count == 0)
-			return;
-
-		changeCurrentSelection(-1);
-
-		var nextZhaoshi = (cur_zhaoshi <= 0) ?
-			cur_zhaoshi = zhaoshiList.Count - 1 :
-			cur_zhaoshi - 1;
-
-		changeCurrentZhaoshiSelection(nextZhaoshi);
-	}
-
 	public override void Update()
 	{
-		//return;
+
 		base.Update();
 
 		//寻找玩家点击的格子
 		var block = InputManager.Instance.GetMouseUpBattleBlock();
-
-		//没有选择格子
+		//射线没有找到格子
 		if (block == null) return;
+		var b = BattleManager.Instance.block_list.Find(b => b.blockName == block.name);
+		if (b == null) return;
 
-		//格子隐藏（原则上应该不会出现）
-		if (block.gameObject.activeSelf == false) return;
-
-		//选择移动，但位置站人了
-		if (isSelectMove && battleModel.BlockHasRole(block.BattlePos.X, block.BattlePos.Y)) return;
-
-
-		//以下进行回调
-
-		//移动
-		blockConfirm(block, true);
-	}
-	
-	protected override void handleGamepadButtons()
-	{
-		base.handleGamepadButtons();
-
-		if (gameObject.activeSelf)
+		if (b.role!=null)//格子上有人就切换亮环位置
 		{
-			if (GamepadHelper.IsCancel())
-				//取消
-				OnNormalAttackClick();
-			else if (GamepadHelper.IsTabRight())
-				OnRestClick();
-			else if (GamepadHelper.IsAction()) // x/square button invoke zhaoshi 
+			if (b.blockName.StartsWith("we"))
 			{
-				if (m_curItemList.Count == 0)
-					return;
-
-				if (cur_zhaoshi < 0 || cur_zhaoshi >= m_curItemList.Count)
+				chooseRing.transform.position = b.WorldPos;
+			}
+			else
+			{
+				currentAttackBlock = b;
+				if (chooseEnermyRing == null)
 				{
-					cur_zhaoshi = 0;
-					changeCurrentZhaoshiSelection(cur_zhaoshi);
+					chooseEnermyRing = Jyx2ResourceHelper.CreatePrefabInstance("CurrentBattleRoleTag");
+					chooseEnermyRing.transform.GetComponent<MeshRenderer>().material.color = Color.red;
 				}
-
-				onZhaoshiStart(m_curItemList[cur_zhaoshi], cur_zhaoshi);
+				chooseEnermyRing.transform.position = b.WorldPos;
 			}
 		}
+		Debug.Log("选择了格子:" + b.blockName);
+		
+		//移动
+		//blockConfirm(block, true);
 	}
 
 	protected override void buttonClickAt(int position)
@@ -293,35 +198,6 @@ public partial class BattleActionUIPanel : Jyx2_UIBase
 		if (!BattleboxHelper.Instance.AnalogMoved && cur_zhaoshi == -1)
 			base.buttonClickAt(position);
 	}
-
-	private void blockConfirm(BattleBlockData block, bool isMouseClick)
-	{
-		if (!BattleboxHelper.Instance.AnalogMoved && !isMouseClick)
-			return;
-
-		changeCurrentSelection(-1);
-
-		if (isSelectMove)
-		{
-			//TryCallback(new BattleLoop.ManualResult() { movePos = block.BattlePos }); //移动
-		}
-		else  //选择攻击
-		{
-			AIResult rst = new AIResult();
-			rst.AttackX = block.BattlePos.X;
-			rst.AttackY = block.BattlePos.Y;
-
-			rst.Zhaoshi = currentZhaoshi;
-
-			//TryCallback(new BattleLoop.ManualResult() { aiResult = rst });
-		}
-	}
-
-	/*void TryCallback(BattleLoop.ManualResult ret)
-	{
-		BattleboxHelper.Instance.HideAllBlocks(true);
-		callback?.Invoke(ret);
-	}*/
 
 	//点击了自动
 	public void OnAutoClicked()
@@ -338,19 +214,6 @@ public partial class BattleActionUIPanel : Jyx2_UIBase
 		//隐藏格子
 		BattleboxHelper.Instance?.HideAllBlocks();
 		zhaoshiList.Clear();
-	}
-
-	void SetActionBtnState()
-	{
-		bool canPoison = m_currentRole.UsePoison >= 20 && m_currentRole.Tili >= 10;
-		UsePoison_Button.gameObject.SetActive(canPoison);
-		bool canDepoison = m_currentRole.DePoison >= 20 && m_currentRole.Tili >= 10;
-		Depoison_Button.gameObject.SetActive(canDepoison);
-		bool canHeal = m_currentRole.Heal >= 20 && m_currentRole.Tili >= 50;
-		Heal_Button.gameObject.SetActive(canHeal);
-
-		bool lastRole = BattleManager.Instance.GetModel().IsLastRole(m_currentRole);
-		Wait_Button.gameObject.SetActive(!lastRole);
 	}
 
 	void RefreshSkill()
@@ -374,10 +237,7 @@ public partial class BattleActionUIPanel : Jyx2_UIBase
 			m_curItemList.Add(item);
 		}
 
-		if (m_currentRole.CurrentSkill > -1 && m_currentRole.CurrentSkill < zhaoshis.Count)
-		{
-			changeCurrentZhaoshiSelection(m_currentRole.CurrentSkill);
-		}
+		changeCurrentZhaoshiSelection(-1);
 	}
 
 	void bindZhaoshi(Button btn, Action callback)
@@ -385,28 +245,32 @@ public partial class BattleActionUIPanel : Jyx2_UIBase
 		BindListener(btn, callback, false);
 		zhaoshiList[btn] = callback;
 	}
-
-
-
+	
+	//上面bindZhaoshi时 将每个技能按钮和该方法绑定了
 	void onZhaoshiStart(SkillUIItem item, int index)
 	{
+		//点击技能时去用技能攻击 第一次进不能直接在这里invoke 会直接setresult返回
+		if (index != -1 && currentAttackBlock != null && item.GetSkill() != null)
+		{
+			callback?.Invoke(new BattleManager.ManualResult() { choose = "skillAttack",BlockData = currentAttackBlock,Skill = item.GetSkill()});
+		}
 		// clear current zhaoshi selection selected color only
 		if (index > -1)
 			changeCurrentSelection(-1);
-
-		m_currentRole.CurrentSkill = index;
-
+		
+		currentZhaoshi = item.GetSkill();
+		
 		m_curItemList.ForEach(t =>
 		{
 			t.SetSelect(t == item);
 		});
-
+		
 		m_currentRole.SwitchAnimationToSkill(item.GetSkill().Data);
 	}
 
 	void OnNormalAttackClick()
 	{
-		callback?.Invoke(new BattleManager.ManualResult() { choose = "normalAttack" });
+		if(currentAttackBlock != null) callback?.Invoke(new BattleManager.ManualResult() { choose = "normalAttack",BlockData = currentAttackBlock});
 	}
 
 	async void OnMoveClick()

@@ -1098,7 +1098,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: f65790148c1ee0441aea11bcad6d4e96, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 500ac2ce40ef87d44ac94929c0177323, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1202,7 +1202,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u6797\u5E73\u4E4B"
+  m_Text: xxx
 --- !u!114 &6169217841677688054
 MonoBehaviour:
   m_ObjectHideFlags: 0

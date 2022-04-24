@@ -59,7 +59,7 @@ public class BattleboxHelper : MonoBehaviour
 		foreach (Transform block in all_block)
 		{
 			BattleBlockData b = new BattleBlockData();
-			b.block = block.gameObject;
+			b.blockObject = block.gameObject;
 			b.WorldPos = block.position;
 			b.team = block.name.Split('-')[0];
 			b.x = int.Parse(block.name.Split('-')[1]);
@@ -191,18 +191,6 @@ public class BattleboxHelper : MonoBehaviour
 			currentlyReleased = false;
 			delayedAxisRelease();
 		}
-
-		if (GamepadHelper.IsConfirm())
-		{
-			if (AnalogMoved && blockConfirmed != null)
-			{
-				var selectedBlock =  _currentBattlebox.GetBlockData(xCurPos, yCurPos);
-				if (selectedBlock != null && !selectedBlock.Inaccessible)
-				{
-					blockConfirmed(selectedBlock);
-				}
-			}
-		}
 	}
 
 	private bool setSelectedBlock()
@@ -224,39 +212,13 @@ public class BattleboxHelper : MonoBehaviour
 
 			AnalogMoved = true;
 
-			if (analogLeftMovedToBlock != null)
-				analogLeftMovedToBlock(newSelectedBlock);
-
 			return true;
 		}
 
 		return false;
 	}
 
-	public event Action<BattleBlockData> analogLeftMovedToBlock;
-	public event Action<BattleBlockData> blockConfirmed;
 
-	private void initXPos()
-	{
-		xPositions = this._currentBattlebox
-		.GetBattleBlocks()
-		.Where(b => b.IsActive)
-		.Select(b => b.BattlePos.X)
-		.OrderBy(p => p)
-		.Distinct()
-		.ToArray();
-	}
-
-	private void initYPos()
-	{
-		yPositions = this._currentBattlebox
-		.GetBattleBlocks()
-		.Where(b => b.IsActive)
-		.Select(b => b.BattlePos.Y)
-		.OrderBy(p => p)
-		.Distinct()
-		.ToArray();
-	}
 
 	protected void delayedAxisRelease()
 	{
@@ -271,76 +233,6 @@ public class BattleboxHelper : MonoBehaviour
 	private BattleBlockData _selectedBlock;
 	private Color _oldColor;
 
-	public void ShowBlocks(RoleInstance role, IEnumerable<BattleBlockVector> list, BattleBlockType type = BattleBlockType.MoveZone,
-		bool selectMiddlePos = false)
-	{
-		if (!GeneralPreJudge()) return;
-		HideAllBlocks();
-
-		if (type == BattleBlockType.MoveZone)
-		{
-			_currentBattlebox.SetAllBlockColor(new Color(1, 1, 1, BattleboxManager.BATTLEBLOCK_DECAL_ALPHA));
-			_selectedBlock = null;
-		}
-		else if (type == BattleBlockType.AttackZone)
-		{
-			_currentBattlebox.SetAllBlockColor(new Color(1, 0, 0, BattleboxManager.BATTLEBLOCK_DECAL_ALPHA));
-			_selectedBlock = null;
-		}
-
-		foreach (var vector in list)
-		{
-			var block = _currentBattlebox.GetBlockData(vector.X, vector.Y);
-			if (block != null)
-			{
-				if (vector.Inaccessible)
-				{
-					_currentBattlebox.SetBlockInaccessible(block);
-				}
-
-				block.Inaccessible = vector.Inaccessible;
-				block.Show();
-			}
-		}
-
-		xMiddlePos = role.Pos.X;
-		yMiddlePos = role.Pos.Y;
-		initShownPositions();
-
-		if (selectMiddlePos)
-		{
-			setSelectedBlock();
-		}
-
-		rangeMode = false;
-	}
-
-	private void initShownPositions()
-	{
-		initXPos();
-		xCurPos = xMiddlePos;
-
-		initYPos();
-		yCurPos = yMiddlePos;
-	}
-
-	public void ShowRangeBlocks(IEnumerable<BattleBlockVector> list)
-	{
-		//todo: debug zhaoshi that has range instead of just one point
-		if (!GeneralPreJudge()) return;
-		_currentBattlebox.HideAllRangeBlocks();
-
-		foreach (var vector in list)
-		{
-			var block = _currentBattlebox.GetRangelockData(vector.X, vector.Y);
-			if (block != null) 
-				block.Show();
-		}
-
-		//initShownPositions();
-		rangeMode = true;
-	}
-
 	public void HideAllBlocks(bool hideRangeBlock = false)
 	{
 		if (!GeneralPreJudge()) return;
@@ -353,16 +245,7 @@ public class BattleboxHelper : MonoBehaviour
 
 		_selectedBlock = null;
 	}
-
-
-
-	public void ShowAllBlocks()
-	{
-		if (!GeneralPreJudge()) return;
-
-		_currentBattlebox.ShowAllValidBlocks();
-	}
-
+	
 	private void Init()
 	{
 		_boxRoot = GameObject.Find(RootPath);
@@ -396,10 +279,5 @@ public class BattleboxHelper : MonoBehaviour
 			return false;
 		}
 		return true;
-	}
-	public enum BattleBlockType
-	{
-		MoveZone = 0,
-		AttackZone = 1,
 	}
 }

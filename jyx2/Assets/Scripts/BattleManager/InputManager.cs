@@ -59,21 +59,16 @@ public class InputManager
         return true;
     }
 
-    public BattleBlockData GetMouseUpBattleBlock()
+    //获取点击的格子对象信息
+    public GameObject GetMouseUpBattleBlock()
     {
         if (Input.GetMouseButtonUp(0) && !IsPointerOverUIObjectExceptTouchpad() && !EventSystem.current.IsPointerOverGameObject())
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-
-            //待调整为格子才可以移动
-            if (Physics.Raycast(ray, out RaycastHit hitInfo, 100, 1 << LayerMask.NameToLayer("Ground")))
+            if (Physics.Raycast(ray, out RaycastHit hitInfo))
             {
-                var block = BattleboxHelper.Instance.GetLocationBattleBlock(hitInfo.point);
-                if (block != null && block.IsActive && !block.Inaccessible)
-                {
-                    return block;
-                }
+                if(hitInfo.transform.gameObject) return hitInfo.transform.gameObject;
             }
         }
         return null;

@@ -32,12 +32,13 @@ namespace Jyx2.Battle
 
         async void FixedUpdate()
         {
-            if (_role == null || isActing == true) return;
+            if (_role == null || _role.Hp <= 0 || isActing == true) return;
             _role.Attack = 1;
             isActing = true;
-            if (_role.GetJyx2RoleId() == 0)
+            if (_role.GetJyx2RoleId() == 0 )
             {
-                _manager.operate(_role,this);
+                //isActing = true;
+                _manager.operate(_role);
             }
             else
             {
@@ -52,6 +53,11 @@ namespace Jyx2.Battle
             Debug.Log(_role.Name);*/
             
         }
-        
+
+        public void test()
+        {
+            Debug.Log("ssssssssssssssssssssssssssssssssssssss");
+        }
+
     }
 }

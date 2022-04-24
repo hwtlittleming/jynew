@@ -39,7 +39,7 @@ MonoBehaviour:
   MaxMp: 16
   Attack: 22
   MagicAttack: 0
-  Speed: 1000
+  Speed: 2000
   Defense: 0
   MagicDefence: 0
   Heal: 31

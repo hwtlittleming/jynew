@@ -38,7 +38,7 @@ public partial class BattleActionUIPanel
 		Rest_Button = transform.Find("LeftActions/Rest").GetComponent<Button>();
 		Skills_RectTransform = transform.Find("Skills").GetComponent<RectTransform>();
 		SkillItem_RectTransform = transform.Find("Prefabs/SkillItem").GetComponent<RectTransform>();
-		//NormalAttack_Button = transform.Find("NormalAttack").GetComponent<Button>();
+		NormalAttack_Button = transform.Find("NormalAttack").GetComponent<Button>();
 
 	}
 }
