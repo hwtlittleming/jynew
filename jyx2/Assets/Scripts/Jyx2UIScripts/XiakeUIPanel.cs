@@ -171,6 +171,8 @@ public partial class XiakeUIPanel : Jyx2_UIBase
 		sb.AppendLine(string.Format("防御 {0}".GetContent(nameof(XiakeUIPanel)), role.Defense));
 		sb.AppendLine(string.Format("速度 {0}".GetContent(nameof(XiakeUIPanel)), role.Speed));
 		sb.AppendLine(string.Format("回复 {0}".GetContent(nameof(XiakeUIPanel)), role.Heal));
+		sb.AppendLine(string.Format("暴击 {0}%--{1}倍".GetContent(nameof(XiakeUIPanel)), role.Critical,role.CriticalLevel));
+		sb.AppendLine(string.Format("闪避 {0}%".GetContent(nameof(XiakeUIPanel)), role.Miss));
 		sb.AppendLine();
 		//---------------------------------------------------------------------------
 		//---------------------------------------------------------------------------
@@ -193,15 +195,6 @@ public partial class XiakeUIPanel : Jyx2_UIBase
 	{
 		StringBuilder sb = new StringBuilder();
 		var weapon = role.GetWeapon();
-		//---------------------------------------------------------------------------
-		//sb.AppendLine("武器：" + (weapon == null ? "" : weapon.Name));
-		//var armor = role.GetArmor();
-		//sb.AppendLine("防具：" + (armor == null ? "" : armor.Name));
-		//var xiulianItem = role.GetXiulianItem();
-		//sb.AppendLine("修炼：" + (xiulianItem == null
-		//    ? ""
-		//    : xiulianItem.Name + $"({role.ExpForItem}/{role.GetFinishedExpForItem()})"));
-		//---------------------------------------------------------------------------
 		//特定位置的翻译【XiakePanel角色信息显示大框的信息】
 		//---------------------------------------------------------------------------
 		sb.AppendLine("武器：".GetContent(nameof(XiakeUIPanel)) + (weapon == null ? "" : weapon.Name));
@@ -209,6 +202,11 @@ public partial class XiakeUIPanel : Jyx2_UIBase
 		var armor = role.GetArmor();
 		sb.AppendLine("防具：".GetContent(nameof(XiakeUIPanel)) + (armor == null ? "" : armor.Name));
 		
+		var shoes = role.GetShoes();
+		sb.AppendLine("代步：".GetContent(nameof(XiakeUIPanel)) + (shoes == null ? "" : shoes.Name));
+		
+		var treasure = role.GetTreasure();
+		sb.AppendLine("宝物：".GetContent(nameof(XiakeUIPanel)) + (treasure == null ? "" : treasure.Name));
 		//---------------------------------------------------------------------------
 		//---------------------------------------------------------------------------
 

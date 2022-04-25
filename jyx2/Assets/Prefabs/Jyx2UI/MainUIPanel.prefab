@@ -80,7 +80,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u7EA7"
+  m_Text: day
 --- !u!114 &7075120555555924389
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2466,7 +2466,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u4FA0\u5BA2"
+  m_Text: "\u961F\u4F0D"
 --- !u!114 &4136772516321110333
 MonoBehaviour:
   m_ObjectHideFlags: 0

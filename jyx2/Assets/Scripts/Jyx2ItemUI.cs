@@ -45,11 +45,11 @@ public class Jyx2ItemUI : MonoBehaviour
     {
         _id = id;
         var item = GetItem();//0-阴性内力，1-阳性内力，2-中性内力
-        var color =
-            (int)item.ItemType == 2
+        var color = ColorStringDefine.Default;
+            /*(int)item.ItemType == 2
                 ? (int)item.NeedMPType == 2 ? ColorStringDefine.Default :
                 (int)item.NeedMPType == 1 ? ColorStringDefine.Mp_type1 : ColorStringDefine.Mp_type0
-                : ColorStringDefine.Default;
+                : ColorStringDefine.Default;*/
         
         m_NameText.text = $"<color={color}>{item.Name}</color>";
         m_CountText.text = (count > 1 ? count.ToString() : "");

@@ -272,6 +272,18 @@ namespace Jyx2
             if (Armor == -1) return null;
             return GameConfigDatabase.Instance.Get<Jyx2ConfigItem>(Armor);
         }
+        
+        public Jyx2ConfigItem GetShoes()
+        {
+            if (Shoes == -1) return null;
+            return GameConfigDatabase.Instance.Get<Jyx2ConfigItem>(Shoes);
+        }
+        
+        public Jyx2ConfigItem GetTreasure()
+        {
+            if (Treasure == -1) return null;
+            return GameConfigDatabase.Instance.Get<Jyx2ConfigItem>(Treasure);
+        }
 
         /// <summary>
         /// 战斗中使用的招式
@@ -386,10 +398,10 @@ namespace Jyx2
                 if ((int)item.ItemType == 2)
                 {
                     //有仅适合人物，直接判断
-                    if (item.OnlySuitableRole >= 0)
+                    /*if (item.OnlySuitableRole >= 0)
                     {
                         return item.OnlySuitableRole == this.Key;
-                    }
+                    }*/
                 }
                 //若有相关武学，则为真
                 //若已经学满武学，则为假
@@ -458,31 +470,6 @@ namespace Jyx2
         private GameRuntimeData runtime
         {
             get { return GameRuntimeData.Instance; }
-        }
-
-        /// <summary>
-        /// 炼制物品
-        /// 计算公式可以参考：https://github.com/ZhanruiLiang/jinyong-legend
-        /// </summary>
-        /// <param name="item"></param>
-        public string LianZhiItem(Jyx2ConfigItem practiseItem)
-        {
-            if (practiseItem == null)
-                return "";
-            int GenerateItemNeedExp = (7 - IQ / 15) * practiseItem.GenerateItemNeedExp;
-            if (practiseItem.GenerateItems != null && practiseItem.GenerateItemNeedCost != null  &&
-                runtime.HaveItemBool(practiseItem.GenerateItemNeedCost.Id))
-            {
-                
-                var pickItem = Jyx2.Middleware.Tools.GetRandomElement(practiseItem.GenerateItems);
-
-                runtime.AddItem(pickItem.Item.Id, pickItem.Count);
-                runtime.AddItem(practiseItem.GenerateItemNeedCost.Id, -1);
-                return $"炼出 {pickItem.Item.Name}×{pickItem.Count}\n";
-                //return $"{GetXiulianItem().Name} 炼出 {pickItem.Item.Name}×{pickItem.Count}\n";
-            }
-
-            return "";
         }
 
         /// <summary>

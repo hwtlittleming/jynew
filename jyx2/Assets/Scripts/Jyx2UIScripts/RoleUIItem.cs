@@ -33,7 +33,7 @@ public class RoleUIItem : MonoBehaviour
 	Text m_roleInfo;
 	Transform m_actionButton;
 	RoleInstance m_role;
-	List<int> m_showPropertyIds = new List<int>() { 14, 13, 15 };//要显示的属性
+	List<int> m_showPropertyIds = new List<int>() { 13, 15 };//要显示的属性
 
 	void InitTrans()
 	{
@@ -81,7 +81,7 @@ public class RoleUIItem : MonoBehaviour
 			}
 			else
 			{
-				int value = (int)m_role.GetType().GetProperty(proItem.PropertyName).GetValue(m_role, null);
+				var value = m_role.GetType().GetProperty(proItem.PropertyName).GetValue(m_role, null);
 				sb.Append($"{proItem.Name}:{value}\n");
 			}
 		}

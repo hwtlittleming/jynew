@@ -14,8 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Id: 2
   Name: "\u767D\u5C9A\u6C0F\u9E21\u7CBE"
+  bestDistance: 0
+  attackRange: 
+  ExtraAttack: 0
+  PairedWugong: {fileID: 0}
   Pic:
-    m_AssetGUID: 4b45e03e69e78d34993516b6d4257106
+    m_AssetGUID: cdca5228c79e1194cbc696860720e36a
     m_SubObjectName: 
     m_SubObjectType: 
     m_EditorAssetChanged: 0
@@ -25,42 +29,16 @@ MonoBehaviour:
   Skill: {fileID: 0}
   AddHp: 20
   AddMaxHp: 0
-  ChangePoisonLevel: 0
   AddTili: 0
   ChangeMPType: 0
   AddMp: 0
   AddMaxMp: 0
   Attack: 0
-  Qinggong: 0
+  Speed: 0
   Defence: 0
   Heal: 0
-  UsePoison: 0
-  DePoison: 0
-  AntiPoison: 0
-  Quanzhang: 0
-  Yujian: 0
-  Shuadao: 0
-  Qimen: 0
-  Anqi: 0
-  Wuxuechangshi: 0
-  AddPinde: 0
-  Zuoyouhubo: 0
-  AttackPoison: 0
-  OnlySuitableRole: 0
-  NeedMPType: 0
   ConditionMp: 0
   ConditionAttack: 0
   ConditionQinggong: 0
-  ConditionPoison: 0
-  ConditionHeal: 0
-  ConditionDePoison: 0
-  ConditionQuanzhang: 0
-  ConditionYujian: 0
-  ConditionShuadao: 0
-  ConditionQimen: 0
-  ConditionAnqi: 0
   ConditionIQ: 0
   NeedExp: 0
-  GenerateItemNeedExp: 0
-  GenerateItemNeedCost: {fileID: 0}
-  GenerateItems: []

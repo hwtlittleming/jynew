@@ -115,41 +115,6 @@ public class UIHelper
         return sb.ToString();
     }
 
-    //产出
-    static string GetOutPut(Jyx2ConfigItem item)
-    {
-        if (item.GenerateItems == null)
-            return "";
-        
-        StringBuilder sb = new StringBuilder();
-        foreach (var tempItem in item.GenerateItems)
-        {
-            var cfg = tempItem.Item;
-            if (cfg == null)
-                continue;
-            sb.Append($"{cfg.Name}:  {tempItem.Count}\n");
-        }
-
-        return sb.ToString();
-    }
-
-    //需要物品
-    static string GetNeedItem(Jyx2ConfigItem item)
-    {
-        StringBuilder sb = new StringBuilder();
-        if (item.GenerateItemNeedExp > 0)
-        {
-           /* sb.Append($"练出物品需经验:  {item.GenerateItemNeedExp}\n");*/
-        }
-        
-        if (item.GenerateItemNeedCost != null)
-        {
-            sb.Append($"材料:  {item.GenerateItemNeedCost.Name}\n");
-        }
-
-        return sb.ToString();
-    }
-
     public static string GetItemDesText(Jyx2ConfigItem item)
     {
         StringBuilder strBuilder = new StringBuilder();
@@ -184,22 +149,6 @@ public class UIHelper
             strBuilder.Append($"\n\n");
             strBuilder.Append("<size=28><color=#FFDB00>使用需求</color></size>\n");
             strBuilder.Append(useRequire);
-        }
-
-        string output = GetOutPut(item);
-        if (!string.IsNullOrEmpty(output))
-        {
-            strBuilder.Append($"\n\n");
-            strBuilder.Append("<size=28><color=#FFDB00>练出</color></size>\n");
-            strBuilder.Append(output);
-        }
-
-        string needItem = GetNeedItem(item);
-        if (!string.IsNullOrEmpty(needItem))
-        {
-            strBuilder.Append($"\n\n");
-            strBuilder.Append("<size=28><color=#FFDB00>需要物品</color></size>\n");
-            strBuilder.Append(needItem);
         }
 
         return strBuilder.ToString();

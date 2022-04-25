@@ -154,15 +154,13 @@ public class GameConst
         ["4"] = new PropertyItem(4, "Defense", "防御".GetContent(nameof(GameConst)), 30, 20),
         ["5"] = new PropertyItem(5, "MaxHp", "生命".GetContent(nameof(GameConst)), 50, 30),//创角用到 特殊
         ["6"] = new PropertyItem(6, "Heal", "医疗".GetContent(nameof(GameConst)), 30, 20),
-        ["7"] = new PropertyItem(7, "UsePoison", "使毒".GetContent(nameof(GameConst)), 30, 20),
-        ["8"] = new PropertyItem(8, "DePoison", "解毒".GetContent(nameof(GameConst)), 30, 20),
+
         ["9"] = new PropertyItem(9, "Quanzhang", "拳掌".GetContent(nameof(GameConst)), 30, 20),
         ["10"] = new PropertyItem(10, "Yujian", "剑术".GetContent(nameof(GameConst)), 30, 20),
         ["11"] = new PropertyItem(11, "Shuadao", "刀术".GetContent(nameof(GameConst)), 30, 20),
         ["12"] = new PropertyItem(12, "Anqi", "暗器".GetContent(nameof(GameConst)), 30, 20),
 
         ["13"] = new PropertyItem(13, "Hp", "生命".GetContent(nameof(GameConst)), 30, 20),
-        ["14"] = new PropertyItem(14, "Tili", "体力".GetContent(nameof(GameConst)), 30, 20),
         ["15"] = new PropertyItem(15, "Mp", "内力".GetContent(nameof(GameConst)), 40, 30),
         ["16"] = new PropertyItem(16, "MaxHp", "最大生命".GetContent(nameof(GameConst)), 50, 30),
         ["17"] = new PropertyItem(17, "MaxMp", "最大内力".GetContent(nameof(GameConst)), 40, 30),

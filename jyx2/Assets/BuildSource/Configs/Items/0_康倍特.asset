@@ -13,54 +13,30 @@ MonoBehaviour:
   m_Name: "0_\u5EB7\u500D\u7279"
   m_EditorClassIdentifier: 
   Id: 0
-  Name: "\u5EB7\u500D\u7279"
+  Name: "\u8E0F\u96EA"
+  bestDistance: 0
+  attackRange: 
+  ExtraAttack: 0
+  PairedWugong: {fileID: 0}
   Pic:
-    m_AssetGUID: a1ba644d902accd4e99298e21a87d186
+    m_AssetGUID: 18df3277def387d4eae6f3ffa0298107
     m_SubObjectName: 
     m_SubObjectType: 
     m_EditorAssetChanged: 0
-  Desc: "\u6D3B\u6027\u996E\u6599\uFF0C\u8FC5\u901F\u8865\u5145\u4F60\u7684\u4F53\u529B"
-  ItemType: 3
-  EquipmentType: -1
+  Desc: "\u6697\u9999\u758F\u5F71\u5904\uFF0C\u51CC\u98CE\u8E0F\u96EA\u6765"
+  ItemType: 1
+  EquipmentType: 2
   Skill: {fileID: 0}
   AddHp: 0
   AddMaxHp: 0
-  ChangePoisonLevel: 0
-  AddTili: 20
-  ChangeMPType: 0
   AddMp: 0
   AddMaxMp: 0
   Attack: 0
-  Qinggong: 0
+  Speed: 50
   Defence: 0
   Heal: 0
-  UsePoison: 0
-  DePoison: 0
-  AntiPoison: 0
-  Quanzhang: 0
-  Yujian: 0
-  Shuadao: 0
-  Qimen: 0
-  Anqi: 0
-  Wuxuechangshi: 0
-  AddPinde: 0
-  Zuoyouhubo: 0
-  AttackPoison: 0
-  OnlySuitableRole: 0
-  NeedMPType: 0
   ConditionMp: 0
   ConditionAttack: 0
   ConditionQinggong: 0
-  ConditionPoison: 0
-  ConditionHeal: 0
-  ConditionDePoison: 0
-  ConditionQuanzhang: 0
-  ConditionYujian: 0
-  ConditionShuadao: 0
-  ConditionQimen: 0
-  ConditionAnqi: 0
   ConditionIQ: 0
   NeedExp: 0
-  GenerateItemNeedExp: 0
-  GenerateItemNeedCost: {fileID: 0}
-  GenerateItems: []

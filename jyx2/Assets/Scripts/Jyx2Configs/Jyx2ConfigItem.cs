@@ -27,7 +27,9 @@ namespace Jyx2Configs
         {
             不是装备 = -1,
             武器 = 0,
-            防具 = 1
+            防具 = 1,
+            代步 = 2,
+            宝物 = 3,
         }
         
         public enum Jyx2ConfigItemType
@@ -35,8 +37,7 @@ namespace Jyx2Configs
             道具 = 0, 
             装备 = 1, 
             经书 = 2, 
-            消耗品 = 3, 
-            暗器 = 4, 
+            消耗品 = 3,
         }
 
         public int bestDistance;//最佳攻击距离
@@ -103,19 +104,12 @@ namespace Jyx2Configs
         {
             return (int)ItemType == 2;
         }
-
-
+        // todo 资质的东西
         [BoxGroup(EFFECT_GROUP)][LabelText("加生命")]
         public int AddHp; 
 
         [BoxGroup(EFFECT_GROUP)][LabelText("加生命最大值")]
         public int AddMaxHp;
-
-        [BoxGroup(EFFECT_GROUP)][LabelText("加体力")]
-        public int AddTili; 
-
-        [BoxGroup(EFFECT_GROUP)][LabelText("改变内力性质")]
-        public int ChangeMPType; 
 
         [BoxGroup(EFFECT_GROUP)][LabelText("加内力")]
         public int AddMp;
@@ -126,28 +120,16 @@ namespace Jyx2Configs
         [BoxGroup(EFFECT_GROUP)][LabelText("加攻击力")]
         public int Attack;
 
-        [BoxGroup(EFFECT_GROUP)][LabelText("加轻功")]
+        [BoxGroup(EFFECT_GROUP)][LabelText("加速度")]
         public int Speed;
 
         [BoxGroup(EFFECT_GROUP)][LabelText("加防御力")]
         public int Defence;
 
-        [BoxGroup(EFFECT_GROUP)][LabelText("加医疗")]
+        [BoxGroup(EFFECT_GROUP)][LabelText("加回复")]
         public int Heal;
-
-        [ShowIf(nameof(IsItemBook))]
-        [BoxGroup(CONDITION_GROUP)][LabelText("仅修炼人物")]
-        public int OnlySuitableRole;
-
-        [ShowIf(nameof(IsItemBook))]
-        [BoxGroup(CONDITION_GROUP)][LabelText("需种族")][EnumToggleButtons]
-        public Jyx2ConfigCharacter.RateTypeEnum NeedMPType;
-
-        bool IsItemBook()
-        {
-            return (int)this.ItemType == 2;
-        }
-
+        
+        
         [BoxGroup(CONDITION_GROUP)][LabelText("需内力")]
         public int ConditionMp;
 
@@ -162,19 +144,7 @@ namespace Jyx2Configs
 
         [BoxGroup(CONDITION_GROUP)][LabelText("需经验")]
         public int NeedExp;
-
-        [ShowIf(nameof(IsItemBook))]
-        [BoxGroup(EFFECT_GROUP)][LabelText("练出物品需经验")]
-        public int GenerateItemNeedExp;
-
-        [ShowIf(nameof(IsItemBook))]
-        [BoxGroup(EFFECT_GROUP)][LabelText("需材料")][SerializeReference]
-        public Jyx2ConfigItem GenerateItemNeedCost;
-
-        [ShowIf(nameof(IsItemBook))]
-        [BoxGroup(EFFECT_GROUP)][LabelText("练出物品")]
-        [TableList]
-        public List<Jyx2ConfigCharacterItem> GenerateItems;
+        
 
         public override async UniTask WarmUp()
         {
