@@ -35,7 +35,6 @@ public partial class MainUIPanel
 		MapName_Text = transform.Find("AnimRoot/PlayerStatus/MapName").GetComponent<Text>();
 		XiakeButton_Button = transform.Find("AnimRoot/BtnRoot/XiakeButton").GetComponent<Button>();
 		BagButton_Button = transform.Find("AnimRoot/BtnRoot/BagButton").GetComponent<Button>();
-		MapButton_Button = transform.Find("AnimRoot/BtnRoot/MapButton").GetComponent<Button>();
 		SystemButton_Button = transform.Find("AnimRoot/BtnRoot/SystemButton").GetComponent<Button>();
 		Image_Right = transform.Find("AnimRoot/Image-right").GetComponent<Image>();
 		Compass = transform.Find("AnimRoot/Compass/Text").GetComponent<Text>();

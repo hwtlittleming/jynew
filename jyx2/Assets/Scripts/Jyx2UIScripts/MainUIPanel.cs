@@ -25,7 +25,6 @@ public partial class MainUIPanel : Jyx2_UIBase, IUIAnimator
 
 		BindListener(XiakeButton_Button, OnXiakeBtnClick);
 		BindListener(BagButton_Button, OnBagBtnClick);
-		BindListener(MapButton_Button, OnMapBtnClick);
 		BindListener(SystemButton_Button, OnSystemBtnClick);
 
 		//pre-load all icon sprites. somehow they don't load the first time
@@ -112,11 +111,6 @@ public partial class MainUIPanel : Jyx2_UIBase, IUIAnimator
 		if (map != null)
 		{
 			MapName_Text.text = map.GetShowName();
-
-			//BY CGGG：小地图不提供传送到大地图的功能 2021/6/13
-			//MapButton_Button.gameObject.SetActive(!isWorldMap);
-			MapButton_Button.gameObject.SetActive(false);
-
 
 			//var rt = Image_Right.GetComponent<RectTransform>();
 			//rt.sizeDelta = new Vector2(isWorldMap?480:640, 100);
@@ -240,24 +234,6 @@ public partial class MainUIPanel : Jyx2_UIBase, IUIAnimator
 
 		await GameUtil.ShowYesOrNoUseItem(item, Action);
 
-	}
-
-	void OnMapBtnClick()
-	{
-		var levelMaster = LevelMaster.Instance;
-
-		if (levelMaster.IsInWorldMap)
-			return;
-
-		//执行离开事件
-		foreach (var zone in FindObjectsOfType<MapTeleportor>())
-		{
-			if (zone.m_GameMap.Id == GameConst.WORLD_MAP_ID)
-			{
-				zone.DoTransport();
-				break;
-			}
-		}
 	}
 
 	async void OnSystemBtnClick()

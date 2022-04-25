@@ -23,7 +23,7 @@ MonoBehaviour:
     m_EditorAssetChanged: 0
   Moral: 0
   IQ: 39
-  Descripe: 
+  Descripe: "\u8FD9\u91CC\u662F\u4EBA\u7269\u63CF\u8FF0"
   Skills:
   - id: 0
   - id: 1
@@ -46,6 +46,10 @@ MonoBehaviour:
     Count: 3
   - Item: {fileID: 11400000, guid: b54b5129cbe7c1f41b33d499121adc19, type: 2}
     Count: 100
+  - Item: {fileID: 11400000, guid: c8330548fef14f04b91235c2aa78b5ff, type: 2}
+    Count: 1
+  - Item: {fileID: 11400000, guid: 7b6c151dab6900644bdf392a912e0fe2, type: 2}
+    Count: 2
   MaxHp: 380000
   MaxMp: 26
   Attack: 27

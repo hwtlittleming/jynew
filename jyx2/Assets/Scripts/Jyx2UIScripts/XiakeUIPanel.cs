@@ -38,9 +38,7 @@ public partial class XiakeUIPanel : Jyx2_UIBase
 
 		//there is button for this, so doesn't get into the listing of dpad nav
 		BindListener(BackButton_Button, OnBackClick, false);
-
-		BindListener(ButtonHeal_Button, OnHealClick);
-		BindListener(ButtonDetoxicate_Button, OnDetoxicateClick);
+		
 		BindListener(ButtonSelectWeapon_Button, OnWeaponClick);
 		BindListener(ButtonSelectArmor_Button, OnArmorClick);
 		BindListener(ButtonSelectBook_Button, OnXiulianClick);
@@ -96,11 +94,6 @@ public partial class XiakeUIPanel : Jyx2_UIBase
 		InfoText_Text.text = GetInfoText(m_currentRole);
 		SkillText_Text.text = GetSkillText(m_currentRole);
 		ItemsText_Text.text = GetItemsText(m_currentRole);
-
-		bool canDepoison = m_currentRole.DePoison >= 20 && m_currentRole.Tili >= 10;
-		ButtonDetoxicate_Button.gameObject.SetActive(canDepoison);
-		bool canHeal = m_currentRole.Heal >= 20 && m_currentRole.Tili >= 50;
-		ButtonHeal_Button.gameObject.SetActive(canHeal);
 
 		//select the first available button
 		changeCurrentSelection(0);
@@ -158,47 +151,30 @@ public partial class XiakeUIPanel : Jyx2_UIBase
 		var color = role.GetMPColor();
 		var color1 = role.GetHPColor1();
 		var color2 = role.GetHPColor2();
-		//---------------------------------------------------------------------------
-		//sb.AppendLine($"等级 {role.Level}");
-		//sb.AppendLine($"体力 {role.Tili}/{GameConst.MAX_ROLE_TILI}");
-		//sb.AppendLine($"生命 <color={color1}>{role.Hp}</color>/<color={color2}>{role.MaxHp}</color>");
-		//sb.AppendLine($"内力 <color={color}>{role.Mp}/{role.MaxMp}</color>");
-		//sb.AppendLine($"经验 {role.Exp}/{role.GetLevelUpExp()}");
-		//sb.AppendLine();
-		//sb.AppendLine($"攻击 {role.Attack}");
-		//sb.AppendLine($"防御 {role.Defence}");
-		//sb.AppendLine($"轻功 {role.Qinggong}");
-		//sb.AppendLine($"医疗 {role.Heal}");
-		//sb.AppendLine($"解毒 {role.DePoison}");
-		//sb.AppendLine($"用毒 {role.UsePoison}");
-		//sb.AppendLine();
-		//sb.AppendLine($"拳掌 {role.Quanzhang}");
-		//sb.AppendLine($"御剑 {role.Yujian}");
-		//sb.AppendLine($"耍刀 {role.Shuadao}");
-		//sb.AppendLine($"特殊 {role.Qimen}");
-		//sb.AppendLine($"暗器 {role.Anqi}");
+
 		//---------------------------------------------------------------------------
 		//特定位置的翻译【XiakePanel角色信息显示大框的信息】
 		//---------------------------------------------------------------------------
 		sb.AppendLine(string.Format("等级 {0}".GetContent(nameof(XiakeUIPanel)), role.Level));
-		sb.AppendLine(string.Format("体力 {0}/{1}".GetContent(nameof(XiakeUIPanel)), role.Tili, GameConst.MAX_ROLE_TILI));
+		sb.AppendLine(string.Format("经验 {0}/{1}".GetContent(nameof(XiakeUIPanel)), role.Exp, role.GetLevelUpExp()));
 		sb.AppendLine(string.Format("生命 <color={0}>{1}</color>/<color={2}>{3}</color>".GetContent(nameof(XiakeUIPanel)), color1, role.Hp, color2,
 			role.MaxHp));
-		sb.AppendLine(string.Format("内力 <color={0}>{1}/{2}</color>".GetContent(nameof(XiakeUIPanel)), color, role.Mp, role.MaxMp));
-		sb.AppendLine(string.Format("经验 {0}/{1}".GetContent(nameof(XiakeUIPanel)), role.Exp, role.GetLevelUpExp()));
-		sb.AppendLine();
-		sb.AppendLine(string.Format("攻击 {0}".GetContent(nameof(XiakeUIPanel)), role.Attack));
-		sb.AppendLine(string.Format("防御 {0}".GetContent(nameof(XiakeUIPanel)), role.Defense));
-		sb.AppendLine(string.Format("轻功 {0}".GetContent(nameof(XiakeUIPanel)), role.Speed));
-		sb.AppendLine(string.Format("医疗 {0}".GetContent(nameof(XiakeUIPanel)), role.Heal));
-		sb.AppendLine(string.Format("解毒 {0}".GetContent(nameof(XiakeUIPanel)), role.DePoison));
-		sb.AppendLine(string.Format("用毒 {0}".GetContent(nameof(XiakeUIPanel)), role.UsePoison));
+		sb.AppendLine(string.Format("能量 <color={0}>{1}/{2}</color>".GetContent(nameof(XiakeUIPanel)), color, role.Mp, role.MaxMp));
+
 		sb.AppendLine();
 		sb.AppendLine(string.Format("拳掌 {0}".GetContent(nameof(XiakeUIPanel)), role.Quanzhang));
 		sb.AppendLine(string.Format("御剑 {0}".GetContent(nameof(XiakeUIPanel)), role.Yujian));
 		sb.AppendLine(string.Format("耍刀 {0}".GetContent(nameof(XiakeUIPanel)), role.Shuadao));
 		sb.AppendLine(string.Format("特殊 {0}".GetContent(nameof(XiakeUIPanel)), role.Qimen));
 		sb.AppendLine(string.Format("暗器 {0}".GetContent(nameof(XiakeUIPanel)), role.Anqi));
+		sb.AppendLine();
+		sb.AppendLine(string.Format("攻击 {0}".GetContent(nameof(XiakeUIPanel)), role.Attack));
+		sb.AppendLine(string.Format("防御 {0}".GetContent(nameof(XiakeUIPanel)), role.Defense));
+		sb.AppendLine(string.Format("速度 {0}".GetContent(nameof(XiakeUIPanel)), role.Speed));
+		sb.AppendLine(string.Format("医疗 {0}".GetContent(nameof(XiakeUIPanel)), role.Heal));
+		sb.AppendLine(string.Format("解毒 {0}".GetContent(nameof(XiakeUIPanel)), role.DePoison));
+		sb.AppendLine(string.Format("用毒 {0}".GetContent(nameof(XiakeUIPanel)), role.UsePoison));
+		sb.AppendLine();
 		//---------------------------------------------------------------------------
 		//---------------------------------------------------------------------------
 
@@ -398,74 +374,6 @@ public partial class XiakeUIPanel : Jyx2_UIBase
 
 			RefreshCurrent();
 		}), filter, current_itemId);
-	}
-
-	async void OnHealClick()
-	{
-		SelectRoleParams selectParams = new SelectRoleParams();
-		selectParams.roleList = m_roleList;
-		selectParams.title = "选择需要医疗的人";
-		selectParams.isDefaultSelect = false;
-		selectParams.callback = (cbParam) =>
-		{
-			StoryEngine.Instance.BlockPlayerControl = false;
-			if (cbParam.isCancelClick == true)
-			{
-				return;
-			}
-			if (cbParam.selectList.Count <= 0)
-			{
-				return;
-			}
-
-			var selectRole = cbParam.selectList[0]; //默认只会选择一个
-			/*var zhaoshi = new HealZhaoshiInstance(m_currentRole.Heal);
-			var result =
-				AIManager.Instance.GetSkillResult(m_currentRole, selectRole, zhaoshi);
-			result.Run();
-			if (result.heal > 0)
-			{
-				m_currentRole.Tili -= 2;
-			}
-
-			DoRefresh();*/
-		};
-
-		await Jyx2_UIManager.Instance.ShowUIAsync(nameof(SelectRolePanel), selectParams);
-	}
-
-	async void OnDetoxicateClick()
-	{
-		SelectRoleParams selectParams = new SelectRoleParams();
-		selectParams.roleList = m_roleList;
-		selectParams.title = "选择需要解毒的人";
-		selectParams.isDefaultSelect = false;
-		selectParams.callback = (cbParam) =>
-		{
-			StoryEngine.Instance.BlockPlayerControl = false;
-			if (cbParam.isCancelClick == true)
-			{
-				return;
-			}
-			if (cbParam.selectList.Count <= 0)
-			{
-				return;
-			}
-
-			var selectRole = cbParam.selectList[0]; //默认只会选择一个
-			var zhaoshi = new DePoisonZhaoshiInstance(m_currentRole.DePoison);
-			var result =
-				AIManager.Instance.GetSkillResult(m_currentRole, selectRole, zhaoshi);
-			result.Run();
-			if (result.depoison < 0)
-			{
-				m_currentRole.Tili -= 2;
-			}
-
-			DoRefresh();
-		};
-
-		await Jyx2_UIManager.Instance.ShowUIAsync(nameof(SelectRolePanel), selectParams);
 	}
 
 	protected override bool captureGamepadAxis => true;

@@ -69,12 +69,26 @@ namespace Jyx2Configs
         
         [BoxGroup(CGroup1)][LabelText("善恶")] 
         public int Moral; //善恶
-        
-        [BoxGroup(CGroup1)][LabelText("智商")] 
-        public int IQ; //智商
-        
+
         [BoxGroup(CGroup1)][LabelText("描述")] 
         public String Descripe; //描述
+        
+        /* ------- 分割线 --------*/
+        
+        [BoxGroup(CGroup3)][LabelText("力量")][SerializeReference]
+        public int Strength; //0.2提高生命，0.8提高物攻
+        
+        [BoxGroup(CGroup3)][LabelText("智慧")][SerializeReference]
+        public int IQ;//0.3 提升生命，0.01提高物理法术暴击率，0.1赚钱倍率
+        
+        [BoxGroup(CGroup3)][LabelText("根骨")][SerializeReference]
+        public int Constitution;//0.5生命 0.5防御，0.1回复
+        
+        [BoxGroup(CGroup3)][LabelText("敏捷")][SerializeReference]
+        public int Agile;// 1.0速度,0.01闪避
+        
+        [BoxGroup(CGroup3)][LabelText("幸运")][SerializeReference]
+        public int Luck;//0.1闪避 
         
         /* ------- 分割线 ------- */
         
@@ -99,62 +113,42 @@ namespace Jyx2Configs
         [BoxGroup(CGroup2)][LabelText("攻击力")]
         public int Attack; //攻击力
         
-        [BoxGroup(CGroup2)][LabelText("法术攻击")]
-        public int MagicAttack; //法术攻击
-        
-        [BoxGroup(CGroup2)][LabelText("速度")]
-        public int Speed; //轻功
-        
         [BoxGroup(CGroup2)][LabelText("防御力")]
-        public int Defense; //防御力
-        
-        [BoxGroup(CGroup2)][LabelText("魔抗")]
-        public int MagicDefence; //魔抗
-        
-        [BoxGroup(CGroup2)][LabelText("回复力")]
-        public int Heal; //回复力
+        public int Defense; //防御力 减免1/100分制
 
-        [BoxGroup(CGroup2)][LabelText("攻击附带")]
-        public String Attach; //攻击附带
-        
-        [BoxGroup(CGroup2)][LabelText("暴击")]
+        [BoxGroup(CGroup2)][LabelText("速度")]
+        public int Speed; //速度
+
+        [BoxGroup(CGroup2)][LabelText("回复力")]
+        public int Heal; //每次回复
+
+        [BoxGroup(CGroup2)][LabelText("暴击率")]
         public int Critical; 
         
         [BoxGroup(CGroup2)][LabelText("暴击伤害系数")]
         public int CriticalLevel; 
         
-        [BoxGroup(CGroup2)][LabelText("闪避")]
-        public int Miss; 
+        [BoxGroup(CGroup2)][LabelText("闪避率")]
+        public int Miss;
         
-        [BoxGroup(CGroup2)][LabelText("幸运")]
-        public int Luck; 
+        [BoxGroup(CGroup2)][LabelText("攻击附带")]
+        public String Attach; //攻击附带
 
-        /* ------- 分割线 --------*/
-        
-        [BoxGroup(CGroup3)][LabelText("力量")][SerializeReference]
-        public int Strength; //中量提高生命，提高物攻
-        
-        [BoxGroup(CGroup3)][LabelText("智慧")][SerializeReference]
-        public int Intelligence;//少量提升生命，提高法攻
-        
-        [BoxGroup(CGroup3)][LabelText("根骨")][SerializeReference]
-        public int Constitution;//提高生命和能量，少量物防
-        
-        [BoxGroup(CGroup3)][LabelText("敏捷")][SerializeReference]
-        public int Agile;//提高出手速度，少量提升闪避几率
-        
+        [BoxGroup(CGroup2)][LabelText("经验")] //经验输入使得属性按资质增长，宠物可额外通过吞食获得经验
+        public int exp;
+
         /* ------- 分割线 --------*/
         
         [BoxGroup(CGroup4)][LabelText("武器")][SerializeReference]
         public Jyx2ConfigItem Weapon;
         
-        [BoxGroup(CGroup4)][LabelText("衣服")][SerializeReference]
+        [BoxGroup(CGroup4)][LabelText("防具")][SerializeReference]
         public Jyx2ConfigItem Armor;
         
-        [BoxGroup(CGroup4)][LabelText("鞋子")][SerializeReference]
+        [BoxGroup(CGroup4)][LabelText("代步")][SerializeReference]
         public Jyx2ConfigItem Shoes;
         
-        [BoxGroup(CGroup4)][LabelText("饰品")][SerializeReference]
+        [BoxGroup(CGroup4)][LabelText("宝物")][SerializeReference]
         public Jyx2ConfigItem Treasure;
         /* ------- 分割线 --------*/
 

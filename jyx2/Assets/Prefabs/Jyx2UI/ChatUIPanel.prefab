@@ -126,7 +126,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 1, y: 3}
   m_SizeDelta: {x: 400, y: 350}
   m_Pivot: {x: 0, y: 0}
 --- !u!222 &8741632633811418522
@@ -313,7 +313,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 4, y: 4}
   m_SizeDelta: {x: 400, y: 350}
   m_Pivot: {x: 0, y: 0}
 --- !u!222 &5108113357610985094
@@ -337,14 +337,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.9518541, g: 0.9528302, b: 0.68765575, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: d5c192b8d48c1394a8f3a7e625d4fd6e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 37aabe04e704c794a84b6de1142b3b22, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -907,7 +907,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.066037714, g: 0.005295478, b: 0.005295478, a: 1}
+  m_Color: {r: 0.9339623, g: 0.8943129, b: 0.8943129, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1027,7 +1027,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.9528302, g: 0.93934673, b: 0.93934673, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1280,14 +1280,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.24230155, g: 0.9339623, b: 0.70986396, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: d5c192b8d48c1394a8f3a7e625d4fd6e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 37aabe04e704c794a84b6de1142b3b22, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1615,7 +1615,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: b588436a1ae79e04aaf2594e9246f239,
+      objectReference: {fileID: 21300000, guid: fd8ba391d2d65f344ad3c4f1c1818465,
         type: 3}
     - target: {fileID: 7135941278568037656, guid: 6634b120d983d514b987a0a4503a669d,
         type: 3}

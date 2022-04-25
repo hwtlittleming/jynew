@@ -62,10 +62,8 @@ namespace Jyx2
        
         
         [SerializeField] public int Attack; //攻击力
-        [SerializeField] public int MagicAttack; //法术攻击
         [SerializeField] public int Defense; //防御力
         [SerializeField] public int Speed; //速度
-        [SerializeField] public int MagicDefence; //魔抗
         [SerializeField] public String Attach; //攻击附带
         [SerializeField] public int Critical; //暴击
         [SerializeField] public int CriticalLevel; //暴击伤害系数
@@ -161,7 +159,6 @@ namespace Jyx2
             Describe = Data.Descripe;
             
             Attack = Data.Attack;
-            MagicAttack = Data.MagicAttack;
             Speed = Data.Speed;
             Defense = Data.Defense;
             Heal = Data.Heal;
