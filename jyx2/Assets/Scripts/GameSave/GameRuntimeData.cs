@@ -282,10 +282,9 @@ namespace Jyx2
                 }
             }
 
-            //清空角色身上的装备
+            //清空角色身上的装备 todo
             role.Weapon = -1;
             role.Armor = -1;
-            role.Xiulianwupin = -1;
 
             role.Items.Clear();   
             
@@ -312,9 +311,6 @@ namespace Jyx2
             role.Weapon = -1;
             role.UnequipItem(role.GetArmor());
             role.Armor = -1;
-            SetItemUser(role.Xiulianwupin, -1);
- 
-            role.Xiulianwupin = -1;
 
             TeamId.Remove(roleId);
             role.Recover(true);

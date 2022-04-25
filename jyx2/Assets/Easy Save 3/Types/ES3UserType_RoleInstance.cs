@@ -4,8 +4,8 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("Key", "Name", "Sex", "Level", "Exp", "Attack", "Speed", 
-		"Defense", "Heal", "Strength", "IQ", "Constitution", "Agile", "Luck", "Moral", "IQ", "Skills", "Items", "Mp", "MaxMp", "MpType", "Hp", "MaxHp", "Hurt", "Weapon", "Armor", "Xiulianwupin", "CurrentSkill")]
+	[ES3PropertiesAttribute("Key", "Name", "Sex","Rate", "Moral", "Describe", "Level", "Exp", "Attack","Defense", "Speed", "Heal", "Strength", "IQ", "Constitution", "Agile", "Luck",
+		"Skills", "Items", "Mp", "MaxMp", "MpType", "Hp", "MaxHp", "Hurt", "Weapon", "Armor", "Shoes", "Treasure", "CurrentSkill")]
 	public class ES3UserType_RoleInstance : ES3ObjectType
 	{
 		public static ES3Type Instance = null;
@@ -20,12 +20,25 @@ namespace ES3Types
 			writer.WriteProperty("Key", instance.Key, ES3Type_int.Instance);
 			writer.WriteProperty("Name", instance.Name, ES3Type_string.Instance);
 			writer.WriteProperty("Sex", instance.Sex, ES3Type_int.Instance);
+			writer.WriteProperty("Rate", instance.Rate, ES3Type_int.Instance);
+			writer.WriteProperty("Moral", instance.Moral, ES3Type_int.Instance);
+			writer.WriteProperty("Describe", instance.Describe, ES3Type_string.Instance);
 			writer.WriteProperty("Level", instance.Level, ES3Type_int.Instance);
 			writer.WriteProperty("Exp", instance.Exp, ES3Type_int.Instance);
+			
+			writer.WriteProperty("Hp", instance.Hp, ES3Type_int.Instance);
+			writer.WriteProperty("MaxHp", instance.MaxHp, ES3Type_int.Instance);
+			writer.WriteProperty("Mp", instance.Mp, ES3Type_int.Instance);
+			writer.WriteProperty("MaxMp", instance.MaxMp, ES3Type_int.Instance);
+			writer.WriteProperty("Hurt", instance.Hurt, ES3Type_int.Instance);
 			writer.WriteProperty("Attack", instance.Attack, ES3Type_int.Instance);
-			writer.WriteProperty("Speed", instance.Speed, ES3Type_int.Instance);
 			writer.WriteProperty("Defense", instance.Defense, ES3Type_int.Instance);
+			writer.WriteProperty("Speed", instance.Speed, ES3Type_int.Instance);
 			writer.WriteProperty("Heal", instance.Heal, ES3Type_int.Instance);
+			writer.WriteProperty("Critical", instance.Critical, ES3Type_int.Instance);
+			writer.WriteProperty("CriticalLevel", instance.CriticalLevel, ES3Type_int.Instance);
+			writer.WriteProperty("Miss", instance.Miss, ES3Type_int.Instance);
+			writer.WriteProperty("Attach", instance.Attach, ES3Type_string.Instance);
 
 			writer.WriteProperty("Strength", instance.Strength, ES3Type_int.Instance);
 			writer.WriteProperty("IQ", instance.IQ, ES3Type_int.Instance);
@@ -33,22 +46,12 @@ namespace ES3Types
 			writer.WriteProperty("Agile", instance.Agile, ES3Type_int.Instance);
 			writer.WriteProperty("Luck", instance.Luck, ES3Type_int.Instance);
 
-			writer.WriteProperty("Moral", instance.Moral, ES3Type_int.Instance);
-
-			writer.WriteProperty("IQ", instance.IQ, ES3Type_int.Instance);
-
 			writer.WriteProperty("Skills", instance.skills, ES3Internal.ES3TypeMgr.GetES3Type(typeof(System.Collections.Generic.List<Jyx2.SkillInstance>)));
 			writer.WriteProperty("Items", instance.Items, ES3Internal.ES3TypeMgr.GetES3Type(typeof(System.Collections.Generic.List<Jyx2Configs.Jyx2ConfigCharacterItem>)));
-			writer.WriteProperty("Mp", instance.Mp, ES3Type_int.Instance);
-			writer.WriteProperty("MaxMp", instance.MaxMp, ES3Type_int.Instance);
-
-			writer.WriteProperty("Hp", instance.Hp, ES3Type_int.Instance);
-			writer.WriteProperty("MaxHp", instance.MaxHp, ES3Type_int.Instance);
-			writer.WriteProperty("Hurt", instance.Hurt, ES3Type_int.Instance);
-
 			writer.WriteProperty("Weapon", instance.Weapon, ES3Type_int.Instance);
 			writer.WriteProperty("Armor", instance.Armor, ES3Type_int.Instance);
-			writer.WriteProperty("Xiulianwupin", instance.Xiulianwupin, ES3Type_int.Instance);
+			writer.WriteProperty("Shoes", instance.Shoes, ES3Type_int.Instance);
+			writer.WriteProperty("Treasure", instance.Treasure, ES3Type_int.Instance);
 			writer.WriteProperty("CurrentSkill", instance.CurrentSkill, ES3Type_int.Instance);
 		}
 
@@ -69,24 +72,62 @@ namespace ES3Types
 					case "Sex":
 						instance.Sex = reader.Read<System.Int32>(ES3Type_int.Instance);
 						break;
+					case "Rate":
+						instance.Rate = reader.Read<System.Int32>(ES3Type_int.Instance);
+						break;
+					case "Moral":
+						instance.Moral = reader.Read<System.Int32>(ES3Type_int.Instance);
+						break;
+					case "Describe":
+						instance.Describe = reader.Read<System.String>(ES3Type_string.Instance);
+						break;
 					case "Level":
 						instance.Level = reader.Read<System.Int32>(ES3Type_int.Instance);
 						break;
 					case "Exp":
 						instance.Exp = reader.Read<System.Int32>(ES3Type_int.Instance);
 						break;
+					//
+					case "Hp":
+						instance.Hp = reader.Read<System.Int32>(ES3Type_int.Instance);
+						break;
+					case "MaxHp":
+						instance.MaxHp = reader.Read<System.Int32>(ES3Type_int.Instance);
+						break;
+					case "Mp":
+						instance.Mp = reader.Read<System.Int32>(ES3Type_int.Instance);
+						break;
+					case "MaxMp":
+						instance.MaxMp = reader.Read<System.Int32>(ES3Type_int.Instance);
+						break;
+					case "Hurt":
+						instance.Hurt = reader.Read<System.Int32>(ES3Type_int.Instance);
+						break;
 					case "Attack":
 						instance.Attack = reader.Read<System.Int32>(ES3Type_int.Instance);
-						break;
-					case "Speed":
-						instance.Speed = reader.Read<System.Int32>(ES3Type_int.Instance);
 						break;
 					case "Defense":
 						instance.Defense = reader.Read<System.Int32>(ES3Type_int.Instance);
 						break;
+					case "Speed":
+						instance.Speed = reader.Read<System.Int32>(ES3Type_int.Instance);
+						break;
 					case "Heal":
 						instance.Heal = reader.Read<System.Int32>(ES3Type_int.Instance);
 						break;
+					case "Critical":
+						instance.Critical = reader.Read<System.Int32>(ES3Type_int.Instance);
+						break;
+					case "CriticalLevel":
+						instance.CriticalLevel = reader.Read<System.Int32>(ES3Type_int.Instance);
+						break;
+					case "Miss":
+						instance.Miss = reader.Read<System.Int32>(ES3Type_int.Instance);
+						break;
+					case "Attach":
+						instance.Attach = reader.Read<System.String>(ES3Type_string.Instance);
+						break;
+					//
 					case "Strength":
 						instance.Strength = reader.Read<System.Int32>(ES3Type_int.Instance);
 						break;
@@ -102,29 +143,12 @@ namespace ES3Types
 					case "Luck":
 						instance.Luck = reader.Read<System.Int32>(ES3Type_int.Instance);
 						break;
-					case "Moral":
-						instance.Moral = reader.Read<System.Int32>(ES3Type_int.Instance);
-						break;
+					//
 					case "Skills":
 						instance.skills = reader.Read<System.Collections.Generic.List<Jyx2.SkillInstance>>();
 						break;
 					case "Items":
 						instance.Items = reader.Read<System.Collections.Generic.List<Jyx2Configs.Jyx2ConfigCharacterItem>>();
-						break;
-					case "Mp":
-						instance.Mp = reader.Read<System.Int32>(ES3Type_int.Instance);
-						break;
-					case "MaxMp":
-						instance.MaxMp = reader.Read<System.Int32>(ES3Type_int.Instance);
-						break;
-					case "Hp":
-						instance.Hp = reader.Read<System.Int32>(ES3Type_int.Instance);
-						break;
-					case "MaxHp":
-						instance.MaxHp = reader.Read<System.Int32>(ES3Type_int.Instance);
-						break;
-					case "Hurt":
-						instance.Hurt = reader.Read<System.Int32>(ES3Type_int.Instance);
 						break;
 					case "Weapon":
 						instance.Weapon = reader.Read<System.Int32>(ES3Type_int.Instance);
@@ -132,8 +156,11 @@ namespace ES3Types
 					case "Armor":
 						instance.Armor = reader.Read<System.Int32>(ES3Type_int.Instance);
 						break;
-					case "Xiulianwupin":
-						instance.Xiulianwupin = reader.Read<System.Int32>(ES3Type_int.Instance);
+					case "Shoes":
+						instance.Shoes = reader.Read<System.Int32>(ES3Type_int.Instance);
+						break;
+					case "Treasure":
+						instance.Treasure = reader.Read<System.Int32>(ES3Type_int.Instance);
 						break;
 					case "CurrentSkill":
 						instance.CurrentSkill = reader.Read<System.Int32>(ES3Type_int.Instance);

@@ -41,7 +41,6 @@ public partial class XiakeUIPanel : Jyx2_UIBase
 		
 		BindListener(ButtonSelectWeapon_Button, OnWeaponClick);
 		BindListener(ButtonSelectArmor_Button, OnArmorClick);
-		BindListener(ButtonSelectBook_Button, OnXiulianClick);
 		BindListener(LeaveButton_Button, OnLeaveClick);
 	}
 
@@ -315,37 +314,7 @@ public partial class XiakeUIPanel : Jyx2_UIBase
 			(item) => { return (int)item.EquipmentType == 1 && (runtime.GetItemUser(item.Id) == m_currentRole.GetJyx2RoleId() || runtime.GetItemUser(item.Id) == -1); },
 			m_currentRole.Armor);
 	}
-
-	async void OnXiulianClick()
-	{
-		async void Callback(int itemId)
-		{
-			var item = GameConfigDatabase.Instance.Get<Jyx2ConfigItem>(itemId);
-			if (m_currentRole.Xiulianwupin == itemId)
-			{
-				runtime.SetItemUser(item.Id, -1);
-				m_currentRole.Xiulianwupin = -1;
-			}
-			else
-			{
-				if (m_currentRole.GetXiulianItem() != null)
-				{
-					runtime.SetItemUser(m_currentRole.Xiulianwupin, -1);
-				}
-
-				m_currentRole.Xiulianwupin = itemId;
-				runtime.SetItemUser(item.Id, m_currentRole.GetJyx2RoleId());
-			}
-		}
-
-		await SelectFromBag(
-			Callback,
-			(item) =>
-			{
-				return (int)item.ItemType == 2 && (runtime.GetItemUser(item.Id) == m_currentRole.GetJyx2RoleId() || runtime.GetItemUser(item.Id) == -1);
-			},
-			m_currentRole.Xiulianwupin);
-	}
+	
 
 	async UniTask SelectFromBag(Action<int> Callback, Func<Jyx2ConfigItem, bool> filter, int current_itemId)
 	{

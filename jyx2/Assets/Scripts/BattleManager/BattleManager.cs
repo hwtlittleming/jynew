@@ -380,10 +380,7 @@ public class BattleManager : MonoBehaviour
                 //---------------------------------------------------------------------------
                 //---------------------------------------------------------------------------
 
-            var practiseItem = role.GetXiulianItem();
-            var isWugongCanUpgrade = practiseItem != null && !(practiseItem.Skill != null && role.GetWugongLevel(practiseItem.Skill.Id)>= 10);
-
-            role.Exp += role.ExpGot;
+                role.Exp += role.ExpGot;
 
             //避免越界
             role.Exp = Tools.Limit(role.Exp, 0, GameConst.MAX_EXP);
@@ -407,7 +404,7 @@ public class BattleManager : MonoBehaviour
 
             //TODO：升级的展示
 
-            if (practiseItem != null)
+            /*if (practiseItem != null)
             {
 
                 change = 0;
@@ -444,7 +441,7 @@ public class BattleManager : MonoBehaviour
 
                 //炼制物品
                 rst += role.LianZhiItem(practiseItem);
-            }
+            }*/
         }
 
         return rst;

@@ -26,32 +26,23 @@ namespace Jyx2
     {
         #region 存档数据定义
         
-        //资质
-        [SerializeField] public int Strength; //力量
-        [SerializeField] public int IQ; //智慧
-        [SerializeField] public int Constitution; //根骨
-        [SerializeField] public int Agile; //敏捷
-        [SerializeField] public int Luck; //幸运
-        
-        //--------------分割线
-        
+        //基本情况
         [SerializeField] public int Key; //ID
         [SerializeField] public string Name; //姓名
-        [SerializeField] public int Level = 1; //等级
-        [SerializeField] public int Exp; //经验
-
-        
         [SerializeField] public int Sex; //性别
         [SerializeField] public int Rate; //种族
+        [SerializeField] public int Moral; //善恶
         [SerializeField] public String Describe; //描述
+        [SerializeField] public int Level = 1; //等级
+        [SerializeField] public int Exp; //经验
         
+        //战斗属性
         [SerializeField] public int Hp;
         [SerializeField] public int MaxHp;
         [SerializeField] public int Mp;
         [SerializeField] public int MaxMp;
         [SerializeField] public int Hurt; //受伤程度
-       
-        
+
         [SerializeField] public int Attack; //攻击力
         [SerializeField] public int Defense; //防御力
         [SerializeField] public int Speed; //速度
@@ -60,19 +51,28 @@ namespace Jyx2
         [SerializeField] public int CriticalLevel; //暴击伤害系数
         [SerializeField] public int Miss; //闪避
         [SerializeField] public int Heal; //恢复
-        [SerializeField] public int Moral; //品德
+        
+        //资质
+        [SerializeField] public int Strength; //力量
+        [SerializeField] public int IQ; //智慧
+        [SerializeField] public int Constitution; //根骨
+        [SerializeField] public int Agile; //敏捷
+        [SerializeField] public int Luck; //幸运
+
+        //携带
 
         [SerializeField] public List<SkillInstance> skills = new List<SkillInstance>(); //武功
         [SerializeField] public List<Jyx2ConfigCharacterItem> Items = new List<Jyx2ConfigCharacterItem>(); //道具
 
         [SerializeField] public int Weapon; //武器
         [SerializeField] public int Armor; //防具
-        [SerializeField] public int Xiulianwupin = -1; //修炼物品
-
-
+        [SerializeField] public int Shoes; //代步
+        [SerializeField] public int Treasure; //宝物
+        
         [SerializeField] public int CurrentSkill = 0; //当前技能
         #endregion
 
+        //额外增加属性 确定要用后再加至存档 todo
         public int bestAttackDistance = 1;//最佳攻击距离，决定站位前后
         public bool isReadyToBattle = true;//是否参战
         public int currentMotivation  = 10; //当前行动力，可赋初始值
@@ -272,14 +272,6 @@ namespace Jyx2
             if (Armor == -1) return null;
             return GameConfigDatabase.Instance.Get<Jyx2ConfigItem>(Armor);
         }
-
-
-        public Jyx2ConfigItem GetXiulianItem()
-        {
-            if (Xiulianwupin == -1) return null;
-            return GameConfigDatabase.Instance.Get<Jyx2ConfigItem>(Xiulianwupin);
-        }
-
 
         /// <summary>
         /// 战斗中使用的招式
@@ -486,7 +478,8 @@ namespace Jyx2
 
                 runtime.AddItem(pickItem.Item.Id, pickItem.Count);
                 runtime.AddItem(practiseItem.GenerateItemNeedCost.Id, -1);
-                return $"{GetXiulianItem().Name} 炼出 {pickItem.Item.Name}×{pickItem.Count}\n";
+                return $"炼出 {pickItem.Item.Name}×{pickItem.Count}\n";
+                //return $"{GetXiulianItem().Name} 炼出 {pickItem.Item.Name}×{pickItem.Count}\n";
             }
 
             return "";
@@ -557,11 +550,6 @@ namespace Jyx2
         public bool CanFinishedItem()
         {
             return false;
-        }
-
-        public int GetFinishedExpForItem()
-        {
-            return GetFinishedExpForItem(GetXiulianItem());
         }
 
         /// <summary>

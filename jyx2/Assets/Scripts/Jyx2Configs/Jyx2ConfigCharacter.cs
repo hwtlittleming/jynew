@@ -135,7 +135,7 @@ namespace Jyx2Configs
         public String Attach; //攻击附带
 
         [BoxGroup(CGroup2)][LabelText("经验")] //经验输入使得属性按资质增长，宠物可额外通过吞食获得经验
-        public int exp;
+        public int Exp;
 
         /* ------- 分割线 --------*/
         
