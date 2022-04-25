@@ -26,30 +26,21 @@ namespace Jyx2
     {
         #region 存档数据定义
         
-        //废弃待删除
-        [SerializeField] public int UsePoison; //用毒
-        [SerializeField] public int DePoison; //解毒
-        [SerializeField] public int AntiPoison; //抗毒
-        [SerializeField] public int Quanzhang; //拳掌
-        [SerializeField] public int Yujian; //御剑
-        [SerializeField] public int Shuadao; //耍刀
-        [SerializeField] public int Qimen; //特殊兵器
-        [SerializeField] public int Anqi; //暗器技巧
-        [SerializeField] public int Wuxuechangshi; //武学常识
-        [SerializeField] public int Zuoyouhubo; //左右互搏
-        [SerializeField] public int Shengwang; //声望
-        [SerializeField] public int ExpForItem; //修炼点数
-        [SerializeField] public int Level = 1; //等级
-        [SerializeField] public int Tili; //体力
-        [SerializeField] public int MpType; //内力性质
-        [SerializeField] public int Exp; //经验
-        [SerializeField] public int Poison; //中毒程度
-        [SerializeField] public int Heal; //恢复
+        //资质
+        [SerializeField] public int Strength; //力量
+        [SerializeField] public int IQ; //智慧
+        [SerializeField] public int Constitution; //根骨
+        [SerializeField] public int Agile; //敏捷
+        [SerializeField] public int Luck; //幸运
+        
         //--------------分割线
         
         [SerializeField] public int Key; //ID
         [SerializeField] public string Name; //姓名
+        [SerializeField] public int Level = 1; //等级
+        [SerializeField] public int Exp; //经验
 
+        
         [SerializeField] public int Sex; //性别
         [SerializeField] public int Rate; //种族
         [SerializeField] public String Describe; //描述
@@ -68,18 +59,12 @@ namespace Jyx2
         [SerializeField] public int Critical; //暴击
         [SerializeField] public int CriticalLevel; //暴击伤害系数
         [SerializeField] public int Miss; //闪避
-        [SerializeField] public int Luck; //幸运
-        
+        [SerializeField] public int Heal; //恢复
         [SerializeField] public int Moral; //品德
-        [SerializeField] public int AttackPoison; //攻击带毒
 
-        [SerializeField] public int IQ; //智商
-        
         [SerializeField] public List<SkillInstance> skills = new List<SkillInstance>(); //武功
         [SerializeField] public List<Jyx2ConfigCharacterItem> Items = new List<Jyx2ConfigCharacterItem>(); //道具
 
-        [SerializeField] public int ExpForMakeItem; //物品修炼点
-        
         [SerializeField] public int Weapon; //武器
         [SerializeField] public int Armor; //防具
         [SerializeField] public int Xiulianwupin = -1; //修炼物品
@@ -190,12 +175,8 @@ namespace Jyx2
             if (condition)
             {
                 SetHPAndRefreshHudBar(MaxHp);
-
                 Mp = MaxMp;
-                Tili = GameConst.MAX_ROLE_TILI;
-
                 Hurt = 0;
-                Poison = 0;
             }
         }
 
@@ -242,7 +223,6 @@ namespace Jyx2
         public void LevelUp()
         {
             Level++;
-            Tili = GameConst.MAX_ROLE_TILI;
             //MaxHp += (Data.HpInc + Random.Range(0, 3)) * 3;
             SetHPAndRefreshHudBar(this.MaxHp);
             //当0 <= 资质 < 30, a = 2;
@@ -256,21 +236,12 @@ namespace Jyx2
             Mp = MaxMp;
 
             Hurt = 0;
-            Poison = 0;
 
             Attack += a;
             Speed += a;
             Defense += a;
 
             Heal = checkUp(Heal, 20, 3);
-            DePoison = checkUp(DePoison, 20, 3);
-            UsePoison = checkUp(UsePoison, 20, 3);
-
-            Quanzhang = checkUp(Quanzhang, 20, 3);
-            Yujian = checkUp(Yujian, 20, 3);
-            Shuadao = checkUp(Shuadao, 20, 3);
-            Anqi = checkUp(Anqi, 20, 3);
-            
 
             Debug.Log($"{this.Name}升到{this.Level}级！");
         }
@@ -427,15 +398,6 @@ namespace Jyx2
                     {
                         return item.OnlySuitableRole == this.Key;
                     }
-
-                    //内力属性判断
-                    if ((this.MpType == 0 || this.MpType == 1) && (item.NeedMPType == 0 || (int)item.NeedMPType == 1))
-                    {
-                        if (this.MpType != (int)item.NeedMPType)
-                        {
-                            return false;
-                        }
-                    }
                 }
                 //若有相关武学，则为真
                 //若已经学满武学，则为假
@@ -516,7 +478,7 @@ namespace Jyx2
             if (practiseItem == null)
                 return "";
             int GenerateItemNeedExp = (7 - IQ / 15) * practiseItem.GenerateItemNeedExp;
-            if (practiseItem.GenerateItems != null && practiseItem.GenerateItemNeedCost != null && ExpForMakeItem >= GenerateItemNeedExp &&
+            if (practiseItem.GenerateItems != null && practiseItem.GenerateItemNeedCost != null  &&
                 runtime.HaveItemBool(practiseItem.GenerateItemNeedCost.Id))
             {
                 
@@ -524,7 +486,6 @@ namespace Jyx2
 
                 runtime.AddItem(pickItem.Item.Id, pickItem.Count);
                 runtime.AddItem(practiseItem.GenerateItemNeedCost.Id, -1);
-                ExpForMakeItem = 0;
                 return $"{GetXiulianItem().Name} 炼出 {pickItem.Item.Name}×{pickItem.Count}\n";
             }
 
@@ -540,7 +501,6 @@ namespace Jyx2
             if (item == null)
                 return;
 
-            this.Tili += item.AddTili;
             //吃药机制
             //参考：https://github.com/ZhanruiLiang/jinyong-legend
             int add = item.AddHp - this.Hurt / 2 + Random.Range(0, 10);
@@ -553,19 +513,11 @@ namespace Jyx2
             this.MaxHp += item.AddMaxHp;
             this.Mp += item.AddMp;
             this.MaxMp += item.AddMaxMp;
-            this.Poison += item.ChangePoisonLevel / 2;
             this.Heal += item.Heal;
 
             this.Attack += item.Attack;
             this.Defense += item.Defence;
             this.Speed += item.Speed;
-            
-            this.AttackPoison += item.AttackPoison;
-
-            if (item.ChangeMPType == 2)
-            {
-                this.MpType = 2;
-            }
 
             if (CanFinishedItem())
             {
@@ -574,7 +526,6 @@ namespace Jyx2
                     this.LearnMagic(item.Skill.Id);
                 }
 
-                this.ExpForItem = 0;
             }
         }
 
@@ -588,18 +539,16 @@ namespace Jyx2
                 return;
 
             runtime.SetItemUser(item.Id, -1);
-            this.Tili -= item.AddTili;
             this.SetHPAndRefreshHudBar(this.Hp - item.AddHp);
             this.MaxHp -= item.AddMaxHp;
             this.Mp -= item.AddMp;
             this.MaxMp -= item.AddMaxMp;
-            this.Poison -= item.ChangePoisonLevel;
+   
             this.Heal -= item.Heal;
 
             this.Attack -= item.Attack;
             this.Defense -= item.Defence;
             this.Speed -= item.Speed;
-            this.AttackPoison -= item.AttackPoison;
 
             int defenceTime = item.Defence < 0 ? 0 : 1;
             int qinggongTime = item.Speed < 0 ? 0 : 1;
@@ -607,11 +556,6 @@ namespace Jyx2
 
         public bool CanFinishedItem()
         {
-            if (this.ExpForItem >= GetFinishedExpForItem())
-            {
-                return true;
-            }
-
             return false;
         }
 
@@ -792,8 +736,6 @@ namespace Jyx2
         //参考：https://github.com/ZhanruiLiang/jinyong-legend
         public int GetMoveAbility()
         {
-            if (Tili <= 5)
-                return 0; //金庸DOS版逻辑，体力小于等于5无法移动
             int speed = this.Speed;
 
             speed = speed / 15 - this.Hurt / 40;
@@ -875,13 +817,7 @@ namespace Jyx2
         public void OnRest()
         {
             int addTili = 3 + Random.Range(0, 3);
-            Tili = Tools.Limit(Tili + addTili, 0, GameConst.MAX_ROLE_TILI);
-            if (Tili > 30)
-            {
-                int addHpMp = 3 + Random.Range(0, Tili / 10 - 2);
-                Hp = Tools.Limit(Hp + addHpMp, 0, MaxHp);
-                Mp = Tools.Limit(Mp + addHpMp, 0, MaxMp);
-            }
+
         }
 
         //学习武学逻辑，对应kyscpp int Role::learnMagic(int magic_id)
@@ -918,7 +854,8 @@ namespace Jyx2
         
         public string GetMPColor()
         {
-            return MpType == 2 ? ColorStringDefine.Default : MpType == 1 ? ColorStringDefine.Mp_type1 : ColorStringDefine.Mp_type0;
+            return ColorStringDefine.Default;
+            //return MpType == 2 ? ColorStringDefine.Default : MpType == 1 ? ColorStringDefine.Mp_type1 : ColorStringDefine.Mp_type0;
         }
         
         public string GetHPColor1()
@@ -928,7 +865,8 @@ namespace Jyx2
         
         public string GetHPColor2()
         {
-            return Poison > 0 ? ColorStringDefine.Hp_posion : ColorStringDefine.Default;
+            return ColorStringDefine.Default;
+            //return Poison > 0 ? ColorStringDefine.Hp_posion : ColorStringDefine.Default;
         }
 
         public int GetWeaponProperty(string propertyName)

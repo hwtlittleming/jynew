@@ -62,11 +62,11 @@ public class HUDItem : MonoBehaviour
     void UpdateHpColor()
     {
         //hpBar.fillImage.sprite = null;
-        if (currentRole.Poison > 0) 
+        /*if (currentRole.Poison > 0) 
         {
             hpBar.fillImage.color = Color.cyan;
             return;
-        }
+        }*/
         hpBar.fillImage.color = currentRole.team == 0 ? Color.green : Color.red;
     }
 

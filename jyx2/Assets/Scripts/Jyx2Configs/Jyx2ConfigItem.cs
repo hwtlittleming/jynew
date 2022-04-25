@@ -109,10 +109,7 @@ namespace Jyx2Configs
         public int AddHp; 
 
         [BoxGroup(EFFECT_GROUP)][LabelText("加生命最大值")]
-        public int AddMaxHp; 
-
-        [BoxGroup(EFFECT_GROUP)][LabelText("加中毒解毒")]
-        public int ChangePoisonLevel; 
+        public int AddMaxHp;
 
         [BoxGroup(EFFECT_GROUP)][LabelText("加体力")]
         public int AddTili; 
@@ -137,9 +134,6 @@ namespace Jyx2Configs
 
         [BoxGroup(EFFECT_GROUP)][LabelText("加医疗")]
         public int Heal;
-        
-        [BoxGroup(EFFECT_GROUP)][LabelText("加功夫带毒")]
-        public int AttackPoison;
 
         [ShowIf(nameof(IsItemBook))]
         [BoxGroup(CONDITION_GROUP)][LabelText("仅修炼人物")]

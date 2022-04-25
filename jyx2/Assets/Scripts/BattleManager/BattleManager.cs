@@ -409,11 +409,6 @@ public class BattleManager : MonoBehaviour
 
             if (practiseItem != null)
             {
-                role.ExpForItem += role.ExpGot * 8 / 10;
-                role.ExpForMakeItem += role.ExpGot * 8 / 10;
-
-                role.ExpForItem = Tools.Limit(role.ExpForItem, 0, GameConst.MAX_EXP);
-                role.ExpForMakeItem = Tools.Limit(role.ExpForMakeItem, 0, GameConst.MAX_EXP);
 
                 change = 0;
 
@@ -504,24 +499,17 @@ public class BattleManager : MonoBehaviour
         async UniTask RunPosionHurtLogic(RoleInstance role)
         {
             int hurtEffect = role.Hurt / 20;
-            int poisonEffect = role.Poison / 10;
 
             int hurtEffectRst = Tools.Limit(hurtEffect, 0, role.Hp);
-            int poisonEffectRst = Tools.Limit(poisonEffect, 0, role.Hp);
-            
-            if (hurtEffect == 0 && poisonEffect == 0) return;
+
+            if (hurtEffect == 0 ) return;
 
             if (hurtEffectRst > 0)
             {
                 role.View?.ShowAttackInfo($"<color=white>-{hurtEffectRst}</color>");
                 role.Hp -= hurtEffectRst;
             }
-            
-            if (poisonEffectRst > 0)
-            {
-                role.View?.ShowAttackInfo($"<color=green>-{poisonEffectRst}</color>");
-                role.Hp -= poisonEffectRst;
-            }
+
             if (role.Hp < 1)
                 role.Hp = 1;
 

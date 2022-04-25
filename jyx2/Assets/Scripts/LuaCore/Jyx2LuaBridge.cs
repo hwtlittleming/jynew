@@ -354,31 +354,6 @@ namespace Jyx2
             Wait();
         }
 
-        //设置用毒
-        public static void SetOneUsePoi(int roleId, int v)
-        {
-            RunInMainThread(() =>
-            {
-                var role = runtime.GetRole(roleId);
-                if (role != null)
-                {
-                    role.UsePoison = v;
-                }
-                else
-                {
-                    Debug.LogError("设置用毒，但角色不在队伍，roleId =" + roleId);
-                }
-                Next();
-            });
-            Wait();
-        }
-        
-        public static void ScenceFromTo(int x,int y,int x2,int y2)
-        {
-            //重制版不需要再实现，使用  jyx2_CameraFollow、jyx2_CameraFollowPlayer
-
-        }
-        
         //修改这个接口逻辑为在当前trigger对应事件序号基础上加上v1,v2,v3 (只对大于0的进行相加，-2保留原事件序号，-1为直接设置)
         // modified by eaphone at 2021/6/12
         public static void Add3EventNum(int scene, int eventId,int v1,int v2,int v3)
@@ -707,13 +682,6 @@ namespace Jyx2
             Wait();
         }
 
-        //设置角色内力属性
-        public static void SetPersonMPPro(int roleId, int value)
-        {
-            var r = runtime.GetRole(roleId);
-            r.MpType = value;
-        }
-
         public static void instruct_50(int p1,int p2,int p3,int p4,int p5,int p6,int p7)
         {
 
@@ -726,15 +694,7 @@ namespace Jyx2
             });
             Wait();
         }
-
-        public static void ShowRepute()
-        {
-            RunInMainThread(() =>
-            {
-                MessageBox.Create("你现在的个人声望指数为" + runtime.Player.Shengwang, Next);
-            });
-            Wait();
-        }
+        
 
         public static bool JudgeEventNum(int eventIndex, int value)
         {
@@ -983,7 +943,7 @@ namespace Jyx2
             {
                 foreach (var role in runtime.GetTeam())
                 {
-                    role.Recover(role.Hurt < 33 && role.Poison <= 0);
+                    role.Recover(role.Hurt < 33);
                 }
             });
         }
@@ -994,7 +954,7 @@ namespace Jyx2
             {
                 foreach (var role in runtime.GetTeam())
                 {
-                    role.Recover(role.Hurt < 50 && role.Poison <= 0);
+                    role.Recover(role.Hurt < 50 );
                 }
             });
         }
@@ -1072,17 +1032,6 @@ namespace Jyx2
         public static void SetScencePosition2(int x, int y)
         {
             //设置位置，没用了，调用jyx2_MovePlayer替代
-        }
-
-        //增加声望
-        public static void AddRepute(int value)
-        {
-            RunInMainThread(() =>{
-                runtime.Player.Shengwang = Tools.Limit(runtime.Player.Shengwang + value, 0, GameConst.MAX_ROLE_SHENGWANG);
-            /*    storyEngine.DisplayPopInfo("增加声望:" + value);*/
-                Next();
-            });
-            Wait();
         }
 
         //韦小宝商店
@@ -1469,22 +1418,6 @@ namespace Jyx2
             });
 
             Wait();
-        }
-        
-        public static bool jyx2_CheckBookAndRepute()
-        {
-            if(runtime.Player.Shengwang<200)
-            {
-                return false;
-            }
-            for(var i=144;i<158;i++)
-            {
-                if(!HaveItem(i))
-                {
-                    return false;
-                }
-            }
-            return true;
         }
 
         public static void jyx2_ShowEndScene()

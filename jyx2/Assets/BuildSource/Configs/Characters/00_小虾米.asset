@@ -21,9 +21,13 @@ MonoBehaviour:
     m_SubObjectName: 
     m_SubObjectType: 
     m_EditorAssetChanged: 0
-  Moral: 0
-  IQ: 39
+  Moral: 112
   Descripe: "\u8FD9\u91CC\u662F\u4EBA\u7269\u63CF\u8FF0"
+  Strength: 0
+  IQ: 39
+  Constitution: 0
+  Agile: 0
+  Luck: 0
   Skills:
   - id: 0
   - id: 1
@@ -53,20 +57,14 @@ MonoBehaviour:
   MaxHp: 380000
   MaxMp: 26
   Attack: 27
-  MagicAttack: 0
-  Speed: 0
   Defense: 0
-  MagicDefence: 0
+  Speed: 0
   Heal: 30
-  Attach: 
   Critical: 0
   CriticalLevel: 0
   Miss: 0
-  Luck: 0
-  Strength: 0
-  Intelligence: 0
-  Constitution: 0
-  Agile: 0
+  Attach: 
+  exp: 0
   Weapon: {fileID: 0}
   Armor: {fileID: 0}
   Shoes: {fileID: 0}

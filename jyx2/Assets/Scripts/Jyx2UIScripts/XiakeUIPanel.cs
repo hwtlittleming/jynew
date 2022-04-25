@@ -162,22 +162,20 @@ public partial class XiakeUIPanel : Jyx2_UIBase
 		sb.AppendLine(string.Format("能量 <color={0}>{1}/{2}</color>".GetContent(nameof(XiakeUIPanel)), color, role.Mp, role.MaxMp));
 
 		sb.AppendLine();
-		sb.AppendLine(string.Format("拳掌 {0}".GetContent(nameof(XiakeUIPanel)), role.Quanzhang));
-		sb.AppendLine(string.Format("御剑 {0}".GetContent(nameof(XiakeUIPanel)), role.Yujian));
-		sb.AppendLine(string.Format("耍刀 {0}".GetContent(nameof(XiakeUIPanel)), role.Shuadao));
-		sb.AppendLine(string.Format("特殊 {0}".GetContent(nameof(XiakeUIPanel)), role.Qimen));
-		sb.AppendLine(string.Format("暗器 {0}".GetContent(nameof(XiakeUIPanel)), role.Anqi));
+		sb.AppendLine(string.Format("力量 {0}".GetContent(nameof(XiakeUIPanel)), role.Strength));
+		sb.AppendLine(string.Format("智慧 {0}".GetContent(nameof(XiakeUIPanel)), role.IQ));
+		sb.AppendLine(string.Format("根骨 {0}".GetContent(nameof(XiakeUIPanel)), role.Constitution));
+		sb.AppendLine(string.Format("敏捷 {0}".GetContent(nameof(XiakeUIPanel)), role.Agile));
+		sb.AppendLine(string.Format("幸运 {0}".GetContent(nameof(XiakeUIPanel)), role.Luck));
 		sb.AppendLine();
 		sb.AppendLine(string.Format("攻击 {0}".GetContent(nameof(XiakeUIPanel)), role.Attack));
 		sb.AppendLine(string.Format("防御 {0}".GetContent(nameof(XiakeUIPanel)), role.Defense));
 		sb.AppendLine(string.Format("速度 {0}".GetContent(nameof(XiakeUIPanel)), role.Speed));
-		sb.AppendLine(string.Format("医疗 {0}".GetContent(nameof(XiakeUIPanel)), role.Heal));
-		sb.AppendLine(string.Format("解毒 {0}".GetContent(nameof(XiakeUIPanel)), role.DePoison));
-		sb.AppendLine(string.Format("用毒 {0}".GetContent(nameof(XiakeUIPanel)), role.UsePoison));
+		sb.AppendLine(string.Format("回复 {0}".GetContent(nameof(XiakeUIPanel)), role.Heal));
 		sb.AppendLine();
 		//---------------------------------------------------------------------------
 		//---------------------------------------------------------------------------
-
+		
 		return sb.ToString();
 	}
 
@@ -211,11 +209,7 @@ public partial class XiakeUIPanel : Jyx2_UIBase
 
 		var armor = role.GetArmor();
 		sb.AppendLine("防具：".GetContent(nameof(XiakeUIPanel)) + (armor == null ? "" : armor.Name));
-
-		var xiulianItem = role.GetXiulianItem();
-		sb.AppendLine("修炼：".GetContent(nameof(XiakeUIPanel)) + (xiulianItem == null
-			? ""
-			: xiulianItem.Name + $"({role.ExpForItem}/{role.GetFinishedExpForItem()})"));
+		
 		//---------------------------------------------------------------------------
 		//---------------------------------------------------------------------------
 
@@ -330,7 +324,6 @@ public partial class XiakeUIPanel : Jyx2_UIBase
 			if (m_currentRole.Xiulianwupin == itemId)
 			{
 				runtime.SetItemUser(item.Id, -1);
-				m_currentRole.ExpForItem = 0;
 				m_currentRole.Xiulianwupin = -1;
 			}
 			else
@@ -338,7 +331,6 @@ public partial class XiakeUIPanel : Jyx2_UIBase
 				if (m_currentRole.GetXiulianItem() != null)
 				{
 					runtime.SetItemUser(m_currentRole.Xiulianwupin, -1);
-					m_currentRole.ExpForItem = 0;
 				}
 
 				m_currentRole.Xiulianwupin = itemId;

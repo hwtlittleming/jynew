@@ -200,14 +200,12 @@ public partial class MainUIPanel : Jyx2_UIBase, IUIAnimator
 							{
 								RoleInstance roleInstance = runtime.GetRoleInTeam(runtime.GetItemUser(item.Id));
 								runtime.SetItemUser(item.Id, -1);
-								roleInstance.ExpForItem = 0;
 								roleInstance.Xiulianwupin = -1;
 							}
 
 							if (selectRole.GetXiulianItem() != null)
 							{
 								runtime.SetItemUser(selectRole.Xiulianwupin, -1);
-								selectRole.ExpForItem = 0;
 							}
 
 							selectRole.Xiulianwupin = id;

@@ -313,7 +313,7 @@ namespace Jyx2
             role.UnequipItem(role.GetArmor());
             role.Armor = -1;
             SetItemUser(role.Xiulianwupin, -1);
-            role.ExpForItem = 0;
+ 
             role.Xiulianwupin = -1;
 
             TeamId.Remove(roleId);

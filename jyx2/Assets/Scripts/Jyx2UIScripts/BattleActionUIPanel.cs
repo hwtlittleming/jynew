@@ -296,10 +296,6 @@ public partial class BattleActionUIPanel : Jyx2_UIBase
 					//TryCallback(new BattleLoop.ManualResult() { aiResult = new AIResult() { Item = item } });
 				}
 			}
-			else if ((int)item.ItemType == 4) //使用暗器逻辑
-			{
-				var zhaoshi = new AnqiZhaoshiInstance(m_currentRole.Anqi, item);
-			}
 
 		}), (Func<Jyx2ConfigItem, bool>)Filter);
 	}

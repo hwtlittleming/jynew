@@ -96,7 +96,7 @@ namespace Jyx2
         public void CastCost(RoleInstance role)
         {
             int damageType = GetDamageType();
-            if(damageType == 0 || damageType == 1)//普通攻击、吸内
+            /*if(damageType == 0 || damageType == 1)//普通攻击、吸内
             {
                 role.Tili = Tools.Limit(role.Tili - 3, 0, 100);
             }else if(damageType ==2)//用毒
@@ -108,7 +108,7 @@ namespace Jyx2
             }else if(damageType == 4)//医疗
             {
                 role.Tili = Tools.Limit(role.Tili - 4, 0, 100);
-            }
+            }*/
             
             //暗器，扣除道具
             if (this is AnqiZhaoshiInstance)

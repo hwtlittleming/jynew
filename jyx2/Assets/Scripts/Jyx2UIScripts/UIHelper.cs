@@ -42,11 +42,6 @@ public class UIHelper
             result.Add(4, item.Defence);
         if (item.Heal != 0)//医疗
             result.Add(6, item.Heal);
-        if (item.AttackPoison != 0)//攻击带毒
-            result.Add(23, item.AttackPoison);
-        if (item.ChangePoisonLevel != 0)//中毒解毒
-            result.Add(26, item.ChangePoisonLevel);
-
 
         return result;
     }

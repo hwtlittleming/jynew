@@ -98,8 +98,6 @@ namespace Jyx2
                 if (damage >= r2.Hp)
                     scale = 1.25f;
                 float attackTwiceScale = 1;
-                if (r1.Zuoyouhubo == 1)
-                    attackTwiceScale = 2;
 
                 return attackTwiceScale * scale * damage + attackTwiceScale * damageMp / 5 + poison;
             }else if(r1.team == r2.team)
@@ -164,28 +162,6 @@ namespace Jyx2
                         r1.Mp = finalMp;
                     }
                 }
-            }
-
-            if (rst.poison > 0)
-            {
-                r2.Poison += rst.poison;
-                if (r2.View != null)
-                {
-                    r2.View.ShowAttackInfo($"<color=green>中毒+{rst.poison}</color>");
-                }
-
-                r1.ExpGot += 1;
-            }
-
-            if (rst.depoison > 0)
-            {
-                r2.Poison -= rst.depoison;
-                if (r2.View != null)
-                {
-                    r2.View.ShowAttackInfo($"<color=green>中毒-{rst.depoison}</color>");
-                }
-
-                r1.ExpGot += 1;
             }
 
             if (rst.heal > 0)

@@ -83,13 +83,6 @@ public static class Jyx2Console
 
                 break;
             }
-            case "zuoyouhubo": //主角学会左右互搏
-            {
-                GameRuntimeData.Instance.Player.Zuoyouhubo = int.Parse(paras[1]);
-                StoryEngine.Instance.DisplayPopInfo(
-                    "主角设置左右互搏：" + (GameRuntimeData.Instance.Player.Zuoyouhubo == 1 ? "开" : "关"));
-                break;
-            }
             case "transportwei":
             {
                 TransportWei();

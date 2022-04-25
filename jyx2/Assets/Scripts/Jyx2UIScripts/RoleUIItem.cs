@@ -74,10 +74,6 @@ public class RoleUIItem : MonoBehaviour
 				var color2 = m_role.GetHPColor2();
 				sb.Append($"{proItem.Name}:<color={color1}>{m_role.Hp}</color>/<color={color2}>{m_role.MaxHp}</color>\n");
 			}
-			else if (proItem.PropertyName == "Tili")
-			{
-				sb.Append($"{proItem.Name}:{m_role.Tili}/{GameConst.MAX_ROLE_TILI}\n");
-			}
 			else if (proItem.PropertyName == "Mp")
 			{
 				var color = m_role.GetMPColor();

@@ -242,22 +242,16 @@ public class AIManager
         //普通攻击
         if (magic.DamageType == 0)
         {
-            //队伍1武学常识
-            int totalWuxue = BattleModel.GetTotalWuXueChangShi(r1.team);
-
-            //队伍2武学常识
-            int totalWuxue2 = BattleModel.GetTotalWuXueChangShi(r2.team);
-
             if (r1.Mp <= magic.MpCost) //已经不够内力释放了
             {
                 rst.damage = 1 + UnityEngine.Random.Range(0, 10);
                 return rst;
             }
             //总攻击力＝(人物攻击力×3 ＋ 武功当前等级攻击力)/2 ＋武器加攻击力 ＋ 防具加攻击力 ＋ 武器武功配合加攻击力 ＋我方武学常识之和
-            int attack = ((r1.Attack - r1.GetWeaponProperty("Attack") - r1.GetArmorProperty("Attack")) * 3 ) / 2 + r1.GetWeaponProperty("Attack") + r1.GetArmorProperty("Attack") + r1.GetExtraAttack(magic) + totalWuxue;
+            int attack = ((r1.Attack - r1.GetWeaponProperty("Attack") - r1.GetArmorProperty("Attack")) * 3 ) / 2 + r1.GetWeaponProperty("Attack") + r1.GetArmorProperty("Attack") + r1.GetExtraAttack(magic);
             
             //总防御力 ＝ 人物防御力 ＋武器加防御力 ＋ 防具加防御力 ＋ 敌方武学常识之和
-            int defence = r2.Defense + totalWuxue2;
+            int defence = r2.Defense;
 
             //伤害 ＝ （总攻击力－总防御×3）×2 / 3 + RND(20) – RND(20)                  （公式1）
             int v = (attack - defence * 3) * 2 / 3 + UnityEngine.Random.Range(0, 20) - UnityEngine.Random.Range(0, 20);
@@ -278,7 +272,7 @@ public class AIManager
             {
                 //8、if  伤害 > 0 then
                 //    伤害＝ 伤害 ＋ 我方体力/15  ＋ 敌人受伤点数/ 20
-                v = v + r1.Tili / 15 + r2.Hurt / 20;
+                v = v  + r2.Hurt / 20;
             }
             
             //点、线、十字的伤害，距离就是两人相差的格子数，最小为1。
@@ -313,16 +307,16 @@ public class AIManager
 
             //攻击带毒
             //中毒程度＝武功等级×武功中毒点数＋人物攻击带毒
-            int add = 10 + r1.AttackPoison;
+            int add = 10;
             //if 敌人抗毒> 中毒程度 或 敌人抗毒> 90 则不中毒
             //敌人中毒=敌人已中毒＋ 中毒程度/15
             //if 敌人中毒> 100 then 敌人中毒 ＝100
             //if 敌人中毒<0 then 敌人中毒=0
-            if (r2.AntiPoison <= add && r2.AntiPoison <= 90)
+            /*if (r2.AntiPoison <= add && r2.AntiPoison <= 90)
             {
                 int poison = Tools.Limit(add / 15, 0, GameConst.MAX_ROLE_ATK_POISON);
                 rst.poison = poison;
-            }
+            }*/
   
             return rst;
         }
@@ -346,30 +340,11 @@ public class AIManager
             
             return rst;
         }
-        else if ((int)magic.DamageType == 2) //用毒 -GameUtil::usePoison
-        {
-            rst.poison = usePoison(r1, r2);
-            return rst;
-        }
-        else if ((int)magic.DamageType == 3) //解毒
-        {
-            rst.depoison = detoxification(r1, r2);
-            return rst;
-        }
         else if ((int)magic.DamageType == 4) //治疗
         {
             var _rst = medicine(r1, r2);
             rst.heal = _rst.heal;
             rst.hurt = _rst.hurt;
-            return rst;
-        }
-        else if ((int)magic.DamageType == 5) //暗器
-        {
-            var anqi = skill.Anqi;
-            var _rst = hiddenWeapon(r1, r2, anqi);
-            rst.damage = _rst.damage;
-            rst.hurt = _rst.hurt;
-            rst.poison = _rst.poison;
             return rst;
         }
         return null;
@@ -385,26 +360,6 @@ public class AIManager
                 items.Add(tmp);
         }
         return items;
-    }
-
-
-    //用毒
-    /// </summary>
-    /// 中毒计算公式可以参考：https://tiexuedanxin.net/thread-365140-1-1.html
-    /// 也参考War_PoisonHurt：https://github.com/ZhanruiLiang/jinyong-legend
-    /// 
-    /// </summary>
-    /// <param name="r1"></param>
-    /// <param name="r2"></param>
-    /// <returns></returns>
-    int usePoison(RoleInstance r1, RoleInstance r2)
-    {
-        //中毒程度 ＝（用毒能力－抗毒能力）/ 4
-        int poison = (r1.UsePoison - r2.AntiPoison) / 4;
-        //小于0则为0
-        if (poison < 0)
-            poison = 0;
-        return poison;
     }
 
     //医疗
@@ -438,66 +393,5 @@ public class AIManager
         rst.hurt = -addHp;
         return rst;
     }
-
-    //解毒
-    /// </summary>
-    /// 解毒计算公式可以参考ExecDecPoison：https://github.com/ZhanruiLiang/jinyong-legend
-    ///
-    /// 
-    /// </summary>
-    /// <param name="r1"></param>
-    /// <param name="r2"></param>
-    /// <returns></returns>
-    int detoxification(RoleInstance r1, RoleInstance r2)
-    {
-        if (r2.Poison > r1.DePoison + 20)
-        {
-            GameUtil.DisplayPopinfo("中毒太重无法解毒");
-            return 0;
-        }
-        int add = (r1.DePoison / 3) + UnityEngine.Random.Range(0, 10) - UnityEngine.Random.Range(0, 10);
-        int depoison = Tools.Limit(add, 0, r2.Poison);
-        return depoison;
-    }
-
-    //暗器
-    //返回值为一正数
-    /// </summary>
-    /// 暗器计算公式可以参考War_AnqiHurt：https://tiexuedanxin.net/forum.php?mod=viewthread&tid=394465
-    ///
-    /// 
-    /// </summary>
-    /// <param name="r1"></param>
-    /// <param name="r2"></param>
-    /// <param name="anqi"></param>
-    /// <returns></returns>
-    SkillCastResult hiddenWeapon(RoleInstance r1, RoleInstance r2, Jyx2ConfigItem anqi)
-    {
-        SkillCastResult rst = new SkillCastResult();
-        //增加生命 = (暗器增加生命/a-random(5)-暗器能力*2)/3;
-        //式中暗器增加生命为负值.
-        //当受伤程度 = 100，a = 1;
-        //当66 < 受伤程度 <= 99, a = 1;
-        //当33 < 受伤程度 <= 66, a = 2;
-        //当0 < 受伤程度 <= 33, a = 3;
-        //当受伤程度 = 0, a = 4;
-        int a = (int)Math.Ceiling((double)r2.Hurt / 33);
-        if (a == 4) a = 3;
-        int v = (anqi.AddHp / (4 - a) - UnityEngine.Random.Range(0, 5) - r1.Anqi * 2) / 3;
-        rst.damage = -v;
-        //敌人受伤程度
-        rst.hurt = -v / 4; //此处v为负值
-        //当暗器带毒 > 0,
-        //增加中毒程度 = [(暗器带毒 + 暗器技巧) / 2 - 抗毒能力] / 2;
-        //当抗毒 = 100, 增加中毒程度 = 0.
-        if (anqi.ChangePoisonLevel > 0)
-        {
-            int add = ((anqi.ChangePoisonLevel + r1.Anqi) / 2 - r2.AntiPoison) / 2;
-            if (r2.AntiPoison == 100)
-                add = 0;
-            int poison = Tools.Limit(add, 0, GameConst.MAX_USE_POISON);
-            rst.poison = poison;
-        }
-        return rst;
-    }
+    
 }
