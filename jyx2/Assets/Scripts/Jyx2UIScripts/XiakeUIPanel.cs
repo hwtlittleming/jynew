@@ -224,11 +224,6 @@ public partial class XiakeUIPanel : Jyx2_UIBase
 	{
 
 		var curMap = LevelMaster.GetCurrentGameMap();
-		if (!curMap.IsWorldMap())
-		{
-			GameUtil.DisplayPopinfo("必须在大地图才可以角色离队");
-			return;
-		}
 
 		if (m_currentRole == null)
 			return;

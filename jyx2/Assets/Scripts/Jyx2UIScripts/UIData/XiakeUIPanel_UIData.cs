@@ -37,7 +37,7 @@ public partial class XiakeUIPanel
 		ButtonSelectArmor_Button = transform.Find("MainContent/ButtonSelectArmor").GetComponent<Button>();
 		ButtonSelectBook_Button = transform.Find("MainContent/ButtonSelectBook").GetComponent<Button>();
 		LeaveButton_Button = transform.Find("MainContent/LeaveButton").GetComponent<Button>();
-		RoleParent_RectTransform = transform.Find("RoleScroll/Viewport/RoleParent").GetComponent<RectTransform>();
-		BackButton_Button = transform.Find("BackButton").GetComponent<Button>();
+		RoleParent_RectTransform = transform.Find("MainContent/RoleScroll/Viewport/RoleParent").GetComponent<RectTransform>();
+		BackButton_Button = transform.Find("MainContent/BackButton").GetComponent<Button>();
 	}
 }
