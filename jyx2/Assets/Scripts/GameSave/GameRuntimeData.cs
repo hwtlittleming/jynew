@@ -282,9 +282,11 @@ namespace Jyx2
                 }
             }
 
-            //清空角色身上的装备 todo
-            role.Weapon = -1;
-            role.Armor = -1;
+            //清空角色身上的装备
+            role.Equipments[0] = null;
+            role.Equipments[1] = null;
+            role.Equipments[2] = null;
+            role.Equipments[3] = null;
 
             role.Items.Clear();   
             
@@ -307,10 +309,10 @@ namespace Jyx2
             }
 
             //卸下角色身上的装备，清空修炼
-            role.UnequipItem(role.GetWeapon());
-            role.Weapon = -1;
-            role.UnequipItem(role.GetArmor());
-            role.Armor = -1;
+            role.UnequipItem(role.Equipments[0],0);
+            role.UnequipItem(role.Equipments[1],1);
+            role.UnequipItem(role.Equipments[2],2);
+            role.UnequipItem(role.Equipments[3],3);
 
             TeamId.Remove(roleId);
             role.Recover(true);

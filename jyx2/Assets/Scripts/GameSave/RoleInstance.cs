@@ -42,7 +42,8 @@ namespace Jyx2
         [SerializeField] public int Mp;
         [SerializeField] public int MaxMp;
         [SerializeField] public int Hurt; //受伤程度
-
+        [SerializeField] public String State; //受伤程度 中毒等
+        
         [SerializeField] public int Attack; //攻击力
         [SerializeField] public int Defense; //防御力
         [SerializeField] public int Speed; //速度
@@ -55,7 +56,7 @@ namespace Jyx2
         //资质
         [SerializeField] public int Strength; //力量
         [SerializeField] public int IQ; //智慧
-        [SerializeField] public int Constitution; //根骨
+        [SerializeField] public int Constitution; //体质
         [SerializeField] public int Agile; //敏捷
         [SerializeField] public int Luck; //幸运
 
@@ -63,11 +64,7 @@ namespace Jyx2
 
         [SerializeField] public List<SkillInstance> skills = new List<SkillInstance>(); //武功
         [SerializeField] public List<Jyx2ConfigCharacterItem> Items = new List<Jyx2ConfigCharacterItem>(); //道具
-
-        [SerializeField] public int Weapon; //武器
-        [SerializeField] public int Armor; //防具
-        [SerializeField] public int Shoes; //代步
-        [SerializeField] public int Treasure; //宝物
+        [SerializeField] public List<Jyx2ConfigItem> Equipments = new List<Jyx2ConfigItem>() {null,null,null,null}; //装备：0武器 1防具 2鞋子 4宝物
         
         [SerializeField] public int CurrentSkill = 0; //当前技能
         #endregion
@@ -141,7 +138,13 @@ namespace Jyx2
             MaxMp = Data.MaxMp;
             Rate = (int)Data.Rate;
             Moral = Data.Moral;
-            Describe = Data.Descripe;
+            Describe = Data.Descripe; 
+            State = Data.State;
+            
+            Strength = Data.Strength;
+            IQ = Data.IQ;
+            Constitution = Data.Constitution;
+            Agile = Data.Agile;
             
             Attack = Data.Attack;
             Speed = Data.Speed;
@@ -154,11 +157,11 @@ namespace Jyx2
             Luck = Data.Luck;
             
         
-            Weapon = Data.Weapon != null ? Data.Weapon.Id : -1;
-            Armor = Data.Armor != null ? Data.Armor.Id : -1;
-            Armor = Data.Shoes != null ? Data.Shoes.Id : -1;
-            Armor = Data.Treasure != null ? Data.Treasure.Id : -1;
-
+            Equipments[0] = Data.Weapon == null ? null :GameConfigDatabase.Instance.Get<Jyx2ConfigItem>(Data.Weapon.Id) ;
+            Equipments[1] = Data.Armor == null ? null :GameConfigDatabase.Instance.Get<Jyx2ConfigItem>(Data.Armor.Id) ;
+            Equipments[2] = Data.Shoes == null ? null :GameConfigDatabase.Instance.Get<Jyx2ConfigItem>(Data.Shoes.Id) ;
+            Equipments[3] = Data.Treasure == null ? null :GameConfigDatabase.Instance.Get<Jyx2ConfigItem>(Data.Treasure.Id) ;
+            
             IQ = Data.IQ;
 
             ResetItems();
@@ -260,30 +263,6 @@ namespace Jyx2
         public int ExpGot; //战斗中获得的经验
 
         #endregion
-
-        public Jyx2ConfigItem GetWeapon()
-        {
-            if (Weapon == -1) return null;
-            return GameConfigDatabase.Instance.Get<Jyx2ConfigItem>(Weapon);
-        }
-
-        public Jyx2ConfigItem GetArmor()
-        {
-            if (Armor == -1) return null;
-            return GameConfigDatabase.Instance.Get<Jyx2ConfigItem>(Armor);
-        }
-        
-        public Jyx2ConfigItem GetShoes()
-        {
-            if (Shoes == -1) return null;
-            return GameConfigDatabase.Instance.Get<Jyx2ConfigItem>(Shoes);
-        }
-        
-        public Jyx2ConfigItem GetTreasure()
-        {
-            if (Treasure == -1) return null;
-            return GameConfigDatabase.Instance.Get<Jyx2ConfigItem>(Treasure);
-        }
 
         /// <summary>
         /// 战斗中使用的招式
@@ -415,10 +394,6 @@ namespace Jyx2
                             return true;
                     }
                     int level = GetWugongLevel(item.Skill.Id);
-                    //if (level >= 0 && level < GameConst.MAX_WUGONG_LEVEL)
-                    //{
-                    //    return true;
-                    //}
                     if (level < 0 && this.skills.Count >= GameConst.MAX_ROLE_WUGONG_COUNT)
                     {
                         return false;
@@ -431,8 +406,8 @@ namespace Jyx2
                 }
 
                 //上面的判断未确定则进入下面的判断链
-                return testAttr(this.Attack - GetWeaponProperty("Attack") - GetArmorProperty("Attack"), item.ConditionAttack)
-                       && testAttr(this.Speed - GetWeaponProperty("Qinggong") - GetArmorProperty("Qinggong"), item.ConditionQinggong)
+                return testAttr(this.Attack - GetEquipmentProperty("Attack",0) - GetEquipmentProperty("Attack",1), item.ConditionAttack)
+                       && testAttr(this.Speed - GetEquipmentProperty("Speed",0) - GetEquipmentProperty("Speed",1), item.ConditionQinggong)
                        && testAttr(this.MaxMp, item.ConditionMp)
                        && testAttr(this.IQ, item.ConditionIQ);
             }
@@ -510,15 +485,17 @@ namespace Jyx2
         }
 
         /// <summary>
-        /// 卸下物品（装备）
+        /// 卸下物品（装备） 解除装备与角色关系+角色属性增减+存储中的角色身上装备去除
         /// </summary>
         /// <param name="item"></param>
-        public void UnequipItem(Jyx2ConfigItem item)
+        public void UnequipItem(Jyx2ConfigItem item,int index)
         {
-            if (item == null)
+            if (item == null || item.Id == 0)
                 return;
-
-            runtime.SetItemUser(item.Id, -1);
+            
+            this.Equipments[index] = null; //存储中的角色身上装备去除
+            runtime.SetItemUser(item.Id, -1);// 解除装备与角色关系
+            //角色属性增减
             this.SetHPAndRefreshHudBar(this.Hp - item.AddHp);
             this.MaxHp -= item.AddMaxHp;
             this.Mp -= item.AddMp;
@@ -844,16 +821,11 @@ namespace Jyx2
             //return Poison > 0 ? ColorStringDefine.Hp_posion : ColorStringDefine.Default;
         }
 
-        public int GetWeaponProperty(string propertyName)
+        public int GetEquipmentProperty(string propertyName,int index)
         {
-            return Weapon != -1 ? (int)GetWeapon().GetType().GetField(propertyName).GetValue(GetWeapon()) : 0;
+            return this.Equipments[index] != null ? (int)Equipments[index].GetType().GetField(propertyName).GetValue(Equipments[index]) : 0;
         }
-
-        public int GetArmorProperty(string propertyName)
-        {
-            return Armor != -1 ? (int)GetArmor().GetType().GetField(propertyName).GetValue(GetArmor()) : 0;
-        }
-
+        
         /// <summary>
         /// 获取武器武功配合加攻击力
         ///
@@ -871,8 +843,8 @@ namespace Jyx2
         /// <returns></returns>
         public int GetExtraAttack(Jyx2ConfigSkill wugong)
         {
-            if (Weapon != -1 && this.GetWeapon().PairedWugong != null && this.GetWeapon().PairedWugong.Id == wugong.Id)
-                return this.GetWeapon().ExtraAttack;
+            if (Equipments[0] !=null && Equipments[0].Id != -1 && this.Equipments[0].PairedWugong != null && this.Equipments[0].PairedWugong.Id == wugong.Id)
+                return this.Equipments[0].ExtraAttack;
             return 0;
 
         }

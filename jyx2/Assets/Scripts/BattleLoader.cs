@@ -163,6 +163,7 @@ public class BattleLoader : MonoBehaviour
             RoleInstance r = new RoleInstance();
             RoleInstance s = runtime.GetRole(roleId);
             r = DeepCopy(s);
+            r.skills = s.skills;
             r.Data.Model = s.Data.Model;//这些gameobject深拷贝不进去 赋值引用
             r.Zhaoshis = s.Zhaoshis;
             r.Items = s.Items;

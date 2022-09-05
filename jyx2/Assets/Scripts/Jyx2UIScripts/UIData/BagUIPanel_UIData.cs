@@ -28,8 +28,8 @@ public partial class BagUIPanel
 
 	public void InitTrans()
 	{
-		ItemDes_RectTransform = transform.Find("ItemDes").GetComponent<RectTransform>();
-		DesText_Text = transform.Find("ItemDes/Viewport/DesText").GetComponent<Text>();
+		ItemDes_RectTransform = transform.Find("TipsScroll/Viewport/ItemDes").GetComponent<RectTransform>();
+		DesText_Text = transform.Find("TipsScroll/Viewport/ItemDes/DesText").GetComponent<Text>();
 		ItemRoot_RectTransform = transform.Find("ItemScroll/Viewport/ItemRoot").GetComponent<RectTransform>();
 		UseBtn_Button = transform.Find("Btns/UseBtn").GetComponent<Button>();
 		UseBtn_Text = transform.Find("Btns/UseBtn/Text").GetComponent<Text>();

@@ -45,6 +45,8 @@ public class Jyx2Player : MonoBehaviour
         
         return LevelMaster.Instance.GetPlayer();
     }
+    public HybridAnimancerComponent m_Animancer;
+    public Animator m_Animator;
 
     
     public bool IsOnBoat;
@@ -171,16 +173,11 @@ public class Jyx2Player : MonoBehaviour
         //判断交互范围
         Debug.DrawRay(transform.position, transform.forward, Color.yellow);
         
-        //获得当前可以触发的交互物体
+        //获得当前可以触发的交互物体,离开交互物体 将UI去除
         var gameEvent = DetectInteractiveGameEvent();
         if (gameEvent == null)
         {
             evtManager.OnExitAllEvents();
-        }
-        else
-        {
-            //Debug.Log("find interactive trigger:" + gameEvent.name);
-            evtManager.OnTriggerEvent(gameEvent);
         }
     }
 
@@ -260,14 +257,15 @@ public class Jyx2Player : MonoBehaviour
         for (int i = 0; i < count; i++)
         {
             var target = targets[i];
-
-            if (CanSee(target) && SetInteractiveGameEvent(target))
+            var evt = target.GetComponent<GameEvent>();
+            if (evt == null) return null;
+            if (evt.m_EventType.Contains("1") || evt.m_EventType.Contains("2") || evt.m_EventType.Contains("3") ||
+                evt.m_EventType.Contains("4"))
             {
                 //找到第一个可交互的物体，则结束
                 return target.GetComponent<GameEvent>();
             }
         }
-
         return null;
     }
 
@@ -318,16 +316,11 @@ public class Jyx2Player : MonoBehaviour
         if (evt == null)
             return false;
 
-        //有进入触发事件
-        if (evt.m_EnterEventId != GameEvent.NO_EVENT)
-            return false;
+        //有非直接触发事件(需弹出UI按钮的事件)
+        if (evt.m_EventType.Contains("1") || evt.m_EventType.Contains("2")  || evt.m_EventType.Contains("3")  || evt.m_EventType.Contains("4"))
+            return true;
 
-        //没有交互触发事件
-        if (evt.m_InteractiveEventId == GameEvent.NO_EVENT && evt.m_UseItemEventId == GameEvent.NO_EVENT)
-            return false;
-
-
-        return true;
+        return false;
     }
     
 

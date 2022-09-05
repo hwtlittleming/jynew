@@ -26,7 +26,7 @@ public partial class SavePanel
 	public void InitTrans()
 	{
 		SaveParent_RectTransform = transform.Find("SaveParent").GetComponent<RectTransform>();
-		BackButton_Button = transform.Find("TopbarUI/BackButton").GetComponent<Button>();
+		BackButton_Button = transform.Find("MainText/BackButton").GetComponent<Button>();
 		SaveItem_Button = transform.Find("ItemRoot/SaveItem").GetComponent<Button>();
 		Main_Text = transform.Find("MainText").GetComponent<Text>();
 		ImButton_Button = transform.Find("FileIO/Import").GetComponent<Button>();
