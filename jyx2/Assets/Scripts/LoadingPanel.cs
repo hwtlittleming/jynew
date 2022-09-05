@@ -49,53 +49,18 @@ public class LoadingPanel : MonoBehaviour
             var handle = SceneManager.LoadSceneAsync(GameConst.DefaultMainMenuScene);
             while (!handle.isDone)
             {
-                //---------------------------------------------------------------------------
-                //m_LoadingText.text = "载入中... " + (int)(handle.progress * 100) + "%";
-                //---------------------------------------------------------------------------
-                //特定位置的翻译【载入中文本显示】
-                //---------------------------------------------------------------------------
                 m_LoadingText.text = "载入中... ".GetContent(nameof(LoadingPanel)) + (int)(handle.progress * 100) + "%";
-                //---------------------------------------------------------------------------
-                //---------------------------------------------------------------------------
                 await UniTask.WaitForEndOfFrame();
             }
         }
         //切换场景
         else
         {
-            var path = Jyx2ResourceHelper.GetAssetRefAddress(sceneAsset, typeof(TextAsset));
-            if(MODLoader.Remap.ContainsKey(path))
+            var async = Addressables.LoadSceneAsync(sceneAsset);
+            while (!async.IsDone)
             {
-                var assetBundleItem = MODLoader.Remap[path];
-                var handle = SceneManager.LoadSceneAsync(assetBundleItem.Name);
-                while (!handle.isDone)
-                {
-                    //---------------------------------------------------------------------------
-                    //m_LoadingText.text = "载入中... " + (int)(handle.progress * 100) + "%";
-                    //---------------------------------------------------------------------------
-                    //特定位置的翻译【载入中文本显示】
-                    //---------------------------------------------------------------------------
-                    m_LoadingText.text = "载入中... ".GetContent(nameof(LoadingPanel)) + (int)(handle.progress * 100) + "%";
-                    //---------------------------------------------------------------------------
-                    //---------------------------------------------------------------------------
-                    await UniTask.WaitForEndOfFrame();
-                }
-            }
-            else
-            {
-                var async = Addressables.LoadSceneAsync(sceneAsset);
-                while (!async.IsDone)
-                {
-                    //---------------------------------------------------------------------------
-                    //m_LoadingText.text = "载入中... " + (int)(async.PercentComplete * 100) + "%";
-                    //---------------------------------------------------------------------------
-                    //特定位置的翻译【载入中文本显示】
-                    //---------------------------------------------------------------------------
-                    m_LoadingText.text = "载入中... ".GetContent(nameof(LoadingPanel)) + (int)(async.PercentComplete * 100) + "%";
-                    //---------------------------------------------------------------------------
-                    //---------------------------------------------------------------------------
-                    await UniTask.WaitForEndOfFrame();
-                }
+                m_LoadingText.text = "载入中... ".GetContent(nameof(LoadingPanel)) + (int)(async.PercentComplete * 100) + "%";
+                await UniTask.WaitForEndOfFrame();
             }
         }
         //要再等一帧

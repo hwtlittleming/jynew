@@ -51,7 +51,7 @@ public class RoleUIItem : MonoBehaviour
 		if (pros != null)
 			m_showPropertyIds = pros;
 
-		string nameText = role.Name + " Lv." + role.Level;
+		string nameText = role.Name;
 		m_roleName.text = nameText;
 
 		ShowProperty();

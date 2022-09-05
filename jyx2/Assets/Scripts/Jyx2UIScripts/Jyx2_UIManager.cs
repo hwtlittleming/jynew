@@ -229,13 +229,6 @@ public class Jyx2_UIManager : MonoBehaviour
 	public async UniTask ShowMainUI()
     {
         var map = LevelMaster.GetCurrentGameMap();
-        /*if (map == null)
-        {
-            //this.HideUI("MainUIPanel");
-            this.ShowUI(nameof(BattleMainUIPanel),BattleMainUIState.None);
-            Debug.Log("当前地图没有地图数据");
-            return;
-        }*/
         if (map != null && map.Tags.Contains("BATTLE"))
         {
             await ShowUIAsync(nameof(BattleMainUIPanel), BattleMainUIState.None);

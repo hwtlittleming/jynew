@@ -91,6 +91,9 @@ namespace Jyx2Configs
         [BoxGroup(DEFAULT_GROUP_NAME)] [LabelText("装备类型")][EnumToggleButtons] 
         public Jyx2ConfigItemEquipmentType EquipmentType;
         
+        [BoxGroup(DEFAULT_GROUP_NAME)] [LabelText("品质")]
+        public String Quality;
+        
         bool ShowEquipmentType()
         {
             return (int)ItemType == 1;
@@ -136,7 +139,7 @@ namespace Jyx2Configs
         [BoxGroup(CONDITION_GROUP)][LabelText("需攻击力")]
         public int ConditionAttack;
 
-        [BoxGroup(CONDITION_GROUP)][LabelText("需轻功")]
+        [BoxGroup(CONDITION_GROUP)][LabelText("需速度")]
         public int ConditionQinggong;
         
         [BoxGroup(CONDITION_GROUP)][LabelText("需智商")]

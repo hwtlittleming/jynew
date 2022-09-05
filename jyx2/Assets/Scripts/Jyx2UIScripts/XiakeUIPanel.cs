@@ -13,6 +13,7 @@ using Jyx2.Middleware;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Text;
 using Cysharp.Threading.Tasks;
 using i18n.TranslatorDef;
@@ -20,6 +21,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 using Jyx2Configs;
+using Vector3 = UnityEngine.Vector3;
 
 public partial class XiakeUIPanel : Jyx2_UIBase
 {
@@ -39,8 +41,10 @@ public partial class XiakeUIPanel : Jyx2_UIBase
 		//there is button for this, so doesn't get into the listing of dpad nav
 		BindListener(BackButton_Button, OnBackClick, false);
 		
-		BindListener(ButtonSelectWeapon_Button, OnWeaponClick);
-		BindListener(ButtonSelectArmor_Button, OnArmorClick);
+		BindListener(ButtonSelectWeapon_Button, () => OnEquipmentClick(0));
+		BindListener(ButtonSelectArmor_Button, () => OnEquipmentClick(1));
+		BindListener(ButtonSelectShoes_Button, () => OnEquipmentClick(2));
+		BindListener(ButtonSelectTreasure_Button, () => OnEquipmentClick(3));
 		BindListener(LeaveButton_Button, OnLeaveClick);
 	}
 
@@ -92,7 +96,7 @@ public partial class XiakeUIPanel : Jyx2_UIBase
 
 		InfoText_Text.text = GetInfoText(m_currentRole);
 		SkillText_Text.text = GetSkillText(m_currentRole);
-		ItemsText_Text.text = GetItemsText(m_currentRole);
+		RefreshEquipments(m_currentRole);
 
 		//select the first available button
 		changeCurrentSelection(0);
@@ -151,66 +155,136 @@ public partial class XiakeUIPanel : Jyx2_UIBase
 		var color1 = role.GetHPColor1();
 		var color2 = role.GetHPColor2();
 
-		//---------------------------------------------------------------------------
-		//特定位置的翻译【XiakePanel角色信息显示大框的信息】
-		//---------------------------------------------------------------------------
-		sb.AppendLine(string.Format("等级 {0}".GetContent(nameof(XiakeUIPanel)), role.Level));
-		sb.AppendLine(string.Format("经验 {0}/{1}".GetContent(nameof(XiakeUIPanel)), role.Exp, role.GetLevelUpExp()));
 		sb.AppendLine(string.Format("生命 <color={0}>{1}</color>/<color={2}>{3}</color>".GetContent(nameof(XiakeUIPanel)), color1, role.Hp, color2,
 			role.MaxHp));
-		sb.AppendLine(string.Format("能量 <color={0}>{1}/{2}</color>".GetContent(nameof(XiakeUIPanel)), color, role.Mp, role.MaxMp));
-
-		sb.AppendLine();
-		sb.AppendLine(string.Format("力量 {0}".GetContent(nameof(XiakeUIPanel)), role.Strength));
+		sb.Append(string.Format("能量 <color={0}>{1}/{2}</color>".GetContent(nameof(XiakeUIPanel)), color, role.Mp, role.MaxMp));
+		sb.AppendLine(string.Format("状态 {0}        ".GetContent(nameof(XiakeUIPanel)), role.State));
+		sb.AppendLine(string.Format("战斗经验 {0}/{1}".GetContent(nameof(XiakeUIPanel)), role.Exp, role.GetLevelUpExp()));
+		
+		sb.AppendLine("<color=#FF9610>--资质" + "--</color>");
+		sb.Append(string.Format(("力量 {0}" + FlexibleLength(role.Strength)).GetContent(nameof(XiakeUIPanel)), role.Strength));
 		sb.AppendLine(string.Format("智慧 {0}".GetContent(nameof(XiakeUIPanel)), role.IQ));
-		sb.AppendLine(string.Format("根骨 {0}".GetContent(nameof(XiakeUIPanel)), role.Constitution));
+		sb.Append(string.Format(("体质 {0}" + FlexibleLength(role.Constitution)).GetContent(nameof(XiakeUIPanel)), role.Constitution));
 		sb.AppendLine(string.Format("敏捷 {0}".GetContent(nameof(XiakeUIPanel)), role.Agile));
-		sb.AppendLine(string.Format("幸运 {0}".GetContent(nameof(XiakeUIPanel)), role.Luck));
-		sb.AppendLine();
-		sb.AppendLine(string.Format("攻击 {0}".GetContent(nameof(XiakeUIPanel)), role.Attack));
+		sb.AppendLine("<color=#FF9610>--属性" + "--</color>");
+		sb.Append(string.Format(("攻击 {0}" + FlexibleLength(role.Attack)).GetContent(nameof(XiakeUIPanel)), role.Attack));
 		sb.AppendLine(string.Format("防御 {0}".GetContent(nameof(XiakeUIPanel)), role.Defense));
-		sb.AppendLine(string.Format("速度 {0}".GetContent(nameof(XiakeUIPanel)), role.Speed));
+		sb.Append(string.Format(("速度 {0}" + FlexibleLength(role.Speed)).GetContent(nameof(XiakeUIPanel)), role.Speed));
 		sb.AppendLine(string.Format("回复 {0}".GetContent(nameof(XiakeUIPanel)), role.Heal));
-		sb.AppendLine(string.Format("暴击 {0}%--{1}倍".GetContent(nameof(XiakeUIPanel)), role.Critical,role.CriticalLevel));
-		sb.AppendLine(string.Format("闪避 {0}%".GetContent(nameof(XiakeUIPanel)), role.Miss));
+		sb.Append(string.Format(("暴击 {0}" + FlexibleLength(role.Critical)).GetContent(nameof(XiakeUIPanel)), role.Critical,role.CriticalLevel));
+		sb.AppendLine(string.Format("闪避 {0}".GetContent(nameof(XiakeUIPanel)), role.Miss));
+		sb.AppendLine(string.Format(("幸运 {0}" + FlexibleLength(role.Luck)).GetContent(nameof(XiakeUIPanel)), role.Luck));
+		sb.AppendLine(string.Format("描述: {0}".GetContent(nameof(XiakeUIPanel)), role.Describe));
+        		
 		sb.AppendLine();
 		//---------------------------------------------------------------------------
 		//---------------------------------------------------------------------------
 		
 		return sb.ToString();
+	}
+
+	//判断 第二列离第一列要生成多少个transparent透明数字位(为了保持列距整齐)
+	StringBuilder FlexibleLength(int attr,int maxLength = 9)
+	{
+		int count = 0;
+		StringBuilder result = new StringBuilder();
+		if (attr < 0)
+		{
+			attr = Math.Abs(attr);
+			count++;
+		}else if (attr == 0)
+		{
+			return new StringBuilder("            ");//12个
+		}
+		while (attr > 0)
+		{
+			attr /= 10;
+			count++;
+		}
+		count = Math.Abs(maxLength - count);
+		result.Append("<color=transparent>");
+		while (count > 0)
+		{
+			result.Append("0");
+			count--;
+		}
+		result.Append("</color>");
+		return result;
 	}
 
 	string GetSkillText(RoleInstance role)
 	{
 		StringBuilder sb = new StringBuilder();
+		sb.AppendLine("<color=#FF9610>--奇术" + "--</color>");
 		foreach (var skill in role.skills)
 		{
 			sb.AppendLine(skill.Name + " " + skill.GetLevel());
 		}
-
+		sb.AppendLine("<color=#FF9610>--绝技" + "--</color>");
 		return sb.ToString();
 	}
 
-	string GetItemsText(RoleInstance role)
+	void RefreshEquipments(RoleInstance role)
 	{
-		StringBuilder sb = new StringBuilder();
-		var weapon = role.GetWeapon();
-		//特定位置的翻译【XiakePanel角色信息显示大框的信息】
-		//---------------------------------------------------------------------------
-		sb.AppendLine("武器：".GetContent(nameof(XiakeUIPanel)) + (weapon == null ? "" : weapon.Name));
-
-		var armor = role.GetArmor();
-		sb.AppendLine("防具：".GetContent(nameof(XiakeUIPanel)) + (armor == null ? "" : armor.Name));
+		for (int i = 0; i< Equipments.childCount; i++)
+		{
+			Transform transform = Equipments.GetChild(i);
+			Text m_roleName = transform.Find("NameText").GetComponent<Text>();
+			Image m_roleHead = transform.Find("Image").GetComponent<Image>();
+			if (transform.name.Contains("Weapon"))
+			{
+				Jyx2ConfigItem item = role.Equipments[0];
+				if (item !=null)
+				{
+					m_roleName.text = item.Name;
+					m_roleHead.LoadAsyncForget(item.GetPic());
+				}else
+				{
+					m_roleHead.gameObject.SetActive(false);
+					m_roleName.text = "武器";
+				}
+			}
+			else if (transform.name.Contains("Armor"))
+			{
+				Jyx2ConfigItem item = role.Equipments[1];
+				if (item !=null)
+				{
+					m_roleName.text = item.Name;
+					m_roleHead.LoadAsyncForget(item.GetPic());
+				}else
+				{
+					m_roleHead.gameObject.SetActive(false);
+					m_roleName.text = "防具";
+				}
+			}
+			else if (transform.name.Contains("Shoes"))
+			{
+				Jyx2ConfigItem item = role.Equipments[2];
+				if (item !=null)
+				{
+					m_roleName.text = item.Name;
+					m_roleHead.LoadAsyncForget(item.GetPic());
+				}else
+				{
+					m_roleHead.gameObject.SetActive(false);
+					m_roleName.text = "代步";
+				}
+			}
+			else if (transform.name.Contains("Treasure"))
+			{
+				Jyx2ConfigItem item = role.Equipments[3];
+				if (item !=null)
+				{
+					m_roleName.text = item.Name;
+					m_roleHead.LoadAsyncForget(item.GetPic());
+				}else
+				{
+					m_roleHead.gameObject.SetActive(false);
+					m_roleName.text = "宝物";
+				}
+			}
+		}
 		
-		var shoes = role.GetShoes();
-		sb.AppendLine("代步：".GetContent(nameof(XiakeUIPanel)) + (shoes == null ? "" : shoes.Name));
-		
-		var treasure = role.GetTreasure();
-		sb.AppendLine("宝物：".GetContent(nameof(XiakeUIPanel)) + (treasure == null ? "" : treasure.Name));
-		//---------------------------------------------------------------------------
-		//---------------------------------------------------------------------------
-
-		return sb.ToString();
 	}
 
 	void OnBackClick()
@@ -259,56 +333,52 @@ public partial class XiakeUIPanel : Jyx2_UIBase
 		get { return GameRuntimeData.Instance; }
 	}
 
-	async void OnWeaponClick()
+	async void OnEquipmentClick(int index)
 	{
+		Jyx2ConfigItem.Jyx2ConfigItemEquipmentType type = Jyx2ConfigItem.Jyx2ConfigItemEquipmentType.武器;
+		Jyx2ConfigItem yetItem = m_currentRole.Equipments[index] != null ? m_currentRole.Equipments[index] : new Jyx2ConfigItem();
+		switch (index)
+		{
+			case 0:
+				type = Jyx2ConfigItem.Jyx2ConfigItemEquipmentType.武器;
+				break;
+			case 1:
+				type = Jyx2ConfigItem.Jyx2ConfigItemEquipmentType.防具;
+				break;
+			case 2:
+				type = Jyx2ConfigItem.Jyx2ConfigItemEquipmentType.代步;
+				break;
+			case 3:
+				type = Jyx2ConfigItem.Jyx2ConfigItemEquipmentType.宝物;
+				break;
+		}
 		await SelectFromBag(
 			(itemId) =>
 			{
 				var item = GameConfigDatabase.Instance.Get<Jyx2ConfigItem>(itemId);
-
 				//选择了当前使用的装备，则卸下
-				if (m_currentRole.Weapon == itemId)
+				if ( yetItem!=null && yetItem.Id == itemId)
 				{
-					m_currentRole.UnequipItem(m_currentRole.GetWeapon());
-					m_currentRole.Weapon = -1;
+					m_currentRole.UnequipItem(yetItem,index);
+					//反射有方法给特定对象的属性赋值
+					if (m_currentRole.Equipments[index] !=null)
+					{
+						m_currentRole.Equipments[index] = null;
+					}
 				}
 				//否则更新
 				else
 				{
-					m_currentRole.UnequipItem(m_currentRole.GetWeapon());
-					m_currentRole.Weapon = itemId;
-					m_currentRole.UseItem(m_currentRole.GetWeapon());
+					m_currentRole.UnequipItem(yetItem,index); //卸下原装备
+					m_currentRole.Equipments[index] = GameConfigDatabase.Instance.Get<Jyx2ConfigItem>(itemId);//替换存储的角色装备
+					m_currentRole.UseItem(m_currentRole.Equipments[index]); //加减属性
 					runtime.SetItemUser(item.Id, m_currentRole.GetJyx2RoleId());
 				}
 			},
-			(item) => { return item.EquipmentType == 0 && (runtime.GetItemUser(item.Id) == m_currentRole.GetJyx2RoleId() || runtime.GetItemUser(item.Id) == -1); },
-			m_currentRole.Weapon);
-	}
-
-	async void OnArmorClick()
-	{
-		await SelectFromBag(
-			(itemId) =>
-			{
-				var item = GameConfigDatabase.Instance.Get<Jyx2ConfigItem>(itemId);
-				if (m_currentRole.Armor == itemId)
-				{
-					m_currentRole.UnequipItem(m_currentRole.GetArmor());
-					m_currentRole.Armor = -1;
-				}
-				else
-				{
-					m_currentRole.UnequipItem(m_currentRole.GetArmor());
-					m_currentRole.Armor = itemId;
-					m_currentRole.UseItem(m_currentRole.GetArmor());
-					runtime.SetItemUser(item.Id, m_currentRole.GetJyx2RoleId());
-				}
-			},
-			(item) => { return (int)item.EquipmentType == 1 && (runtime.GetItemUser(item.Id) == m_currentRole.GetJyx2RoleId() || runtime.GetItemUser(item.Id) == -1); },
-			m_currentRole.Armor);
+			(item) => { return item.EquipmentType ==type && (runtime.GetItemUser(item.Id) == m_currentRole.GetJyx2RoleId() || runtime.GetItemUser(item.Id) == -1); },
+			m_currentRole.Equipments[index] == null ? -1 : m_currentRole.Equipments[index].Id);
 	}
 	
-
 	async UniTask SelectFromBag(Action<int> Callback, Func<Jyx2ConfigItem, bool> filter, int current_itemId)
 	{
 		await Jyx2_UIManager.Instance.ShowUIAsync(nameof(BagUIPanel), runtime.Items, new Action<int>((itemId) =>

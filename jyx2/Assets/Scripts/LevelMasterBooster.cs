@@ -67,7 +67,7 @@ public class LevelMasterBooster : MonoBehaviour
         if (m_IsBattleMap)
             return;
 
-        //设置所有的宝箱
+        //设置所有的宝箱 
         foreach(var chest in GameObject.FindObjectsOfType<MapChest>())
         {
             chest.Init();

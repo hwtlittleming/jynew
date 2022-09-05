@@ -16,10 +16,11 @@ public partial class InteractUIPanel : Jyx2_UIBase
 
 	Action m_callback1;
 	Action m_callback2;
+	Action m_callback3;
+	Action m_callback4;
 	private int buttonCount;
 	private float lastDpadY;
-	private int focusButtonPos
-		= 0;
+	private int focusButtonPos = 0;
 
 	protected override void OnCreate()
 	{
@@ -27,6 +28,8 @@ public partial class InteractUIPanel : Jyx2_UIBase
 
 		BindListener(MainBg_Button1, () => OnBtnClick(0), false);
 		BindListener(MainBg_Button2, () => OnBtnClick(1), false);
+		BindListener(MainBg_Button3, () => OnBtnClick(2), false);
+		BindListener(MainBg_Button4, () => OnBtnClick(3), false);
 	}
 
 	protected override void OnShowPanel(params object[] allParams)
@@ -35,22 +38,70 @@ public partial class InteractUIPanel : Jyx2_UIBase
 
 		if (allParams == null) return;
 
-		this.buttonCount = allParams.Length / 2;
-		MainBg_Button2.gameObject.SetActive(buttonCount == 2);
-
-		MainText_Text1.text = allParams[0] as string;
-		m_callback1 = allParams[1] as Action;
-
-		if (MainBg_Button2.gameObject.activeInHierarchy)
+		//后改更灵活的写法
+		if (allParams.Length == 2)
 		{
+			MainText_Text1.text = allParams[0] as string;
+			m_callback1 = allParams[1] as Action;
+			MainBg_Button2.gameObject.SetActive(false);
+			MainBg_Button3.gameObject.SetActive(false);
+			MainBg_Button4.gameObject.SetActive(false);
+		}
+		else if (allParams.Length == 4)
+		{
+			MainText_Text1.text = allParams[0] as string;
+			m_callback1 = allParams[1] as Action;
+			MainBg_Button2.gameObject.SetActive(true);
+			MainBg_Button3.gameObject.SetActive(false);
+			MainBg_Button4.gameObject.SetActive(false);
 			MainText_Text2.text = allParams[2] as string;
 			m_callback2 = allParams[3] as Action;
+		}
+		else if (allParams.Length == 6)
+		{
+			MainText_Text1.text = allParams[0] as string;
+			m_callback1 = allParams[1] as Action;
+			MainBg_Button2.gameObject.SetActive(true);
+			MainText_Text2.text = allParams[2] as string;
+			m_callback2 = allParams[3] as Action;
+			MainBg_Button3.gameObject.SetActive(true);
+			MainBg_Button4.gameObject.SetActive(false);
+			MainText_Text3.text = allParams[4] as string;
+			m_callback3 = allParams[5] as Action;
+		}
+		else if (allParams.Length == 8)
+		{
+			MainText_Text1.text = allParams[0] as string;
+			m_callback1 = allParams[1] as Action;
+			MainBg_Button2.gameObject.SetActive(true);
+			MainText_Text2.text = allParams[2] as string;
+			m_callback2 = allParams[3] as Action;
+			MainBg_Button3.gameObject.SetActive(true);
+			MainText_Text3.text = allParams[4] as string;
+			m_callback3 = allParams[5] as Action;
+			MainBg_Button4.gameObject.SetActive(true);
+			MainText_Text4.text = allParams[6] as string;
+			m_callback4 = allParams[7] as Action;
 		}
 	}
 
 	void OnBtnClick(int buttonIndex)
 	{
-		Action temp = buttonIndex == 0 ? m_callback1 : m_callback2;
+		Action temp = m_callback1;
+		if ( buttonIndex == 0 )
+		{
+			temp = m_callback1;
+		}else if ( buttonIndex == 1 )
+		{
+			temp = m_callback2;
+		}else if ( buttonIndex == 2 )
+		{
+			temp = m_callback3;
+		}else if ( buttonIndex == 3 )
+		{
+			temp = m_callback4;
+		}
+
 		Jyx2_UIManager.Instance.HideUI(nameof(InteractUIPanel));
 		temp?.Invoke();
 	}
@@ -80,5 +131,7 @@ public partial class InteractUIPanel : Jyx2_UIBase
 		base.OnHidePanel();
 		m_callback1 = null;
 		m_callback2 = null;
+		m_callback3 = null;
+		m_callback4 = null;
 	}
 }

@@ -62,7 +62,6 @@ public abstract class Jyx2_UIBase : MonoBehaviour
 		OnCreate();
 	}
 
-
 	public void Show(params object[] allParams)
 	{
 		this.gameObject.SetActive(true);
@@ -402,28 +401,7 @@ public abstract class Jyx2_UIBase : MonoBehaviour
 			currentlyReleased = true;
 		});
 	}
-
-	protected void setAreasHeightForItemCompleteView(float itemHeight, RectTransform[] areasToAdjust )
-	{
-		if (areasToAdjust.Length == 0)
-			return;
-
-		if (!scrollSizeAdjusted)
-		{
-			//shrink scroll and description boxes, to make sure no half items showing
-			var boxHeight = areasToAdjust[0].rect.height;
-			boxHeight = (float)Math.Floor(boxHeight / itemHeight) * itemHeight;
-
-			foreach(var area in areasToAdjust)
-			{
-				var scrollSize = area.sizeDelta;
-				area.sizeDelta = new Vector2(scrollSize.x, boxHeight);
-			}
-
-			scrollSizeAdjusted = true;
-		}
-	}
-
+	
 	protected void scrollIntoView(ScrollRect area, RectTransform item, GridLayoutGroup layout, float padding)
 	{
 		var itemHeight = layout.cellSize.y + layout.spacing.y;

@@ -603,8 +603,8 @@ public class BattleManager : MonoBehaviour
             List<RoleInstance> toRoleList = new List<RoleInstance>(); //攻击涵盖的角色, todo 角色属性变化 格子上的角色属性是否能跟着变化
             if (skill.Data.Name == "普通攻击")
             {
-                String attackRange = role.GetWeapon().attackRange; //攻击范围，默认为空:点攻击，名武器才有值
-                Jyx2ConfigItem weapon = role.GetWeapon();
+                String attackRange = role.Equipments[0].attackRange; //攻击范围，默认为空:点攻击，名武器才有值
+                Jyx2ConfigItem weapon = role.Equipments[0];
                 int dis = weapon.bestDistance; //获得持有武器的最佳攻击距离
                 if (attackRange != null && attackRange != "0")
                 {

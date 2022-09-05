@@ -100,5 +100,5 @@ MonoBehaviour:
   SceneId: -2
   EventId: -2
   InteractiveEventId: -1
-  UseItemEventId: -1
+  UseItemEventId: 0
   EnterEventId: -1

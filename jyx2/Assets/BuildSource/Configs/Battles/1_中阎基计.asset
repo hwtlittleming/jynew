@@ -36,24 +36,25 @@ MonoBehaviour:
   Enemies:
   - {fileID: 11400000, guid: 79db212632dad954fa3c8d18fe92c52f, type: 2}
   BattleKind: 0
-  CountLevel: 5-5
+  CountLevel: 1-1
   RoleRate:
-  - id: 0
-  - id: 1
-  - id: 2
+  - rid: 0
+  - rid: 1
+  - rid: 2
   references:
-    version: 1
-    00000000:
+    version: 2
+    RefIds:
+    - rid: 0
       type: {class: SamepleRate, ns: Jyx2Configs, asm: Assembly-CSharp}
       data:
         Sameple: 3
         Rate: 10
-    00000001:
+    - rid: 1
       type: {class: SamepleRate, ns: Jyx2Configs, asm: Assembly-CSharp}
       data:
         Sameple: 4
         Rate: 20
-    00000002:
+    - rid: 2
       type: {class: SamepleRate, ns: Jyx2Configs, asm: Assembly-CSharp}
       data:
         Sameple: 5

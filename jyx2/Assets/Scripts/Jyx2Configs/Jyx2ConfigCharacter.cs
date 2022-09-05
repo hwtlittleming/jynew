@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Jyx2;
@@ -7,8 +6,6 @@ using Jyx2.MOD;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-using UnityEngine.AddressableAssets.ResourceLocators;
-using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace Jyx2Configs
 {
@@ -73,6 +70,9 @@ namespace Jyx2Configs
         [BoxGroup(CGroup1)][LabelText("描述")] 
         public String Descripe; //描述
         
+        [BoxGroup(CGroup1)][LabelText("状态")] 
+        public String State; //状态
+        
         /* ------- 分割线 --------*/
         
         [BoxGroup(CGroup3)][LabelText("力量")][SerializeReference]
@@ -81,14 +81,14 @@ namespace Jyx2Configs
         [BoxGroup(CGroup3)][LabelText("智慧")][SerializeReference]
         public int IQ;//0.3 提升生命，0.01提高物理法术暴击率，0.1赚钱倍率
         
-        [BoxGroup(CGroup3)][LabelText("根骨")][SerializeReference]
+        [BoxGroup(CGroup3)][LabelText("体质")][SerializeReference]
         public int Constitution;//0.5生命 0.5防御，0.1回复
         
         [BoxGroup(CGroup3)][LabelText("敏捷")][SerializeReference]
         public int Agile;// 1.0速度,0.01闪避
         
         [BoxGroup(CGroup3)][LabelText("幸运")][SerializeReference]
-        public int Luck;//0.1闪避 
+        public int Luck;//+点数点闪避,事件触发 
         
         /* ------- 分割线 ------- */
         
@@ -134,7 +134,7 @@ namespace Jyx2Configs
         [BoxGroup(CGroup2)][LabelText("攻击附带")]
         public String Attach; //攻击附带
 
-        [BoxGroup(CGroup2)][LabelText("经验")] //经验输入使得属性按资质增长，宠物可额外通过吞食获得经验
+        [BoxGroup(CGroup2)][LabelText("战斗经验")] //经验输入使得属性按资质增长，宠物可额外通过吞食获得经验
         public int Exp;
 
         /* ------- 分割线 --------*/

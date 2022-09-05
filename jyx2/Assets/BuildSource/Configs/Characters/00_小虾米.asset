@@ -13,34 +13,36 @@ MonoBehaviour:
   m_Name: "00_\u5C0F\u867E\u7C73"
   m_EditorClassIdentifier: 
   Id: 0
-  Name: "\u5C0F\u867E\u7C73"
-  Sexual: 0
+  Name: "\u5E05\u6B7B\u516B\u4E2A\u4EBA"
+  Sexual: 1
   Rate: 0
   Pic:
-    m_AssetGUID: 2eb4be4006e3e1f40b587b4783cf401f
+    m_AssetGUID: f6b44a2d06fdcfe4a99e350942ab6ea2
     m_SubObjectName: 
     m_SubObjectType: 
     m_EditorAssetChanged: 0
   Moral: 112
-  Descripe: "\u8FD9\u91CC\u662F\u4EBA\u7269\u63CF\u8FF0"
-  Strength: 0
+  Descripe: "\u4F60\u770B\u8D77\u6765\u4E8C\u5341\u6765\u5C81\uFF0C\u7709\u6E05\u76EE\u79C0\uFF0C\u6B66\u529F\u770B\u8D77\u6765\u6BEB\u4E0D\u8DB3\u8651;
+    \u643A\u5E26:\u6728\u5251\uFF0C\u5E03\u8863"
+  State: 
+  Strength: 8
   IQ: 39
-  Constitution: 0
-  Agile: 0
-  Luck: 0
+  Constitution: 123
+  Agile: 1234
+  Luck: 12345
   Skills:
-  - id: 0
-  - id: 1
-  - id: 2
-  - id: 3
-  - id: 4
-  - id: 5
-  - id: 6
-  - id: 7
-  - id: 8
-  - id: 9
-  - id: 10
-  - id: 11
+  - rid: 0
+  - rid: 1
+  - rid: 2
+  - rid: 3
+  - rid: 4
+  - rid: 5
+  - rid: 6
+  - rid: 7
+  - rid: 8
+  - rid: 9
+  - rid: 10
+  - rid: 11
   Items:
   - Item: {fileID: 11400000, guid: e48b1e789c05d664b90adf395dc9436b, type: 2}
     Count: 2
@@ -54,17 +56,19 @@ MonoBehaviour:
     Count: 1
   - Item: {fileID: 11400000, guid: 7b6c151dab6900644bdf392a912e0fe2, type: 2}
     Count: 2
+  - Item: {fileID: 11400000, guid: fa6882d37a49c734ab01a2885e31a77f, type: 2}
+    Count: 0
   MaxHp: 380000
-  MaxMp: 26
-  Attack: 27
-  Defense: 0
-  Speed: 0
-  Heal: 30
-  Critical: 0
-  CriticalLevel: 0
+  MaxMp: 666
+  Attack: 1
+  Defense: 22
+  Speed: 33
+  Heal: 444
+  Critical: 555
+  CriticalLevel: 6666
   Miss: 0
   Attach: 
-  exp: 0
+  Exp: 0
   Weapon: {fileID: 0}
   Armor: {fileID: 0}
   Shoes: {fileID: 0}
@@ -72,63 +76,64 @@ MonoBehaviour:
   LeaveStoryId: 
   Model: {fileID: 11400000, guid: a04197a5f95a83c4e899063c285998c3, type: 2}
   references:
-    version: 1
-    00000000:
+    version: 2
+    RefIds:
+    - rid: 0
       type: {class: Jyx2ConfigCharacterSkill, ns: Jyx2Configs, asm: Assembly-CSharp}
       data:
         Skill: {fileID: 11400000, guid: babd4ea6e36e95943a93c1f72b04f73b, type: 2}
         Level: 0
-    00000001:
+    - rid: 1
       type: {class: Jyx2ConfigCharacterSkill, ns: Jyx2Configs, asm: Assembly-CSharp}
       data:
         Skill: {fileID: 11400000, guid: 798ccc1e51b35994bbf92a57a4d069c0, type: 2}
         Level: 0
-    00000002:
+    - rid: 2
       type: {class: Jyx2ConfigCharacterSkill, ns: Jyx2Configs, asm: Assembly-CSharp}
       data:
         Skill: {fileID: 11400000, guid: 78f5d745c66793a49ae68ecac3aa9bcb, type: 2}
         Level: 0
-    00000003:
+    - rid: 3
       type: {class: Jyx2ConfigCharacterSkill, ns: Jyx2Configs, asm: Assembly-CSharp}
       data:
         Skill: {fileID: 11400000, guid: 9ff9afa094a346d45a51f983715e3bfc, type: 2}
         Level: 0
-    00000004:
+    - rid: 4
       type: {class: Jyx2ConfigCharacterSkill, ns: Jyx2Configs, asm: Assembly-CSharp}
       data:
         Skill: {fileID: 11400000, guid: 5cd67f17bb1de674e8cfc3fc831c1e06, type: 2}
         Level: 0
-    00000005:
+    - rid: 5
       type: {class: Jyx2ConfigCharacterSkill, ns: Jyx2Configs, asm: Assembly-CSharp}
       data:
         Skill: {fileID: 11400000, guid: 0533e6d63da4f624992672858a0b6d09, type: 2}
         Level: 0
-    00000006:
+    - rid: 6
       type: {class: Jyx2ConfigCharacterSkill, ns: Jyx2Configs, asm: Assembly-CSharp}
       data:
         Skill: {fileID: 11400000, guid: f8151c5b9ad3d6f4494274ca4d633af1, type: 2}
         Level: 0
-    00000007:
+    - rid: 7
       type: {class: Jyx2ConfigCharacterSkill, ns: Jyx2Configs, asm: Assembly-CSharp}
       data:
         Skill: {fileID: 11400000, guid: 057fc96ded3661649a52babad461f385, type: 2}
         Level: 0
-    00000008:
+    - rid: 8
       type: {class: Jyx2ConfigCharacterSkill, ns: Jyx2Configs, asm: Assembly-CSharp}
       data:
         Skill: {fileID: 11400000, guid: c5c87e0f7e593a64d97add8146b57869, type: 2}
         Level: 0
-    00000009:
+    - rid: 9
       type: {class: Jyx2ConfigCharacterSkill, ns: Jyx2Configs, asm: Assembly-CSharp}
       data:
         Skill: {fileID: 11400000, guid: 9c89af9444d5608468da1dfcb540174b, type: 2}
         Level: 0
-    0000000A:
+    - rid: 10
       type: {class: Jyx2ConfigCharacterSkill, ns: Jyx2Configs, asm: Assembly-CSharp}
       data:
         Skill: {fileID: 11400000, guid: 1bfadcaa3e61e9b498b7c4475962a64f, type: 2}
         Level: 0
-    0000000B:
+    - rid: 11
       type: {class: Jyx2ConfigCharacterSkill, ns: Jyx2Configs, asm: Assembly-CSharp}
       data:
         Skill: {fileID: 11400000, guid: dcf2c2741d5b65648aec0afd1ff50a46, type: 2}

@@ -95,7 +95,7 @@ public class GeneralSettingsPanel : Jyx2_UIBase
     {
         _graphicSetting.Save();
         _graphicSetting.Execute();
-        Jyx2_UIManager.Instance.HideUI(nameof(GraphicSettingsPanel));
+        Jyx2_UIManager.Instance.HideUI(nameof(GameSettingsPanel));
     }
 
     public void InitResolutionDropdown()

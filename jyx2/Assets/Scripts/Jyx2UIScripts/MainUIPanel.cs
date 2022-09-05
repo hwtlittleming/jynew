@@ -13,6 +13,8 @@ using System;
 using System.Linq;
 using Jyx2Configs;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
+using i18n.TranslatorDef;
 using UnityEngine.UI;
 
 public partial class MainUIPanel : Jyx2_UIBase, IUIAnimator
@@ -26,7 +28,13 @@ public partial class MainUIPanel : Jyx2_UIBase, IUIAnimator
 		BindListener(XiakeButton_Button, OnXiakeBtnClick);
 		BindListener(BagButton_Button, OnBagBtnClick);
 		BindListener(SystemButton_Button, OnSystemBtnClick);
-
+		
+		BindListener(Save_Button, OnSaveBtnClick);
+		BindListener(Load_Button, OnLoadBtnClick);
+		BindListener(MainMenu_Button, OnMainMenuBtnClick);
+		BindListener(Settings_Button, OnSettingsBtnClick);
+		BindListener(Close_Button, OnCloseBtnClick);
+		
 		//pre-load all icon sprites. somehow they don't load the first time
 		foreach (var i in Enumerable.Range(0, 4))
 			ChatUIPanel.getGamepadIconSprites(i);
@@ -54,18 +62,22 @@ public partial class MainUIPanel : Jyx2_UIBase, IUIAnimator
 			initialized = true;
 		}
 
-		Compass.gameObject.SetActive(LevelMaster.Instance.IsInWorldMap && Jyx2LuaBridge.HaveItem(182));
-		if (Compass.gameObject.activeSelf)
+		if (Compass != null )
 		{
-			var p = LevelMaster.Instance.GetPlayerPosition();
-			var pString = (p.x + 242).ToString("F0") + "," + (p.z + 435).ToString("F0");
-			if (!LevelMaster.Instance.GetPlayer().IsOnBoat)
+			Compass.gameObject.SetActive(LevelMaster.Instance.IsInWorldMap && Jyx2LuaBridge.HaveItem(182));
+			if (Compass.gameObject.activeSelf)
 			{
-				var b = LevelMaster.Instance.GetPlayer().GetBoatPosition();
-				pString += "(" + (b.x + 242).ToString("F0") + "," + (b.z + 435).ToString("F0") + ")";
+				var p = LevelMaster.Instance.GetPlayerPosition();
+				var pString = (p.x + 242).ToString("F0") + "," + (p.z + 435).ToString("F0");
+				if (!LevelMaster.Instance.GetPlayer().IsOnBoat)
+				{
+					var b = LevelMaster.Instance.GetPlayer().GetBoatPosition();
+					pString += "(" + (b.x + 242).ToString("F0") + "," + (b.z + 435).ToString("F0") + ")";
+				}
+				Compass.text = pString;
 			}
-			Compass.text = pString;
 		}
+		
 	}
 
 	protected override void OnShowPanel(params object[] allParams)
@@ -166,13 +178,11 @@ public partial class MainUIPanel : Jyx2_UIBase, IUIAnimator
 							if (runtime.GetItemUser(item.Id) != -1)
 							{
 								RoleInstance roleInstance = runtime.GetRoleInTeam(runtime.GetItemUser(item.Id));
-								roleInstance.UnequipItem(roleInstance.GetWeapon());
-								roleInstance.Weapon = -1;
+								roleInstance.UnequipItem(roleInstance.Equipments[0],0);
 							}
 
-							selectRole.UnequipItem(selectRole.GetWeapon());
-							selectRole.Weapon = id;
-							selectRole.UseItem(selectRole.GetWeapon());
+							selectRole.UnequipItem(selectRole.Equipments[0],0);
+							selectRole.UseItem(selectRole.Equipments[0]);
 							runtime.SetItemUser(item.Id, selectRole.GetJyx2RoleId());
 							GameUtil.DisplayPopinfo($"{selectRole.Name}使用了{item.Name}");
 						}
@@ -182,13 +192,10 @@ public partial class MainUIPanel : Jyx2_UIBase, IUIAnimator
 							if (runtime.GetItemUser(item.Id) != -1)
 							{
 								RoleInstance roleInstance = runtime.GetRoleInTeam(runtime.GetItemUser(item.Id));
-								roleInstance.UnequipItem(roleInstance.GetArmor());
-								roleInstance.Armor = -1;
+								roleInstance.UnequipItem(roleInstance.Equipments[1],1);
 							}
-
-							selectRole.UnequipItem(selectRole.GetArmor());
-							selectRole.Armor = id;
-							selectRole.UseItem(selectRole.GetArmor());
+							selectRole.UnequipItem(selectRole.Equipments[1],1);
+							selectRole.UseItem(selectRole.Equipments[1]);
 							runtime.SetItemUser(item.Id, selectRole.GetJyx2RoleId());
 							GameUtil.DisplayPopinfo($"{selectRole.Name}使用了{item.Name}");
 						}
@@ -217,8 +224,51 @@ public partial class MainUIPanel : Jyx2_UIBase, IUIAnimator
 
 	async void OnSystemBtnClick()
 	{
-		await Jyx2_UIManager.Instance.ShowUIAsync(nameof(SystemUIPanel));
+		SettingsPanel.gameObject.SetActive(true);
+		var levelMaster = LevelMaster.Instance;
+		levelMaster.SetPlayerCanController(false);
+		levelMaster.StopPlayerNavigation();
 	}
+	async void OnCloseBtnClick()
+	{
+		SettingsPanel.gameObject.SetActive(false);
+		var levelMaster = LevelMaster.Instance;
+		levelMaster.SetPlayerCanController(true);
+	}
+	async void OnSaveBtnClick()
+	{
+		await Jyx2_UIManager.Instance.ShowUIAsync(nameof(SavePanel), new Action<int>((index) =>
+		{
+			var levelMaster = FindObjectOfType<LevelMaster>();
+			levelMaster.OnManuelSave(index);
+		}), "选择存档位".GetContent(nameof(MainUIPanel)));
+	}
+	
+	async void OnLoadBtnClick()
+	{
+		await Jyx2_UIManager.Instance.ShowUIAsync(nameof(SavePanel), new Action<int>((index) =>
+		{
+			StoryEngine.DoLoadGame(index);
+		}), "选择读档位".GetContent(nameof(MainUIPanel)));
+	}
+	
+	async void OnMainMenuBtnClick()
+	{
+		List<string> selectionContent = new List<string>() { "是(Y)", "否(N)" };
+		await Jyx2_UIManager.Instance.ShowUIAsync(nameof(ChatUIPanel), ChatType.Selection, "0", "将丢失未保存进度，是否继续？", selectionContent, new Action<int>((index) =>
+		{
+			if (index == 0)
+			{
+				LoadingPanel.Create(null).Forget();
+			}
+		}));
+	}
+	
+	async void OnSettingsBtnClick()
+	{
+		await Jyx2_UIManager.Instance.ShowUIAsync(nameof(GameSettingsPanel));
+	}
+	
 
 	public void DoShowAnimator()
 	{

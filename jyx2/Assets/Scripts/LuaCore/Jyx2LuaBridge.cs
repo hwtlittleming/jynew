@@ -152,7 +152,7 @@ namespace Jyx2
 
                     if (enterEventId == -2)
                     {
-                        enterEventId = evt.m_EnterEventId;
+                        enterEventId = evt.m_HitEventId;
                     }
                 }
                 // 非当前场景事件如何获取
@@ -396,9 +396,9 @@ namespace Jyx2
                         v2+=evt.m_UseItemEventId;
                     }
                     if(v3==-2){
-                        v3=evt.m_EnterEventId;
+                        v3=evt.m_HitEventId;
                     }else if(v3>-1){
-                        v3+=evt.m_EnterEventId;
+                        v3+=evt.m_HitEventId;
                     }
                     
                     runtime.ModifyEvent(scene, eventId, v1, v2, v3);
@@ -515,7 +515,7 @@ namespace Jyx2
         public static bool JudgeAttack(int roleId,int low,int high)
         {
             bool ret = JudgeRoleValue(roleId, (r) => {
-                int originAttack = r.Attack - r.GetWeaponProperty("Attack") - r.GetArmorProperty("Attack");
+                int originAttack = r.Attack - r.GetEquipmentProperty("Attack",0) - r.GetEquipmentProperty("Attack",1);
 
                 return originAttack >= low && originAttack <= high;
             });
@@ -686,6 +686,15 @@ namespace Jyx2
         {
 
         }
+        
+        public static void ShowMessage(string message)
+        {
+            RunInMainThread(() =>
+            {
+                MessageBox.Create(message, Next);
+            });
+            Wait();
+        }
 
         public static void ShowEthics()
         {
@@ -694,7 +703,15 @@ namespace Jyx2
             });
             Wait();
         }
-        
+
+        public static void ShowRepute()
+        {
+            RunInMainThread(() =>
+            {
+                MessageBox.Create("你现在的个人声望指数为" + runtime.Player, Next);
+            });
+            Wait();
+        }
 
         public static bool JudgeEventNum(int eventIndex, int value)
         {
@@ -1033,6 +1050,7 @@ namespace Jyx2
         {
             //设置位置，没用了，调用jyx2_MovePlayer替代
         }
+        
 
         //韦小宝商店
         public static void WeiShop()

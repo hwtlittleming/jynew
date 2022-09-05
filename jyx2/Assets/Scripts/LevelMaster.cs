@@ -122,7 +122,7 @@ public class LevelMaster : MonoBehaviour
 	/// </summary>
 	public bool IsInWorldMap
 	{
-		get { return _currentMap?.IsWorldMap() ?? false; }
+		get { return _currentMap?.Tags.Contains("WORLDMAP") ?? false; }
 	}
 
 	// Use this for initialization
@@ -155,7 +155,7 @@ public class LevelMaster : MonoBehaviour
 		var gameMap = GetCurrentGameMap();
 		if (gameMap != null && !IsInBattle)
 		{
-			if (gameMap.IsWorldMap())//JYX2 临时测试
+			if (gameMap.Tags.Contains("WORLDMAP"))//JYX2 临时测试
 			{
 				var btn = transform.Find("UI/MainUI/BackButton");
 				if (btn != null)
@@ -176,9 +176,9 @@ public class LevelMaster : MonoBehaviour
 
 		//尝试绑定主角
 		TryBindPlayer();
-
+		
 		//大地图不能使用跟随相机（目前好像比较卡？）
-		if (gameMap != null && !gameMap.IsWorldMap())
+		if (gameMap != null && !gameMap.Tags.Contains("WORLDMAP"))
 		{
 			//初始化跟随相机
 			GameViewPortManager.Instance.InitForLevel(_player);
@@ -200,14 +200,14 @@ public class LevelMaster : MonoBehaviour
 		}
 
 		//修复所有没有绑定controller的角色
-		foreach (var animator in FindObjectsOfType<Animator>())
+		/*foreach (var animator in FindObjectsOfType<Animator>())
 		{
 			if (animator.runtimeAnimatorController != null) continue;
 			if (animator.transform.parent.name == "NPC")
 			{
 				animator.runtimeAnimatorController = GlobalAssetConfig.Instance.defaultNPCAnimatorController;
 			}
-		}
+		}*/
 
 		if (gameMap != null && !gameMap.IsWorldMap())
 		{
@@ -914,7 +914,7 @@ public class LevelMaster : MonoBehaviour
 					string[] tmp = modify.Split('_');
 					evt.m_InteractiveEventId = int.Parse(tmp[0]);
 					evt.m_UseItemEventId = int.Parse(tmp[1]);
-					evt.m_EnterEventId = int.Parse(tmp[2]);
+					evt.m_HitEventId = int.Parse(tmp[2]);
 				}
 
 				evt.Init();

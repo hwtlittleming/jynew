@@ -22,30 +22,30 @@ MonoBehaviour:
     m_SubObjectType: 
     m_EditorAssetChanged: 0
   Moral: 0
+  Descripe: "\u4E00\u4E2A\u5356\u7CD6\u846B\u82A6\u7684\u8001\u5934\uFF0C\u6B66\u529F\u770B\u8D77\u6765\u6BEB\u4E0D\u8DB3\u8651
+    /n\u643A\u5E26:\u6728\u5251\uFF0C\u5E03\u8863"
+  State: 
+  Strength: 0
   IQ: 39
-  Descripe: 
+  Constitution: 0
+  Agile: 0
+  Luck: 0
   Skills:
-  - id: 0
+  - rid: 0
   Items:
   - Item: {fileID: 11400000, guid: e48b1e789c05d664b90adf395dc9436b, type: 2}
     Count: 2
   MaxHp: 100
   MaxMp: 100
   Attack: 1
-  MagicAttack: 0
-  Speed: 0
   Defense: 0
-  MagicDefence: 0
+  Speed: 0
   Heal: 0
-  Attach: 
   Critical: 0
   CriticalLevel: 0
   Miss: 0
-  Luck: 0
-  Strength: 0
-  Intelligence: 0
-  Constitution: 0
-  Agile: 0
+  Attach: 
+  Exp: 0
   Weapon: {fileID: 0}
   Armor: {fileID: 0}
   Shoes: {fileID: 0}
@@ -53,9 +53,10 @@ MonoBehaviour:
   LeaveStoryId: 
   Model: {fileID: 0}
   references:
-    version: 1
-    00000000:
+    version: 2
+    RefIds:
+    - rid: 0
       type: {class: Jyx2ConfigCharacterSkill, ns: Jyx2Configs, asm: Assembly-CSharp}
       data:
-        Skill: {fileID: 0}
+        Skill: {fileID: 11400000, guid: f043371a92550214fb4b1d96ce31d388, type: 2}
         Level: 0
