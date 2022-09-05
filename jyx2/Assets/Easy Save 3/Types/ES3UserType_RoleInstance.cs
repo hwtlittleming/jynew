@@ -1,4 +1,5 @@
 using System;
+using Jyx2Configs;
 using UnityEngine;
 
 namespace ES3Types
@@ -23,6 +24,7 @@ namespace ES3Types
 			writer.WriteProperty("Rate", instance.Rate, ES3Type_int.Instance);
 			writer.WriteProperty("Moral", instance.Moral, ES3Type_int.Instance);
 			writer.WriteProperty("Describe", instance.Describe, ES3Type_string.Instance);
+			writer.WriteProperty("State", instance.State, ES3Type_string.Instance);
 			writer.WriteProperty("Level", instance.Level, ES3Type_int.Instance);
 			writer.WriteProperty("Exp", instance.Exp, ES3Type_int.Instance);
 			
@@ -48,10 +50,10 @@ namespace ES3Types
 
 			writer.WriteProperty("Skills", instance.skills, ES3Internal.ES3TypeMgr.GetES3Type(typeof(System.Collections.Generic.List<Jyx2.SkillInstance>)));
 			writer.WriteProperty("Items", instance.Items, ES3Internal.ES3TypeMgr.GetES3Type(typeof(System.Collections.Generic.List<Jyx2Configs.Jyx2ConfigCharacterItem>)));
-			writer.WriteProperty("Weapon", instance.Weapon, ES3Type_int.Instance);
-			writer.WriteProperty("Armor", instance.Armor, ES3Type_int.Instance);
-			writer.WriteProperty("Shoes", instance.Shoes, ES3Type_int.Instance);
-			writer.WriteProperty("Treasure", instance.Treasure, ES3Type_int.Instance);
+			writer.WriteProperty("Weapon", instance.Equipments[0], ES3Type_int.Instance);
+			writer.WriteProperty("Armor", instance.Equipments[1], ES3Type_int.Instance);
+			writer.WriteProperty("Shoes", instance.Equipments[2], ES3Type_int.Instance);
+			writer.WriteProperty("Treasure", instance.Equipments[3], ES3Type_int.Instance);
 			writer.WriteProperty("CurrentSkill", instance.CurrentSkill, ES3Type_int.Instance);
 		}
 
@@ -80,6 +82,9 @@ namespace ES3Types
 						break;
 					case "Describe":
 						instance.Describe = reader.Read<System.String>(ES3Type_string.Instance);
+						break;
+					case "State":
+						instance.State = reader.Read<System.String>(ES3Type_string.Instance);
 						break;
 					case "Level":
 						instance.Level = reader.Read<System.Int32>(ES3Type_int.Instance);
@@ -151,16 +156,16 @@ namespace ES3Types
 						instance.Items = reader.Read<System.Collections.Generic.List<Jyx2Configs.Jyx2ConfigCharacterItem>>();
 						break;
 					case "Weapon":
-						instance.Weapon = reader.Read<System.Int32>(ES3Type_int.Instance);
+						instance.Equipments[0] = reader.Read<Jyx2Configs.Jyx2ConfigItem>();
 						break;
 					case "Armor":
-						instance.Armor = reader.Read<System.Int32>(ES3Type_int.Instance);
+						instance.Equipments[1] = reader.Read<Jyx2Configs.Jyx2ConfigItem>();
 						break;
 					case "Shoes":
-						instance.Shoes = reader.Read<System.Int32>(ES3Type_int.Instance);
+						instance.Equipments[2] = reader.Read<Jyx2Configs.Jyx2ConfigItem>();
 						break;
 					case "Treasure":
-						instance.Treasure = reader.Read<System.Int32>(ES3Type_int.Instance);
+						instance.Equipments[3] = reader.Read<Jyx2Configs.Jyx2ConfigItem>();
 						break;
 					case "CurrentSkill":
 						instance.CurrentSkill = reader.Read<System.Int32>(ES3Type_int.Instance);
