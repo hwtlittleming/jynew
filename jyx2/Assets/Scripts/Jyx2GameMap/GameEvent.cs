@@ -35,19 +35,21 @@ public class GameEvent : MonoBehaviour
     public GameObject[] m_EventTargets;
 
     /// <summary>
-    /// 交互事件
+    /// 有哪些事件类型(0:直接触发；1：交谈 2：观察 3：使用物品 4：偷袭)多项则都放进去，观察是通用的
+    /// 直接触发的eventId用m_InteractiveEventId
     /// </summary>
-    public int m_InteractiveEventId = NO_EVENT;
-
-    /// <summary>
-    /// 使用物品事件
-    /// </summary>
-    public int m_UseItemEventId = NO_EVENT;
-
-    /// <summary>
-    /// 经过事件
-    /// </summary>
-    public int m_EnterEventId = NO_EVENT;
+    [Header("事件类型(0:直接触发；1：交谈 2：观察 3：使用物品 4：偷袭)多项则都放进去")]
+    public String m_EventType = "-1";
+    
+    /// 交谈事件id
+    public int m_InteractiveEventId ;
+    
+    /// 使用物品事件id (灵活-可下毒，赠送各种效果)
+    public int m_UseItemEventId ;
+    
+    /// 偷袭事件id
+    public int m_HitEventId ;
+    
 
     /// <summary>
     /// 交互提示按钮文字
@@ -96,7 +98,7 @@ public class GameEvent : MonoBehaviour
     public void Init()
     {
         //如果有可交互事件，并且有绑定可交互物体。把这些物体设置为交互对象
-        if(m_UseItemEventId != NO_EVENT || m_InteractiveEventId != NO_EVENT)
+        if(m_EventType.Contains("1") || m_EventType.Contains("2") ||m_EventType.Contains("3") ||m_EventType.Contains("4"))
         {
             if(m_EventTargets != null && m_EventTargets.Length > 0)
             {
@@ -110,9 +112,7 @@ public class GameEvent : MonoBehaviour
                 }
             }
         }
-
-        //否则清空该物体的可交互属性
-        if(m_UseItemEventId == NO_EVENT && m_InteractiveEventId == NO_EVENT)
+        else //否则清空该物体的可交互属性
         {
             foreach (var obj in m_EventTargets)
             {
@@ -130,92 +130,18 @@ public class GameEvent : MonoBehaviour
     {
         //BY CGGG 2021/6/9，已经修改为面朝向射线触发，不会再需要鼠标点击
         //DO NOTHING
-
         return;
-        if (EventSystem.current.IsPointerOverGameObject())
-            return;
-
-        if (Jyx2Player.GetPlayer().IsOnBoat)
-            return;
-
-        //先判断角色是否已经足够近了
-        var levelMaster = LevelMaster.Instance;
-        if (levelMaster == null)
-        {
-            Debug.LogError("LevelMaster is NULL! but click target triggered.");
-            return;
-        }
-
-        if((levelMaster.GetPlayerPosition() - target.transform.position).magnitude > EVENT_TRIGGER_DISTANCE)
-        {
-            StoryEngine.Instance.DisplayPopInfo("我需要离得更近一些");
-            return;
-        }
-
-        evtManager.OnClicked(this);
     }
-
-
-    void OnTriggerStay(Collider other)
-    {
-        
-    }
-
+    
     void OnTriggerEnter(Collider other)
     {
-        if (LevelMaster.Instance == null || LevelMaster.Instance.IsInited == false)
-            return;
-        
-        //只保留进入触发事件
-        if (this.m_EnterEventId == NO_EVENT)
-            return;
-
         var player = Jyx2Player.GetPlayer();
-        if (player == null || other.gameObject != player.gameObject)
+        if (LevelMaster.Instance == null || LevelMaster.Instance.IsInited == false || player == null || this.m_EventType == null )
             return;
-        
         evtManager.OnTriggerEvent(this);
     }
 
-    
-    /*
-    void OnTriggerStay(Collider other)
-    {
-        if (EventSystem.current.IsPointerOverGameObject())
-            return;
-
-        if (Jyx2Player.GetPlayer().IsOnBoat)
-            return;
-
-        //这里只触发非交互类事件
-        if (this.m_EnterEventId != NO_EVENT)
-        {
-            evtManager.OnTriggerEvent(this);
-        }
-    }
-
-    void OnTriggerEnter(Collider other)
-    {
-        if (EventSystem.current.IsPointerOverGameObject())
-            return;
-
-        if (Jyx2Player.GetPlayer().IsOnBoat)
-            return;
-
-        //这里只触发非交互类事件
-        if (this.m_EnterEventId != NO_EVENT)
-        {
-            evtManager.OnTriggerEvent(this);
-        }
-    }
-
-    void OnTriggerExit(Collider other)
-    {
-        evtManager.OnExitEvent(this);
-    }*/
-
-
-    public async UniTask MarkChest()
+    public async UniTask MarkChest()    
     {
         foreach (var target in m_EventTargets)
         {
@@ -223,8 +149,8 @@ public class GameEvent : MonoBehaviour
             var chest = target.GetComponent<MapChest>();
             if (chest != null)
             {
-				//使用物品事件为-1时可以直接打开。>0时候需要对应钥匙才能解开。-2时不能打开，参考南贤居宝箱一开始不能打开，交谈后可以直接打开
-                chest.ChangeLockStatus(m_UseItemEventId != -1);
+				//使用物品事件为-1时可以直接打开。>0时候需要对应钥匙才能解开。-2时不能打开，参考南贤居宝箱一开始不能打开，交谈后可以直接打开 todo 
+                chest.ChangeLockStatus(m_EventType.Contains("3"));
                 await chest.MarkAsOpened();
             }
         }

@@ -35,14 +35,16 @@ public partial class GameMainMenu : Jyx2_UIBase
 
 	private PanelType m_panelType;
 
-	private int main_menu_index = 0;
+	private int main_menu_index => current_selection;
 
 	private const int NewGameIndex = 0;
 	private const int LoadGameIndex = 1;
-	private const int QuitGameIndex = 2;
+	private const int SettingsIndex = 2;
+	private const int QuitGameIndex = 3;
 
 	async void OnStart()
 	{
+		MainMenuTitles.SetActive(false);
 		//显示loading
 		var c = StartCoroutine(ShowLoading());
 		await BeforeSceneLoad.loadFinishTask;
@@ -173,7 +175,7 @@ public partial class GameMainMenu : Jyx2_UIBase
 		{
 			if (m_panelType == PanelType.NewGamePage)
 			{
-				OnCreateBtnClicked();
+				onButtonClick(); //OnCreateBtnClicked();
 			}
 		});
 		GlobalHotkeyManager.Instance.RegistHotkey(this, KeyCode.Y, () =>
@@ -227,6 +229,9 @@ public partial class GameMainMenu : Jyx2_UIBase
 			else if (main_menu_index == LoadGameIndex)
 			{
 				OnLoadGameClicked();
+			}else if (main_menu_index == SettingsIndex)
+			{
+				OpenSettingsPanel();
 			}
 			else if (main_menu_index == QuitGameIndex)
 			{
@@ -237,6 +242,7 @@ public partial class GameMainMenu : Jyx2_UIBase
 
 	public void OnNewGameClicked()
 	{
+		transform.Find("mainPanel/ExtendPanel")?.gameObject.SetActive(false); 
 		OnNewGame();
 	}
 
@@ -312,7 +318,9 @@ public partial class GameMainMenu : Jyx2_UIBase
 	{
 		BindListener(this.NewGameButton_Button, OnNewGameClicked);
 		BindListener(this.LoadGameButton_Button, OnLoadGameClicked);
+		BindListener(this.SettingsButton_Button, OpenSettingsPanel);
 		BindListener(this.QuitGameButton_Button, OnQuitGameClicked);
+		
 		BindListener(this.inputSure_Button, OnCreateBtnClicked, false);
 		BindListener(this.inputBack_Button, OnBackBtnClicked, false);
 		BindListener(this.YesBtn_Button, OnCreateRoleYesClick, false);
@@ -330,7 +338,7 @@ public partial class GameMainMenu : Jyx2_UIBase
 		GameRuntimeData.Instance.startDate = DateTime.Now;
 		//加载地图
 		var startMap = Jyx2ConfigMap.GetGameStartMap();
-
+		
 		LevelLoader.LoadGameMap(startMap, loadPara, () =>
 		{
 			//首次进入游戏音乐
@@ -367,6 +375,8 @@ public partial class GameMainMenu : Jyx2_UIBase
 		this.homeBtnAndTxtPanel_RectTransform.gameObject.SetActive(true);
 		this.InputNamePanel_RectTransform.gameObject.SetActive(false);
 		m_panelType = PanelType.Home;
+		
+		transform.Find("mainPanel/ExtendPanel")?.gameObject.SetActive(true);
 	}
 
 	protected override void OnHidePanel()
@@ -392,7 +402,7 @@ public partial class GameMainMenu : Jyx2_UIBase
 	/// </summary>
 	public void OpenSettingsPanel()
 	{
-		Jyx2_UIManager.Instance.ShowUI(nameof(GraphicSettingsPanel));
+		Jyx2_UIManager.Instance.ShowUIAsync(nameof(GameSettingsPanel)).Forget();
 	}
 
 	bool isXSelection = false;
