@@ -38,24 +38,12 @@ MonoBehaviour:
   BattleKind: 0
   CountLevel: 1-1
   RoleRate:
-  - rid: 0
-  - rid: 1
-  - rid: 2
+  - rid: 2369322339111010304
   references:
     version: 2
     RefIds:
-    - rid: 0
-      type: {class: SamepleRate, ns: Jyx2Configs, asm: Assembly-CSharp}
+    - rid: 2369322339111010304
+      type: {class: SampleRate, ns: Jyx2Configs, asm: Assembly-CSharp}
       data:
-        Sameple: 3
-        Rate: 10
-    - rid: 1
-      type: {class: SamepleRate, ns: Jyx2Configs, asm: Assembly-CSharp}
-      data:
-        Sameple: 4
-        Rate: 20
-    - rid: 2
-      type: {class: SamepleRate, ns: Jyx2Configs, asm: Assembly-CSharp}
-      data:
-        Sameple: 5
-        Rate: 70
+        Sample: 1
+        Rate: 1

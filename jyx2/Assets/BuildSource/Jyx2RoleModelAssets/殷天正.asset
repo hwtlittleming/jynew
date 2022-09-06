@@ -19,23 +19,24 @@ MonoBehaviour:
     m_EditorAssetChanged: 0
   m_View: {fileID: 684454383137025335, guid: d9b71afcc27789e4ab1c6bafa46d555a, type: 3}
   m_SwordWeapon:
-    id: 0
+    rid: 0
   m_KnifeWeapon:
-    id: 1
+    rid: 1
   m_SpearWeapon:
-    id: 2
+    rid: 2
   references:
-    version: 1
-    00000000:
+    version: 2
+    RefIds:
+    - rid: 0
       type: {class: SwordPart, ns: Jyx2, asm: Assembly-CSharp}
       data:
         m_Id: 1
         m_BindBone: QuickRigCharacter_RightHand
-        m_PartView: {fileID: 0}
+        m_PartView: {fileID: 100000, guid: 5268d95dd3755784dae339730953b6fc, type: 3}
         m_OffsetPosition: {x: 0, y: 0, z: 0}
         m_OffsetRotation: {x: 0, y: 0, z: 0}
         m_OffsetScale: {x: 1, y: 1, z: 1}
-    00000001:
+    - rid: 1
       type: {class: KnifePart, ns: Jyx2, asm: Assembly-CSharp}
       data:
         m_Id: 2
@@ -44,7 +45,7 @@ MonoBehaviour:
         m_OffsetPosition: {x: 0, y: 0, z: 0}
         m_OffsetRotation: {x: 0, y: 0, z: 0}
         m_OffsetScale: {x: 1, y: 1, z: 1}
-    00000002:
+    - rid: 2
       type: {class: SpearPart, ns: Jyx2, asm: Assembly-CSharp}
       data:
         m_Id: 3

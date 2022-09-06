@@ -24,8 +24,9 @@ MonoBehaviour:
     m_SubObjectType: 
     m_EditorAssetChanged: 0
   Desc: "\u5F88\u597D\u7528\u7684\u4E1C\u897F\uFF0C\u751A\u81F3\u80FD\u4F7F\u9B3C\u63A8\u78E8"
-  ItemType: 0
+  ItemType: 1
   EquipmentType: -1
+  Quality: 
   Skill: {fileID: 0}
   AddHp: 0
   AddMaxHp: 0

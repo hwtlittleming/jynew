@@ -46,46 +46,32 @@ public class BattleLoader : MonoBehaviour
     }
 
     public List<BattlePosRole> m_Roles;
-
-    void CycleLoadBattle()
-    {
-        LevelLoader.LoadBattle(m_BattleId, (ret) => { CycleLoadBattle(); });
-    }
-
+    
     // Start is called before the first frame update
     async void Start()
     {
         await BeforeSceneLoad.loadFinishTask;
-
-        if (IsTestCase)
-        {
-            await LoadJyx2Battle(m_BattleId, (ret) => { CycleLoadBattle(); });
-        }
-        else
-        {
-            await LoadJyx2Battle(m_BattleId, Callback);
-        }
+        await LoadJyx2Battle(m_BattleId, Callback);
     }
-
-
+    
     GameRuntimeData runtime
     {
         get { return GameRuntimeData.Instance; }
     }
 
     //传入 特征值:概率的数组 按传入概率求随机特征值的公用方法
-    public int MyRandom(List<SamepleRate> lr,Random seed)
+    public int MyRandom(List<SampleRate> lr,Random seed)
     {
         int ran = seed.Next(1,101); 
         int minRate = 0;
-        int result = int.Parse(lr.FirstOrDefault().Sameple);
-        foreach (SamepleRate s in lr)
+        int result = int.Parse(lr.FirstOrDefault().Sample);
+        foreach (SampleRate s in lr)
         {
             minRate += s.Rate;
             if (ran <= minRate)
             {   
                 //Debug.Log(ran + "-----" + result);
-                result = int.Parse(s.Sameple);
+                result = int.Parse(s.Sample);
                 return result;
             }
         }
@@ -124,6 +110,7 @@ public class BattleLoader : MonoBehaviour
         }
         //需要传入地图或线路  暂时搞个id对应地图的对应关系，以后改成直接传入地图或线路名
         //todo 战场仅几种通用类型，特殊再设计，模糊化当前场景，再实化战斗要素
+        //todo 改成从excel取数据
         Jyx2ConfigBattle battle = Jyx2ConfigBattle.Get(id);
         if (battle == null)
         {
@@ -133,10 +120,10 @@ public class BattleLoader : MonoBehaviour
         AudioManager.PlayMusic(battle.Music);
         
         //敌方角色生成
-        List<SamepleRate> lr = battle.RoleRate;
+        List<SampleRate> lr = battle.RoleRate;
         List<int> enermyIdList = new List<int>();
-        List<RoleInstance> enermyRoleList = new List<RoleInstance>();
-        List<RoleInstance> ourRoleList = new List<RoleInstance>();
+        List<RoleInstance> enermyRoleList = new List<RoleInstance>(); //战时对方角色 改到类属性里
+        List<RoleInstance> ourRoleList = new List<RoleInstance>();//战时我方角色
         if (battle.BattleKind == "0")  //随机遇怪
         {
             //按配置生成数量
@@ -151,11 +138,11 @@ public class BattleLoader : MonoBehaviour
                 int result = MyRandom(lr,seed);
                 enermyIdList.Add(result);
             }
-        }else if (battle.BattleKind == "1")  //固定战斗 SamepleRate配置角色id就行
+        }else if (battle.BattleKind == "1")  //固定战斗 SampleRate配置角色id就行
         {
-            foreach (SamepleRate samepleRate in lr)
+            foreach (SampleRate sampleRate in lr)
             {
-                enermyIdList.Add(int.Parse(samepleRate.Sameple));
+                enermyIdList.Add(int.Parse(sampleRate.Sample));
             }
         }
         foreach (int roleId in enermyIdList)

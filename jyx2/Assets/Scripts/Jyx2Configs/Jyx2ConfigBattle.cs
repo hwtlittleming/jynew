@@ -44,7 +44,7 @@ namespace Jyx2Configs
         public String CountLevel;
 
         [BoxGroup("新增内容")] [LabelText("出现各敌人的概率(roleid:rate)")] [SerializeReference]
-        public List<SamepleRate> RoleRate;
+        public List<SampleRate> RoleRate;
         
         public override async UniTask WarmUp()
         {
@@ -53,14 +53,14 @@ namespace Jyx2Configs
     }
     
     [Serializable]
-    public class SamepleRate : IComparable<SamepleRate>
+    public class SampleRate : IComparable<SampleRate>
     {
         [LabelText("样本")] 
-        public String Sameple;
+        public String Sample;
         
         [LabelText("概率")]
         public int Rate;
-        public int CompareTo(SamepleRate obj)
+        public int CompareTo(SampleRate obj)
         {
             return Rate.CompareTo(obj.Rate);
         }
