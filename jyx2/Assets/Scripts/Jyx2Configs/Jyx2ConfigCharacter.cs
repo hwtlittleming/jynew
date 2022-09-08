@@ -12,30 +12,7 @@ namespace Jyx2Configs
     [CreateAssetMenu(menuName = "金庸重制版/配置文件/角色", fileName = "角色ID_角色名")]
     public class Jyx2ConfigCharacter : Jyx2ConfigBase
     {
-        
-        /// <summary>
-        /// 设置为中文仅用于odin显示，不要在代码中直接使用
-        /// </summary>
-        public enum SexualType
-        {
-            男 = 0,
-            女 = 1
-        }
-
-        /// <summary>
-        /// 设置为中文仅用于odin显示，不要在代码中直接使用
-        /// </summary>
-        //0:阴 1:阳 2:调和
-        public enum RateTypeEnum
-        {
-            人 = 0,
-            妖 = 1,
-            魔 = 2,
-            仙 = 3,
-            神 = 4
-        }
-
-        private const string CGroup1 = "基本配置";
+        private const string CGroup1 = "基本信息";
         private const string CGroup2 = "属性";
         private const string CGroup3 = "资质";
         private const string CGroup4 = "装备";
@@ -43,10 +20,10 @@ namespace Jyx2Configs
         private const string CGroupItems = "道具";
         
         [BoxGroup(CGroup1)][LabelText("性别")][EnumToggleButtons] 
-        public SexualType Sexual;
+        public String Sexual;
         
-        [BoxGroup(CGroup1)][LabelText("种族")][EnumToggleButtons]
-        public RateTypeEnum Rate;
+        [BoxGroup(CGroup1)][LabelText("种族/职业")][EnumToggleButtons]
+        public String Race;
         
         [BoxGroup(CGroup1)][LabelText("头像")]
         public AssetReferenceTexture2D Pic;
@@ -64,8 +41,8 @@ namespace Jyx2Configs
             return _sprite;
         }
         
-        [BoxGroup(CGroup1)][LabelText("善恶")] 
-        public int Moral; //善恶
+        [BoxGroup(CGroup1)][LabelText("善恶(不同地域的仇恨记录)")] 
+        public String Moral; //善恶
 
         [BoxGroup(CGroup1)][LabelText("描述")] 
         public String Descripe; //描述

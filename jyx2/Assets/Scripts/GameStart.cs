@@ -42,14 +42,8 @@ public class GameStart : MonoBehaviour
 			Destroy(introPanel.gameObject);
 		});
 
-		//如果没有 mod，跳过 mod ui，直接进入游戏
-		MODManager.Init();
-		if (MODManager.ModEntries.Count > 0)
-			SceneManager.LoadScene("0_ModMenu");
-		else
-		{
-			BeforeSceneLoad.ColdBind();
-			SceneManager.LoadScene("0_MainMenu");
-		}
+		//直接进入游戏
+		BeforeSceneLoad.ColdBind();
+		SceneManager.LoadScene("0_MainMenu");
 	}
 }

@@ -133,33 +133,7 @@ public class GameUtil
             action();
         });
     }
-
-    public static async UniTask ShowYesOrNoCastrate(RoleInstance role, Action action)
-    {
-        if (role.Sex == 0)//男
-        {
-            string msg = "修炼此书必须先行挥剑自宫，你是否仍要修炼？";
-            List<string> selectionContent = new List<string>() { "是(Y)", "否(N)" };
-            await Jyx2_UIManager.Instance.ShowUIAsync(nameof(ChatUIPanel), ChatType.Selection, "0", msg, selectionContent, new Action<int>((index) =>
-            {
-                if (index == 0)
-                {
-                    ChangeScence();
-                    role.Sex = 2;
-                    action();
-                }
-            }));
-        }
-        else if (role.Sex == 1)//女
-        {
-            DisplayPopinfo("此人不适合修炼此物品");
-            return;
-        }
-        else if (role.Sex == 2)//太监
-        {
-            action();
-        }
-    }
+    
 
     private static void ChangeScence()
     {

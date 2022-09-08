@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcbc68552f5f10f4fbade431c50a817d, type: 3}
   m_Name: "106_\u6781\u5317\u623F\u5C4B"
   m_EditorClassIdentifier: 
-  Id: 110
+  Id: 122
   Name: "\u6781\u5317\u623F\u5C4B"
   MapScene:
     m_AssetGUID: 196b9b708cabfdc42a54126e84b31340

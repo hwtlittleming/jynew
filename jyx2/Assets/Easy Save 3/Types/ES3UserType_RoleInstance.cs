@@ -20,9 +20,9 @@ namespace ES3Types
 			
 			writer.WriteProperty("Key", instance.Key, ES3Type_int.Instance);
 			writer.WriteProperty("Name", instance.Name, ES3Type_string.Instance);
-			writer.WriteProperty("Sex", instance.Sex, ES3Type_int.Instance);
-			writer.WriteProperty("Rate", instance.Rate, ES3Type_int.Instance);
-			writer.WriteProperty("Moral", instance.Moral, ES3Type_int.Instance);
+			writer.WriteProperty("Sex", instance.Sex, ES3Type_string.Instance);
+			writer.WriteProperty("Rate", instance.Race, ES3Type_string.Instance);
+			writer.WriteProperty("Moral", instance.Moral, ES3Type_string.Instance);
 			writer.WriteProperty("Describe", instance.Describe, ES3Type_string.Instance);
 			writer.WriteProperty("State", instance.State, ES3Type_string.Instance);
 			writer.WriteProperty("Level", instance.Level, ES3Type_int.Instance);
@@ -72,13 +72,13 @@ namespace ES3Types
 						instance.Name = reader.Read<System.String>(ES3Type_string.Instance);
 						break;
 					case "Sex":
-						instance.Sex = reader.Read<System.Int32>(ES3Type_int.Instance);
+						instance.Sex = reader.Read<System.String>(ES3Type_string.Instance);
 						break;
-					case "Rate":
-						instance.Rate = reader.Read<System.Int32>(ES3Type_int.Instance);
+					case "Race":
+						instance.Race = reader.Read<System.String>(ES3Type_string.Instance);
 						break;
 					case "Moral":
-						instance.Moral = reader.Read<System.Int32>(ES3Type_int.Instance);
+						instance.Moral = reader.Read<System.String>(ES3Type_string.Instance);
 						break;
 					case "Describe":
 						instance.Describe = reader.Read<System.String>(ES3Type_string.Instance);
@@ -184,15 +184,5 @@ namespace ES3Types
 			return instance;
 		}
 	}
-
-
-	public class ES3UserType_RoleInstanceArray : ES3ArrayType
-	{
-		public static ES3Type Instance;
-
-		public ES3UserType_RoleInstanceArray() : base(typeof(Jyx2.RoleInstance[]), ES3UserType_RoleInstance.Instance)
-		{
-			Instance = this;
-		}
-	}
+	
 }

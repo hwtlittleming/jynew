@@ -88,15 +88,5 @@ namespace ES3Types
 			return instance;
 		}
 	}
-
-
-	public class ES3UserType_GameRuntimeDataArray : ES3ArrayType
-	{
-		public static ES3Type Instance;
-
-		public ES3UserType_GameRuntimeDataArray() : base(typeof(Jyx2.GameRuntimeData[]), ES3UserType_GameRuntimeData.Instance)
-		{
-			Instance = this;
-		}
-	}
+	
 }

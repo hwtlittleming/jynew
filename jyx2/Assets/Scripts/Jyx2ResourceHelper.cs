@@ -55,24 +55,7 @@ public static class Jyx2ResourceHelper
         {
             return;
         }
-
         _isInited = true;
-        
-#if UNITY_EDITOR
-        if (File.Exists(Path.Combine(Application.streamingAssetsPath, "OverrideList.txt"))) ;
-            File.Delete(Path.Combine(Application.streamingAssetsPath, "OverrideList.txt"));
-        MODLoader.SaveOverrideList("Assets/BuildSource/Skills", ".asset");
-        MODLoader.SaveOverrideList("Assets/BuildSource/Configs/Characters", ".asset");
-        MODLoader.SaveOverrideList("Assets/BuildSource/Configs/Items", ".asset");
-        MODLoader.SaveOverrideList("Assets/BuildSource/Configs/Skills", ".asset");
-        MODLoader.SaveOverrideList("Assets/BuildSource/Configs/Shops", ".asset");
-        MODLoader.SaveOverrideList("Assets/BuildSource/Configs/Maps", ".asset");
-        MODLoader.SaveOverrideList("Assets/BuildSource/Configs/Battles", ".asset");
-        MODLoader.SaveOverrideList("Assets/BuildSource/Lua", ".lua");
-#endif
-
-        await MODLoader.Init();
-        
         //全局配置表
         var t = await MODLoader.LoadAsset<GlobalAssetConfig>("Assets/BuildSource/Configs/GlobalAssetConfig.asset");
         if (t != null)
@@ -82,7 +65,7 @@ public static class Jyx2ResourceHelper
         }
 
         //技能池
-        var overridePaths = MODLoader.LoadOverrideList("Assets/BuildSource/Skills");
+        var overridePaths = MODLoader.getSonFiles("Assets/BuildSource/Skills");
         var task = await MODLoader.LoadAssets<Jyx2SkillDisplayAsset>(overridePaths);
         if (task != null)
         {
@@ -92,6 +75,20 @@ public static class Jyx2ResourceHelper
         //基础配置表
         await GameConfigDatabase.Instance.Init();
 
+        /*从excel取配置数据的方法
+         #if UNITY_EDITOR
+                //excel转data二进制
+                string dataPath = "Assets/BuildSource/Configs/Datas.bytes";
+                if (File.Exists(dataPath))
+                {
+                    File.Delete(dataPath);
+                }
+                ExcelTools.GenerateConfigsFromExcel<Jyx2ConfigBase>( "Assets/BuildSource/Configs");
+                AssetDatabase.Refresh();
+                var config = await MODLoader.LoadAsset<TextAsset>($"Assets/Configs/Datas.bytes");
+                GameConfigDatabase.Instance._dataBase = ExcelTools.ProtobufDeserialize<Dictionary<Type, Dictionary<int, Jyx2ConfigBase>>>(config.bytes);
+        #endif  */
+        
         //lua
         await LuaManager.InitLuaMapper();
         LuaManager.Init();

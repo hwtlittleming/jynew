@@ -466,50 +466,11 @@ namespace Jyx2
         {
             return runtime.GetTeamMembersCount() > GameConst.MAX_TEAMCOUNT - 1;
         }
-
-        /// <summary>
-        /// 修改地图
-        /// </summary>
-        /// <param name="sceneId">场景ID,-2为当前场景</param>
-        /// <param name="layer">层级</param>
-        /// <param name="x">X坐标</param>
-        /// <param name="y">Y坐标</param>
-        /// <param name="v">贴图编号（需要除以2）</param>
-        public static void SetScenceMap(int sceneId,int layer,int x,int y,int v)
-        {
-            //这个函数已经不需要实现，具体2D和3D版差异解决的方式可以参考
-            //https://github.com/jynew/jynew/wiki/1.5%E6%90%AD%E5%BB%BA%E6%B8%B8%E6%88%8F%E4%B8%96%E7%95%8C%E5%B7%AE%E5%BC%82%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95
-            
-        }
-
-        //增加品德
-        public static void AddEthics(int value)
-        {
-            RunInMainThread(() =>
-            {
-                runtime.Player.Moral = Tools.Limit(runtime.Player.Moral + value, 0, 100);
-               /* storyEngine.DisplayPopInfo((value > 0 ? "增加" : "减少") + "品德:" + Math.Abs(value));*/
-                Next();
-            });
-            Wait();
-        }
-
-        public static void ChangeScencePic(int p1,int p2,int p3,int p4)
-        {
-            //这个函数已经不需要实现，具体2D和3D版差异解决的方式可以参考
-            //https://github.com/jynew/jynew/wiki/1.5%E6%90%AD%E5%BB%BA%E6%B8%B8%E6%88%8F%E4%B8%96%E7%95%8C%E5%B7%AE%E5%BC%82%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95
-
-        }
-
+        
         //播放动画
         public static void PlayAnimation(int p1,int p2,int p3) 
         {
             //这个函数已经不需要实现，使用jyx2_PlayTimeline来解决
-        }
-
-        public static bool JudgeEthics(int roleId,int low,int high)
-        {
-            return JudgeRoleValue(roleId, (r) => { return r.Moral >= low && r.Moral <= high; });
         }
 
         public static bool JudgeAttack(int roleId,int low,int high)
@@ -526,8 +487,7 @@ namespace Jyx2
         {
             //这个函数已经不需要实现，使用jyx2_WalkFromTo来解决
         }
-
-
+        
         public static void LearnMagic2(int roleId,int magicId,int noDisplay)
         {
             RunInMainThread(() => {
@@ -603,27 +563,17 @@ namespace Jyx2
             Wait();
         }
 
-        public static bool JudgeSexual(int sexual)
-        {
-            return JudgeRoleValue(0, r => r.Sex == sexual);
-        }
-
         //判断队伍中是否有女性
         public static bool JudgeFemaleInTeam()
         {
             foreach(var r in runtime.GetTeam())
             {
-                if (r.Sex == 1)
+                if (r.Sex == "女")
                     return true;
             }
             return false;
         }
         
-        public static void Play2Amination(int eventIndex1, int beginPic1, int endPic1, int eventIndex2, int beginPic2, int endPic2)
-        {
-            //这个函数已经不需要实现，使用jyx2_PlayTimeline来解决
-        }
-
         //增加轻功
         public static void AddSpeed(int roleId, int value)
         {
@@ -681,11 +631,7 @@ namespace Jyx2
             });
             Wait();
         }
-
-        public static void instruct_50(int p1,int p2,int p3,int p4,int p5,int p6,int p7)
-        {
-
-        }
+        
         
         public static void ShowMessage(string message)
         {
@@ -700,15 +646,6 @@ namespace Jyx2
         {
             RunInMainThread(() => {
                 MessageBox.Create("你现在的品德指数为" + runtime.Player.Moral, Next);
-            });
-            Wait();
-        }
-
-        public static void ShowRepute()
-        {
-            RunInMainThread(() =>
-            {
-                MessageBox.Create("你现在的个人声望指数为" + runtime.Player, Next);
             });
             Wait();
         }
@@ -879,16 +816,7 @@ namespace Jyx2
         {
 
         }
-
-        public static void SetSexual(int roleId,int sexual)
-        {
-            var role = runtime.GetRole(roleId);
-            if(role != null)
-            {
-                role.Sex = sexual;
-            }
-        }
-
+        
         public static void PlayMusic(int id)
         {
             RunInMainThread(() =>

@@ -29,9 +29,9 @@ namespace Jyx2
         //基本情况
         [SerializeField] public int Key; //ID
         [SerializeField] public string Name; //姓名
-        [SerializeField] public int Sex; //性别
-        [SerializeField] public int Rate; //种族
-        [SerializeField] public int Moral; //善恶
+        [SerializeField] public String Sex; //性别
+        [SerializeField] public String Race; //种族
+        [SerializeField] public String Moral; //善恶
         [SerializeField] public String Describe; //描述
         [SerializeField] public int Level = 1; //等级
         [SerializeField] public int Exp; //经验
@@ -131,12 +131,12 @@ namespace Jyx2
             
             //CG 初始化
             Name = Data.Name;
-            Sex = (int)Data.Sexual;
+            Sex = Data.Sexual;
             Hp = Data.MaxHp;
             MaxHp = Data.MaxHp;
             Mp = Data.MaxMp;
             MaxMp = Data.MaxMp;
-            Rate = (int)Data.Rate;
+            Race = Data.Race;
             Moral = Data.Moral;
             Describe = Data.Descripe; 
             State = Data.State;
