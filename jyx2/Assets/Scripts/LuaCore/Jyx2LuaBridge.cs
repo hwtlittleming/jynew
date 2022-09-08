@@ -269,15 +269,7 @@ namespace Jyx2
             Wait();
             return isWin;
         }
-
-        //替换当前的出门音乐
-        public static void ChangeMMapMusic(int musicId)
-        {
-            RunInMainThread(() => {
-                LevelMaster.GetCurrentGameMap().ForceSetLeaveMusicId = musicId;
-            });
-        }
-
+        
         public static bool AskJoin()
         {
             return ShowYesOrNoSelectPanel("是否要求加入?");

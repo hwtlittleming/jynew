@@ -239,18 +239,12 @@ public class LevelMaster : MonoBehaviour
 		//首先播放进门音乐
 		if (!AudioManager.PlayMusic(gameMap.InMusic))
 		{
-
-			//如果没有在，则播放出门音乐
+			//如果没有则放上一地图音乐
 			if (LastGameMap != null)
 			{
-				if (LastGameMap.ForceSetLeaveMusicId != -1)
+				if (LastGameMap.InMusic != null)
 				{
-					AudioManager.PlayMusic(LastGameMap.ForceSetLeaveMusicId);
-				}
-
-				if (LastGameMap.OutMusic != null)
-				{
-					AudioManager.PlayMusic(LastGameMap.OutMusic);
+					AudioManager.PlayMusic(LastGameMap.InMusic);
 				}
 			}
 		}

@@ -57,11 +57,9 @@ namespace Jyx2Configs
 
         bool IsWeapon()
         {
-            return (int)this.EquipmentType == 0;
+            return (int)this.EquipmentType != -1;
         }
-
-
-
+        
         [BoxGroup(DEFAULT_GROUP_NAME)][LabelText("图标")]
         public AssetReferenceTexture2D Pic;
 
@@ -108,13 +106,13 @@ namespace Jyx2Configs
             return (int)ItemType == 2;
         }
         // todo 资质的东西
-        [BoxGroup(EFFECT_GROUP)][LabelText("加生命")]
+        [BoxGroup(EFFECT_GROUP)][LabelText("加生命")] //战斗中的伤药
         public int AddHp; 
 
         [BoxGroup(EFFECT_GROUP)][LabelText("加生命最大值")]
         public int AddMaxHp;
 
-        [BoxGroup(EFFECT_GROUP)][LabelText("加内力")]
+        [BoxGroup(EFFECT_GROUP)][LabelText("加内力")]//战斗中的伤药
         public int AddMp;
 
         [BoxGroup(EFFECT_GROUP)][LabelText("加内力最大值")]

@@ -19,10 +19,7 @@ using UnityEngine.UI;
 using DG.Tweening;
 using Jyx2Configs;
 
-/// <summary>
 /// JYX工具类
-/// </summary>
-
 public class GameUtil
 {
     /// <summary>
@@ -64,12 +61,8 @@ public class GameUtil
 
         await Jyx2_UIManager.Instance.ShowUIAsync(nameof(SelectRolePanel), selectParams);
     }
-
-    /// <summary>
+    
     /// 显示冒泡文字
-    /// </summary>
-    /// <param name="msg"></param>
-    /// <param name="duration"></param>
     public static void DisplayPopinfo(string msg, float duration =2f)
     {
         StoryEngine.Instance.DisplayPopInfo(msg, duration);
@@ -109,16 +102,10 @@ public class GameUtil
         return com;
     }
     
-    public static T GetOrAddComponent<T>(GameObject go) where T:Component
-    {
-        return GetOrAddComponent<T>(go.transform);
-    }
-
     public static void LogError(string str) 
     {
         Debug.LogError(str);
     }
-    
     
     public static void CallWithDelay(double time,Action action)
     {

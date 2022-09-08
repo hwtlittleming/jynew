@@ -56,13 +56,13 @@ namespace Jyx2Configs
         public int Strength; //0.2提高生命，0.8提高物攻
         
         [BoxGroup(CGroup3)][LabelText("智慧")][SerializeReference]
-        public int IQ;//0.3 提升生命，0.01提高物理法术暴击率，0.1赚钱倍率
+        public int IQ;//0.3 提升生命，0.01提高物理法术暴击率，0.1赚钱倍率，多次使用某技能概率升级
         
         [BoxGroup(CGroup3)][LabelText("体质")][SerializeReference]
         public int Constitution;//0.5生命 0.5防御，0.1回复
         
         [BoxGroup(CGroup3)][LabelText("敏捷")][SerializeReference]
-        public int Agile;// 1.0速度,0.01闪避
+        public int Agile;// 1.0速度,0.01闪避,0.2防御
         
         [BoxGroup(CGroup3)][LabelText("幸运")][SerializeReference]
         public int Luck;//+点数点闪避,事件触发 
@@ -111,7 +111,7 @@ namespace Jyx2Configs
         [BoxGroup(CGroup2)][LabelText("攻击附带")]
         public String Attach; //攻击附带
 
-        [BoxGroup(CGroup2)][LabelText("战斗经验")] //经验输入使得属性按资质增长，宠物可额外通过吞食获得经验
+        [BoxGroup(CGroup2)][LabelText("战斗经验")] //经验每满一定程度 属性按资质增长，宠物可额外通过吞食获得经验
         public int Exp;
 
         /* ------- 分割线 --------*/

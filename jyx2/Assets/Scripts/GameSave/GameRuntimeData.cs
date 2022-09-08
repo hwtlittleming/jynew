@@ -527,11 +527,7 @@ namespace Jyx2
             KeyValues[key] = str;
         }
 
-        /// <summary>
         /// 获取场景进入条件码
-        /// </summary>
-        /// <param name="scene"></param>
-        /// <returns></returns>
         public int GetSceneEntranceCondition(int mapId)
         {
             var gameMap = Jyx2ConfigMap.Get(mapId);
