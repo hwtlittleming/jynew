@@ -14,18 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Id: 2
   Name: "\u964D\u707E"
-  bestDistance: 0
-  attackRange: 
-  ExtraAttack: 0
-  PairedWugong: {fileID: 0}
   Pic:
     m_AssetGUID: 4f81054147ff6e041905476140de2626
     m_SubObjectName: 
     m_SubObjectType: 
     m_EditorAssetChanged: 0
-  Desc: "\u6614\u5251\u9080\u540D,\u613F\u4E3A\u964D\u707E"
-  ItemType: 1
-  EquipmentType: 0
+  bestDistance: 0
+  attackRange: 
+  ExtraAttack: 0
+  PairedWugong: {fileID: 0}
+  Desc: "\u6F06\u9ED1\u7684\u5927\u5251\uFF0C\u5251\u8EAB\u4F3C\u6709\u9B3C\u9B45\u73AF\u7ED5\uFF0C\u4E00\u4FA7\u523B\u6709\u6587\u5B57:\"\u6614\u5251\u9080\u540D,\u613F\u4E3A\u964D\u707E\""
+  ItemType: 10
   Quality: "\u4F20\u8BF4"
   Skill: {fileID: 0}
   AddHp: 0
@@ -36,8 +35,8 @@ MonoBehaviour:
   Speed: 0
   Defence: 0
   Heal: 0
-  ConditionMp: 0
-  ConditionAttack: 0
-  ConditionQinggong: 0
+  ConditionStrength: 0
   ConditionIQ: 0
-  NeedExp: 0
+  ConditionConstitution: 0
+  ConditionAgile: 0
+  ConditionLuck: 0

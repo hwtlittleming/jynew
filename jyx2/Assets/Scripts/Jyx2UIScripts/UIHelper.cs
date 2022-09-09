@@ -53,17 +53,16 @@ public class UIHelper
     public static Dictionary<int, int> GetUseItemRequire(Jyx2ConfigItem item) 
     {
         Dictionary<int, int> result = new Dictionary<int, int>();
-        if (item.ConditionMp > 0)
-            result.Add(15, item.ConditionMp);
-        if (item.ConditionAttack > 0)
-            result.Add(18, item.ConditionAttack);
-        if (item.ConditionQinggong > 0)
-            result.Add(3, item.ConditionQinggong);
+        if (item.ConditionIQ > 0)
+            result.Add(15, item.ConditionIQ);
+        if (item.ConditionStrength > 0)
+            result.Add(18, item.ConditionStrength);
+        if (item.ConditionAgile > 0)
+            result.Add(3, item.ConditionAgile);
         if (item.ConditionIQ > 0)
             result.Add(25, item.ConditionIQ);
 
         return result;
-
     }
 
     //使用人
@@ -101,10 +100,7 @@ public class UIHelper
     {
         Dictionary<int, int> effects = UIHelper.GetUseItemRequire(item);
         StringBuilder sb = new StringBuilder();
-        if (item.NeedExp > 0)
-        {
-            //sb.Append($"经验:  {item.NeedExp}\n");
-        }
+
         foreach (var effect in effects)
         {
             if (!GameConst.ProItemDic.ContainsKey(effect.Key.ToString()))

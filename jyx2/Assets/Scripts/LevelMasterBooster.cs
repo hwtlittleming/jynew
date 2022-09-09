@@ -59,7 +59,7 @@ public class LevelMasterBooster : MonoBehaviour
     {
         await BeforeSceneLoad.loadFinishTask;
 
-        if (GameRuntimeData.Instance == null)
+        if (GameRuntimeData.Instance == null) //编辑器内场景单独启动时 从配置表取初始数据
         {
             GameRuntimeData.CreateNew();
         }

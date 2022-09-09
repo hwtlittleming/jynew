@@ -13,6 +13,7 @@ using UnityEngine;
 
 namespace Jyx2
 {
+    [Serializable] 
     public class BattleBlockData
     {
         //战场逻辑位置 待去掉

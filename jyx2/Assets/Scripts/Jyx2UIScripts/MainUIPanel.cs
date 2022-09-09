@@ -151,7 +151,7 @@ public partial class MainUIPanel : Jyx2_UIBase, IUIAnimator
 		}
 
 		//剧情类和暗器不能使用
-		if ((int)item.ItemType == 0 || (int)item.ItemType == 4)
+		if ((int)item.ItemType == 0)
 		{
 			GameUtil.DisplayPopinfo("此道具不能在此使用");
 			return;
@@ -173,7 +173,7 @@ public partial class MainUIPanel : Jyx2_UIBase, IUIAnimator
 					if ((int)item.ItemType == 1)
 					{
 						//武器
-						if ((int)item.EquipmentType == 0)
+						if ((int)item.ItemType == 10)
 						{
 							if (runtime.GetItemUser(item.Id) != -1)
 							{
@@ -187,7 +187,7 @@ public partial class MainUIPanel : Jyx2_UIBase, IUIAnimator
 							GameUtil.DisplayPopinfo($"{selectRole.Name}使用了{item.Name}");
 						}
 						//防具
-						else if ((int)item.EquipmentType == 1)
+						else if ((int)item.ItemType == 11)
 						{
 							if (runtime.GetItemUser(item.Id) != -1)
 							{
@@ -248,7 +248,7 @@ public partial class MainUIPanel : Jyx2_UIBase, IUIAnimator
 	{
 		await Jyx2_UIManager.Instance.ShowUIAsync(nameof(SavePanel), new Action<int>((index) =>
 		{
-			StoryEngine.DoLoadGame(index);
+			GameRuntimeData.DoLoadGame(index);
 		}), "选择读档位".GetContent(nameof(MainUIPanel)));
 	}
 	

@@ -46,9 +46,7 @@ namespace Jyx2
             get; 
             set;
         }
-
-        public Jyx2ConfigItem Anqi;
-
+        
         public string Key;
 
         public int level;
@@ -110,7 +108,7 @@ namespace Jyx2
                 role.Tili = Tools.Limit(role.Tili - 4, 0, 100);
             }*/
             
-            //暗器，扣除道具
+            /*//暗器，扣除道具
             if (this is AnqiZhaoshiInstance)
             {
                 if (!role.isAI)
@@ -121,7 +119,7 @@ namespace Jyx2
                 {
                     role.AddItem(Anqi.Id, -1);
                 }
-            }
+            }*/
         }
 
         /// <summary>
@@ -244,33 +242,5 @@ namespace Jyx2
             return SkillCoverType.POINT;
         }
     }
-
-    /// <summary>
-    /// JYX2:暗器
-    /// </summary>
-    public class AnqiZhaoshiInstance : BattleZhaoshiInstance
-    {
-        private const int ANQI_MAGIC_ID = 97;
-
-        public AnqiZhaoshiInstance(int lv, Jyx2ConfigItem item)
-        {
-            //Key = "暗器_" + item.Name;
-            Key = "暗器";
-            _level = lv;
-            Anqi = item;
-            Data = new SkillInstance(item, ANQI_MAGIC_ID);
-        }
-
-        int _level;
-
-        public override bool IsAttack()
-        {
-            return false;
-        }
-
-        public override SkillCoverType GetCoverType()
-        {
-            return SkillCoverType.POINT;
-        }
-    }
+    
 }

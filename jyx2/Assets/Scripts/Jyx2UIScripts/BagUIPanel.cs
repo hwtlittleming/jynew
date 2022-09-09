@@ -131,11 +131,10 @@ public partial class BagUIPanel : Jyx2_UIBase
 			if (m_filter != null && m_filter(item) == false)
 				continue;
 
-			if (_filter == BagFilter.Item && item.GetItemType() != Jyx2ItemType.TaskItem) continue;
-			if (_filter == BagFilter.Anqi && item.GetItemType() != Jyx2ItemType.Anqi) continue;
-			if (_filter == BagFilter.Book && item.GetItemType() != Jyx2ItemType.Book) continue;
-			if (_filter == BagFilter.Cost && item.GetItemType() != Jyx2ItemType.Costa) continue;
-			if (_filter == BagFilter.Equipment && item.GetItemType() != Jyx2ItemType.Equipment) continue;
+			if (_filter == BagFilter.Item && (int)item.ItemType != 0) continue;
+			if (_filter == BagFilter.Book && (int)item.ItemType != 2) continue;
+			if (_filter == BagFilter.Cost && (int)item.ItemType != 3) continue;
+			if (_filter == BagFilter.Equipment && (int)item.ItemType != 1) continue;
 
 
 			var itemUI = Jyx2ItemUI.Create(int.Parse(id), count);

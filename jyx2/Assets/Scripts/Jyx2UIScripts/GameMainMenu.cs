@@ -247,26 +247,13 @@ public partial class GameMainMenu : Jyx2_UIBase
 	}
 
 	// merge to SavePanel.cs
-	// modified by eaphone at 2021/05/21
 	public async void OnLoadGameClicked()
 	{
 		m_panelType = PanelType.LoadGamePage;
-		//---------------------------------------------------------------------------
-		//await Jyx2_UIManager.Instance.ShowUIAsync(nameof(SavePanel), new Action<int>((index) =>
-		//{
-		//    if (!StoryEngine.DoLoadGame(index) && m_panelType==PanelType.LoadGamePage){
-		//        OnNewGame();
-		//    }
-		//}),"选择读档位", new Action(() =>
-		//{
-		//    m_panelType = PanelType.Home;
-		//}));
-		//---------------------------------------------------------------------------
-		//特定位置的翻译【读档时候的Title显示】
-		//---------------------------------------------------------------------------
+
 		await Jyx2_UIManager.Instance.ShowUIAsync(nameof(SavePanel), new Action<int>((index) =>
 		{
-			if (!StoryEngine.DoLoadGame(index) && m_panelType == PanelType.LoadGamePage)
+			if (!GameRuntimeData.DoLoadGame(index) && m_panelType == PanelType.LoadGamePage)
 			{
 				OnNewGame();
 			}
@@ -304,6 +291,7 @@ public partial class GameMainMenu : Jyx2_UIBase
 		OnCreateRoleNoClick();
 	}
 
+	//游戏开始界面的 开始游戏
 	void OnNewGame()
 	{
 		var runtime = GameRuntimeData.CreateNew();

@@ -55,9 +55,7 @@ public partial class XiakeUIPanel : Jyx2_UIBase
 		m_currentRole = allParams[0] as RoleInstance;
 		if (allParams.Length > 1)
 			m_roleList = allParams[1] as List<RoleInstance>;
-
-		/*var curMap=GameRuntimeData.Instance.CurrentMap;
-        (LeaveButton_Button.gameObject).SetActive("0_BigMap"==curMap);*/
+		
 		DoRefresh();
 	}
 
@@ -93,17 +91,17 @@ public partial class XiakeUIPanel : Jyx2_UIBase
 		}
 
 		NameText_Text.text = m_currentRole.Name;
-
+		PreImage_Image.LoadAsyncForget(m_currentRole.Data.GetPic());
+		
 		InfoText_Text.text = GetInfoText(m_currentRole);
 		SkillText_Text.text = GetSkillText(m_currentRole);
 		RefreshEquipments(m_currentRole);
 
 		//select the first available button
 		changeCurrentSelection(0);
-
-		PreImage_Image.LoadAsyncForget(m_currentRole.Data.GetPic());
 	}
 
+	//左侧人物选择下拉框
 	void RefreshScrollView()
 	{
 		m_roleUIItems.Clear();
@@ -226,65 +224,36 @@ public partial class XiakeUIPanel : Jyx2_UIBase
 
 	void RefreshEquipments(RoleInstance role)
 	{
-		for (int i = 0; i< Equipments.childCount; i++)
+		foreach (var equip in role.Equipments)
 		{
-			Transform transform = Equipments.GetChild(i);
-			Text m_roleName = transform.Find("NameText").GetComponent<Text>();
-			Image m_roleHead = transform.Find("Image").GetComponent<Image>();
-			if (transform.name.Contains("Weapon"))
+			Text equipName = ButtonSelectWeapon_Button.transform.Find("NameText").GetComponent<Text>();
+			Image equipHead = ButtonSelectWeapon_Button.transform.Find("Image").GetComponent<Image>();
+			
+			int type = (int) equip.ItemType;
+			if (type == 10)
 			{
-				Jyx2ConfigItem item = role.Equipments[0];
-				if (item !=null)
-				{
-					m_roleName.text = item.Name;
-					m_roleHead.LoadAsyncForget(item.GetPic());
-				}else
-				{
-					m_roleHead.gameObject.SetActive(false);
-					m_roleName.text = "武器";
-				}
-			}
-			else if (transform.name.Contains("Armor"))
+				equipName.text = equip.Name;
+				equipHead.LoadAsyncForget(equip.GetPic());
+			}else if (type == 11)
 			{
-				Jyx2ConfigItem item = role.Equipments[1];
-				if (item !=null)
-				{
-					m_roleName.text = item.Name;
-					m_roleHead.LoadAsyncForget(item.GetPic());
-				}else
-				{
-					m_roleHead.gameObject.SetActive(false);
-					m_roleName.text = "防具";
-				}
-			}
-			else if (transform.name.Contains("Shoes"))
+				equipName = ButtonSelectArmor_Button.transform.Find("NameText").GetComponent<Text>();
+				equipHead = ButtonSelectArmor_Button.transform.Find("Image").GetComponent<Image>();
+				equipName.text = equip.Name;
+				equipHead.LoadAsyncForget(equip.GetPic());
+			}else if (type == 12)
 			{
-				Jyx2ConfigItem item = role.Equipments[2];
-				if (item !=null)
-				{
-					m_roleName.text = item.Name;
-					m_roleHead.LoadAsyncForget(item.GetPic());
-				}else
-				{
-					m_roleHead.gameObject.SetActive(false);
-					m_roleName.text = "代步";
-				}
-			}
-			else if (transform.name.Contains("Treasure"))
+				equipName = ButtonSelectShoes_Button.transform.Find("NameText").GetComponent<Text>();
+				equipHead = ButtonSelectShoes_Button.transform.Find("Image").GetComponent<Image>();
+				equipName.text = equip.Name;
+				equipHead.LoadAsyncForget(equip.GetPic());
+			}else if (type == 13)
 			{
-				Jyx2ConfigItem item = role.Equipments[3];
-				if (item !=null)
-				{
-					m_roleName.text = item.Name;
-					m_roleHead.LoadAsyncForget(item.GetPic());
-				}else
-				{
-					m_roleHead.gameObject.SetActive(false);
-					m_roleName.text = "宝物";
-				}
+				equipName = ButtonSelectTreasure_Button.transform.Find("NameText").GetComponent<Text>();
+				equipHead = ButtonSelectTreasure_Button.transform.Find("Image").GetComponent<Image>();
+				equipName.text = equip.Name;
+				equipHead.LoadAsyncForget(equip.GetPic());
 			}
 		}
-		
 	}
 
 	void OnBackClick()
@@ -335,23 +304,7 @@ public partial class XiakeUIPanel : Jyx2_UIBase
 
 	async void OnEquipmentClick(int index)
 	{
-		Jyx2ConfigItem.Jyx2ConfigItemEquipmentType type = Jyx2ConfigItem.Jyx2ConfigItemEquipmentType.武器;
 		Jyx2ConfigItem yetItem = m_currentRole.Equipments[index] != null ? m_currentRole.Equipments[index] : new Jyx2ConfigItem();
-		switch (index)
-		{
-			case 0:
-				type = Jyx2ConfigItem.Jyx2ConfigItemEquipmentType.武器;
-				break;
-			case 1:
-				type = Jyx2ConfigItem.Jyx2ConfigItemEquipmentType.防具;
-				break;
-			case 2:
-				type = Jyx2ConfigItem.Jyx2ConfigItemEquipmentType.代步;
-				break;
-			case 3:
-				type = Jyx2ConfigItem.Jyx2ConfigItemEquipmentType.宝物;
-				break;
-		}
 		await SelectFromBag(
 			(itemId) =>
 			{
@@ -375,7 +328,7 @@ public partial class XiakeUIPanel : Jyx2_UIBase
 					runtime.SetItemUser(item.Id, m_currentRole.GetJyx2RoleId());
 				}
 			},
-			(item) => { return item.EquipmentType ==type && (runtime.GetItemUser(item.Id) == m_currentRole.GetJyx2RoleId() || runtime.GetItemUser(item.Id) == -1); },
+			(item) => { return (int)item.ItemType == (index + 10) && (runtime.GetItemUser(item.Id) == m_currentRole.GetJyx2RoleId() || runtime.GetItemUser(item.Id) == -1); },
 			m_currentRole.Equipments[index] == null ? -1 : m_currentRole.Equipments[index].Id);
 	}
 	

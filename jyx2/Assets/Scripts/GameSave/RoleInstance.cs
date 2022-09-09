@@ -1,17 +1,6 @@
-/*
- * 金庸群侠传3D重制版
- * https://github.com/jynew/jynew
- *
- * 这是本开源项目文件头，所有代码均使用MIT协议。
- * 但游戏内资源和第三方插件、dll等请仔细阅读LICENSE相关授权协议文档。
- *
- * 金庸老先生千古！
- */
-
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using Jyx2.Middleware;
 using UnityEngine;
 using UniRx;
 using Jyx2Configs;
@@ -61,45 +50,35 @@ namespace Jyx2
         [SerializeField] public int Luck; //幸运
 
         //携带
-
         [SerializeField] public List<SkillInstance> skills = new List<SkillInstance>(); //武功
         [SerializeField] public List<Jyx2ConfigCharacterItem> Items = new List<Jyx2ConfigCharacterItem>(); //道具
-        [SerializeField] public List<Jyx2ConfigItem> Equipments = new List<Jyx2ConfigItem>() {null,null,null,null}; //装备：0武器 1防具 2鞋子 4宝物
+        [SerializeField] public List<Jyx2ConfigItem> Equipments = new List<Jyx2ConfigItem>(); //装备：0武器 1防具 2鞋子 4宝物
         
-        [SerializeField] public int CurrentSkill = 0; //当前技能
+        [SerializeField] public int CurrentSkill = 0; //进入战斗时 默认选中的武功序号
         #endregion
 
-        //额外增加属性 确定要用后再加至存档 todo
+        //额外增加的属性 确定要用后再加至存档 todo
         public int bestAttackDistance = 1;//最佳攻击距离，决定站位前后
         public bool isReadyToBattle = true;//是否参战
         public int currentMotivation  = 10; //当前行动力，可赋初始值
         public int motivationPerSecond = 10;//每秒获得的行动力
         public BattleBlockData blockData = new BattleBlockData();//当前所处格子坐标
-        public Vector3 Block;
+        //public Vector3 Block;
 
         public RoleInstance()
         {
         }
 
+        //初始化角色实例，从配置表中复制数据
         public RoleInstance(int roleId)
         {
-            Key = roleId;
-            BindKey();
-            InitData();
-            Recover(true);
-        }
-
-        public void BindKey()
-        {
-            _data = GameConfigDatabase.Instance.Get<Jyx2ConfigCharacter>(Key);
-
-            if (_data == null)
-            {
-                Assert.Fail();
-            }
+            Key = roleId; // todo 先给Key 然后又get configrole 多此一举
+            InitData(); //复制属性数据
             
-            //初始化武功列表 读取配置的技能
-            //Wugongs.Clear();			
+            //配置的技能复制到角色实例
+            _data = GameConfigDatabase.Instance.Get<Jyx2ConfigCharacter>(Key);
+            if (_data == null)Assert.Fail();
+            skills.Clear();			
             if (skills.Count == 0)
             {
                 foreach (var wugong in _data.Skills)
@@ -107,10 +86,28 @@ namespace Jyx2
                     skills.Add(new SkillInstance(wugong));
                 }
             }
-
-            //每次战斗前reset一次 将存档里的技能和物品id在战斗中获得技能实例
-            ResetForBattle();
+            //配置表中添加初始物品
+            Items.Clear();
+            foreach (var item in Data.Items)
+            {
+                var generateItem = new Jyx2ConfigCharacterItem();
+                generateItem.Item = item.Item;
+                generateItem.Count = item.Count;
+                Items.Add(generateItem);
+            }
+            //配置表中添加初始装备
+            Equipments.Clear();
+            foreach (var item in Data.Equipments)
+            {
+                if ( item != null )
+                {
+                    Equipments.Add(GameConfigDatabase.Instance.Get<Jyx2ConfigItem>(item.Id));
+                }
+                
+            }
+            Recover(true);
         }
+        
         public static T DeepCopy<T>(T obj)
         {
             //如果是字符串或值类型则直接返回
@@ -128,8 +125,6 @@ namespace Jyx2
 
         void InitData()
         {
-            
-            //CG 初始化
             Name = Data.Name;
             Sex = Data.Sexual;
             Hp = Data.MaxHp;
@@ -155,24 +150,25 @@ namespace Jyx2
             CriticalLevel = Data.CriticalLevel;
             Miss = Data.Miss;
             Luck = Data.Luck;
-            
-        
-            Equipments[0] = Data.Weapon == null ? null :GameConfigDatabase.Instance.Get<Jyx2ConfigItem>(Data.Weapon.Id) ;
-            Equipments[1] = Data.Armor == null ? null :GameConfigDatabase.Instance.Get<Jyx2ConfigItem>(Data.Armor.Id) ;
-            Equipments[2] = Data.Shoes == null ? null :GameConfigDatabase.Instance.Get<Jyx2ConfigItem>(Data.Shoes.Id) ;
-            Equipments[3] = Data.Treasure == null ? null :GameConfigDatabase.Instance.Get<Jyx2ConfigItem>(Data.Treasure.Id) ;
-            
+
             IQ = Data.IQ;
-
-            ResetItems();
+            
         }
 
-        public void ResetForBattle()
+        //从存档中获取技能
+        public SkillInstance getSkill(int magicId)
         {
-            ResetZhaoshis();
-            ResetItems();
-        }
+            foreach (var skill in skills)
+            {
+                if (skill.Key == magicId)
+                {
+                    return skill;
+                }
+            }
 
+            return null;
+        }
+        
         public void Recover(bool condition)
         {
             if (condition)
@@ -286,7 +282,8 @@ namespace Jyx2
                 yield break;
         }
 
-        public void ResetZhaoshis()
+        //将角色实例的技能复制到角色实例的战斗技能  todo 战斗前引用该方法
+        public void ResetBattleSkill()
         {
             if (Zhaoshis == null)
             {
@@ -304,31 +301,13 @@ namespace Jyx2
         }
 
         #region JYX2道具相关
-
-        //重置身上的物品
-        public void ResetItems()
-        {
-            Items.Clear();
-            //配置表中添加的物品
-            foreach (var item in Data.Items)
-            {
-                var generateItem = new Jyx2ConfigCharacterItem();
-                generateItem.Item = item.Item;
-                generateItem.Count = item.Count;
-                Items.Add(generateItem);
-            }
-        }
-
+        
         public bool HaveItemBool(int itemId)
         {
             return Items.FindIndex(it => it.Item.Id == itemId) != -1;
         }
-
-        /// <summary>
+        
         /// 为角色添加物品
-        /// </summary>
-        /// <param name="itemId"></param>
-        /// <param name="count"></param>
         public void AddItem(int itemId, int count)
         {
             var item = Items.Find(it => it.Item.Id == itemId);
@@ -336,7 +315,6 @@ namespace Jyx2
             if (item != null)
             {
                 item.Count += count;
-
                 //fix issue of using one removed the entire item
                 if (count <  0 && item.Count <= 0)
                     Items.Remove(item);
@@ -350,107 +328,27 @@ namespace Jyx2
                 });
             }
         }
-
-
+        
         public bool CanUseItem(int itemId)
         {
-            return CanUseItem(GameConfigDatabase.Instance.Get<Jyx2ConfigItem>(itemId));
-        }
-
-        /// <summary>
-        /// 判断角色是否可以使用道具
-        /// 
-        /// 对应kyscpp：bool GameUtil::canUseItem(Role* r, Item* i)
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        public bool CanUseItem(Jyx2ConfigItem item)
-        {
-            if (item == null) return false;
-
-            //剧情类无人可以使用
-            if (item.ItemType == 0)
-                return false;
-
-            else if ((int)item.ItemType == 1 || (int)item.ItemType == 2)
-            {
-                if ((int)item.ItemType == 2)
-                {
-                    //有仅适合人物，直接判断
-                    /*if (item.OnlySuitableRole >= 0)
-                    {
-                        return item.OnlySuitableRole == this.Key;
-                    }*/
-                }
-                //若有相关武学，则为真
-                //若已经学满武学，则为假
-                //满级则为真
-                //此处注意，如果有可制成物品的秘籍，则武学满级之后不会再制药了，请尽量避免这样的设置
-                if (item.Skill != null)
-                {
-                    foreach (var wugong in skills)
-                    {
-                        if (wugong.Key == item.Skill.Id)
-                            return true;
-                    }
-                    int level = GetWugongLevel(item.Skill.Id);
-                    if (level < 0 && this.skills.Count >= GameConst.MAX_ROLE_WUGONG_COUNT)
-                    {
-                        return false;
-                    }
-
-                    if (level == GameConst.MAX_WUGONG_LEVEL)
-                    {
-                        return true;
-                    }
-                }
-
-                //上面的判断未确定则进入下面的判断链
-                return testAttr(this.Attack - GetEquipmentProperty("Attack",0) - GetEquipmentProperty("Attack",1), item.ConditionAttack)
-                       && testAttr(this.Speed - GetEquipmentProperty("Speed",0) - GetEquipmentProperty("Speed",1), item.ConditionQinggong)
-                       && testAttr(this.MaxMp, item.ConditionMp)
-                       && testAttr(this.IQ, item.ConditionIQ);
-            }
-            else if ((int)item.ItemType == 3)
-            {
-                //药品类所有人可以使用
-                return true;
-            }
-            else if ((int)item.ItemType == 4)
-            {
-                //暗器类不可以使用
-                return false;
-            }
-
-            return false;
-        }
-
-
-        bool testAttr(int v, int v_need)
-        {
-            if (v_need > 0 && v < v_need)
-            {
-                return false;
-            }
-
-            if (v_need < 0 && v > -v_need)
+            var item = GameConfigDatabase.Instance.Get<Jyx2ConfigItem>(itemId);
+            if (item == null || item.ItemType == 0) return false;
+            
+            if (this.Strength - item.ConditionStrength< 0 || this.IQ - item.ConditionIQ< 0 || this.Agile - item.ConditionAgile < 0
+                || this.Constitution - item.ConditionConstitution< 0 || this.Luck - item.ConditionLuck < 0 )
             {
                 return false;
             }
 
             return true;
         }
-
-
+        
         private GameRuntimeData runtime
         {
             get { return GameRuntimeData.Instance; }
         }
-
-        /// <summary>
+        
         /// 使用物品
-        /// </summary>
-        /// <param name="item"></param>
         public void UseItem(Jyx2ConfigItem item)
         {
             if (item == null)
@@ -515,48 +413,7 @@ namespace Jyx2
         {
             return false;
         }
-
-        /// <summary>
-        /// 获得修炼所需经验
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        public int GetFinishedExpForItem(Jyx2ConfigItem item)
-        {
-            if (item == null || (int)item.ItemType != 2 || item.NeedExp < 0)
-            {
-                return GameConst.MAX_EXP;
-            }
-
-            int multiple = 7 - this.IQ / 15;
-            if (multiple <= 0)
-            {
-                multiple = 1;
-            }
-
-            //有关联武学的，如已满级则不可修炼
-            if (item.Skill != null)
-            {
-                int magic_level_index = GetWugongLevel(item.Skill.Id);
-                if (magic_level_index == GameConst.MAX_SKILL_LEVEL)
-                {
-                    return GameConst.MAX_EXP;
-                }
-
-                //初次修炼和从1级升到2级的是一样的
-                if (magic_level_index > 0)
-                {
-                    multiple *= magic_level_index;
-                }
-            }
-            else
-            {
-                multiple *= 2;
-            }
-
-            return item.NeedExp * multiple;
-        }
-
+        
         #endregion
 
         public int GetWugongLevel(int wugongId)
@@ -577,7 +434,7 @@ namespace Jyx2
             {
                 if (_data == null)
                 {
-                    BindKey();
+                    _data = GameConfigDatabase.Instance.Get<Jyx2ConfigCharacter>(Key);
                 }
 
                 return _data;
@@ -624,10 +481,7 @@ namespace Jyx2
             BattleBlockData posData = BattleboxHelper.Instance.GetBlockData(Pos.X, Pos.Y);
             View.SetPosition(posData.WorldPos);
         }
-
-        //移动过的格子数
-        public int movedStep = 0;
-
+        
         //是否已经行动
         public bool isActed = false;
         public bool isWaiting = false; //正在等待
@@ -640,7 +494,7 @@ namespace Jyx2
 
             View.LazyInitAnimator();
 
-            //修复当前武功
+            //进入战斗时 默认选中的武功
             if (CurrentSkill >= skills.Count)
             {
                 CurrentSkill = 0;
@@ -772,35 +626,23 @@ namespace Jyx2
 
         }
 
-        //学习武学逻辑，对应kyscpp int Role::learnMagic(int magic_id)
+        //廉价的过度武学-可学习
         public int LearnMagic(int magicId)
         {
-            if (magicId <= 0)
-                return -1;
-
-            foreach (var skill in skills)
+            if (magicId <= 0) return -1;
+            SkillInstance skill = getSkill(magicId);
+            Level = 1;
+            if ( skill == null)
             {
-                if (skill.Key == magicId)
-                {
-                    if (skill.Level < GameConst.MAX_SKILL_LEVEL)
-                    {
-                        skill.Level += 100;
-                        return 0;
-                    }
-                    else
-                    {
-                        return -2; //已经满级
-                    }
-                }
+                SkillInstance s = new SkillInstance(magicId);
+                skills.Add(s);
+            }else if (skill.Level < 3)
+            {
+                skill.Level = skill.Level + 1;
+            }else
+            {
+                return -3;
             }
-
-            if (skills.Count >= GameConst.MAX_SKILL_COUNT)
-                return -3; //武学已满
-
-
-            SkillInstance w = new SkillInstance(magicId);
-            skills.Add(w);
-            ResetZhaoshis();
             return 0;
         }
         
@@ -820,7 +662,8 @@ namespace Jyx2
             return ColorStringDefine.Default;
             //return Poison > 0 ? ColorStringDefine.Hp_posion : ColorStringDefine.Default;
         }
-
+        
+        //根据传入名称 获取任意属性
         public int GetEquipmentProperty(string propertyName,int index)
         {
             return this.Equipments[index] != null ? (int)Equipments[index].GetType().GetField(propertyName).GetValue(Equipments[index]) : 0;

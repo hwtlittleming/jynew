@@ -50,7 +50,6 @@ namespace Jyx2Configs
         public string GetShowName()
         {
             //特定位置的翻译【小地图左上角的主角居显示】
-            //---------------------------------------------------------------------------
             if (GlobalAssetConfig.Instance.defaultHomeName.Equals(Name)) return GameRuntimeData.Instance.Player.Name + "居".GetContent(nameof(Jyx2ConfigMap));
             return Name;
         }

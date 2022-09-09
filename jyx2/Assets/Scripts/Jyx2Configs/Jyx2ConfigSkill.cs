@@ -30,19 +30,22 @@ namespace Jyx2Configs
             竖排攻击 = 2,
             随机斜线攻击 = 3,
             邻近格子攻击 = 4,
-            面攻击 = 5 //每种按能打击的程度，程度max则为全体攻击
+            全体攻击 = 5 
         }
         
         public enum ConfigSkillLevelType
         {
             初窥门径 = 1,
-            驾轻就熟 = 2,
-            心领神会 = 3,
+            驾轻就熟 = 2,  //属性增加，伤害增幅，范围增减
+            心领神会 = 3, //额外附加效果 红警三阶标志
         }
         
         private const string CGroup1 = "基本配置";
         private const string CGroup2 = "战斗属性";
 
+        [BoxGroup(CGroup2)][LabelText("技能等阶")][EnumToggleButtons]
+        public ConfigSkillLevelType SkillLevel ;
+        
         [BoxGroup(CGroup2)][LabelText("伤害类型")][EnumPaging]
         public Jyx2ConfigSkillDamageType DamageType; //伤害类型
         
@@ -50,8 +53,8 @@ namespace Jyx2Configs
         public Jyx2ConfigSkillCoverType SkillCoverType; //攻击范围
         
         [BoxGroup(CGroup2)][LabelText("消耗能量点数")]
-        public int MpCost; 
-        
+        public int MpCost;
+
         [BoxGroup(CGroup2)][LabelText("带毒方法")]
         public String Poison;
         
@@ -64,9 +67,6 @@ namespace Jyx2Configs
         [BoxGroup(CGroup2)][LabelText("技能附加")]
         public String Attach;
         
-        [BoxGroup(CGroup2)][LabelText("技能等阶")][EnumToggleButtons]
-        public ConfigSkillLevelType SkillLevel ;
-
         [InlineEditor] [BoxGroup("技能外观")] [SerializeReference]
         public Jyx2SkillDisplayAsset Display;
 

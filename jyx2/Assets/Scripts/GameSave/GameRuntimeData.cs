@@ -11,6 +11,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Runtime.Serialization.Json;
 using System.Text;
 using ES3Types;
 using i18n.TranslatorDef;
@@ -19,17 +21,10 @@ using UnityEngine;
 
 namespace Jyx2
 {
-    
-    
-    
-    /// <summary>
-    /// 这里是整个游戏的存档数据结构根节点
-    ///
-    /// </summary>
+    /// 游戏的存档数据结构根节点
     [Serializable]
     public class GameRuntimeData 
     {
-        #region 单例
         public static GameRuntimeData Instance {
             get
             {
@@ -41,9 +36,7 @@ namespace Jyx2
             }
         }
         private static GameRuntimeData _instance;
-
-        #endregion
-
+        
         #region 存档数据定义
         //JYX2，所有的角色都放到存档里
         [SerializeField] public Dictionary<int,RoleInstance> AllRoles = new Dictionary<int,RoleInstance>();
@@ -61,93 +54,28 @@ namespace Jyx2
         [SerializeField] public Dictionary<string, int> MapPic = new Dictionary<string, int>();
         [SerializeField] private List<int> ItemAdded = new List<int>(); //已经添加的角色物品
         #endregion
-
-        #region JYX2
-
-        //新建一个存档
+        
+        //入口:新游戏的开始
         public static GameRuntimeData CreateNew()
         {
             _instance = new GameRuntimeData();
-            var runtime = _instance;
-
-            _instance.InitAllRole();
-
-            var player = runtime.GetRole(0);
             
-            //主角入当前队伍
-            runtime.JoinRoleToTeam(0);
-
-#if UNITY_EDITOR
-            //可自由实现新的语法
-            var content = File.ReadAllLines("CreateTeamDebug.txt");
-            
-            //初始技能
-            foreach(var line in content)
-            {
-                if (string.IsNullOrEmpty(line.Trim())) continue;
-                if (line.StartsWith("//")) continue;
-                if (line.StartsWith("skills=")) //初始技能
-                {
-                    var tmp = line.Replace("skills=", "").Split('|');
-                    foreach(var skill in tmp)
-                    {
-                        int skillId = int.Parse(skill.Split(',')[0]);
-                        string level = skill.Split(',')[1];
-                        player.LearnMagic(skillId);
-                        var s = player.skills.Find(p => p.Key == skillId);
-                        if (s != null)
-                        {
-                            s.Level = int.Parse(level);
-                        }
-                    }
-                }else if (line.StartsWith("teammates=")) //初始队友
-                {
-                    var tmp = line.Replace("teammates=", "").Split('|');
-                    foreach (var roleId in tmp)
-                    {
-                        int role = int.Parse(roleId);
-                        GameRuntimeData.Instance.JoinRoleToTeam(role);
-                    }
-                }else if (line.StartsWith("items")) //初始物品
-                {
-                    var tmp = line.Replace("items=", "").Split('|');
-                    foreach (var item in tmp)
-                    {
-                        int itemId = int.Parse(item.Split(',')[0]);
-                        int count = int.Parse(item.Split(',')[1]);
-                        GameRuntimeData.Instance.AddItem(itemId, count);
-                    }
-                }else if (line.StartsWith("props")) //初始属性
-                {
-                    var tmp = line.Replace("props=", "").Split('|');
-                    foreach (var prop in tmp)
-                    {
-                        string name = prop.Split(',')[0];
-                        int value = int.Parse(prop.Split(',')[1]);
-                        player.GetType().GetField(name).SetValue(player, value);
-                    }
-                }
-            }
-
-#endif
-            return runtime;
-        }
-
-        void InitAllRole() 
-        {
             //创建所有角色
             foreach (var r in GameConfigDatabase.Instance.GetAll<Jyx2ConfigCharacter>())
             {
                 var role = new RoleInstance(r.Id);
                 _instance.AllRoles.Add(r.Id, role);
             }
+            
+            //主角入当前队伍
+            _instance.JoinRoleToTeam(0);
+            _instance.JoinRoleToTeam(1);
+
+            return _instance;
         }
 
-        #endregion
-
         #region 游戏保存和读取
-
-
+        
         public const string ARCHIVE_FILE_NAME = "archive_{0}.dat";
         public const string ARCHIVE_SUMMARY_FILE_NAME = "archive_summary_{0}.dat";
         public const string ARCHIVE_FILE_DIR = "Save";
@@ -155,20 +83,97 @@ namespace Jyx2
         [Obsolete("待删除")]
         public const string ARCHIVE_SUMMARY_PREFIX = "save_summaryinfo_new_";
 
+        public static string GetJson<T>(T obj)
+        {
+            DataContractJsonSerializer json = new DataContractJsonSerializer(typeof(T));
+            using (MemoryStream ms = new MemoryStream())
+            {
+                json.WriteObject(ms, obj);
+                string szJson = Encoding.UTF8.GetString(ms.ToArray());
+                return szJson;
+            }
+        }
+        
+        public static T ParseFormJson<T>(string szJson)
+        {
+            T obj = Activator.CreateInstance<T>();
+            using (MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(szJson)))
+            {
+                DataContractJsonSerializer dcj = new DataContractJsonSerializer(typeof(T));
+                return (T)dcj.ReadObject(ms);
+            }
+        }
+        
+        //存档
         public void GameSave(int index = -1)
         {
             Debug.Log("存档中.. index = " + index);
-            SaveToFile(index);
+
+            string path = string.Format(ARCHIVE_FILE_NAME, index);
+           ES3.Save(nameof(GameRuntimeData), this, path);
+           
+           /*ES3.Save(nameof(GameRuntimeData), GetJson(this) , path);
+           GameRuntimeData g = ParseFormJson<GameRuntimeData>(ES3.Load(path).ToString());*/
+
+           /*BinaryFormatter bf0=new BinaryFormatter();
+           FileStream  fs0=File.Create(Application.persistentDataPath+"/Data.yj");
+           bf0.Serialize(fs0,this.AllRoles[0]);
+           //将Save对象转化为字节
+           fs0.Close();
+           
+           BinaryFormatter bf=new BinaryFormatter();
+           FileStream fs=File.Open(Application.persistentDataPath+"/Data.yj",FileMode.Open);//打开文件
+           RoleInstance save=bf.Deserialize(fs) as RoleInstance;
+           fs.Close();*/
+           
             Debug.Log("存档结束");
 
             var summaryInfo = GenerateSaveSummaryInfo();
             ES3.Save("summary", summaryInfo, string.Format(ARCHIVE_SUMMARY_FILE_NAME, index));
             //PlayerPrefs.SetString(ARCHIVE_SUMMARY_PREFIX + index, summaryInfo);
         }
+        
+        //载入存档
+        public static bool DoLoadGame(int index)
+        {
+            //ES3取得存档数据
+            string path = string.Format(ARCHIVE_FILE_NAME, index);
+            var r =  ES3.Load<GameRuntimeData>(nameof(GameRuntimeData), path);
+            _instance = r;
+            
+            if (r == null)
+            {
+                return false;
+            }
+
+            //将存档的角色数据给当前角色实例
+            GameRuntimeData.Instance.AllRoles = r.AllRoles;
+            
+            var loadPara = new LevelMaster.LevelLoadPara() {loadType = LevelMaster.LevelLoadPara.LevelLoadType.Load};
+
+            //加载地图
+            int mapId = -1;
+            if (r.SubMapData == null)
+            {
+                mapId = GameConst.WORLD_MAP_ID;
+                loadPara.Pos = r.WorldData.WorldPosition;
+                loadPara.Rotate = r.WorldData.WorldRotation;
+            }
+            else
+            {
+                mapId = r.SubMapData.MapId;
+                loadPara.Pos = r.SubMapData.CurrentPos;
+                loadPara.Rotate = r.SubMapData.CurrentOri;
+            }
+
+            LevelLoader.LoadGameMap(GameConfigDatabase.Instance.Get<Jyx2ConfigMap>(mapId), loadPara,
+                () => { LevelMaster.Instance.TryBindPlayer(); });
+            return true;
+        }
 
         public static DateTime? GetSaveDate(int index)
 		{
-            var summaryInfoFilePath = getSaveFileName(index);
+            var summaryInfoFilePath = string.Format(ARCHIVE_SUMMARY_FILE_NAME, index);
             return ES3.FileExists(summaryInfoFilePath) ?
                  ((DateTime?) ES3.GetTimestamp(summaryInfoFilePath)) : null;
         }
@@ -176,42 +181,14 @@ namespace Jyx2
         public static string GetSaveSummary(int index)
 		{
 			string summaryInfo = "";
-			var summaryInfoFilePath = getSaveFileName(index);
+			var summaryInfoFilePath = string.Format(ARCHIVE_SUMMARY_FILE_NAME, index);
 			if (ES3.FileExists(summaryInfoFilePath))
 			{
 				summaryInfo = ES3.Load<string>("summary", summaryInfoFilePath);
 			}
-			else //CGGG：否则使用老的方式进行载入，适配老存档，此处待删除
-			{
-				var summaryInfoKey = ARCHIVE_SUMMARY_PREFIX + index;
-				if (PlayerPrefs.HasKey(summaryInfoKey))
-				{
-					summaryInfo = PlayerPrefs.GetString(summaryInfoKey);
-				}
-			}
-
-			return summaryInfo;
+            return summaryInfo;
 		}
-
-		private static string getSaveFileName(int index)
-		{
-			return string.Format(ARCHIVE_SUMMARY_FILE_NAME, index);
-		}
-
-		public void SaveToFile(int fileIndex)
-        {
-            string path = string.Format(ARCHIVE_FILE_NAME, fileIndex);
-            ES3.Save(nameof(GameRuntimeData), this, path);
-        }
-
-        public static GameRuntimeData LoadArchive(int fileIndex)
-        {
-            string path = string.Format(ARCHIVE_FILE_NAME, fileIndex);
-            var runtime =  ES3.Load<GameRuntimeData>(nameof(GameRuntimeData), path);
-            _instance = runtime;
-            return runtime;
-        }
-
+        
         private string GenerateSaveSummaryInfo()
         {
             string mapName = LevelMaster.GetCurrentGameMap().GetShowName();
@@ -269,26 +246,15 @@ namespace Jyx2
                     ItemAdded.Add(item.Item.Id);
                     if (item.Count > 0 && showGetItem)
                     {
-                        //---------------------------------------------------------------------------
-                        //StoryEngine.Instance.DisplayPopInfo("得到物品:" + item.Item.Name + "×" + Math.Abs(item.Count));
-                        //---------------------------------------------------------------------------
-                        //特定位置的翻译【得到物品提示】
-                        //---------------------------------------------------------------------------
                         StoryEngine.Instance.DisplayPopInfo("得到物品:".GetContent(nameof(GameRuntimeData)) + item.Item.Name + "×" + Math.Abs(item.Count));
-                        //---------------------------------------------------------------------------
-                        //---------------------------------------------------------------------------
                     }
                     item.Count = 0;
                 }
             }
 
-            //清空角色身上的装备
-            role.Equipments[0] = null;
-            role.Equipments[1] = null;
-            role.Equipments[2] = null;
-            role.Equipments[3] = null;
-
-            role.Items.Clear();   
+            //清空角色身上的装备和物品
+            /*role.Equipments.Clear();
+            role.Items.Clear();*/
             
             TeamId.Add(roleId);
             return true;

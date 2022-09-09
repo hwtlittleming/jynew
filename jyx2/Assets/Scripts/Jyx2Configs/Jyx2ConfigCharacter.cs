@@ -9,13 +9,13 @@ using UnityEngine.AddressableAssets;
 
 namespace Jyx2Configs
 {
+    [Serializable]
     [CreateAssetMenu(menuName = "金庸重制版/配置文件/角色", fileName = "角色ID_角色名")]
     public class Jyx2ConfigCharacter : Jyx2ConfigBase
     {
         private const string CGroup1 = "基本信息";
         private const string CGroup2 = "属性";
         private const string CGroup3 = "资质";
-        private const string CGroup4 = "装备";
         private const string CGroupSkill = "武功";
         private const string CGroupItems = "道具";
         
@@ -56,7 +56,7 @@ namespace Jyx2Configs
         public int Strength; //0.2提高生命，0.8提高物攻
         
         [BoxGroup(CGroup3)][LabelText("智慧")][SerializeReference]
-        public int IQ;//0.3 提升生命，0.01提高物理法术暴击率，0.1赚钱倍率，多次使用某技能概率升级
+        public int IQ;// 10提升能量上限，法术伤害翻倍率, 0.3 提升生命，0.1赚钱倍率，多次使用某技能概率升级  90以上获得20法术暴击率，
         
         [BoxGroup(CGroup3)][LabelText("体质")][SerializeReference]
         public int Constitution;//0.5生命 0.5防御，0.1回复
@@ -77,7 +77,6 @@ namespace Jyx2Configs
         /* ------- 分割线 --------*/
         [BoxGroup(CGroupItems)] [LabelText("携带道具")][TableList]
         public List<Jyx2ConfigCharacterItem> Items;
-
         
         /* ------- 分割线 --------*/
 
@@ -115,8 +114,10 @@ namespace Jyx2Configs
         public int Exp;
 
         /* ------- 分割线 --------*/
+        [BoxGroup(CGroupItems)] [LabelText("携带装备")][TableList]
+        public List<Jyx2ConfigItem> Equipments;
         
-        [BoxGroup(CGroup4)][LabelText("武器")][SerializeReference]
+        /*[BoxGroup(CGroup4)][LabelText("武器")][SerializeReference]
         public Jyx2ConfigItem Weapon;
         
         [BoxGroup(CGroup4)][LabelText("防具")][SerializeReference]
@@ -126,7 +127,7 @@ namespace Jyx2Configs
         public Jyx2ConfigItem Shoes;
         
         [BoxGroup(CGroup4)][LabelText("宝物")][SerializeReference]
-        public Jyx2ConfigItem Treasure;
+        public Jyx2ConfigItem Treasure;*/
         /* ------- 分割线 --------*/
 
         [BoxGroup("其他")][LabelText("队友离场对话")] 

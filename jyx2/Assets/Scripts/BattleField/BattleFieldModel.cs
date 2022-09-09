@@ -98,10 +98,10 @@ namespace Jyx2
             foreach(var r in Roles)
             {
                 if (r.IsDead()) continue;
-                if(r.Block.Equals(vec))
+                /*if(r.Block.Equals(vec))
                 {
                     return r;
-                }
+                }*/
             }
             return null;
         }
@@ -171,7 +171,7 @@ namespace Jyx2
             {
                 item.isActed = false;
                 item.sp = 0;
-                item.movedStep = 0;
+                //item.movedStep = 0;
             }
         }
 

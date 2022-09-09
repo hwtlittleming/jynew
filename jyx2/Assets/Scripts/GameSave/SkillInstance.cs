@@ -1,21 +1,11 @@
-/*
- * 金庸群侠传3D重制版
- * https://github.com/jynew/jynew
- *
- * 这是本开源项目文件头，所有代码均使用MIT协议。
- * 但游戏内资源和第三方插件、dll等请仔细阅读LICENSE相关授权协议文档。
- *
- * 金庸老先生千古！
- */
+
 using System;
 using Jyx2Configs;
 using UnityEngine;
 
 namespace Jyx2
 {
-    /// <summary>
-    /// JYX2的武功实例
-    /// </summary>
+    /// 技能实例  存档思路: 在configSkill的id + 扩展属性，存Id,初始化时get configSkill数据
     [Serializable]
     public class SkillInstance
     {
@@ -64,17 +54,7 @@ namespace Jyx2
         public Jyx2ConfigSkill GetSkill(Jyx2ConfigItem _anqi = null)
         {
             var skillT = GameConfigDatabase.Instance.Get<Jyx2ConfigSkill>(Key);
-
-			//暗器
-			/*if (_anqi != null)
-            {
-                skillT.Poison = "1";//_anqi.ChangePoisonLevel;
-                
-				foreach (var sl in _skill.Levels)
-				{
-					sl.Attack = Mathf.Abs(_anqi.AddHp);
-				}
-			}*/
+            
             return skillT;
         }
 

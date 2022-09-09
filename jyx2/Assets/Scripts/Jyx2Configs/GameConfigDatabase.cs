@@ -90,14 +90,8 @@ namespace Jyx2Configs
                 }
             }
         }
-
-        /// <summary>
+        
         /// 初始化指定类型配置
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        /// <exception cref="Exception"></exception>
         public async UniTask<int> Init<T>(string path) where T : Jyx2ConfigBase
         {
             if (_dataBase.ContainsKey(typeof(T)))

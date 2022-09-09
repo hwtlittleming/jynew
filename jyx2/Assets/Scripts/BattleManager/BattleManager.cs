@@ -672,10 +672,10 @@ public class BattleManager : MonoBehaviour
             }
 
             AnimationClip clip = null;
-            var itemType = item.GetItemType();
-            if (itemType == Jyx2ItemType.Costa)
+            var itemType = (int)item.ItemType;
+            if (itemType == 3)
                 clip = GlobalAssetConfig.Instance.useItemClip; //选择吃药的动作
-            else if (itemType == Jyx2ItemType.Anqi)
+            else if (itemType == 4)
                 clip = GlobalAssetConfig.Instance.anqiClip; //选择使用暗器的动作
 
             //如果配置了动作，则先播放动作

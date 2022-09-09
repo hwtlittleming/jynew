@@ -78,12 +78,13 @@ public partial class SavePanel : Jyx2_UIBase
 		GlobalHotkeyManager.Instance.UnRegistHotkey(this, KeyCode.Space);
 	}
 
+	//游戏结束，弹出载入存档界面
 	public void Show()
 	{
 		InitTrans();
 		this.OnShowPanel(new Action<int>((index) =>
 		{
-			StoryEngine.DoLoadGame(index);
+			GameRuntimeData. DoLoadGame(index);
 		}), "");
 	}
 
@@ -188,21 +189,12 @@ public partial class SavePanel : Jyx2_UIBase
 			//特定位置的翻译【存档界面存档一、存档二、存档三的显示】
 			//---------------------------------------------------------------------------
 			title.text = "存档".GetContent(nameof(SavePanel)) + GameConst.GetUPNumber(i + 1).GetContent(nameof(SavePanel));
-			//---------------------------------------------------------------------------
-			//---------------------------------------------------------------------------
 
 			var txt = btn.transform.Find("SummaryText").GetComponent<Text>();
 
 			string summaryInfo = GameRuntimeData.GetSaveSummary(i);
-
-			//---------------------------------------------------------------------------
-			//txt.text = string.IsNullOrEmpty(summaryInfo) ? "空档位" : summaryInfo;
-			//---------------------------------------------------------------------------
-			//特定位置的翻译【SavePanel中没有存档显示空档位的显示问题】
-			//---------------------------------------------------------------------------
+			
 			txt.text = string.IsNullOrEmpty(summaryInfo) ? "空档位".GetContent(nameof(SavePanel)) : summaryInfo;
-			//---------------------------------------------------------------------------
-			//---------------------------------------------------------------------------
 
 			var date = btn.transform.Find("DateTime").GetComponent<Text>();
 

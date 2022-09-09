@@ -249,12 +249,7 @@ public class LevelMaster : MonoBehaviour
 			}
 		}
 	}
-
-	public void PlayMusicAtPath(string musicPath)
-	{
-		AudioManager.PlayMusicAtPath(musicPath).Forget();
-	}
-
+	
 	private void UpdateMobileControllerUI()
 	{
 		m_Joystick.gameObject.SetActive(IsMobilePlatform());
@@ -400,14 +395,7 @@ public class LevelMaster : MonoBehaviour
 			}
 		}
 	}
-
-	public void SwitchToBattleUI(bool isOn)
-	{
-		GameObject.Find("LevelMaster/UI/MainUI").SetActive(!isOn);
-		GameObject.Find("LevelMaster/UI/SystemButton").SetActive(!isOn);
-		GameObject.Find("LevelMaster/UI/PlayerStatusPanel").SetActive(!isOn);
-	}
-
+	
 	void FixedUpdate()
 	{
 		TryClearNavPointer();
@@ -457,11 +445,8 @@ public class LevelMaster : MonoBehaviour
 			interactUI.gameObject.SetActive(CanController);
 		}
 	}
-
-	/// <summary>
+	
 	/// 玩家是否拥有角色控制权
-	/// </summary>
-	/// <returns></returns>
 	public bool IsPlayerCanControl()
 	{
 		return _CanController;

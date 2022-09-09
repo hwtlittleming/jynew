@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
@@ -6,6 +7,7 @@ using UnityEngine;
 
 namespace Jyx2Configs
 {
+    [Serializable] 
     abstract public class Jyx2ConfigBase : ScriptableObject
     {
         protected const string DEFAULT_GROUP_NAME = "基本配置";

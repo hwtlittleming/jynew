@@ -104,7 +104,7 @@ public class BattleLoader : MonoBehaviour
         //被打对象无受击动画，额外施加受击掉血效果
 
         //单例的从存档读取的GameRuntimeData
-        if (GameRuntimeData.Instance == null)
+        if (GameRuntimeData.Instance == null) //如果直接从场景进入战斗，读取配置的初始数据
         {
             GameRuntimeData.CreateNew();
         }
@@ -194,7 +194,7 @@ public class BattleLoader : MonoBehaviour
             {
                 x = int.Parse(pos.name.Split('-')[1]);
                 y = int.Parse(pos.name.Split('-')[2]);
-                r.Block = new Vector3(x,y,r.team);
+                //r.Block = new Vector3(x,y,r.team);
                 BattleBlockData bd = BattleManager.Instance.GetBlockData(x,y,"we" );//给角色信息里 添加位置
                 position = bd.WorldPos;
                 r.blockData = bd;
@@ -205,7 +205,7 @@ public class BattleLoader : MonoBehaviour
                 int dis = r.bestAttackDistance;
                 x = i+1; //UnityEngine.Random.Range(1, BattleManager.Instance.block_list.FirstOrDefault().maxX);
                 y = dis;
-                r.Block = new Vector3(x, y, r.team);
+                //r.Block = new Vector3(x, y, r.team);
                 BattleBlockData bd = BattleManager.Instance.GetBlockData(x,dis,"we" );//给角色信息里 添加位置
                 position = bd.WorldPos;
                 r.blockData = bd;
@@ -220,7 +220,7 @@ public class BattleLoader : MonoBehaviour
             int dis = r.bestAttackDistance;
             x = i+1;//UnityEngine.Random.Range(1, BattleManager.Instance.block_list.FirstOrDefault().maxX);
             y = dis;
-            r.Block = new Vector3(x, y, r.team);
+            //r.Block = new Vector3(x, y, r.team);
             BattleBlockData bd = BattleManager.Instance.GetBlockData(x,dis,"they" );//给角色信息里 添加位置
             position = bd.WorldPos;
             r.blockData = bd;

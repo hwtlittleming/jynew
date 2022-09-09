@@ -52,40 +52,5 @@ public class StoryEngine : MonoBehaviour
         await Jyx2_UIManager.Instance.ShowUIAsync(nameof(CommonTipsUIPanel), TipsType.Common, msg, duration);
     }
 
-    public static bool DoLoadGame(int index)
-    {
-        //加载存档
-        var r = GameRuntimeData.LoadArchive(index);
-        if (r == null)
-        {
-            return false;
-        }
-
-        //初始化角色
-        foreach (var role in r.AllRoles.Values)
-        {
-            role.BindKey();
-        }
-
-        var loadPara = new LevelMaster.LevelLoadPara() {loadType = LevelMaster.LevelLoadPara.LevelLoadType.Load};
-
-        //加载地图
-        int mapId = -1;
-        if (r.SubMapData == null)
-        {
-            mapId = GameConst.WORLD_MAP_ID;
-            loadPara.Pos = r.WorldData.WorldPosition;
-            loadPara.Rotate = r.WorldData.WorldRotation;
-        }
-        else
-        {
-            mapId = r.SubMapData.MapId;
-            loadPara.Pos = r.SubMapData.CurrentPos;
-            loadPara.Rotate = r.SubMapData.CurrentOri;
-        }
-
-        LevelLoader.LoadGameMap(GameConfigDatabase.Instance.Get<Jyx2ConfigMap>(mapId), loadPara,
-            () => { LevelMaster.Instance.TryBindPlayer(); });
-        return true;
-    }
+    
 }
