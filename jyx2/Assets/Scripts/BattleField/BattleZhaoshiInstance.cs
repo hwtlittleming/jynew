@@ -23,15 +23,11 @@ namespace Jyx2
     public class BattleZhaoshiInstance
     {
         public const int MAX_MAGIC_LEVEL_INDEX = 9;
-
-        protected BattleZhaoshiInstance()
-        {
-        }
-
+        
         public BattleZhaoshiInstance(SkillInstance skill)
         {
             Data = skill;
-            level = skill.GetLevel();
+            level = skill.Level;
             Key = skill.Key.ToString();
         }
 
@@ -68,7 +64,7 @@ namespace Jyx2
             int damageType = GetDamageType();
             if (damageType == 0 || damageType == 1)//普通攻击、吸内
             {
-                int level_index = this.Data.GetLevel();
+                int level_index = this.Data.Level;
                 role.Mp = Tools.Limit(role.Mp - this.calNeedMP(level_index), 0, role.MaxMp);
 
                 role.ExpGot += 2;
@@ -173,11 +169,6 @@ namespace Jyx2
             if (v > v2) v = v2;
             return v;
         }
-
-        public virtual bool IsAttack()
-        {
-            return true;
-        }
         
         public virtual int GetDamageType()
         {
@@ -185,49 +176,4 @@ namespace Jyx2
         }
     }
 
-    /// <summary>
-    /// JYX2:用毒
-    /// </summary>
-    public class PoisonZhaoshiInstance : BattleZhaoshiInstance
-    {
-        public PoisonZhaoshiInstance(int lv)
-        {
-            _level = lv;
-            Data = new SkillInstance(93);
-        }
-
-        int _level;
-
-        public override bool IsAttack()
-        {
-            return false;
-        }
-        
-    }
-
-    /// <summary>
-    /// JYX2：解毒
-    /// </summary>
-    public class DePoisonZhaoshiInstance : BattleZhaoshiInstance
-    {
-        public DePoisonZhaoshiInstance(int lv)
-        {
-            _level = lv;
-            Data = new SkillInstance(94);
-        }
-
-        int _level;
-
-        public override bool IsAttack()
-        {
-            return false;
-        }
-
-        public override bool IsCastToEnemy()
-        {
-            return false;
-        }
-        
-    }
-    
 }

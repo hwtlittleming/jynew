@@ -52,6 +52,7 @@ namespace Jyx2Configs
             total += await Init<Jyx2ConfigCharacter>("Assets/BuildSource/Configs/Characters");
             total += await Init<Jyx2ConfigItem>("Assets/BuildSource/Configs/Items");
             total += await Init<Jyx2ConfigSkill>("Assets/BuildSource/Configs/Skills");
+            total += await Init<Jyx2SkillDisplayAsset>("Assets/BuildSource/Configs/SkillDisplays");
             total += await Init<Jyx2ConfigShop>("Assets/BuildSource/Configs/Shops");
             total += await Init<Jyx2ConfigMap>("Assets/BuildSource/Configs/Maps");
             total += await Init<Jyx2ConfigBattle>("Assets/BuildSource/Configs/Battles");

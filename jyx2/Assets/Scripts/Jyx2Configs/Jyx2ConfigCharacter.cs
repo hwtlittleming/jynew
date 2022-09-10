@@ -71,10 +71,9 @@ namespace Jyx2Configs
         
         [InfoBox("必须至少有一个技能", InfoMessageType.Error, "@this.Skills==null || this.Skills.Count == 0")]
         [InfoBox("注：等级0：对应1级技能，  等级900：对应10级技能")]
-        [BoxGroup(CGroupSkill)] [LabelText("技能")][SerializeReference][TableList]
-        public List<Jyx2ConfigCharacterSkill> Skills;
+        [BoxGroup(CGroupSkill)] [LabelText("技能")][SerializeReference]
+        public List<int> Skills;
         
-        /* ------- 分割线 --------*/
         [BoxGroup(CGroupItems)] [LabelText("携带道具")][TableList]
         public List<Jyx2ConfigCharacterItem> Items;
         
@@ -146,16 +145,6 @@ namespace Jyx2Configs
                 _sprite = null;
             }
         }
-    }
-
-    [Serializable]
-    public class Jyx2ConfigCharacterSkill
-    {
-        [LabelText("技能")][SerializeReference][InlineEditor]
-        public Jyx2ConfigSkill Skill;
-
-        [LabelText("等级")] 
-        public int Level;
     }
     
     [Serializable]

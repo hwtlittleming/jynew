@@ -400,7 +400,7 @@ public class MapRole : Jyx2AnimationBattleRole
     /// <param name="skill">技能实例</param>
     public void SwitchSkillTo(SkillInstance skill)
     {
-        var display = skill.GetDisplay();
+        var display = skill.Display;
         //切换对应武器
         var weaponCode = display.weaponCode;
         if (weaponCode >= 0)

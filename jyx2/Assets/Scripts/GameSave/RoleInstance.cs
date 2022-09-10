@@ -422,7 +422,7 @@ namespace Jyx2
             foreach (var wugong in skills)
             {
                 if (wugong.Key == wugongId)
-                    return wugong.GetLevel();
+                    return wugong.Level;
             }
 
             return 0;

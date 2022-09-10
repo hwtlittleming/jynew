@@ -11,7 +11,9 @@ namespace Jyx2
     {
         #region 存档数据定义
         [SerializeField] public int Key;
+        [SerializeField] public String Name;
         //动态数据
+        [SerializeField] public int ConfigId;
         [SerializeField] public int Level;
         [SerializeField] public int MpCost; //能量消耗
         [SerializeField] public int DamageType; //伤害的特殊效果
@@ -22,41 +24,38 @@ namespace Jyx2
         
         //技能等级升级后属性变化方法，携带道具类 换成xx instance
         #endregion
+
+        //技能外观 非存档数据 只要不加[SerializeField] ES3就不会存档；只要初始化时和变更时同时给其赋值就可以了
+        public Jyx2SkillDisplayAsset Display;
+        
         public SkillInstance()
         {
         }
-
-        public SkillInstance(Jyx2ConfigCharacterSkill s)
-        {
-            Key = s.Skill.Id;
-            Level = s.Level;
-        }
         
-        public SkillInstance(int magicId)
+        public SkillInstance(int configId)
         {
-            Key = magicId;
+            //1.取配置的默认值
+            Key = configId;
+            ConfigId = configId;
+            Jyx2ConfigSkill configSkill = GameConfigDatabase.Instance.Get<Jyx2ConfigSkill>(ConfigId);
+            
+            Name = configSkill.Name;
             Level = 0;
-            GetSkill();
+            MpCost = configSkill.MpCost;
+            DamageType = (int)configSkill.DamageType;
+            SkillCoverType = (int)configSkill.SkillCoverType;
+            FixedDamage = configSkill.FixedDamage;
+            DamageLevel = configSkill.DamageLevel;
+            DisplayId = configSkill.Display.Id;
+            Display = GameConfigDatabase.Instance.Get<Jyx2SkillDisplayAsset>(DisplayId);
+            
+            //2.进行实例化替换
+            Refreshskill();
         }
 
-        public SkillInstance(Jyx2ConfigItem item, int magicId)
+        public void Refreshskill()
         {
-            Key = magicId;
-            Level = 0;
-            GetSkill(item);
-        }
-
-        public int GetLevel()
-        {
-            return Level / 100 + 1;
-        }
-
-        public string Name
-        {
-            get
-            {
-                return GetSkill().Name;
-            }
+            return;
         }
 
         public Jyx2ConfigSkill GetSkill(Jyx2ConfigItem _anqi = null)
@@ -64,27 +63,6 @@ namespace Jyx2
             var skillT = GameConfigDatabase.Instance.Get<Jyx2ConfigSkill>(Key);
             
             return skillT;
-        }
-
-        public void ResetSkill()
-        {
-            _skill = null;
-        }
-
-        Jyx2ConfigSkill skill;
-        Jyx2ConfigSkill _skill{
-			get {
-				if(skill==null) skill=GetSkill();
-				return skill;
-			}
-			set {
-				skill=value;
-			}
-		}
-        
-        public Jyx2SkillDisplayAsset GetDisplay()
-        {
-			return _skill.Display;
         }
 
         public int GetCoolDown()

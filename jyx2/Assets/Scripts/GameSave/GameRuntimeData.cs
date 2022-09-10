@@ -110,21 +110,23 @@ namespace Jyx2
             Debug.Log("存档中.. index = " + index);
 
             string path = string.Format(ARCHIVE_FILE_NAME, index);
-           ES3.Save(nameof(GameRuntimeData), this, path);
+           //ES3.Save(nameof(GameRuntimeData), this, path);
            
            /*ES3.Save(nameof(GameRuntimeData), GetJson(this) , path);
            GameRuntimeData g = ParseFormJson<GameRuntimeData>(ES3.Load(path).ToString());*/
 
-           BinaryFormatter bf0=new BinaryFormatter();
+           ES3.Save(nameof(GameRuntimeData), new SkillInstance(), path);
+           
+           /*BinaryFormatter bf0=new BinaryFormatter();
            FileStream  fs0=File.Create(Application.persistentDataPath+"/Data.yj");
-           bf0.Serialize(fs0,new Jyx2ConfigSkill());
+           bf0.Serialize(fs0,new SkillInstance());
            //将Save对象转化为字节
            fs0.Close();
            
            BinaryFormatter bf=new BinaryFormatter();
            FileStream fs=File.Open(Application.persistentDataPath+"/Data.yj",FileMode.Open);//打开文件
-           Jyx2ConfigSkill save=bf.Deserialize(fs) as Jyx2ConfigSkill;
-           fs.Close();
+           SkillInstance save=bf.Deserialize(fs) as SkillInstance;
+           fs.Close();*/
            
             Debug.Log("存档结束");
 

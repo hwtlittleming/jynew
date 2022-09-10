@@ -38,7 +38,7 @@ namespace Jyx2.MOD
         }
 #endregion
 
-        //获取路径下所有asset文件 可做再获取文件夹下的
+        //获取路径下所有asset文件 
         public static List<string> getSonFiles(string path)
         {
             List<String> overridePaths = new List<String>();

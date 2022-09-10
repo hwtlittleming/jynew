@@ -34,10 +34,7 @@ public class Jyx2SkillEditorEnemy : Jyx2AnimationBattleRole
         
         animator = GetComponent<Animator>();
         Jyx2ConfigSkill skill = GameConfigDatabase.Instance.Get<Jyx2ConfigSkill>(SkillId.ToString());
-        var wugong = new SkillInstance(SkillId);
-
-        var display = wugong.GetDisplay();
-        this.CurDisplay = display;
+        this.CurDisplay = skill.Display;
 
         this.Idle();
     }

@@ -65,12 +65,12 @@ public static class Jyx2ResourceHelper
         }
 
         //技能池
-        var overridePaths = MODLoader.getSonFiles("Assets/BuildSource/Skills");
+        /*var overridePaths = MODLoader.getSonFiles("Assets/BuildSource/Configs/SkillDisplays");
         var task = await MODLoader.LoadAssets<Jyx2SkillDisplayAsset>(overridePaths);
         if (task != null)
         {
             Jyx2SkillDisplayAsset.All = task;
-        }
+        }*/
 
         //基础配置表
         await GameConfigDatabase.Instance.Init();

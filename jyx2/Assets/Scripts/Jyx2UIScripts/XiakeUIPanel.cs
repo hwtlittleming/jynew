@@ -216,7 +216,7 @@ public partial class XiakeUIPanel : Jyx2_UIBase
 		sb.AppendLine("<color=#FF9610>--奇术" + "--</color>");
 		foreach (var skill in role.skills)
 		{
-			sb.AppendLine(skill.Name + " " + skill.GetLevel());
+			sb.AppendLine(skill.Name + " " + skill.Level);
 		}
 		sb.AppendLine("<color=#FF9610>--绝技" + "--</color>");
 		return sb.ToString();

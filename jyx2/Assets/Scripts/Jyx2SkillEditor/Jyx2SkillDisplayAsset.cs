@@ -3,7 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Cysharp.Threading.Tasks;
 using Jyx2;
+using Jyx2Configs;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -13,7 +15,7 @@ using UnityEditor;
 #endif
 
 [CreateAssetMenu(fileName = "[技能名称]", menuName = "金庸重制版/技能展现配置")]
-public partial class Jyx2SkillDisplayAsset : ScriptableObject
+public partial class Jyx2SkillDisplayAsset : Jyx2ConfigBase
 {
     public static IList<Jyx2SkillDisplayAsset> All;
 
@@ -21,7 +23,7 @@ public partial class Jyx2SkillDisplayAsset : ScriptableObject
     {
         //为了在编辑器下所见即所得，所以在editor下直接载入
 #if UNITY_EDITOR
-        var clip = AssetDatabase.LoadAssetAtPath<Jyx2SkillDisplayAsset>($"Assets/BuildSource/Skills/{skillName}.asset");
+        var clip = AssetDatabase.LoadAssetAtPath<Jyx2SkillDisplayAsset>($"Assets/BuildSource/Configs/SkillDisplays/{skillName}.asset");
         return clip;
 #else
         return All.Single(s => s.name == skillName);
@@ -198,6 +200,11 @@ public partial class Jyx2SkillDisplayAsset : ScriptableObject
         Behit,
         Attack,
         Stun
+    }
+
+    public override async UniTask WarmUp()
+    {
+            
     }
 }
 

@@ -37,7 +37,7 @@ public class SkillUIItem : MonoBehaviour
         m_currentSkill = skill;
         //TODO 更新icon
         BattleZhaoshiInstance.ZhaoshiStatus state = skill.GetStatus();
-        string skillText = $"{skill.Data.Name}\nLv.{skill.Data.GetLevel()}";
+        string skillText = $"{skill.Data.Name}\nLv.{skill.Data.Level}";
         m_skillText.text = skillText;
     }
 

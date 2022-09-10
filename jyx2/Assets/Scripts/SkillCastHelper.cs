@@ -63,7 +63,7 @@ namespace Jyx2
 
         Jyx2SkillDisplayAsset GetDisplay()
         {
-            return Zhaoshi.Data.GetDisplay();
+            return Zhaoshi.Data.Display;
         }
 
 
