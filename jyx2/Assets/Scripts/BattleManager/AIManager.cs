@@ -38,14 +38,7 @@ public class AIManager
             return _instance;
         }
     }
-
-    RangeLogic rangeLogic 
-    {
-        get 
-        {
-            return BattleManager.Instance.GetRangeLogic();
-        }
-    }
+    
     BattleManager _battleManager 
     {
         get 
@@ -278,7 +271,7 @@ public class AIManager
             //点、线、十字的伤害，距离就是两人相差的格子数，最小为1。
             //面攻击时，距离是两人相差的格子数＋敌人到攻击点的距离。
             int dist = 1;
-            if (skill.GetCoverType() == SkillCoverType.RECT)
+            if (skill.Data.SkillCoverType == 1)
             {
                 dist += 1; //blockVector.GetDistance(r2.Pos);
             }

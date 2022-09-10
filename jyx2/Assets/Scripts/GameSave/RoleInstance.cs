@@ -10,6 +10,7 @@ using Random = UnityEngine.Random;
 
 namespace Jyx2
 {
+    //静态属性和一些动态的有初始值的属性放config,其余的放这里；载入存档时，必须要从存档取数，对于取不到的
     [Serializable]
     public class RoleInstance : IComparable<RoleInstance>
     {
@@ -666,6 +667,7 @@ namespace Jyx2
         //根据传入名称 获取任意属性
         public int GetEquipmentProperty(string propertyName,int index)
         {
+            if (this.Equipments.Count < index + 1 ) return 0;
             return this.Equipments[index] != null ? (int)Equipments[index].GetType().GetField(propertyName).GetValue(Equipments[index]) : 0;
         }
         
@@ -686,8 +688,8 @@ namespace Jyx2
         /// <returns></returns>
         public int GetExtraAttack(Jyx2ConfigSkill wugong)
         {
-            if (Equipments[0] !=null && Equipments[0].Id != -1 && this.Equipments[0].PairedWugong != null && this.Equipments[0].PairedWugong.Id == wugong.Id)
-                return this.Equipments[0].ExtraAttack;
+            /*if (Equipments[0] !=null && Equipments[0].Id != -1 && this.Equipments[0].PairedWugong != null && this.Equipments[0].PairedWugong.Id == wugong.Id)
+                return this.Equipments[0].ExtraAttack;*/
             return 0;
 
         }

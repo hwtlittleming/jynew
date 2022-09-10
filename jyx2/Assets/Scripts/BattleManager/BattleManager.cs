@@ -64,12 +64,12 @@ public class BattleManager : MonoBehaviour
     }
 
 
-    private RangeLogic rangeLogic;
+    /*private RangeLogic rangeLogic;
 
     public RangeLogic GetRangeLogic()
     {
         return rangeLogic;
-    }
+    }*/
 
     private RoleInstance _player
     {
@@ -113,7 +113,7 @@ public class BattleManager : MonoBehaviour
         //初始化战斗model
         m_BattleModel = new BattleFieldModel();
         //初始化范围逻辑
-        rangeLogic = new RangeLogic(BattleboxHelper.Instance.IsBlockExists, m_BattleModel.BlockHasRole);
+        //rangeLogic = new RangeLogic(BattleboxHelper.Instance.IsBlockExists, m_BattleModel.BlockHasRole);
         
         //await UniTask.Delay(TimeSpan.FromSeconds(0.5f));
         await UniTask.WaitForEndOfFrame();
@@ -121,12 +121,14 @@ public class BattleManager : MonoBehaviour
         //地图上所有单位进入战斗,加入战场，待命动画，面向对面
         foreach (var role in enermyRoleList)
         {
+            role.ResetBattleSkill();
             role.EnterBattle();
             AddBattleRole(role);
         }
         
         foreach (var role in ourRoleList)
         {
+            role.ResetBattleSkill();
             role.EnterBattle();
             AddBattleRole(role);
         }
@@ -325,7 +327,7 @@ public class BattleManager : MonoBehaviour
             }
         }
 
-        rangeLogic = null;
+        //rangeLogic = null;
         m_BattleModel.Roles.Clear();
     }
 
@@ -451,38 +453,6 @@ public class BattleManager : MonoBehaviour
     #region 战斗共有方法
     
 
-    /// <summary>
-    /// 寻找移动路径 也就是寻路
-    /// </summary>
-    /// <returns></returns>
-    public List<Vector3> FindMovePath(RoleInstance role, BattleBlockVector block)
-    {
-        var paths = rangeLogic.GetWay(role.Pos.X, role.Pos.Y,
-            block.X, block.Y);
-        var posList = new List<Vector3>();
-        foreach (var temp in paths)
-        {
-            var tempBlock = BattleboxHelper.Instance.GetBlockData(temp.X, temp.Y);
-            if (tempBlock != null) posList.Add(tempBlock.WorldPos);
-        }
-
-        return posList;
-    }
-
-    /// <summary>
-    /// 获取角色的移动范围
-    /// </summary>
-    /// <param name="role"></param>
-    /// <param name="movedStep">移动过的格子数</param>
-    public List<BattleBlockVector> GetMoveRange(RoleInstance role, int movedStep)
-    {
-        //获得角色移动能力
-        int moveAbility = role.GetMoveAbility();
-        //绘制周围的移动格子
-        var blockList = rangeLogic.GetMoveRange(role.Pos.X, role.Pos.Y, moveAbility - movedStep, false, true);
-        return blockList;
-    }
-
     #endregion
     
      //中毒受伤
@@ -549,7 +519,7 @@ public class BattleManager : MonoBehaviour
         }
 
         //角色移动
-        async UniTask RoleMove(RoleInstance role, BattleBlockVector moveTo)
+        /*async UniTask RoleMove(RoleInstance role, BattleBlockVector moveTo)
         {
             if (role == null || moveTo == null)
             {
@@ -578,8 +548,8 @@ public class BattleManager : MonoBehaviour
             {
                 //面向最近的敌人
                 role.View.LookAtWorldPosInBattle(enemy.View.transform.position);
-            }*/
-        }
+            }#1#
+        }*/
 
 
         //做一次施展伤害技能或普攻,普攻也视为一次特殊skill；blockData:攻击选择点所在格子信息
@@ -618,7 +588,7 @@ public class BattleManager : MonoBehaviour
             {
                 skill.CastCD(); //技能CD
                 skill.CastCost(role);skill.CastMP(role); //技能消耗
-                var covertype = skill.GetCoverType();
+                var covertype = skill.Data.SkillCoverType;
                 // todo 技能的攻击格子
                 blockList.Add(blockData);
                 blockTransList.Add(blockData.blockObject.transform);

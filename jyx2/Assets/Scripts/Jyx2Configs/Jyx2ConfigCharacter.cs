@@ -78,7 +78,7 @@ namespace Jyx2Configs
         [BoxGroup(CGroupItems)] [LabelText("携带道具")][TableList]
         public List<Jyx2ConfigCharacterItem> Items;
         
-        /* ------- 分割线 --------*/
+        /* -------需要有初始配置值的 --------*/
 
         [BoxGroup(CGroup2)][LabelText("生命上限")]
         public int MaxHp;
@@ -112,8 +112,7 @@ namespace Jyx2Configs
 
         [BoxGroup(CGroup2)][LabelText("战斗经验")] //经验每满一定程度 属性按资质增长，宠物可额外通过吞食获得经验
         public int Exp;
-
-        /* ------- 分割线 --------*/
+        
         [BoxGroup(CGroupItems)] [LabelText("携带装备")][TableList]
         public List<Jyx2ConfigItem> Equipments;
         
@@ -128,12 +127,11 @@ namespace Jyx2Configs
         
         [BoxGroup(CGroup4)][LabelText("宝物")][SerializeReference]
         public Jyx2ConfigItem Treasure;*/
-        /* ------- 分割线 --------*/
+        
+        //固定配置
 
         [BoxGroup("其他")][LabelText("队友离场对话")] 
         public string LeaveStoryId;
-
-        /* ------- 分割线 --------*/
         
         [BoxGroup("模型配置")] [LabelText("模型配置")] [SerializeReference][InlineEditor]
         public ModelAsset Model;

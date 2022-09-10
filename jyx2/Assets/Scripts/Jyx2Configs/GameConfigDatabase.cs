@@ -11,6 +11,8 @@ using Jyx2.Middleware;
 
 namespace Jyx2Configs
 {
+    //用于存储和加载 静态数据  类继承ScriptableObject后，可将类的一些不常变的实例作为数据 存储于asset文件中供取用 
+    //类的属性值 在游戏运行期间改变后 不需要保存下来的数据 就可以考虑用此方法
     public class GameConfigDatabase 
     {
         #region Singleton

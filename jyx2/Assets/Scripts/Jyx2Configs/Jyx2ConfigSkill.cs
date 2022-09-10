@@ -8,6 +8,7 @@ using UnityEngine;
 
 namespace Jyx2Configs
 {
+    [Serializable]
     [CreateAssetMenu(menuName = "金庸重制版/配置文件/技能", fileName = "技能ID_技能名")]
     public class Jyx2ConfigSkill : Jyx2ConfigBase
     {
@@ -20,7 +21,8 @@ namespace Jyx2Configs
             治疗 = 4,
             封魔 = 5,
             混乱 = 6,
-            
+            灼烧 = 7,
+            冰冻 = 8,
         }
 
         public enum Jyx2ConfigSkillCoverType
@@ -55,17 +57,11 @@ namespace Jyx2Configs
         [BoxGroup(CGroup2)][LabelText("消耗能量点数")]
         public int MpCost;
 
-        [BoxGroup(CGroup2)][LabelText("带毒方法")]
-        public String Poison;
-        
         [BoxGroup(CGroup2)][LabelText("固定伤害")]
         public int FixedDamage = 0;
         
         [BoxGroup(CGroup2)][LabelText("技能伤害系数")]
         public int DamageLevel;
-        
-        [BoxGroup(CGroup2)][LabelText("技能附加")]
-        public String Attach;
         
         [InlineEditor] [BoxGroup("技能外观")] [SerializeReference]
         public Jyx2SkillDisplayAsset Display;

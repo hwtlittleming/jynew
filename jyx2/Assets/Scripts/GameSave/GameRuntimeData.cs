@@ -115,16 +115,16 @@ namespace Jyx2
            /*ES3.Save(nameof(GameRuntimeData), GetJson(this) , path);
            GameRuntimeData g = ParseFormJson<GameRuntimeData>(ES3.Load(path).ToString());*/
 
-           /*BinaryFormatter bf0=new BinaryFormatter();
+           BinaryFormatter bf0=new BinaryFormatter();
            FileStream  fs0=File.Create(Application.persistentDataPath+"/Data.yj");
-           bf0.Serialize(fs0,this.AllRoles[0]);
+           bf0.Serialize(fs0,new Jyx2ConfigSkill());
            //将Save对象转化为字节
            fs0.Close();
            
            BinaryFormatter bf=new BinaryFormatter();
            FileStream fs=File.Open(Application.persistentDataPath+"/Data.yj",FileMode.Open);//打开文件
-           RoleInstance save=bf.Deserialize(fs) as RoleInstance;
-           fs.Close();*/
+           Jyx2ConfigSkill save=bf.Deserialize(fs) as Jyx2ConfigSkill;
+           fs.Close();
            
             Debug.Log("存档结束");
 

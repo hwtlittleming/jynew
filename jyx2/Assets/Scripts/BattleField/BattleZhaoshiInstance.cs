@@ -178,12 +178,7 @@ namespace Jyx2
         {
             return true;
         }
-
-        public virtual SkillCoverType GetCoverType()
-        {
-            return Data.CoverType;
-        }
-
+        
         public virtual int GetDamageType()
         {
             return (int)Data.GetSkill().DamageType;
@@ -207,11 +202,7 @@ namespace Jyx2
         {
             return false;
         }
-
-        public override SkillCoverType GetCoverType()
-        {
-            return SkillCoverType.POINT;
-        }
+        
     }
 
     /// <summary>
@@ -236,11 +227,7 @@ namespace Jyx2
         {
             return false;
         }
-
-        public override SkillCoverType GetCoverType()
-        {
-            return SkillCoverType.POINT;
-        }
+        
     }
     
 }

@@ -1,9 +1,5 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using Cysharp.Threading.Tasks;
-using Jyx2;
 using Jyx2.MOD;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -11,6 +7,7 @@ using UnityEngine.AddressableAssets;
 
 namespace Jyx2Configs
 {
+    //物品基本是静态的，装备附魂用额外的dic在存档记录
     public enum Jyx2ConfigItemType
     {
         剧情道具 = 0,

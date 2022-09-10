@@ -5,15 +5,23 @@ using UnityEngine;
 
 namespace Jyx2
 {
-    /// 技能实例  存档思路: 在configSkill的id + 扩展属性，存Id,初始化时get configSkill数据
+    /// 技能实例  不同角色掌握程度不同，因此不能用静态的；静态的属性和有默认值的动态属性放Config中，每次去asset取固定的，动态的属性放这里
     [Serializable]
     public class SkillInstance
     {
         #region 存档数据定义
         [SerializeField] public int Key;
+        //动态数据
         [SerializeField] public int Level;
+        [SerializeField] public int MpCost; //能量消耗
+        [SerializeField] public int DamageType; //伤害的特殊效果
+        [SerializeField] public int SkillCoverType; //攻击范围
+        [SerializeField] public int FixedDamage; //固定伤害
+        [SerializeField] public int DamageLevel; //技能伤害系数
+        [SerializeField] public int DisplayId; //技能外观ID
+        
+        //技能等级升级后属性变化方法，携带道具类 换成xx instance
         #endregion
-
         public SkillInstance()
         {
         }
@@ -73,28 +81,7 @@ namespace Jyx2
 				skill=value;
 			}
 		}
-
-        public SkillCoverType CoverType
-        {
-            get
-            {
-                switch ((int)_skill.SkillCoverType)
-                {
-                    case 0:
-                        return SkillCoverType.POINT;
-                    case 1:
-                        return SkillCoverType.LINE;
-                    case 2:
-                        return SkillCoverType.CROSS;
-                    case 3:
-                        return SkillCoverType.RECT;
-                    default:
-                        Debug.LogError("invalid skill cover type:" + _skill.SkillCoverType);
-                        return SkillCoverType.INVALID;
-                }
-            }
-        }
-
+        
         public Jyx2SkillDisplayAsset GetDisplay()
         {
 			return _skill.Display;

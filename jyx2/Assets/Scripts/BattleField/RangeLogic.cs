@@ -1,4 +1,5 @@
 /*
+/*
  * 金庸群侠传3D重制版
  * https://github.com/jynew/jynew
  *
@@ -6,7 +7,7 @@
  * 但游戏内资源和第三方插件、dll等请仔细阅读LICENSE相关授权协议文档。
  *
  * 金庸老先生千古！
- */
+ #1#
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -291,53 +292,7 @@ namespace Jyx2
 			return x * 10000 + y;
 		}
 
-		//重复调用，将覆盖之前的内容
-		void GenNearBlocksFirstTime(int x, int y, int maxdistance)
-		{
-			var pk = GetBlockCacheKey(x, y, maxdistance);
-			if (!nearblocksCache.ContainsKey(pk))
-			{
-				nearblocksCache.Add(pk, new List<BattleBlockVector>());
-			}
-
-			var list = nearblocksCache[pk];
-			list.Clear();
-			var visited = new HashSet<int>();
-			var searchQueue = new Queue<MoveSearchHelper>();
-			searchQueue.Enqueue(new MoveSearchHelper() { X = x, Y = y, Cost = 0 });
-
-			while (searchQueue.Count > 0)
-			{
-				MoveSearchHelper currentNode = searchQueue.Dequeue();
-				int xx = currentNode.X;
-				int yy = currentNode.Y;
-				int cost = currentNode.Cost;
-
-				int blockHash = GetBlockHash(xx, yy);
-
-				if (visited.Contains(blockHash))
-				{
-					continue;
-				}
-
-				list.Add(new BattleBlockVector() { X = xx, Y = yy });
-				visited.Add(blockHash);
-
-				foreach (var b in GetNearBlocks(xx, yy))
-				{
-					int x2 = b.X;
-					int y2 = b.Y;
-					int dcost = 1;
-
-					//if (Exists != null && !Exists(x2, y2)) continue;
-
-					if (cost + dcost <= maxdistance && !visited.Contains(GetBlockHash(x2, y2)))
-					{
-						searchQueue.Enqueue(new MoveSearchHelper() { X = x2, Y = y2, Cost = cost + dcost });
-					}
-				}
-			}
-		}
+	
 
 		/// <summary>
 		/// 寻路函数，从sx，sy到tx，ty的路径（返回最近的任意一条）
@@ -532,16 +487,6 @@ namespace Jyx2
 						}
 						break;
 					}
-				/*case SkillCoverType.RECT:
-					rst.Add(new BattleBlockVector() { X = tx, Y = ty });
-
-
-					if (coversize > 0)
-					{
-						int actualSize = (int)Math.Ceiling(coversize / Math.Sqrt(2)); //尝试修复距离不对？
-						rst.AddRange(GetNearBlocks(tx, ty, actualSize));
-					}
-					break;*/
 				case SkillCoverType.RECT:
 					for (int i = tx - coversize; i <= tx + coversize; ++i)
 					{
@@ -569,3 +514,4 @@ namespace Jyx2
 		public bool Inaccessbiel;
 	}
 }
+*/

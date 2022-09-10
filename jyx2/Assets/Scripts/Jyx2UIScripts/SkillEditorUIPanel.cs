@@ -150,18 +150,18 @@ public partial class SkillEditorUIPanel:Jyx2_UIBase
 
         //根据不同的技能覆盖类型，显示不同的效果
         Transform[] blocks = null;
-        switch (wugong.CoverType)
+        switch (wugong.SkillCoverType)
         {
-            case SkillCoverType.RECT:
+            case 0:
                 blocks = skillEditor.faceTrans;
                 break;
-            case SkillCoverType.LINE:
+            case 1:
                 blocks = skillEditor.lineTrans;
                 break;
-            case SkillCoverType.CROSS:
+            case 2:
                 blocks = skillEditor.crossTrans;
                 break;
-            case SkillCoverType.POINT:
+            case 3:
                 
                 //任选一个敌人受击
                 blocks = new Transform[1] {Jyx2.Middleware.Tools.GetRandomElement(enemys).transform};
