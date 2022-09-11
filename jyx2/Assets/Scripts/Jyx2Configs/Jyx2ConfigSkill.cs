@@ -9,7 +9,7 @@ using UnityEngine;
 namespace Jyx2Configs
 {
     //这里配置1阶技能初始值 todo 技能等级增长带来属性增长的记录
-    [CreateAssetMenu(menuName = "金庸重制版/配置文件/技能", fileName = "技能ID_技能名")]
+    [CreateAssetMenu(menuName = "配置文件/技能", fileName = "技能ID_技能名")]
     public class Jyx2ConfigSkill : Jyx2ConfigBase
     {
         public enum Jyx2ConfigSkillDamageType

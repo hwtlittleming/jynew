@@ -245,41 +245,17 @@ public class BattleManager : MonoBehaviour
             case BattleResult.Win:
             {
                 string bonusText = CalExpGot(m_battleParams.battleData);
-                //---------------------------------------------------------------------------
-                //GameUtil.ShowFullSuggest(bonusText, "<color=yellow><size=50>战斗胜利</size></color>", delegate
-                //{
-                //    EndBattle();
-                //    m_battleParams.callback?.Invoke(result);
-                //    m_battleParams = null;
-                //});
-                //---------------------------------------------------------------------------
-                //特定位置的翻译【战斗胜利的提示】
-                //---------------------------------------------------------------------------
                 GameUtil.ShowFullSuggest(bonusText, "<color=yellow><size=50>战斗胜利</size></color>".GetContent(nameof(BattleManager)), delegate
                 {
                     EndBattle();
                     m_battleParams.callback?.Invoke(result);
                     m_battleParams = null;
                 });
-                //---------------------------------------------------------------------------
-                //---------------------------------------------------------------------------
                 break;
             }
             case BattleResult.Lose:
             {
-
-                //---------------------------------------------------------------------------
-                //GameUtil.ShowFullSuggest("胜败乃兵家常事，请大侠重新来过。", "<color=red><size=80>战斗失败！</size></color>", delegate
-                //{
-                //    EndBattle();
-                //    m_battleParams.callback?.Invoke(result);
-                //    //if (m_battleParams.backToBigMap) //由dead指令实现返回主界面逻辑
-                //    //    LevelLoader.LoadGameMap("Level_BigMap");
-                //    m_battleParams = null;
-                //});
-                //---------------------------------------------------------------------------
-                //特定位置的翻译【战斗失败的提示】
-                //---------------------------------------------------------------------------
+                
                 GameUtil.ShowFullSuggest("胜败乃兵家常事，请大侠重新来过。".GetContent(nameof(BattleManager)), "<color=red><size=80>战斗失败！</size></color>".GetContent(nameof(BattleManager)), delegate
                 {
                     EndBattle();
@@ -288,8 +264,6 @@ public class BattleManager : MonoBehaviour
                     //    LevelLoader.LoadGameMap("Level_BigMap");
                     m_battleParams = null;
                 });
-                //---------------------------------------------------------------------------
-                //---------------------------------------------------------------------------
                 break;
             }
         }
@@ -565,14 +539,15 @@ public class BattleManager : MonoBehaviour
             List<RoleInstance> toRoleList = new List<RoleInstance>(); //攻击涵盖的角色, todo 角色属性变化 格子上的角色属性是否能跟着变化
             if (skill.Data.Name == "普通攻击")
             {
-                String attackRange = role.Equipments[0].attackRange.ToString(); //攻击范围，默认为空:点攻击，名武器才有值
-                ItemInstance weapon = role.Equipments[0];
-                int dis = weapon.bestDistance; //获得持有武器的最佳攻击距离
+                /*String attackRange = role.Equipments[0].attackRange.ToString(); //攻击范围，默认为空:点攻击，名武器才有值
                 if (attackRange != null && attackRange != "0")
                 {
                     // todo 名武器攻击格子 横1 竖2 
-                }
-
+                }*/
+                
+                ItemInstance weapon = role.Equipments[0];
+                int dis = weapon.bestDistance; //获得持有武器的最佳攻击距离
+                
                 blockList.Add(blockData);
                 blockTransList.Add(blockData.blockObject.transform);
             }
@@ -643,7 +618,7 @@ public class BattleManager : MonoBehaviour
 
             toRole.UseItem(item);
 
-            if (role.team == 0 && role.GetJyx2RoleId() == 0) //如果是己方角色，则从背包里扣。 队友暂时是扔自己配置了携带的物品，是否要改？
+            if (role.team == 0 && role.Id == 0) //如果是己方角色，则从背包里扣。 队友暂时是扔自己配置了携带的物品，是否要改？
             {
                 GameRuntimeData.Instance.AllRoles[0].AlterItem(item.ConfigId, -1);
             }

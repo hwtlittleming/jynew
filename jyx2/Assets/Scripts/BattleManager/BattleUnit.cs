@@ -35,7 +35,7 @@ namespace Jyx2.Battle
             if (_role == null || _role.Hp <= 0 || isActing == true) return;
             _role.Attack = 1;
             isActing = true;
-            if (_role.GetJyx2RoleId() == 0 )
+            if (_role.Id == 0 )
             {
                 //isActing = true;
                 _manager.operate(_role);

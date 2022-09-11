@@ -97,15 +97,8 @@ public partial class ShopUIPanel : Jyx2_UIBase
 
 	void RefreshMoney()
 	{
-		int num = runtime.GetMoney();
-		//---------------------------------------------------------------------------
-		//MoneyNum_Text.text = $"持有银两:{num}";
-		//---------------------------------------------------------------------------
-		//特定位置的翻译【持有银两的显示翻译】
-		//---------------------------------------------------------------------------
+		int num = runtime.GetItemCount(GameConst.MONEY_ID);
 		MoneyNum_Text.text = string.Format("持有银两:{0}".GetContent(nameof(ShopUIPanel)), num);
-		//---------------------------------------------------------------------------
-		//---------------------------------------------------------------------------
 	}
 
 	void RefreshChild()
@@ -174,7 +167,7 @@ public partial class ShopUIPanel : Jyx2_UIBase
 		if (itemCfg == null)
 			return;
 		int moneyCost = count * item.Price;
-		if (runtime.GetMoney() < moneyCost)
+		if (runtime.GetItemCount(GameConst.MONEY_ID) < moneyCost)
 		{
 			GameUtil.DisplayPopinfo("持有银两不足");
 			return;

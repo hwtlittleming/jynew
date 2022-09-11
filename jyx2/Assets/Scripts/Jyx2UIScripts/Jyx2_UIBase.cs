@@ -1,7 +1,6 @@
 
 using Jyx2.Middleware;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -84,26 +83,7 @@ public abstract class Jyx2_UIBase : MonoBehaviour
 			return true;
 		}
 	}
-
-	//temporarily comment out the game pad connection state change handler
-	//since cannot poll input joystick names in another thread
-	//private void onGameConnectionStateChange(bool hasGamepad)
-	//{
-	//	if (hasGamepad)
-	//	{
-	//		//hilite the selected item
-	//		changeCurrentSelection(Math.Max(current_selection, 0));
-	//	}
-	//	else
-	//	{
-	//		//unhilite selected item
-	//		if (current_selection > -1)
-	//		{
-	//			changeCurrentSelection(-1);
-	//		}
-	//	}
-	//}
-
+	
 	public void Hide()
 	{
 		if (AlwaysDisplay) return;

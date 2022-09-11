@@ -21,7 +21,7 @@ namespace Jyx2Configs
         宝物 = 13, 
     }
     [Serializable]
-    [CreateAssetMenu(menuName = "金庸重制版/配置文件/道具", fileName = "道具ID_道具名")]
+    [CreateAssetMenu(menuName = "配置文件/道具", fileName = "道具ID_道具名")]
     public class Jyx2ConfigItem : Jyx2ConfigBase
     {
         

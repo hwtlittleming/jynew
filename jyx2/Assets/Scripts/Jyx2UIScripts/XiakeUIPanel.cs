@@ -148,7 +148,7 @@ public partial class XiakeUIPanel : Jyx2_UIBase
 
 		sb.AppendLine(string.Format("生命 <color={0}>{1}</color>/<color={2}>{3}</color>".GetContent(nameof(XiakeUIPanel)), color1, role.Hp, color2,
 			role.MaxHp));
-		sb.Append(string.Format("能量 <color={0}>{1}/{2}</color>".GetContent(nameof(XiakeUIPanel)), color, role.Mp, role.MaxMp));
+		sb.Append(string.Format(("能量 <color={0}>{1}/{2}</color>" + FlexibleLength(role.Strength)).GetContent(nameof(XiakeUIPanel)), color, role.Mp, role.MaxMp));
 		sb.AppendLine(string.Format("状态 {0}        ".GetContent(nameof(XiakeUIPanel)), role.State));
 		sb.AppendLine(string.Format("战斗经验 {0}/{1}".GetContent(nameof(XiakeUIPanel)), role.Exp, role.GetLevelUpExp()));
 		
@@ -168,13 +168,10 @@ public partial class XiakeUIPanel : Jyx2_UIBase
 		sb.AppendLine(string.Format("描述: {0}".GetContent(nameof(XiakeUIPanel)), role.Describe));
         		
 		sb.AppendLine();
-		//---------------------------------------------------------------------------
-		//---------------------------------------------------------------------------
-		
 		return sb.ToString();
 	}
 
-	//判断 第二列离第一列要生成多少个transparent透明数字位(为了保持列距整齐)
+	//判断 第二列离第一列要生成多少个transparent透明数字位(为了保持列距整齐) 未计算中文
 	StringBuilder FlexibleLength(int attr,int maxLength = 9)
 	{
 		int count = 0;
@@ -249,31 +246,26 @@ public partial class XiakeUIPanel : Jyx2_UIBase
 		Jyx2_UIManager.Instance.HideUI(nameof(XiakeUIPanel));
 	}
 
-	// added handle leave chat logic
-	// by eaphone at 2021/6/6
+	//人物离队
 	void OnLeaveClick()
 	{
-
-		var curMap = LevelMaster.GetCurrentGameMap();
-
 		if (m_currentRole == null)
 			return;
 		if (!m_roleList.Contains(m_currentRole))
 			return;
-		if (m_currentRole.GetJyx2RoleId() == GameRuntimeData.Instance.Player.GetJyx2RoleId())
+		if (m_currentRole.Id == GameRuntimeData.Instance.Player.Id)
 		{
 			GameUtil.DisplayPopinfo("主角不能离开队伍");
 			return;
 		}
-
-		var eventLuaPath = GameConfigDatabase.Instance.Get<Jyx2ConfigCharacter>(m_currentRole.GetJyx2RoleId()).LeaveStoryId;
+		var eventLuaPath = GameConfigDatabase.Instance.Get<Jyx2ConfigCharacter>(m_currentRole.Id).LeaveStoryId;
 		if (!string.IsNullOrEmpty(eventLuaPath))
 		{
 			Jyx2.LuaExecutor.Execute("jygame/ka" + eventLuaPath, RefreshView);
 		}
 		else
 		{
-			GameRuntimeData.Instance.LeaveTeam(m_currentRole.GetJyx2RoleId());
+			GameRuntimeData.Instance.LeaveTeam(m_currentRole.Id);
 			RefreshView();
 		}
 	}
@@ -313,10 +305,10 @@ public partial class XiakeUIPanel : Jyx2_UIBase
 					m_currentRole.UnequipItem(yetItem,index); //卸下原装备
 					m_currentRole.Equipments[index] = item;//替换存储的角色装备
 					m_currentRole.UseItem(m_currentRole.Equipments[index]); //加减属性
-					runtime.SetItemUser(item.Id, m_currentRole.GetJyx2RoleId());
+					runtime.SetItemUser(item.Id, m_currentRole.Id);
 				}
 			},
-			(item) => { return (int)item.ItemType == (index + 10) && (runtime.GetItemUser(item) == m_currentRole.GetJyx2RoleId() || runtime.GetItemUser(item) == -1); },
+			(item) => { return (int)item.ItemType == (index + 10) && (runtime.GetItemUser(item) == m_currentRole.Id || runtime.GetItemUser(item) == -1); },
 			m_currentRole.Equipments[index] == null ? null : m_currentRole.Equipments[index].Id );
 	}
 	

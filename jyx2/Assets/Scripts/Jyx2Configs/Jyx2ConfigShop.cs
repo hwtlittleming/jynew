@@ -7,7 +7,7 @@ using UnityEngine.AddressableAssets;
 
 namespace Jyx2Configs
 {
-    [CreateAssetMenu(menuName = "金庸重制版/配置文件/商店", fileName = "商店配置")]
+    [CreateAssetMenu(menuName = "配置文件/商店", fileName = "商店配置")]
     public class Jyx2ConfigShop : Jyx2ConfigBase
     {
         [LabelText("韦小宝触发器名")] 

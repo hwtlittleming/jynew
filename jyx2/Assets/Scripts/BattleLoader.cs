@@ -140,7 +140,7 @@ public class BattleLoader : MonoBehaviour
         foreach (int roleId in enermyIdList)
         {
             RoleInstance r = new RoleInstance();
-            RoleInstance s = runtime.GetRole(roleId);
+            RoleInstance s = runtime.AllRoles[roleId];
             r = DeepCopy(s);
             r.skills = s.skills;
             r.configData.Model = s.configData.Model;//这些gameobject深拷贝不进去 赋值引用
@@ -157,7 +157,7 @@ public class BattleLoader : MonoBehaviour
             {
                 var roleId = v.Id;
                 if (roleId == -1) continue;
-                ourRoleList.Add(runtime.GetRole(roleId));
+                ourRoleList.Add(runtime.AllRoles[roleId]);
             }
         }
         else //否则我方上阵参战的角色
@@ -182,7 +182,7 @@ public class BattleLoader : MonoBehaviour
         for (int i = 0; i < ourRoleList.Count; i++)
         {
             RoleInstance r = ourRoleList[i];
-            if (r.GetJyx2RoleId() == 0)
+            if (r.Id == 0)
             {
                 x = int.Parse(pos.name.Split('-')[1]);
                 y = int.Parse(pos.name.Split('-')[2]);

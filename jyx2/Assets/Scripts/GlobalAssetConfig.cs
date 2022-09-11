@@ -9,7 +9,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
-[CreateAssetMenu(fileName = "GlobalAssetConfig", menuName = "金庸重制版/全局资源配置文件")]
+[CreateAssetMenu(fileName = "GlobalAssetConfig", menuName = "全局资源配置文件")]
 public class GlobalAssetConfig : ScriptableObject
 {
     public static GlobalAssetConfig Instance = null;

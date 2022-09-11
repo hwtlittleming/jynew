@@ -269,7 +269,7 @@ namespace Jyx2
                 
                 if (runtime.JoinRoleToTeam(roleId, true))
                 {
-                    RoleInstance role = runtime.GetRole(roleId);
+                    RoleInstance role = runtime.AllRoles[roleId];
                     storyEngine.DisplayPopInfo(role.Name + "加入队伍！");
                 }
                 
@@ -312,7 +312,7 @@ namespace Jyx2
 
                 if (runtime.LeaveTeam(roleId))
                 {
-                    RoleInstance role = runtime.GetRole(roleId);
+                    RoleInstance role = runtime.AllRoles[roleId];
                     storyEngine.DisplayPopInfo(role.Name + "离队。");
                 }
                 
@@ -443,7 +443,7 @@ namespace Jyx2
         // by eaphone at 2021/6/5
         public static bool TeamIsFull()
         {
-            return runtime.GetTeamMembersCount() > GameConst.MAX_TEAMCOUNT - 1;
+            return runtime.TeamId.Count > GameConst.MAX_TEAMCOUNT - 1;
         }
         
         //播放动画
@@ -474,7 +474,7 @@ namespace Jyx2
 
                 if (role == null)
                 {
-                    role = runtime.GetRole(roleId);
+                    role = runtime.AllRoles[roleId];
                 }
 
                 if (role == null)
@@ -487,7 +487,7 @@ namespace Jyx2
                 role.LearnMagic(magicId);
 
                 //只有设置了显示，并且角色在队伍的时候才显示
-                if(noDisplay != 0 && runtime.IsRoleInTeam(roleId))
+                if(noDisplay != 0 && runtime.TeamId.Contains(roleId))
                 {
                     var skill = GameConfigDatabase.Instance.Get<Jyx2ConfigSkill>(magicId);
                     storyEngine.DisplayPopInfo(role.Name + "习得武学" + skill.Name);
@@ -502,7 +502,7 @@ namespace Jyx2
         {
             RunInMainThread(() =>
             {
-                var role = runtime.GetRole(roleId);
+                var role = runtime.AllRoles[roleId];
                 role.IQ = Tools.Limit(role.IQ + v, 0, GameConst.MAX_ZIZHI);
                 storyEngine.DisplayPopInfo(role.Name + "资质增加" + v);
                 Next();
@@ -518,7 +518,7 @@ namespace Jyx2
 
                 if (role == null)
                 {
-                    role = runtime.GetRole(roleId);
+                    role = runtime.AllRoles[roleId];
                 }
 
                 if (role == null)
@@ -558,7 +558,7 @@ namespace Jyx2
         {
             RunInMainThread(() => 
             {
-                var r = runtime.GetRole(roleId);
+                var r = runtime.AllRoles[roleId];
                 var v0 = r.Speed;
                 r.Speed = Tools.Limit(v0 + value, 0, GameConst.MAX_ROLE_ATTRITE);
                 storyEngine.DisplayPopInfo(r.Name + "轻功增加" + (r.Speed - v0));
@@ -572,7 +572,7 @@ namespace Jyx2
         {
             RunInMainThread(() =>
             {
-                var r = runtime.GetRole(roleId);
+                var r = runtime.AllRoles[roleId];
                 var v0 = r.MaxMp;
                 r.MaxMp = Tools.Limit(v0 + value, 0, GameConst.MAX_HPMP);
                 r.Mp = Tools.Limit(r.Mp + value, 0, GameConst.MAX_HPMP);
@@ -587,7 +587,7 @@ namespace Jyx2
         {
             RunInMainThread(() =>
             {
-                var r = runtime.GetRole(roleId);
+                var r = runtime.AllRoles[roleId];
                 var v0 = r.Attack;
                 r.Attack = Tools.Limit(v0 + value, 0, GameConst.MAX_ROLE_ATTRITE);
                 storyEngine.DisplayPopInfo(r.Name + "武力增加" + (r.Attack - v0));
@@ -601,7 +601,7 @@ namespace Jyx2
         {
             RunInMainThread(() =>
             {
-                var r = runtime.GetRole(roleId);
+                var r = runtime.AllRoles[roleId];
                 var v0 = r.MaxHp;
                 r.MaxHp = Tools.Limit(v0 + value, 0, GameConst.MAX_HPMP);
                 r.Hp = Tools.Limit(r.Hp + value, 0, GameConst.MAX_HPMP);
@@ -736,27 +736,7 @@ namespace Jyx2
             Talk(0,"历经千辛万苦，我终于打败群雄，得到这武林盟主之位及神杖．但是”圣堂”在那呢？为什麽没人告诉我，难道大家都不知道．这会儿又有的找了．","talkname0", 1);
             AddItem(143,1);
         }
-
-        //所有人离队
-        public static void AllLeave()
-        {
-            RunInMainThread(() => {
-                Debug.Log("call AllLeave()");
-                Debug.Log(runtime.GetTeamMembersCount());
-
-                var roleList = runtime.GetTeam().ToList();
-                foreach (var role in roleList)
-                {
-                    if (role.Key != 0)
-                    {
-                        runtime.LeaveTeam(role.Key);
-                    }
-                }
-                Next();
-            });
-            Wait();
-        }
-
+        
         //判断场景贴图。ModifyEvent里如果p7!=-2时，会更新对应{场景}_{事件}的贴图信息，可以用此方法JudegeScenePic检查对应的贴图信息
         public static bool JudgeScenePic(int scene, int eventId, int pic)
         {
@@ -784,16 +764,6 @@ namespace Jyx2
             });
             Wait();
             return result;
-        }
-
-        public static bool Judge14BooksPlaced()
-        {
-            return jyx2_CheckEventCount(82,999,0)==14;
-        }
-
-        public static void EndAmination(int p1, int p2, int p3, int p4, int p5, int p6, int p7)
-        {
-
         }
         
         public static void PlayMusic(int id)
@@ -825,7 +795,7 @@ namespace Jyx2
         /// 为角色添加非装备
         public static void NPCGetItem(int roleId,int itemId,int count)
         {
-            var role = runtime.GetRole(roleId);
+            var role = runtime.AllRoles[roleId];
             if (role != null) role.AlterItem(itemId, count);
         }
 
@@ -965,20 +935,6 @@ namespace Jyx2
             Wait();
         }
 
-        public static void AskSoftStar()
-        {
-            RunInMainThread(() => {
-                var eventLuaPath = "jygame/ka" + UnityEngine.Random.Range(801, 820).ToString();
-                Jyx2.LuaExecutor.Execute(eventLuaPath, null);
-            });
-        }
-
-
-        public static void instruct_57()
-        {
-
-        }
-
         #region 扩展函数
         public static void jyx2_ReplaceSceneObject(string scene,string path, string replace)
         {
@@ -1083,11 +1039,8 @@ namespace Jyx2
         {
             _timelineSpeed = speed;
         }
-
-        /// <summary>
+        
         /// 简单模式播放timeline，播放完毕后直接关闭
-        /// </summary>
-        /// <param name="timelineName"></param>
         public static void jyx2_PlayTimelineSimple(string timelineName, bool hidePlayer = false)
         {
             RunInMainThread(() =>
@@ -1270,16 +1223,11 @@ namespace Jyx2
             });
             Wait();
         }
-
-
-        /// <summary>
+        
         /// 切换角色动作
         ///
         /// 调用样例（胡斐居）
         /// jyx2_SwitchRoleAnimation("Level/NPC/胡斐", "Assets/BuildSource/AnimationControllers/打坐.controller")
-        /// </summary>
-        /// <param name="rolePath"></param>
-        /// <param name="animationControllerPath"></param>
         public static void jyx2_SwitchRoleAnimation(string rolePath, string animationControllerPath, string scene = "")
         {
             Debug.Log("jyx2_SwitchRoleAnimation called");
@@ -1396,7 +1344,7 @@ namespace Jyx2
                 var role = runtime.GetRoleInTeam(roleId);
                 if(role == null)
                 {
-                    role = runtime.GetRole(roleId);
+                    role = runtime.AllRoles[roleId];
                 }
                 if (role == null)
                 {

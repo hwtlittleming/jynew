@@ -137,21 +137,7 @@ namespace Jyx2
                     }
                     else
                     {
-                        return roleA.GetJyx2RoleId().CompareTo(roleB.GetJyx2RoleId());
-                    }
-                });
-            }
-            else 
-            {
-                Roles.Sort((roleA, roleB) =>
-                {
-                    if (roleA.sp != roleB.sp)
-                    {
-                        return roleB.sp.CompareTo(roleA.sp);
-                    }
-                    else
-                    {
-                        return roleA.GetJyx2RoleId().CompareTo(roleB.GetJyx2RoleId());
+                        return roleA.Id.CompareTo(roleB.Id);
                     }
                 });
             }

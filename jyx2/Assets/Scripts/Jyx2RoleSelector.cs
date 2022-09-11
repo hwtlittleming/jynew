@@ -75,7 +75,7 @@ public class Jyx2RoleSelector : MonoBehaviour
             {
                 var role = roleHeadUI.GetRole();
                 rst.Add(role);
-                Debug.Log(role.Key);
+                Debug.Log(role.Id);
             }
             
         }

@@ -17,7 +17,7 @@ namespace Jyx2
         #region 存档数据定义
         
         //基本情况
-        [SerializeField] public int Key; //ID
+        [SerializeField] public int Id; //ID
         [SerializeField] public string Name; //姓名
         [SerializeField] public String Sex; //性别
         [SerializeField] public String Race; //种族
@@ -89,15 +89,15 @@ namespace Jyx2
             else //第一次初始化数据
             { 
                 //获取配置的初始数据
-                Key = roleId; 
-                configData = GameConfigDatabase.Instance.Get<Jyx2ConfigCharacter>(Key); //读档时塞不塞这个再看
+                Id = roleId; 
+                configData = GameConfigDatabase.Instance.Get<Jyx2ConfigCharacter>(Id); //读档时塞不塞这个再看
                 InitData(); //复制属性数据
             
                 //添加配置的初始技能 配置技能数据+level ->存档的技能数据
                 if (configData == null)Assert.Fail();
                 if (skills.Count == 0)
                 {
-                    if (configData.Skills == null) //没配技能 加一个普攻技能
+                    if (configData.Skills == null || configData.Skills.Count == 0) //没配技能 加一个普攻技能
                     {
                         skills.Add(new SkillInstance(0,0));
                     }
@@ -199,16 +199,9 @@ namespace Jyx2
                 Hurt = 0;
             }
         }
-
-        public int GetJyx2RoleId()
-        {
-            return Key;
-        }
-
+        
         #region JYX2等级相关
-
-
-
+        
         //JYX2
         public bool CanLevelUp()
         {
@@ -232,14 +225,7 @@ namespace Jyx2
         {
             return GameConst._levelUpExpList[Level - 1];
         }
-
-
-        /// <summary>
-        /// 升级属性计算公式可以参考：https://github.com/ZhanruiLiang/jinyong-legend
-        ///
-        /// 
-        /// </summary>
-        /// <returns></returns>
+        
         public void LevelUp()
         {
             Level++;
@@ -281,16 +267,10 @@ namespace Jyx2
 
         #endregion
 
-        /// <summary>
         /// 战斗中使用的招式
-        /// </summary>
         public List<BattleZhaoshiInstance> Zhaoshis;
-
-
-        /// <summary>
+        
         /// 用于战斗中获取该角色蓝够的招式，（如果有医疗、用毒、解毒，也封装成招式）
-        /// </summary>
-        /// <returns></returns>
         public IEnumerable<BattleZhaoshiInstance> GetZhaoshis(bool forceAttackZhaoshi)
         {
             foreach (var zhaoshi in Zhaoshis)
@@ -371,19 +351,12 @@ namespace Jyx2
             return true;
         }
         
-        private GameRuntimeData runtime
-        {
-            get { return GameRuntimeData.Instance; }
-        }
-        
         /// 使用物品
         public void UseItem(ItemInstance item)
         {
             if (item == null)
                 return;
-
-            //吃药机制
-            //参考：https://github.com/ZhanruiLiang/jinyong-legend
+            
             int add = item.AddHp - this.Hurt / 2 + Random.Range(0, 10);
             if (add <= 0)
             {
@@ -405,18 +378,15 @@ namespace Jyx2
                 this.LearnMagic(item.Skill);
             }
         }
-
-        /// <summary>
+        
         /// 卸下物品（装备） 解除装备与角色关系+角色属性增减+存储中的角色身上装备去除
-        /// </summary>
-        /// <param name="item"></param>
         public void UnequipItem(ItemInstance item,int index)
         {
             if (item == null || item.Id == null)
                 return;
             
             this.Equipments[index] = null; //存储中的角色身上装备去除
-            runtime.SetItemUser(item.Id, -1);// 解除装备与角色关系
+            GameRuntimeData.Instance.SetItemUser(item.Id, -1);// 解除装备与角色关系
             //角色属性增减
             this.SetHPAndRefreshHudBar(this.Hp - item.AddHp);
             this.MaxHp -= item.AddMaxHp;
@@ -616,7 +586,7 @@ namespace Jyx2
 
         #endregion
 
-        //JYX2的休息逻辑，对应jinyong-legend  War_RestMenu
+        //改为蓄力
         public void OnRest()
         {
             int addTili = 3 + Random.Range(0, 3);
@@ -667,11 +637,7 @@ namespace Jyx2
             return this.Equipments[index] != null ? (int)Equipments[index].GetType().GetField(propertyName).GetValue(Equipments[index]) : 0;
         }
         
-        /// <summary>
         /// 获取武器武功配合加攻击力
-        ///
-        /// 计算方法参考：https://github.com/ZhanruiLiang/jinyong-legend
-        ///
         /// 玄铁剑+玄铁剑法 攻击+100
         /// 君子剑+玉女素心剑 攻击+50
         /// 淑女剑+玉女素心剑 攻击+50
@@ -679,9 +645,6 @@ namespace Jyx2
         /// 冷月宝刀+胡家刀法 攻击+70
         /// 金蛇剑+金蛇剑法 攻击力+80
         /// 霹雳狂刀+霹雳刀法 攻击+100
-        /// </summary>
-        /// <param name="wugong"></param>
-        /// <returns></returns>
         public int GetExtraAttack(Jyx2ConfigSkill wugong)
         {
             /*if (Equipments[0] !=null && Equipments[0].Id != -1 && this.Equipments[0].PairedWugong != null && this.Equipments[0].PairedWugong.Id == wugong.Id)

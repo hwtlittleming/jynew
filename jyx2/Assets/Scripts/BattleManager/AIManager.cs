@@ -208,16 +208,7 @@ public class AIManager
             }
         }
     }
-    /// </summary>
-    /// 战斗计算公式可以参考：https://tiexuedanxin.net/thread-365140-1-1.html
-    ///
-    /// 
-    /// </summary>
-    /// <param name="r1"></param>
-    /// <param name="r2"></param>
-    /// <param name="skill"></param>
-    /// <param name="blockVector"></param>
-    /// <returns></returns>
+
     public SkillCastResult GetSkillResult(RoleInstance r1, RoleInstance r2, BattleZhaoshiInstance skill)
     {        
         SkillCastResult rst = new SkillCastResult(r1, r2, skill);

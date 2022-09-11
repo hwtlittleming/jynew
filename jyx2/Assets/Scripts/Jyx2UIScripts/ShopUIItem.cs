@@ -69,7 +69,7 @@ public class ShopUIItem : MonoBehaviour
 	void RefreshCount()
 	{
 		numText.text = buyCount.ToString();
-		int moneyCount = GameRuntimeData.Instance.GetMoney();
+		int moneyCount = GameRuntimeData.Instance.GetItemCount(GameConst.MONEY_ID);
 		int needCount = shopItem.Price * buyCount;
 		Color textColor = moneyCount >= needCount ? Color.white : Color.red;
 		//---------------------------------------------------------------------------

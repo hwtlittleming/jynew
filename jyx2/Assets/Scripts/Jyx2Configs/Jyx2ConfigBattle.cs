@@ -9,7 +9,7 @@ using UnityEngine.Serialization;
 namespace Jyx2Configs
 {
     //大体静态，可增加属性记录实现 到达某条件 某些值就用新的
-    [CreateAssetMenu(menuName = "金庸重制版/配置文件/战斗", fileName = "战斗ID")]
+    [CreateAssetMenu(menuName = "配置文件/战斗", fileName = "战斗ID")]
     public class Jyx2ConfigBattle : Jyx2ConfigBase
     {
         public static Jyx2ConfigBattle Get(int id)

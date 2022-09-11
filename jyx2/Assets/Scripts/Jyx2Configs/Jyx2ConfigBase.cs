@@ -17,11 +17,8 @@ namespace Jyx2Configs
         
         [BoxGroup(DEFAULT_GROUP_NAME)][LabelText("名称")] 
         public string Name;
-
-        /// <summary>
+        
         /// 资源预热
-        /// </summary>
-        /// <returns></returns>
         public abstract UniTask WarmUp();
     }
 }

@@ -10,7 +10,7 @@ using UnityEngine.AddressableAssets;
 namespace Jyx2Configs
 {
     [Serializable]
-    [CreateAssetMenu(menuName = "金庸重制版/配置文件/角色", fileName = "角色ID_角色名")]
+    [CreateAssetMenu(menuName = "配置文件/角色", fileName = "角色ID_角色名")]
     public class Jyx2ConfigCharacter : Jyx2ConfigBase
     {
         private const string CGroup1 = "基本信息";
@@ -79,19 +79,7 @@ namespace Jyx2Configs
         
         [BoxGroup(CGroupItems)] [LabelText("携带道具")][TableList]
         public List<Jyx2ConfigCharacterItem> Items;
-        
-        /*[BoxGroup(CGroup4)][LabelText("武器")][SerializeReference]
-        public Jyx2ConfigItem Weapon;
-        
-        [BoxGroup(CGroup4)][LabelText("防具")][SerializeReference]
-        public Jyx2ConfigItem Armor;
-        
-        [BoxGroup(CGroup4)][LabelText("代步")][SerializeReference]
-        public Jyx2ConfigItem Shoes;
-        
-        [BoxGroup(CGroup4)][LabelText("宝物")][SerializeReference]
-        public Jyx2ConfigItem Treasure;*/
-        
+
         [BoxGroup(CGroup2)][LabelText("生命上限")]
         public int MaxHp;
         

@@ -17,7 +17,7 @@ using UnityEngine.UI;
         [SerializeField] public String Name;
         [SerializeField] public int ConfigId;
         //动态数据
-        [SerializeField] public int UseRoleId;//使用人id
+        [SerializeField] public int UseRoleId;//使用人id        剧情道具 = 0,技能书 = 2, 消耗品 = 3, 武器 = 10, 防具 = 11, 代步 = 12, 宝物 = 13,
         [SerializeField] public String Desc;//物品说明
         [SerializeField] public int ItemType;//物品类型
         [SerializeField] public int Skill; //习得技能

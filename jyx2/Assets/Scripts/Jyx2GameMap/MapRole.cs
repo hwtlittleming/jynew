@@ -446,23 +446,16 @@ public class MapRole : Jyx2AnimationBattleRole
             Debug.LogError("武器挂载到了不存在的节点：" + weapon.m_BindBone);
         }
     }
-
-    /// <summary>
+    
     /// 卸载武器
-    /// </summary>
     void UnMountCurrentWeapon()
     {
         if(m_CurrentWeapon == null) return;
         
         m_CurrentWeapon.transform.localScale = Vector3.zero;
     }
-
-    /// <summary>
+    
     /// 重定向角色Controller
-    /// TODO:目前不知道有什么用，到时候再看看
-    /// </summary>
-    /// <param name="controller"></param>
-    /// <param name="callback"></param>
     void ChangeAnimationController(RuntimeAnimatorController controller, Action callback)
     {
         if (controller == null)

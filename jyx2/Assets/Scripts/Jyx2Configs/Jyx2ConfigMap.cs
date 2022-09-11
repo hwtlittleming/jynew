@@ -14,7 +14,7 @@ using UnityEditor.SceneManagement;
 
 namespace Jyx2Configs
 {
-    [CreateAssetMenu(menuName = "金庸重制版/配置文件/地图", fileName = "地图ID_地图名")]
+    [CreateAssetMenu(menuName = "配置文件/地图", fileName = "地图ID_地图名")]
     public class Jyx2ConfigMap : Jyx2ConfigBase
     {
         public static Jyx2ConfigMap Get(int id)

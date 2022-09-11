@@ -49,7 +49,7 @@ namespace ES3Types
 			writer.WriteProperty("Luck", instance.Luck, ES3Type_int.Instance);
 
 			writer.WriteProperty("Skills", instance.skills, ES3Internal.ES3TypeMgr.GetES3Type(typeof(System.Collections.Generic.List<Jyx2.SkillInstance>)));
-			writer.WriteProperty("Items", instance.Items, ES3Internal.ES3TypeMgr.GetES3Type(typeof(System.Collections.Generic.List<Jyx2Configs.Jyx2ConfigCharacterItem>)));
+			//writer.WriteProperty("Items", instance.Items, ES3Internal.ES3TypeMgr.GetES3Type(typeof(System.Collections.Generic.List<Jyx2Configs.Jyx2ConfigCharacterItem>)));
 			writer.WriteProperty("Equipments", instance.Equipments, ES3Internal.ES3TypeMgr.GetES3Type(typeof(System.Collections.Generic.List<Jyx2Configs.Jyx2ConfigItem>)));
 
 			writer.WriteProperty("CurrentSkill", instance.CurrentSkill,  ES3Type_int.Instance);
@@ -130,7 +130,7 @@ namespace ES3Types
 					case "Attach":
 						instance.Attach = reader.Read<System.String>(ES3Type_string.Instance);
 						break;
-					//
+					
 					case "Strength":
 						instance.Strength = reader.Read<System.Int32>(ES3Type_int.Instance);
 						break;
@@ -146,15 +146,12 @@ namespace ES3Types
 					case "Luck":
 						instance.Luck = reader.Read<System.Int32>(ES3Type_int.Instance);
 						break;
-					//
+					
 					case "Skills":
 						instance.skills = reader.Read<System.Collections.Generic.List<Jyx2.SkillInstance>>();
 						break;
-					case "Items":
-						instance.Items = reader.Read<System.Collections.Generic.List<Jyx2Configs.Jyx2ConfigCharacterItem>>();
-						break;
 					case "Equipments":
-						instance.Equipments = reader.Read<System.Collections.Generic.List<Jyx2Configs.Jyx2ConfigItem>>();
+						instance.Equipments = reader.Read<System.Collections.Generic.List<ItemInstance>>();
 						break;
 					case "CurrentSkill":
 						instance.CurrentSkill = reader.Read<System.Int32>(ES3Type_int.Instance);

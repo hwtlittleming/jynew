@@ -296,9 +296,7 @@ namespace AmplifyShaderEditor
 				}
 
 				GUI.Label( m_searchBarSize, string.Empty, UIUtils.ToolbarSearchCancelButton );
-
-
-
+				
 				if ( Event.current.isKey && Event.current.keyCode == KeyCode.Escape )
 				{
 					m_searchBarVisible = false;

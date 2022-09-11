@@ -30,21 +30,18 @@ namespace Jyx2
         private static GameRuntimeData _instance;
         
         #region 存档数据定义
-        //JYX2，所有的角色都放到存档里
+        //第一个角色为主角，主角携带=背包物品 物品里记录使用人
         [SerializeField] public Dictionary<int,RoleInstance> AllRoles = new Dictionary<int,RoleInstance>();
         
         //当前玩家队伍
-        [SerializeField] private List<int> TeamId = new List<int>();
+        [SerializeField] public List<int> TeamId = new List<int>();
         [SerializeField] public SubMapSaveData SubMapData; //当前所处子地图存储数据
         [SerializeField] public WorldMapSaveData WorldData; //世界地图信息
         
-        [SerializeField] public Dictionary<string, string> KeyValues = new Dictionary<string, string>(); //主键值对数据
-        [SerializeField] public Dictionary<string, int> Items = new Dictionary<string, int>(); //包裹中的物品，{ID，数量}
-        [SerializeField] public Dictionary<string, int> ItemUser= new Dictionary<string, int>(); //物品使用人，{物品ID，人物ID}
+        [SerializeField] public Dictionary<string, string> KeyValues = new Dictionary<string, string>(); //宝箱状态,地图打开状态
         [SerializeField] public Dictionary<string, int> ShopItems= new Dictionary<string, int>(); //小宝商店物品，{ID，数量}
         [SerializeField] public Dictionary<string, int> EventCounter = new Dictionary<string, int>();
         [SerializeField] public Dictionary<string, int> MapPic = new Dictionary<string, int>();
-        [SerializeField] private List<int> ItemAdded = new List<int>(); //因角色入队而带入背包的物品
         #endregion
         
         //入口:新游戏的开始
@@ -83,10 +80,7 @@ namespace Jyx2
             string path = string.Format(ARCHIVE_FILE_NAME, index);
            ES3.Save(nameof(GameRuntimeData), this, path);
            
-           /*ES3.Save(nameof(GameRuntimeData), GetJson(this) , path);
-           GameRuntimeData g = ParseFormJson<GameRuntimeData>(ES3.Load(path).ToString());*/
-           
-           /*BinaryFormatter bf0=new BinaryFormatter();
+           /* 序列化方式存储 BinaryFormatter bf0=new BinaryFormatter();
            FileStream  fs0=File.Create(Application.persistentDataPath+"/Data.yj");
            bf0.Serialize(fs0,new SkillInstance());
            //将Save对象转化为字节
@@ -99,7 +93,9 @@ namespace Jyx2
            
             Debug.Log("存档结束");
 
-            var summaryInfo = GenerateSaveSummaryInfo();
+            string mapName = LevelMaster.GetCurrentGameMap().GetShowName();
+            var summaryInfo = $"{Player.Level}级,{mapName},队伍:{TeamId.Count}人";
+
             ES3.Save("summary", summaryInfo, string.Format(ARCHIVE_SUMMARY_FILE_NAME, index));
             //PlayerPrefs.SetString(ARCHIVE_SUMMARY_PREFIX + index, summaryInfo);
         }
@@ -136,6 +132,7 @@ namespace Jyx2
             return true;
         }
 
+        //获取存档时间
         public static DateTime? GetSaveDate(int index)
 		{
             var summaryInfoFilePath = string.Format(ARCHIVE_SUMMARY_FILE_NAME, index);
@@ -143,6 +140,7 @@ namespace Jyx2
                  ((DateTime?) ES3.GetTimestamp(summaryInfoFilePath)) : null;
         }
 
+        //获取存档摘要
         public static string GetSaveSummary(int index)
 		{
 			string summaryInfo = "";
@@ -154,12 +152,6 @@ namespace Jyx2
             return summaryInfo;
 		}
         
-        private string GenerateSaveSummaryInfo()
-        {
-            string mapName = LevelMaster.GetCurrentGameMap().GetShowName();
-            return $"{Player.Level}级,{mapName},队伍:{GetTeamMembersCount()}人";
-        }
-
         #endregion
         
         #region 游戏运行时数据
@@ -167,7 +159,13 @@ namespace Jyx2
         //主角
         public RoleInstance Player
         {
-            get { return GetRole(0); }
+            get { return AllRoles[0]; }
+        }
+        
+        //背包数据
+        public List<ItemInstance> itemList
+        {
+            get { return AllRoles[0].Items; }
         }
 
 
@@ -179,13 +177,8 @@ namespace Jyx2
                 yield return AllRoles[id];
             }
         }
-
-        //获取队伍人数
-        public int GetTeamMembersCount()
-        {
-            return TeamId.Count;
-        }
-
+        
+        //角色入队
         public bool JoinRoleToTeam(int roleId,bool showGetItem = false)
         {
             if (GetRoleInTeam(roleId) != null)
@@ -194,7 +187,7 @@ namespace Jyx2
                 return false;
             }
             
-            var role = GetRole(roleId);
+            var role = AllRoles[roleId];
             if(role == null)
             {
                 Debug.LogError($"调用了不存在的role加入队伍，id = {roleId}");
@@ -213,21 +206,17 @@ namespace Jyx2
                         StoryEngine.Instance.DisplayPopInfo("得到物品:".GetContent(nameof(GameRuntimeData)) + item.Name + "×" + Math.Abs(item.Count));
                     }
                 }
+                //清空角色身上的物品
+                role.Items.Clear();
             }
 
-
-
-            //清空角色身上的装备和物品
-            /*role.Equipments.Clear();
-            role.Items.Clear();*/
-            
             TeamId.Add(roleId);
             return true;
         }
 
         public bool LeaveTeam(int roleId) 
         {
-            var role = GetRole(roleId);
+            var role = AllRoles[roleId];
             if (role == null)
             {
                 Debug.LogError("调用了不存在的role加入队伍，roleid =" + roleId);
@@ -239,17 +228,19 @@ namespace Jyx2
                 return false;
             }
 
-            //卸下角色身上的装备，清空修炼
-            role.UnequipItem(role.Equipments[0],0);
-            role.UnequipItem(role.Equipments[1],1);
-            role.UnequipItem(role.Equipments[2],2);
-            role.UnequipItem(role.Equipments[3],3);
-
+            //清除背包中的角色已装备的装备
+            foreach (var equipment in role.Equipments)
+            {
+                if (equipment == null) continue;
+                role.Items.Remove(role.GetItem(equipment.Id));
+            }
+            
             TeamId.Remove(roleId);
             role.Recover(true);
             return true;
         }
 
+        //获取队伍里的角色
         public RoleInstance GetRoleInTeam(int roleId)
         {
             if (TeamId.Contains(roleId))
@@ -259,22 +250,8 @@ namespace Jyx2
 
             return null;
         }
-
-        public bool IsRoleInTeam(int roleId)
-        {
-            return TeamId.Contains(roleId);
-        }
-
-
-
-        public RoleInstance GetRole(int roleId)
-        {
-            return AllRoles[roleId];
-        }
-
-
-
-        #region KeyValues
+        
+        #region 宝箱状态,地图打开状态
 
         public string GetKeyValues(string k)
         {
@@ -298,34 +275,29 @@ namespace Jyx2
             return false;
         }
         #endregion
-
-
-
-        public int GetMoney()
-        {
-            return GetItemCount(GameConst.MONEY_ID);
-        }
         
+        //获取背包某物品数量
         public int GetItemCount(int id)
         {
-            if (Items.ContainsKey(id.ToString()))
-                return Items[id.ToString()];
-            return 0;
+            int count = 0;
+            if (AllRoles[0].GetItem(id) != null) 
+                count = AllRoles[0].GetItem(GameConst.MONEY_ID).Count;
+            return count;
         }
         
         //设置物品使用人
         public void SetItemUser(String itemId, int roleId)
         {
-            _instance.GetRole(0).GetItem(itemId).UseRoleId = roleId;
+            _instance.AllRoles[0].GetItem(itemId).UseRoleId = roleId;
         }
 
         //获取物品使用人
         public int GetItemUser(ItemInstance item)
         {
-            return _instance.GetRole(0).GetItem(item.Id).UseRoleId;
+            return _instance.AllRoles[0].GetItem(item.Id).UseRoleId;
         }
-
-
+        
+        //改变事件
         public void ModifyEvent(int scene, int eventId, int interactiveEventId, int useItemEventId, int enterEventId)
         {
             string key = "evt_" + scene + "_" + eventId;
@@ -339,9 +311,7 @@ namespace Jyx2
                 return KeyValues[key];
             return null;
         }
-
-
-
+        
         public void AddEventCount(int scene, int eventId, int eventName, int num)
         {
             string key=(string.Format("{0}_{1}_{2}", scene, eventId, eventName));
@@ -380,7 +350,6 @@ namespace Jyx2
             }
             return -1;
         }
-
 
         //JYX2场景相关记录
         public Dictionary<string,string> GetSceneInfo(string scene)

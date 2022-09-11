@@ -39,8 +39,8 @@ public static class RoleHelper
         var roleView = GameObject.Instantiate(roleViewPre).GetComponent<MapRole>();
         role.View = roleView;
         roleView.DataInstance = role;
-        roleView.m_RoleKey = role.Key;
-        roleView.name = role.Key.ToString();
+        roleView.m_RoleKey = role.Id;
+        roleView.name = role.Id.ToString();
         roleView.tag = tag;
         return roleView;
     }

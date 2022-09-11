@@ -14,7 +14,7 @@ using UnityEngine.SceneManagement;
 using UnityEditor;
 #endif
 
-[CreateAssetMenu(fileName = "[技能名称]", menuName = "金庸重制版/技能展现配置")]
+[CreateAssetMenu(fileName = "[技能名称]", menuName = "技能展现配置")]
 public partial class Jyx2SkillDisplayAsset : Jyx2ConfigBase
 {
     public static IList<Jyx2SkillDisplayAsset> All;
