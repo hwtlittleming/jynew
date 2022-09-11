@@ -1,12 +1,4 @@
-/*
- * 金庸群侠传3D重制版
- * https://github.com/jynew/jynew
- *
- * 这是本开源项目文件头，所有代码均使用MIT协议。
- * 但游戏内资源和第三方插件、dll等请仔细阅读LICENSE相关授权协议文档。
- *
- * 金庸老先生千古！
- */
+
 
 using System;
 using System.Collections;
@@ -573,8 +565,8 @@ public class BattleManager : MonoBehaviour
             List<RoleInstance> toRoleList = new List<RoleInstance>(); //攻击涵盖的角色, todo 角色属性变化 格子上的角色属性是否能跟着变化
             if (skill.Data.Name == "普通攻击")
             {
-                String attackRange = role.Equipments[0].attackRange; //攻击范围，默认为空:点攻击，名武器才有值
-                Jyx2ConfigItem weapon = role.Equipments[0];
+                String attackRange = role.Equipments[0].attackRange.ToString(); //攻击范围，默认为空:点攻击，名武器才有值
+                ItemInstance weapon = role.Equipments[0];
                 int dis = weapon.bestDistance; //获得持有武器的最佳攻击距离
                 if (attackRange != null && attackRange != "0")
                 {
@@ -632,15 +624,10 @@ public class BattleManager : MonoBehaviour
         }
 
         //使用道具 修改后可用
-        public async UniTask RoleUseItem(RoleInstance role, Jyx2ConfigItem item,RoleInstance toRole)
+        public async UniTask RoleUseItem(RoleInstance role, ItemInstance item,RoleInstance toRole)
         {
             Debug.Log(role.Name + "使用" + item.Name + "攻击" + toRole.blockData.blockName);
-            if (role == null || item == null)
-            {
-                GameUtil.LogError("使用物品状态错误");
-                return;
-            }
-
+            
             AnimationClip clip = null;
             var itemType = (int)item.ItemType;
             if (itemType == 3)
@@ -658,11 +645,11 @@ public class BattleManager : MonoBehaviour
 
             if (role.team == 0 && role.GetJyx2RoleId() == 0) //如果是己方角色，则从背包里扣。 队友暂时是扔自己配置了携带的物品，是否要改？
             {
-                GameRuntimeData.Instance.AddItem(item.Id, -1);
+                GameRuntimeData.Instance.AllRoles[0].AlterItem(item.ConfigId, -1);
             }
             else //否则从角色身上扣
             {
-                toRole.AddItem(item.Id, -1);
+                toRole.AlterItem(item.ConfigId, -1);
             }
 
             Dictionary<int, int> effects = UIHelper.GetItemEffect(item);

@@ -38,20 +38,12 @@ namespace Jyx2Configs
             return _sprite;
         }
         
-        public int bestDistance;//最佳攻击距离
-        public String attackRange;//攻击范围，名武器独有,最多仅横纵
-        
-        private const string EXTEND_GROUP = "扩展属性";
         private const string EFFECT_GROUP = "使用效果";
         private const string CONDITION_GROUP = "使用条件";
         
-        [BoxGroup(EXTEND_GROUP)][LabelText("武器武功配合加攻击力")]
-        public int ExtraAttack;
+        /*[BoxGroup(EXTEND_GROUP)][LabelText("武器武功配合加攻击力")]
+        public int ExtraAttack;*/
         
-        //某装备和武功配合 使得
-        [BoxGroup(EXTEND_GROUP)][LabelText("配合武功")][SerializeReference]
-        public Jyx2ConfigSkill PairedWugong;
-
         [BoxGroup(DEFAULT_GROUP_NAME)][LabelText("物品说明")]
         public string Desc; 
         
@@ -59,16 +51,16 @@ namespace Jyx2Configs
         public Jyx2ConfigItemType ItemType;
         
         [BoxGroup(DEFAULT_GROUP_NAME)] [LabelText("品质")] //物品增益效果根据品质提升百分比；装备根据品质属性增幅
-        public String Quality;
+        public int Quality;
         
-        [ShowIf(nameof(ShowSkill))]
-        [BoxGroup(DEFAULT_GROUP_NAME)][LabelText("练出武功")][SerializeReference]
-        public Jyx2ConfigSkill Skill;
-
-        bool ShowSkill()
-        {
-            return (int)ItemType == 2;
-        }
+        [BoxGroup(DEFAULT_GROUP_NAME)] [LabelText("最佳攻击距离")]
+        public int bestDistance;
+        [BoxGroup(DEFAULT_GROUP_NAME)] [LabelText("攻击范围，名武器独有")]
+        public String attackRange;
+        
+        [BoxGroup(DEFAULT_GROUP_NAME)][LabelText("习得技能")][SerializeReference]
+        public int Skill;
+        
         // todo 资质的东西，宝物的临时增加资质
         [BoxGroup(EFFECT_GROUP)][LabelText("加生命")] //战斗中的伤药
         public int AddHp; 

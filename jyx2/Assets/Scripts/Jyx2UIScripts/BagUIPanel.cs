@@ -1,12 +1,4 @@
-/*
- * 金庸群侠传3D重制版
- * https://github.com/jynew/jynew
- *
- * 这是本开源项目文件头，所有代码均使用MIT协议。
- * 但游戏内资源和第三方插件、dll等请仔细阅读LICENSE相关授权协议文档。
- *
- * 金庸老先生千古！
- */
+
 using Jyx2.Middleware;
 
 using Jyx2;
@@ -24,12 +16,12 @@ public partial class BagUIPanel : Jyx2_UIBase
 {
 	public override UILayer Layer => UILayer.NormalUI;
 
-	Action<int> m_callback;
-	Dictionary<string, int> m_itemsData;
+	Action<String> m_callback;
+	List<ItemInstance> m_itemsData;
 	Jyx2ItemUI m_selectItem;
-	Func<Jyx2ConfigItem, bool> m_filter = null;
+	Func<ItemInstance, bool> m_filter = null;
 	private bool castFromSelectPanel = false;
-	private int current_item;
+	private String current_item;
 
 	enum BagFilter
 	{
@@ -38,7 +30,6 @@ public partial class BagUIPanel : Jyx2_UIBase
 		Cost,
 		Equipment,
 		Book,
-		Anqi
 	}
 
 	private BagFilter _filter = BagFilter.All;
@@ -65,15 +56,15 @@ public partial class BagUIPanel : Jyx2_UIBase
 	protected override void OnShowPanel(params object[] allParams)
 	{
 		base.OnShowPanel(allParams);
-		m_itemsData = (Dictionary<string, int>)allParams[0];
+		m_itemsData = (List<ItemInstance>)allParams[0];
 		if (allParams.Length > 1)
-			m_callback = (Action<int>)allParams[1];
+			m_callback = (Action<String>)allParams[1];
 		if (allParams.Length > 2)
-			m_filter = (Func<Jyx2ConfigItem, bool>)allParams[2];
+			m_filter = (Func<ItemInstance, bool>)allParams[2];
 		if (allParams.Length > 3)
 		{
-			castFromSelectPanel = true;
-			current_item = (int)allParams[3];
+			castFromSelectPanel = true; 
+			current_item = allParams[3] == null ? null : allParams[3].ToString();;
 		}
 		else castFromSelectPanel = false;
 
@@ -116,17 +107,11 @@ public partial class BagUIPanel : Jyx2_UIBase
 
 		float itemHeight = 0;
 
-		foreach (var kv in m_itemsData)
+		foreach (ItemInstance item in m_itemsData)
 		{
-			string id = kv.Key;
-			int count = kv.Value;
-
-			var item = GameConfigDatabase.Instance.Get<Jyx2ConfigItem>(id);
-			if (item == null)
-			{
-				Debug.LogError("cannot get item data, id=" + id);
-				continue;
-			}
+			String id = item.Id;
+			int count = item.Count;
+			
 			//item filter
 			if (m_filter != null && m_filter(item) == false)
 				continue;
@@ -136,8 +121,8 @@ public partial class BagUIPanel : Jyx2_UIBase
 			if (_filter == BagFilter.Cost && (int)item.ItemType != 3) continue;
 			if (_filter == BagFilter.Equipment && (int)item.ItemType != 1) continue;
 
-
-			var itemUI = Jyx2ItemUI.Create(int.Parse(id), count);
+			//循环创建物品单元
+			var itemUI = Jyx2ItemUI.Create(id, count);
 			itemUI.transform.SetParent(ItemRoot_RectTransform);
 			itemUI.transform.localScale = Vector3.one;
 			var btn = itemUI.GetComponent<Button>();
@@ -220,7 +205,7 @@ public partial class BagUIPanel : Jyx2_UIBase
 	{
 		if (m_callback != null)
 		{
-			m_callback(-1);
+			m_callback(null);
 		}
 		
 		Jyx2_UIManager.Instance.HideUI(nameof(BagUIPanel));
@@ -231,7 +216,7 @@ public partial class BagUIPanel : Jyx2_UIBase
 	{
 		if (m_selectItem == null || m_callback == null)
 			return;
-		Action<int> call = m_callback;
+		Action<String> call = m_callback;
 		var item = m_selectItem.GetItem();
 
 		//if (item.ItemType == 3) //使用未遂，不关闭bag
@@ -252,15 +237,6 @@ public partial class BagUIPanel : Jyx2_UIBase
 
 	void setBtnText()
 	{
-		//---------------------------------------------------------------------------
-		//if (m_selectItem==null)return;
-		//if (castFromSelectPanel && m_selectItem.GetItem().Id == current_item)
-		//    UseBtn_Text.text = "卸 下";
-		//else
-		//    UseBtn_Text.text = "使 用";
-		//---------------------------------------------------------------------------
-		//特定位置的翻译【BagUIPanel右边显示的按钮文字】
-		//---------------------------------------------------------------------------
 		if (m_selectItem == null) return;
 		if (castFromSelectPanel && m_selectItem.GetItem().Id == current_item)
 			UseBtn_Text.text = "卸 下".GetContent(nameof(BagUIPanel));

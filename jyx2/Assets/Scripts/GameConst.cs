@@ -1,12 +1,4 @@
-/*
- * 金庸群侠传3D重制版
- * https://github.com/jynew/jynew
- *
- * 这是本开源项目文件头，所有代码均使用MIT协议。
- * 但游戏内资源和第三方插件、dll等请仔细阅读LICENSE相关授权协议文档。
- *
- * 金庸老先生千古！
- */
+
 
 using System;
 using System.Collections;
@@ -111,7 +103,7 @@ public class GameConst
     public const int MAX_ROLE_WUGONG_COUNT = 10;
 
     //银两ID
-    public const int MONEY_ID = 174;
+    public const int MONEY_ID = 0;
 
     //最大队伍人数
     public const int MAX_TEAMCOUNT = 6;

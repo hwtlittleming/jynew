@@ -1,12 +1,4 @@
-/*
- * 金庸群侠传3D重制版
- * https://github.com/jynew/jynew
- *
- * 这是本开源项目文件头，所有代码均使用MIT协议。
- * 但游戏内资源和第三方插件、dll等请仔细阅读LICENSE相关授权协议文档。
- *
- * 金庸老先生千古！
- */
+
 
 using System;
 using Jyx2;
@@ -86,10 +78,7 @@ public partial class BattleMainUIPanel:Jyx2_UIBase
             , m_currentRole.Hp, color2, m_currentRole.MaxHp, color, m_currentRole.Mp,
             m_currentRole.MaxMp));
 
-        //---------------------------------------------------------------------------
-        //---------------------------------------------------------------------------
-
-        PreImage_Image.LoadAsyncForget(m_currentRole.Data.GetPic());
+        PreImage_Image.LoadAsyncForget(m_currentRole.configData.GetPic());
     }
 
     void OnAutoBattleValueChange(bool active) 

@@ -52,13 +52,15 @@ namespace Jyx2
 
         //携带
         [SerializeField] public List<SkillInstance> skills = new List<SkillInstance>(); //武功
-        [SerializeField] public List<Jyx2ConfigCharacterItem> Items = new List<Jyx2ConfigCharacterItem>(); //道具
-        [SerializeField] public List<Jyx2ConfigItem> Equipments = new List<Jyx2ConfigItem>(); //装备：0武器 1防具 2鞋子 4宝物
+        [SerializeField] public List<ItemInstance> Items = new List<ItemInstance>(); //道具
+        [SerializeField] public List<ItemInstance> Equipments = new List<ItemInstance>(); //装备：0武器 1防具 2鞋子 4宝物
         
         [SerializeField] public int CurrentSkill = 0; //进入战斗时 默认选中的武功序号
         #endregion
 
+        public Jyx2ConfigCharacter configData;
         //额外增加的属性 确定要用后再加至存档 todo
+        
         public int bestAttackDistance = 1;//最佳攻击距离，决定站位前后
         public bool isReadyToBattle = true;//是否参战
         public int currentMotivation  = 10; //当前行动力，可赋初始值
@@ -70,42 +72,60 @@ namespace Jyx2
         {
         }
 
-        //初始化角色实例，从配置表中复制数据
-        public RoleInstance(int roleId)
+        //初始化角色实例，从配置表中复制数据 loadFlag区分是否是第一次初始化
+        public RoleInstance(int roleId,Boolean loadFlag = false)
         {
-            Key = roleId; // todo 先给Key 然后又get configrole 多此一举
-            InitData(); //复制属性数据
-            
-            //配置的技能复制到角色实例
-            _data = GameConfigDatabase.Instance.Get<Jyx2ConfigCharacter>(Key);
-            if (_data == null)Assert.Fail();
-            skills.Clear();			
-            if (skills.Count == 0)
+            if (loadFlag) //读档
             {
-                foreach (var wugong in _data.Skills)
+                
+                
+                //存档中的技能 除了类型为对象的 其他已都有值
+                foreach (var skill in skills)
                 {
-                    skills.Add(new SkillInstance(wugong));
-                }
-            }
-            //配置表中添加初始物品
-            Items.Clear();
-            foreach (var item in Data.Items)
-            {
-                var generateItem = new Jyx2ConfigCharacterItem();
-                generateItem.Item = item.Item;
-                generateItem.Count = item.Count;
-                Items.Add(generateItem);
-            }
-            //配置表中添加初始装备
-            Equipments.Clear();
-            foreach (var item in Data.Equipments)
-            {
-                if ( item != null )
-                {
-                    Equipments.Add(GameConfigDatabase.Instance.Get<Jyx2ConfigItem>(item.Id));
+                    skill.Display = GameConfigDatabase.Instance.Get<Jyx2SkillDisplayAsset>(skill.DisplayId);
                 }
                 
             }
+            else //第一次初始化数据
+            { 
+                //获取配置的初始数据
+                Key = roleId; 
+                configData = GameConfigDatabase.Instance.Get<Jyx2ConfigCharacter>(Key); //读档时塞不塞这个再看
+                InitData(); //复制属性数据
+            
+                //添加配置的初始技能 配置技能数据+level ->存档的技能数据
+                if (configData == null)Assert.Fail();
+                if (skills.Count == 0)
+                {
+                    if (configData.Skills == null) //没配技能 加一个普攻技能
+                    {
+                        skills.Add(new SkillInstance(0,0));
+                    }
+                    else
+                    {
+                        foreach (var skill in configData.Skills)
+                        {
+                            skills.Add(new SkillInstance(skill.Skill.Id,skill.Level));
+                        }
+                    }
+                }
+                //添加配置的初始物品
+                Items.Clear();
+                foreach (var item in configData.Items)
+                {
+                    Items.Add(new ItemInstance(item.Item.Id,item.Count));
+                }
+                //添加配置的初始装备
+                Equipments = new List<ItemInstance>() {null, null, null, null};
+                foreach (var item in configData.Equipments)
+                {
+                    if ( item != null &&  10 <= (int)item.ItemType && (int)item.ItemType < 20)
+                    {
+                        Equipments.Add(new ItemInstance(item.Id,1)); 
+                    }
+                }
+            }
+
             Recover(true);
         }
         
@@ -126,33 +146,33 @@ namespace Jyx2
 
         void InitData()
         {
-            Name = Data.Name;
-            Sex = Data.Sexual;
-            Hp = Data.MaxHp;
-            MaxHp = Data.MaxHp;
-            Mp = Data.MaxMp;
-            MaxMp = Data.MaxMp;
-            Race = Data.Race;
-            Moral = Data.Moral;
-            Describe = Data.Descripe; 
-            State = Data.State;
+            Name = configData.Name;
+            Sex = configData.Sexual;
+            Hp = configData.MaxHp;
+            MaxHp = configData.MaxHp;
+            Mp = configData.MaxMp;
+            MaxMp = configData.MaxMp;
+            Race = configData.Race;
+            Moral = configData.Moral;
+            Describe = configData.Descripe; 
+            State = configData.State;
             
-            Strength = Data.Strength;
-            IQ = Data.IQ;
-            Constitution = Data.Constitution;
-            Agile = Data.Agile;
+            Strength = configData.Strength;
+            IQ = configData.IQ;
+            Constitution = configData.Constitution;
+            Agile = configData.Agile;
             
-            Attack = Data.Attack;
-            Speed = Data.Speed;
-            Defense = Data.Defense;
-            Heal = Data.Heal;
-            Attach = Data.Attach;
-            Critical = Data.Critical;
-            CriticalLevel = Data.CriticalLevel;
-            Miss = Data.Miss;
-            Luck = Data.Luck;
+            Attack = configData.Attack;
+            Speed = configData.Speed;
+            Defense = configData.Defense;
+            Heal = configData.Heal;
+            Attach = configData.Attach;
+            Critical = configData.Critical;
+            CriticalLevel = configData.CriticalLevel;
+            Miss = configData.Miss;
+            Luck = configData.Luck;
 
-            IQ = Data.IQ;
+            IQ = configData.IQ;
             
         }
 
@@ -275,7 +295,7 @@ namespace Jyx2
         {
             foreach (var zhaoshi in Zhaoshis)
             {
-                if (this.Mp >= zhaoshi.Data.GetSkill().MpCost)
+                if (this.Mp >= zhaoshi.Data.MpCost)
                     yield return zhaoshi;
             }
             
@@ -303,36 +323,43 @@ namespace Jyx2
 
         #region JYX2道具相关
         
-        public bool HaveItemBool(int itemId)
+        //获取角色携带的物品 适配String
+        public ItemInstance GetItem(String itemId)
         {
-            return Items.FindIndex(it => it.Item.Id == itemId) != -1;
+            return Items.Find(it => itemId.Equals(it.Id));
         }
-        
-        /// 为角色添加物品
-        public void AddItem(int itemId, int count)
+        //获取角色携带的物品 默认获取最低级的 默认获取非装备 ---- 给Lua使用 提供为API的
+        public ItemInstance GetItem(int configItemId,int quality = 0, String equipmentId = "-1")
         {
-            var item = Items.Find(it => it.Item.Id == itemId);
+            if (!"-1".Equals(equipmentId))
+            {
+                return Items.Find(it => (configItemId.ToString() + "_" + quality).Equals(it.Id));
+            }
+            return Items.Find(it => equipmentId.Equals(it.Id));
+        }
 
-            if (item != null)
+        /// 对角色包里的 某数量+某个特定物品 进行增减
+        public void AlterItem(int configItemId,int count,int quality = 0)
+        { //todo 如果是已装备的装备，请先卸下
+            var item = GetItem(configItemId);
+            
+            if (count < 0 && item == null)Debug.Log("要扣减的物品不存在！");
+
+            if ( item != null)
             {
                 item.Count += count;
-                //fix issue of using one removed the entire item
                 if (count <  0 && item.Count <= 0)
                     Items.Remove(item);
             }
-            else
+            else //新生成物品 从config取
             {
-                Items.Add(new Jyx2ConfigCharacterItem()
-                {
-                    Item = GameConfigDatabase.Instance.Get<Jyx2ConfigItem>(itemId),
-                    Count = count
-                });
+                Items.Add(new ItemInstance(configItemId,count,quality));
             }
         }
         
-        public bool CanUseItem(int itemId)
+        public bool CanUseItem(String itemId)
         {
-            var item = GameConfigDatabase.Instance.Get<Jyx2ConfigItem>(itemId);
+            var item = GetItem(itemId);
             if (item == null || item.ItemType == 0) return false;
             
             if (this.Strength - item.ConditionStrength< 0 || this.IQ - item.ConditionIQ< 0 || this.Agile - item.ConditionAgile < 0
@@ -350,7 +377,7 @@ namespace Jyx2
         }
         
         /// 使用物品
-        public void UseItem(Jyx2ConfigItem item)
+        public void UseItem(ItemInstance item)
         {
             if (item == null)
                 return;
@@ -375,11 +402,7 @@ namespace Jyx2
 
             if (CanFinishedItem())
             {
-                if (item.Skill != null)
-                {
-                    this.LearnMagic(item.Skill.Id);
-                }
-
+                this.LearnMagic(item.Skill);
             }
         }
 
@@ -387,9 +410,9 @@ namespace Jyx2
         /// 卸下物品（装备） 解除装备与角色关系+角色属性增减+存储中的角色身上装备去除
         /// </summary>
         /// <param name="item"></param>
-        public void UnequipItem(Jyx2ConfigItem item,int index)
+        public void UnequipItem(ItemInstance item,int index)
         {
-            if (item == null || item.Id == 0)
+            if (item == null || item.Id == null)
                 return;
             
             this.Equipments[index] = null; //存储中的角色身上装备去除
@@ -416,34 +439,7 @@ namespace Jyx2
         }
         
         #endregion
-
-        public int GetWugongLevel(int wugongId)
-        {
-            foreach (var wugong in skills)
-            {
-                if (wugong.Key == wugongId)
-                    return wugong.Level;
-            }
-
-            return 0;
-        }
         
-
-        public Jyx2ConfigCharacter Data
-        {
-            get
-            {
-                if (_data == null)
-                {
-                    _data = GameConfigDatabase.Instance.Get<Jyx2ConfigCharacter>(Key);
-                }
-
-                return _data;
-            }
-        }
-
-        private Jyx2ConfigCharacter _data;
-
         public MapRole View { get; set; }
 
         #region 战斗相关

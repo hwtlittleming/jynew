@@ -1,12 +1,4 @@
-/*
- * 金庸群侠传3D重制版
- * https://github.com/jynew/jynew
- *
- * 这是本开源项目文件头，所有代码均使用MIT协议。
- * 但游戏内资源和第三方插件、dll等请仔细阅读LICENSE相关授权协议文档。
- *
- * 金庸老先生千古！
- */
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -62,24 +54,19 @@ namespace Jyx2
             
             Wait();
         }
-
-        /// <summary>
+        
         /// 添加（减少）物品，不显示提示
-        /// </summary>
-        /// <param name="itemId"></param>
-        /// <param name="count"></param>
-        public static void AddItemWithoutHint(int itemId, int count)
+        public static void AddItemWithoutHint(int itemId, int count,int quality = 0)
         {
             RunInMainThread(() =>
             {
-                var item = GameConfigDatabase.Instance.Get<Jyx2ConfigItem>(itemId);
+                var item = runtime.AllRoles[0].GetItem(itemId,quality); // todo 如果是对装备操作
                 if (item == null)
                 {
                     Debug.LogError("调用了未定义的物品:" + itemId);
                     return;
                 }
-
-                runtime.AddItem(itemId, count);
+                runtime.AllRoles[0].AlterItem(itemId,count,item.Quality);
             });
         }
 
@@ -306,7 +293,7 @@ namespace Jyx2
 
         public static bool HaveItem(int itemId)
         {
-            return runtime.HaveItemBool(itemId);
+            return runtime.AllRoles[0].GetItem(itemId) != null;
         }
 
         //当前正在使用的物品ID
@@ -835,9 +822,11 @@ namespace Jyx2
             Wait();
         }
 
+        /// 为角色添加非装备
         public static void NPCGetItem(int roleId,int itemId,int count)
         {
-            runtime.RoleGetItem(roleId, itemId, count);
+            var role = runtime.GetRole(roleId);
+            if (role != null) role.AlterItem(itemId, count);
         }
 
         public static void PlayWave(int waveIndex)
@@ -923,55 +912,31 @@ namespace Jyx2
         {
             return (runtime.GetItemCount(GameConst.MONEY_ID) >= money);
         }
-
-        /// <summary>
+        
         /// 添加（减少）物品，并显示提示
-        /// </summary>
-        /// <param name="itemId"></param>
         /// <param name="count">可为负数</param>
-        public static void AddItem(int itemId, int count)
+        public static void AddItem(int itemId, int count,int quality = 0)
         {
-            RunInMainThread(() => {
-                var item = GameConfigDatabase.Instance.Get<Jyx2ConfigItem>(itemId);
+            RunInMainThread(() =>
+            {
+                var item = runtime.AllRoles[0].GetItem(itemId,quality);  // todo 如果是对装备操作 
                 if (item == null)
                 {
                     Debug.LogError("调用了未定义的物品:" + itemId);
                     return;
                 }
-
                 if (count < 0)
                 {
-                    //---------------------------------------------------------------------------
-                    //storyEngine.DisplayPopInfo("失去物品:" + item.Name + "×" + Math.Abs(count));
-                    //---------------------------------------------------------------------------
-                    //特定位置的翻译【得到物品提示】
-                    //---------------------------------------------------------------------------
                     storyEngine.DisplayPopInfo("失去物品:".GetContent(nameof(Jyx2LuaBridge)) + item.Name + "×" + Math.Abs(count));
-                    //---------------------------------------------------------------------------
-                    //---------------------------------------------------------------------------
                 }
                 else
                 {
-                    //---------------------------------------------------------------------------
-                    //storyEngine.DisplayPopInfo("得到物品:" + item.Name + "×" + Math.Abs(count));
-                    //---------------------------------------------------------------------------
-                    //特定位置的翻译【得到物品提示】
-                    //---------------------------------------------------------------------------
                     storyEngine.DisplayPopInfo("得到物品:".GetContent(nameof(Jyx2LuaBridge)) + item.Name + "×" + Math.Abs(count));
-                    //---------------------------------------------------------------------------
-                    //---------------------------------------------------------------------------
                 }
-
-                runtime.AddItem(itemId, count);
+                runtime.AllRoles[0].AlterItem(itemId,count,item.Quality);
             });
         }
-
-        public static void SetScencePosition2(int x, int y)
-        {
-            //设置位置，没用了，调用jyx2_MovePlayer替代
-        }
         
-
         //韦小宝商店
         public static void WeiShop()
         {

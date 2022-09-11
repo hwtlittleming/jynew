@@ -15,7 +15,7 @@ MonoBehaviour:
   Id: 1
   Name: "\u5356\u7CD6\u846B\u82A6\u8001\u5934"
   Sexual: 0
-  Rate: 0
+  Race: 
   Pic:
     m_AssetGUID: e5b538f2db8d36f479701cbe0bf1dfe6
     m_SubObjectName: 
@@ -30,11 +30,6 @@ MonoBehaviour:
   Constitution: 0
   Agile: 0
   Luck: 0
-  Skills:
-  - rid: 0
-  Items:
-  - Item: {fileID: 11400000, guid: e48b1e789c05d664b90adf395dc9436b, type: 2}
-    Count: 2
   MaxHp: 100
   MaxMp: 100
   Attack: 1
@@ -46,17 +41,6 @@ MonoBehaviour:
   Miss: 0
   Attach: 
   Exp: 0
-  Weapon: {fileID: 0}
-  Armor: {fileID: 0}
-  Shoes: {fileID: 0}
-  Treasure: {fileID: 0}
+  Equipments: []
   LeaveStoryId: 
   Model: {fileID: 0}
-  references:
-    version: 2
-    RefIds:
-    - rid: 0
-      type: {class: Jyx2ConfigCharacterSkill, ns: Jyx2Configs, asm: Assembly-CSharp}
-      data:
-        Skill: {fileID: 11400000, guid: f043371a92550214fb4b1d96ce31d388, type: 2}
-        Level: 0

@@ -1,18 +1,11 @@
-/*
- * 金庸群侠传3D重制版
- * https://github.com/jynew/jynew
- *
- * 这是本开源项目文件头，所有代码均使用MIT协议。
- * 但游戏内资源和第三方插件、dll等请仔细阅读LICENSE相关授权协议文档。
- *
- * 金庸老先生千古！
- */
+
 
 using Jyx2;
 using Jyx2.Middleware;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Text;
 using Cysharp.Threading.Tasks;
@@ -91,7 +84,7 @@ public partial class XiakeUIPanel : Jyx2_UIBase
 		}
 
 		NameText_Text.text = m_currentRole.Name;
-		PreImage_Image.LoadAsyncForget(m_currentRole.Data.GetPic());
+		PreImage_Image.LoadAsyncForget(m_currentRole.configData.GetPic());
 		
 		InfoText_Text.text = GetInfoText(m_currentRole);
 		SkillText_Text.text = GetSkillText(m_currentRole);
@@ -226,33 +219,28 @@ public partial class XiakeUIPanel : Jyx2_UIBase
 	{
 		foreach (var equip in role.Equipments)
 		{
+			if(equip == null) continue;
 			Text equipName = ButtonSelectWeapon_Button.transform.Find("NameText").GetComponent<Text>();
 			Image equipHead = ButtonSelectWeapon_Button.transform.Find("Image").GetComponent<Image>();
 			
 			int type = (int) equip.ItemType;
 			if (type == 10)
 			{
-				equipName.text = equip.Name;
-				equipHead.LoadAsyncForget(equip.GetPic());
 			}else if (type == 11)
 			{
 				equipName = ButtonSelectArmor_Button.transform.Find("NameText").GetComponent<Text>();
 				equipHead = ButtonSelectArmor_Button.transform.Find("Image").GetComponent<Image>();
-				equipName.text = equip.Name;
-				equipHead.LoadAsyncForget(equip.GetPic());
 			}else if (type == 12)
 			{
 				equipName = ButtonSelectShoes_Button.transform.Find("NameText").GetComponent<Text>();
 				equipHead = ButtonSelectShoes_Button.transform.Find("Image").GetComponent<Image>();
-				equipName.text = equip.Name;
-				equipHead.LoadAsyncForget(equip.GetPic());
 			}else if (type == 13)
 			{
 				equipName = ButtonSelectTreasure_Button.transform.Find("NameText").GetComponent<Text>();
 				equipHead = ButtonSelectTreasure_Button.transform.Find("Image").GetComponent<Image>();
-				equipName.text = equip.Name;
-				equipHead.LoadAsyncForget(equip.GetPic());
 			}
+			equipName.text = equip.Name;
+			equipHead.LoadAsyncForget(equip.GetPic());
 		}
 	}
 
@@ -304,11 +292,11 @@ public partial class XiakeUIPanel : Jyx2_UIBase
 
 	async void OnEquipmentClick(int index)
 	{
-		Jyx2ConfigItem yetItem = m_currentRole.Equipments[index] != null ? m_currentRole.Equipments[index] : new Jyx2ConfigItem();
+		ItemInstance yetItem =  m_currentRole.Equipments[index];
 		await SelectFromBag(
 			(itemId) =>
 			{
-				var item = GameConfigDatabase.Instance.Get<Jyx2ConfigItem>(itemId);
+				var item = runtime.AllRoles[0].GetItem(itemId);
 				//选择了当前使用的装备，则卸下
 				if ( yetItem!=null && yetItem.Id == itemId)
 				{
@@ -323,34 +311,34 @@ public partial class XiakeUIPanel : Jyx2_UIBase
 				else
 				{
 					m_currentRole.UnequipItem(yetItem,index); //卸下原装备
-					m_currentRole.Equipments[index] = GameConfigDatabase.Instance.Get<Jyx2ConfigItem>(itemId);//替换存储的角色装备
+					m_currentRole.Equipments[index] = item;//替换存储的角色装备
 					m_currentRole.UseItem(m_currentRole.Equipments[index]); //加减属性
 					runtime.SetItemUser(item.Id, m_currentRole.GetJyx2RoleId());
 				}
 			},
-			(item) => { return (int)item.ItemType == (index + 10) && (runtime.GetItemUser(item.Id) == m_currentRole.GetJyx2RoleId() || runtime.GetItemUser(item.Id) == -1); },
-			m_currentRole.Equipments[index] == null ? -1 : m_currentRole.Equipments[index].Id);
+			(item) => { return (int)item.ItemType == (index + 10) && (runtime.GetItemUser(item) == m_currentRole.GetJyx2RoleId() || runtime.GetItemUser(item) == -1); },
+			m_currentRole.Equipments[index] == null ? null : m_currentRole.Equipments[index].Id );
 	}
 	
-	async UniTask SelectFromBag(Action<int> Callback, Func<Jyx2ConfigItem, bool> filter, int current_itemId)
+	async UniTask SelectFromBag(Action<String> callback, Func<ItemInstance, bool> filter, String currentItemId)
 	{
-		await Jyx2_UIManager.Instance.ShowUIAsync(nameof(BagUIPanel), runtime.Items, new Action<int>((itemId) =>
+		await Jyx2_UIManager.Instance.ShowUIAsync(nameof(BagUIPanel), runtime.AllRoles[0].Items, new Action<String>((itemId) =>
 		{
-			if (itemId != -1 && !m_currentRole.CanUseItem(itemId))
+			if (itemId != null && !m_currentRole.CanUseItem(itemId))
 			{
-				var item = GameConfigDatabase.Instance.Get<Jyx2ConfigItem>(itemId);
+				var item = GameRuntimeData.Instance.AllRoles[0].GetItem(itemId);
 				GameUtil.DisplayPopinfo((int)item.ItemType == 1 ? "此人不适合配备此物品" : "此人不适合修炼此物品");
 				return;
 			}
 
-			if (itemId != -1)
+			if (itemId != null)
 			{
 				//卸下或使用选择装备
-				Callback(itemId);
+				callback(itemId);
 			}
 
 			RefreshCurrent();
-		}), filter, current_itemId);
+		}), filter, currentItemId);
 	}
 
 	protected override bool captureGamepadAxis => true;

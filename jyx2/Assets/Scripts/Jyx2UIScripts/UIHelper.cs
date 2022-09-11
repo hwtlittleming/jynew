@@ -1,12 +1,4 @@
-/*
- * 金庸群侠传3D重制版
- * https://github.com/jynew/jynew
- *
- * 这是本开源项目文件头，所有代码均使用MIT协议。
- * 但游戏内资源和第三方插件、dll等请仔细阅读LICENSE相关授权协议文档。
- *
- * 金庸老先生千古！
- */
+
 
 using Jyx2;
 using System.Collections;
@@ -18,12 +10,8 @@ using UnityEngine;
 
 public class UIHelper
 {
-    /// <summary>
     /// 获取物品的效果 //ChangeMPType
-    /// </summary>
-    /// <param name="item"></param>
-    /// <returns></returns>
-    public static Dictionary<int, int> GetItemEffect(Jyx2ConfigItem item) 
+    public static Dictionary<int, int> GetItemEffect(ItemInstance item) 
     {
         Dictionary<int, int> result = new Dictionary<int, int>();
         if (item.AddHp != 0)//加血
@@ -50,7 +38,7 @@ public class UIHelper
     /// 获取使用物品的需求 //NeedMPType; 
     /// </summary>
     /// <param name="item"></param>
-    public static Dictionary<int, int> GetUseItemRequire(Jyx2ConfigItem item) 
+    public static Dictionary<int, int> GetUseItemRequire(ItemInstance item) 
     {
         Dictionary<int, int> result = new Dictionary<int, int>();
         if (item.ConditionIQ > 0)
@@ -66,11 +54,11 @@ public class UIHelper
     }
 
     //使用人
-    static string GetItemUser(Jyx2ConfigItem item)
+    static string GetItemUser(ItemInstance item)
     {
         StringBuilder sb = new StringBuilder();
 
-        RoleInstance user = GameRuntimeData.Instance.GetRoleInTeam(GameRuntimeData.Instance.GetItemUser(item.Id));
+        RoleInstance user = GameRuntimeData.Instance.GetRoleInTeam(GameRuntimeData.Instance.GetItemUser(item));
         if (user != null)
         {
             sb.Append($"{user.Name}\n");
@@ -80,7 +68,7 @@ public class UIHelper
     }
 
     //效果
-    static string GetEffectText(Jyx2ConfigItem item)
+    static string GetEffectText(ItemInstance item)
     {
         Dictionary<int, int> effects = UIHelper.GetItemEffect(item);
         StringBuilder sb = new StringBuilder();
@@ -96,7 +84,7 @@ public class UIHelper
     }
 
     //使用要求
-    static string GetUseRquire(Jyx2ConfigItem item)
+    static string GetUseRquire(ItemInstance item)
     {
         Dictionary<int, int> effects = UIHelper.GetUseItemRequire(item);
         StringBuilder sb = new StringBuilder();
@@ -111,7 +99,7 @@ public class UIHelper
         return sb.ToString();
     }
 
-    public static string GetItemDesText(Jyx2ConfigItem item)
+    public static string GetItemDesText(ItemInstance item)
     {
         StringBuilder strBuilder = new StringBuilder();
         strBuilder.Append($"<size=35><color=#FFDB00>{item.Name}</color></size>\n");

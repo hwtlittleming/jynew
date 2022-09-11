@@ -1,12 +1,4 @@
-/*
- * 金庸群侠传3D重制版
- * https://github.com/jynew/jynew
- *
- * 这是本开源项目文件头，所有代码均使用MIT协议。
- * 但游戏内资源和第三方插件、dll等请仔细阅读LICENSE相关授权协议文档。
- *
- * 金庸老先生千古！
- */
+
 
 using System;
 using System.Collections.Generic;
@@ -47,12 +39,12 @@ namespace Jyx2
         [SerializeField] public WorldMapSaveData WorldData; //世界地图信息
         
         [SerializeField] public Dictionary<string, string> KeyValues = new Dictionary<string, string>(); //主键值对数据
-        [SerializeField] public Dictionary<string, int> Items = new Dictionary<string, int>(); //JYX2物品，{ID，数量}
+        [SerializeField] public Dictionary<string, int> Items = new Dictionary<string, int>(); //包裹中的物品，{ID，数量}
         [SerializeField] public Dictionary<string, int> ItemUser= new Dictionary<string, int>(); //物品使用人，{物品ID，人物ID}
         [SerializeField] public Dictionary<string, int> ShopItems= new Dictionary<string, int>(); //小宝商店物品，{ID，数量}
         [SerializeField] public Dictionary<string, int> EventCounter = new Dictionary<string, int>();
         [SerializeField] public Dictionary<string, int> MapPic = new Dictionary<string, int>();
-        [SerializeField] private List<int> ItemAdded = new List<int>(); //已经添加的角色物品
+        [SerializeField] private List<int> ItemAdded = new List<int>(); //因角色入队而带入背包的物品
         #endregion
         
         //入口:新游戏的开始
@@ -82,27 +74,6 @@ namespace Jyx2
         
         [Obsolete("待删除")]
         public const string ARCHIVE_SUMMARY_PREFIX = "save_summaryinfo_new_";
-
-        public static string GetJson<T>(T obj)
-        {
-            DataContractJsonSerializer json = new DataContractJsonSerializer(typeof(T));
-            using (MemoryStream ms = new MemoryStream())
-            {
-                json.WriteObject(ms, obj);
-                string szJson = Encoding.UTF8.GetString(ms.ToArray());
-                return szJson;
-            }
-        }
-        
-        public static T ParseFormJson<T>(string szJson)
-        {
-            T obj = Activator.CreateInstance<T>();
-            using (MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(szJson)))
-            {
-                DataContractJsonSerializer dcj = new DataContractJsonSerializer(typeof(T));
-                return (T)dcj.ReadObject(ms);
-            }
-        }
         
         //存档
         public void GameSave(int index = -1)
@@ -110,12 +81,10 @@ namespace Jyx2
             Debug.Log("存档中.. index = " + index);
 
             string path = string.Format(ARCHIVE_FILE_NAME, index);
-           //ES3.Save(nameof(GameRuntimeData), this, path);
+           ES3.Save(nameof(GameRuntimeData), this, path);
            
            /*ES3.Save(nameof(GameRuntimeData), GetJson(this) , path);
            GameRuntimeData g = ParseFormJson<GameRuntimeData>(ES3.Load(path).ToString());*/
-
-           ES3.Save(nameof(GameRuntimeData), new SkillInstance(), path);
            
            /*BinaryFormatter bf0=new BinaryFormatter();
            FileStream  fs0=File.Create(Application.persistentDataPath+"/Data.yj");
@@ -141,19 +110,13 @@ namespace Jyx2
             //ES3取得存档数据
             string path = string.Format(ARCHIVE_FILE_NAME, index);
             var r =  ES3.Load<GameRuntimeData>(nameof(GameRuntimeData), path);
+            if (r == null)return false;
+            
+            //将存档的角色等各数据给当前runtime实例
             _instance = r;
             
-            if (r == null)
-            {
-                return false;
-            }
-
-            //将存档的角色数据给当前角色实例
-            GameRuntimeData.Instance.AllRoles = r.AllRoles;
-            
-            var loadPara = new LevelMaster.LevelLoadPara() {loadType = LevelMaster.LevelLoadPara.LevelLoadType.Load};
-
             //加载地图
+            var loadPara = new LevelMaster.LevelLoadPara() {loadType = LevelMaster.LevelLoadPara.LevelLoadType.Load};
             int mapId = -1;
             if (r.SubMapData == null)
             {
@@ -239,20 +202,20 @@ namespace Jyx2
             }
             
             //获得角色身上的道具
-            foreach (var item in role.Items)
+            if (role.configData.Id != 0)
             {
-                if (!ItemAdded.Contains(item.Item.Id))
+                foreach (var item in role.Items)
                 {
                     if (item.Count == 0) item.Count = 1;
-                    AddItem(item.Item.Id, item.Count);
-                    ItemAdded.Add(item.Item.Id);
+                    AllRoles[0].AlterItem(item.ConfigId, item.Count,item.Quality);
                     if (item.Count > 0 && showGetItem)
                     {
-                        StoryEngine.Instance.DisplayPopInfo("得到物品:".GetContent(nameof(GameRuntimeData)) + item.Item.Name + "×" + Math.Abs(item.Count));
+                        StoryEngine.Instance.DisplayPopInfo("得到物品:".GetContent(nameof(GameRuntimeData)) + item.Name + "×" + Math.Abs(item.Count));
                     }
-                    item.Count = 0;
                 }
             }
+
+
 
             //清空角色身上的装备和物品
             /*role.Equipments.Clear();
@@ -343,75 +306,23 @@ namespace Jyx2
             return GetItemCount(GameConst.MONEY_ID);
         }
         
-
-
-        public bool HaveItemBool(int itemId)
-        {
-            return Items.ContainsKey(itemId.ToString());
-        }
-
-        //JYX2增加物品
-        public void AddItem(string id, int count)
-        {
-            if (!Items.ContainsKey(id))
-            {
-                if(count < 0)
-                {
-                    Debug.LogError("扣了不存在的物品,id=" + id + ",count=" + count);
-                    return;
-                }
-                Items[id] = count;
-            }
-            else
-            {
-                Items[id] += count;
-                if(Items[id] == 0)
-                {
-                    Items.Remove(id);
-                }else if(Items[id] < 0)
-                {
-                    Debug.LogError("物品扣成负的了,id=" + id + ",count=" + count);
-                    Items.Remove(id);
-                }
-            }
-        }
-
-        //JYX2增加物品
-        public void AddItem(int id, int count)
-        {
-            AddItem(id.ToString(), count);
-        }
-
-
         public int GetItemCount(int id)
         {
             if (Items.ContainsKey(id.ToString()))
                 return Items[id.ToString()];
             return 0;
         }
-
-        public void RoleGetItem(int roleId, int itemId, int count)
-        {
-            //实现的逻辑是，如果这个角色在队里，则直接加到角色身上。否则加到一个存档记录里，在之后生成这个角色的时候再进行添加
-            var teamRole = GetRole(roleId);
-            if (teamRole != null)
-            {
-                teamRole.AddItem(itemId, count);
-            }
-        }
-
+        
         //设置物品使用人
-        public void SetItemUser(int itemId, int roleId)
+        public void SetItemUser(String itemId, int roleId)
         {
-            ItemUser[itemId.ToString()] = roleId;
+            _instance.GetRole(0).GetItem(itemId).UseRoleId = roleId;
         }
 
         //获取物品使用人
-        public int GetItemUser(int id)
+        public int GetItemUser(ItemInstance item)
         {
-            if (ItemUser.ContainsKey(id.ToString()))
-                return ItemUser[id.ToString()];
-            return -1;
+            return _instance.GetRole(0).GetItem(item.Id).UseRoleId;
         }
 
 

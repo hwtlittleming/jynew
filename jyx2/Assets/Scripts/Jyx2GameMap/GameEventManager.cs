@@ -1,12 +1,4 @@
-/*
- * 金庸群侠传3D重制版
- * https://github.com/jynew/jynew
- *
- * 这是本开源项目文件头，所有代码均使用MIT协议。
- * 但游戏内资源和第三方插件、dll等请仔细阅读LICENSE相关授权协议文档。
- *
- * 金庸老先生千古！
- */
+
 using Jyx2;
 
 using System;
@@ -148,7 +140,7 @@ public class GameEventManager : MonoBehaviour
 
     async void OnClickedUseItemButton()
     {
-        await Jyx2_UIManager.Instance.ShowUIAsync(nameof(BagUIPanel), GameRuntimeData.Instance.Items, new Action<int>((itemId) =>
+        await Jyx2_UIManager.Instance.ShowUIAsync(nameof(BagUIPanel), GameRuntimeData.Instance.AllRoles[0].Items, new Action<int>((itemId) =>
         {
             if (itemId == -1) //取消使用
                 return;

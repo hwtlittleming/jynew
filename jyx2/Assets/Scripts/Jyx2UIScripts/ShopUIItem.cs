@@ -1,12 +1,4 @@
-/*
- * 金庸群侠传3D重制版
- * https://github.com/jynew/jynew
- *
- * 这是本开源项目文件头，所有代码均使用MIT协议。
- * 但游戏内资源和第三方插件、dll等请仔细阅读LICENSE相关授权协议文档。
- *
- * 金庸老先生千古！
- */
+
 
 using System;
 using Jyx2;
@@ -57,7 +49,7 @@ public class ShopUIItem : MonoBehaviour
 	{
 		this.index = index;
 		this.shopItem = shopItem;
-		Jyx2ConfigItem item = shopItem.Item;
+		ItemInstance item = shopItem.Item;
 
 		//---------------------------------------------------------------------------
 		//desText.text = $"{item.Name}\n价格：{shopItem.Price}";
@@ -71,7 +63,7 @@ public class ShopUIItem : MonoBehaviour
 		leftNum = Tools.Limit(leftNum, 0, shopItem.Count);
 		itemNum.text = leftNum.ToString();
 
-		iconImg.LoadAsyncForget(item.GetPic());
+		iconImg.LoadAsyncForget(item.GetPic()); 
 	}
 
 	void RefreshCount()

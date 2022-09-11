@@ -1,12 +1,4 @@
-/*
- * 金庸群侠传3D重制版
- * https://github.com/jynew/jynew
- *
- * 这是本开源项目文件头，所有代码均使用MIT协议。
- * 但游戏内资源和第三方插件、dll等请仔细阅读LICENSE相关授权协议文档。
- *
- * 金庸老先生千古！
- */
+
 using Jyx2;
 
 
@@ -137,8 +129,8 @@ public class AIManager
         {
             if ((role.Hp < role.Hp * 0.2 || role.Mp < role.Mp * 0.2) && role.Items.Count > 0)
             {
-                List<Jyx2ConfigItem> items = GetAvailableItems(role, 3); //获得携带物品
-                Jyx2ConfigItem item = items.ElementAt(r.Next(0,items.Count()));
+                List<ItemInstance> items = GetAvailableItems(role, 3); //获得携带物品
+                ItemInstance item = items.ElementAt(r.Next(0,items.Count()));
                 //使用道具
                 await _battleManager.RoleUseItem(role,item,toBlockData.role);
                 return;
@@ -169,8 +161,8 @@ public class AIManager
             {
                 if (teammate.Items.Count > 0 && (teammate.Hp < 0.2 * teammate.MaxHp || teammate.Mp < 0.2 * teammate.MaxMp))
                 {
-                    List<Jyx2ConfigItem> items = GetAvailableItems(role, 3);
-                    Jyx2ConfigItem _item = items.FirstOrDefault();
+                    List<ItemInstance> items = GetAvailableItems(role, 3);
+                    ItemInstance _item = items.FirstOrDefault();
                     foreach (var item in items)
                     {
                         double score = 0;
@@ -229,19 +221,18 @@ public class AIManager
     public SkillCastResult GetSkillResult(RoleInstance r1, RoleInstance r2, BattleZhaoshiInstance skill)
     {        
         SkillCastResult rst = new SkillCastResult(r1, r2, skill);
-        var magic = skill.Data.GetSkill();
         int level_index = skill.Data.Level-1;//此方法返回的是显示的武功等级，1-10。用于calMaxLevelIndexByMP时需要先-1变为数组index再使用
         level_index = skill.calMaxLevelIndexByMP(r1.Mp, level_index)+1;//此处计算是基于武功等级数据index，0-9.用于GetSkillLevelInfo时需要+1，因为用于GetSkillLevelInfo时需要里是基于GetLevel计算的，也就是1-10.
         //普通攻击
-        if (magic.DamageType == 0)
+        if (skill.Data.DamageType == 0)
         {
-            if (r1.Mp <= magic.MpCost) //已经不够内力释放了
+            if (r1.Mp <= skill.Data.MpCost) //已经不够内力释放了
             {
                 rst.damage = 1 + UnityEngine.Random.Range(0, 10);
                 return rst;
             }
             //总攻击力＝(人物攻击力×3 ＋ 武功当前等级攻击力)/2 ＋武器加攻击力 ＋ 防具加攻击力 ＋ 武器武功配合加攻击力 ＋我方武学常识之和
-            int attack = ((r1.Attack - r1.GetEquipmentProperty("Attack",0) - r1.GetEquipmentProperty("Attack",0)) * 3 ) / 2 + r1.GetEquipmentProperty("Attack",0) + r1.GetEquipmentProperty("Attack",0) + r1.GetExtraAttack(magic);
+            int attack = ((r1.Attack - r1.GetEquipmentProperty("Attack",0) - r1.GetEquipmentProperty("Attack",0)) * 3 ) / 2 + r1.GetEquipmentProperty("Attack",0) + r1.GetEquipmentProperty("Attack",0) ;
             
             //总防御力 ＝ 人物防御力 ＋武器加防御力 ＋ 防具加防御力 ＋ 敌方武学常识之和
             int defence = r2.Defense;
@@ -313,7 +304,7 @@ public class AIManager
   
             return rst;
         }
-        else if ((int)magic.DamageType == 1) //吸内
+        else if ((int)skill.Data.DamageType == 1) //吸内
         {
             /*var levelInfo = skill.Data.GetSkillLevelInfo();
             
@@ -333,7 +324,7 @@ public class AIManager
             
             return rst;
         }
-        else if ((int)magic.DamageType == 4) //治疗
+        else if ((int)skill.Data.DamageType == 4) //治疗
         {
             var _rst = medicine(r1, r2);
             rst.heal = _rst.heal;
@@ -343,12 +334,12 @@ public class AIManager
         return null;
     }
 
-    List<Jyx2ConfigItem> GetAvailableItems(RoleInstance role, int itemType)
+    List<ItemInstance> GetAvailableItems(RoleInstance role, int itemType)
     {
-        List<Jyx2ConfigItem> items = new List<Jyx2ConfigItem>();
+        List<ItemInstance> items = new List<ItemInstance>();
         foreach (var item in role.Items)
         {
-            var tmp = item.Item;
+            var tmp = item;
             if ((int)tmp.ItemType == itemType)
                 items.Add(tmp);
         }

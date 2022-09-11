@@ -1,7 +1,10 @@
 
 using System;
+using Cysharp.Threading.Tasks;
+using Jyx2.MOD;
 using Jyx2Configs;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace Jyx2
 {
@@ -15,16 +18,16 @@ namespace Jyx2
         //动态数据
         [SerializeField] public int ConfigId;
         [SerializeField] public int Level;
-        [SerializeField] public int MpCost; //能量消耗
+        [SerializeField] public int MpCost; //能量消耗  改成数组
         [SerializeField] public int DamageType; //伤害的特殊效果
         [SerializeField] public int SkillCoverType; //攻击范围
         [SerializeField] public int FixedDamage; //固定伤害
         [SerializeField] public int DamageLevel; //技能伤害系数
         [SerializeField] public int DisplayId; //技能外观ID
-        
+
         //技能等级升级后属性变化方法，携带道具类 换成xx instance
         #endregion
-
+        
         //技能外观 非存档数据 只要不加[SerializeField] ES3就不会存档；只要初始化时和变更时同时给其赋值就可以了
         public Jyx2SkillDisplayAsset Display;
         
@@ -32,7 +35,8 @@ namespace Jyx2
         {
         }
         
-        public SkillInstance(int configId)
+        //用来从配置拿一个初始技能的方法；因为配置类的属性不能存档 所以需要把属性都搬运一份到技能实例
+        public SkillInstance(int configId,int level = 1)
         {
             //1.取配置的默认值
             Key = configId;
@@ -49,22 +53,17 @@ namespace Jyx2
             DisplayId = configSkill.Display.Id;
             Display = GameConfigDatabase.Instance.Get<Jyx2SkillDisplayAsset>(DisplayId);
             
-            //2.进行实例化替换
-            Refreshskill();
+            //2.进行实例化替换  todo level的set方法写更换技能等级带来的属性变化
+            ChangeForLevel(Level);
         }
 
-        public void Refreshskill()
+        //按等级调整技能属性的方法
+        public void ChangeForLevel(int Level)
         {
+            
             return;
         }
-
-        public Jyx2ConfigSkill GetSkill(Jyx2ConfigItem _anqi = null)
-        {
-            var skillT = GameConfigDatabase.Instance.Get<Jyx2ConfigSkill>(Key);
-            
-            return skillT;
-        }
-
+        
         public int GetCoolDown()
         {
             return 0;

@@ -26,7 +26,7 @@ namespace Jyx2Configs
     public class Jyx2ConfigShopItem
     {
         [LabelText("道具")] [SerializeReference] [InlineEditor]
-        public Jyx2ConfigItem Item;
+        public ItemInstance Item;
 
         [LabelText("数量")] public int Count;
 

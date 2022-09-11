@@ -1,12 +1,4 @@
-/*
- * 金庸群侠传3D重制版
- * https://github.com/jynew/jynew
- *
- * 这是本开源项目文件头，所有代码均使用MIT协议。
- * 但游戏内资源和第三方插件、dll等请仔细阅读LICENSE相关授权协议文档。
- *
- * 金庸老先生千古！
- */
+
 
 using Jyx2;
 using System;
@@ -123,7 +115,7 @@ namespace Jyx2
         /// </summary>
         /// <param name="level_index"></param>
         /// <returns></returns>
-        public int calNeedMP(int level_index) { return Data.GetSkill().MpCost * ((level_index + 1) / 2); }
+        public int calNeedMP(int level_index) { return Data.MpCost * ((level_index + 1) / 2); }
 
         public void TimeRun()
         {
@@ -148,7 +140,7 @@ namespace Jyx2
         public int calMaxLevelIndexByMP(int mp, int max_level)
         {
             max_level = limit(max_level, 0, MAX_MAGIC_LEVEL_INDEX);
-            int needMp = Data.GetSkill().MpCost;
+            int needMp = Data.MpCost;
             if(needMp <= 0)
             {
                 return max_level;
@@ -159,7 +151,7 @@ namespace Jyx2
 
         public int getMpCost()
         {
-            int needMp = Data.GetSkill().MpCost;
+            int needMp = Data.MpCost;
             return needMp * (level + 2) / 2; // 内力消耗计算公式
         }
 
@@ -172,7 +164,7 @@ namespace Jyx2
         
         public virtual int GetDamageType()
         {
-            return (int)Data.GetSkill().DamageType;
+            return (int)Data.DamageType;
         }
     }
 

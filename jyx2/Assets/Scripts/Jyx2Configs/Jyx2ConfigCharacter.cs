@@ -69,16 +69,29 @@ namespace Jyx2Configs
         
         /* ------- 分割线 ------- */
         
-        [InfoBox("必须至少有一个技能", InfoMessageType.Error, "@this.Skills==null || this.Skills.Count == 0")]
-        [InfoBox("注：等级0：对应1级技能，  等级900：对应10级技能")]
-        [BoxGroup(CGroupSkill)] [LabelText("技能")][SerializeReference]
-        public List<int> Skills;
+        [InfoBox("注：等级level 一般0-2级")]
+        [BoxGroup(CGroupSkill)] [LabelText("技能")][SerializeReference][TableList]
+        public List<Jyx2ConfigCharacterSkill> Skills;
+        
+        
+        [BoxGroup(CGroupItems)] [LabelText("携带装备2")][TableList]
+        public List<Jyx2ConfigItem> Equipments;
         
         [BoxGroup(CGroupItems)] [LabelText("携带道具")][TableList]
         public List<Jyx2ConfigCharacterItem> Items;
         
-        /* -------需要有初始配置值的 --------*/
-
+        /*[BoxGroup(CGroup4)][LabelText("武器")][SerializeReference]
+        public Jyx2ConfigItem Weapon;
+        
+        [BoxGroup(CGroup4)][LabelText("防具")][SerializeReference]
+        public Jyx2ConfigItem Armor;
+        
+        [BoxGroup(CGroup4)][LabelText("代步")][SerializeReference]
+        public Jyx2ConfigItem Shoes;
+        
+        [BoxGroup(CGroup4)][LabelText("宝物")][SerializeReference]
+        public Jyx2ConfigItem Treasure;*/
+        
         [BoxGroup(CGroup2)][LabelText("生命上限")]
         public int MaxHp;
         
@@ -111,22 +124,7 @@ namespace Jyx2Configs
 
         [BoxGroup(CGroup2)][LabelText("战斗经验")] //经验每满一定程度 属性按资质增长，宠物可额外通过吞食获得经验
         public int Exp;
-        
-        [BoxGroup(CGroupItems)] [LabelText("携带装备")][TableList]
-        public List<Jyx2ConfigItem> Equipments;
-        
-        /*[BoxGroup(CGroup4)][LabelText("武器")][SerializeReference]
-        public Jyx2ConfigItem Weapon;
-        
-        [BoxGroup(CGroup4)][LabelText("防具")][SerializeReference]
-        public Jyx2ConfigItem Armor;
-        
-        [BoxGroup(CGroup4)][LabelText("代步")][SerializeReference]
-        public Jyx2ConfigItem Shoes;
-        
-        [BoxGroup(CGroup4)][LabelText("宝物")][SerializeReference]
-        public Jyx2ConfigItem Treasure;*/
-        
+
         //固定配置
 
         [BoxGroup("其他")][LabelText("队友离场对话")] 
@@ -147,6 +145,16 @@ namespace Jyx2Configs
         }
     }
     
+    //以下类型仅为初始配置时方便展示而建,不会存储
+    [Serializable]
+    public class Jyx2ConfigCharacterSkill
+    {
+        [LabelText("技能")][SerializeReference][InlineEditor]
+        public Jyx2ConfigSkill Skill;
+
+        [LabelText("等级")] 
+        public int Level;
+    }
     [Serializable]
     public class Jyx2ConfigCharacterItem
     {

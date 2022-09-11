@@ -1,12 +1,4 @@
-/*
- * 金庸群侠传3D重制版
- * https://github.com/jynew/jynew
- *
- * 这是本开源项目文件头，所有代码均使用MIT协议。
- * 但游戏内资源和第三方插件、dll等请仔细阅读LICENSE相关授权协议文档。
- *
- * 金庸老先生千古！
- */
+
 using Jyx2;
 using System;
 using System.Collections;
@@ -144,9 +136,9 @@ public class GameUtil
         });
     }
 
-    public static async UniTask ShowYesOrNoUseItem(Jyx2ConfigItem item, Action action)
+    public static async UniTask ShowYesOrNoUseItem(ItemInstance item, Action action)
     {
-        if (GameRuntimeData.Instance.GetItemUser(item.Id) != -1)
+        if (GameRuntimeData.Instance.GetItemUser(item) != -1)
         {
             string msg = (int)item.ItemType == 1 ? "此物品已经有人配备，是否换人配备？" : "此物品已经有人修炼，是否换人修炼？";
             List<string> selectionContent = new List<string>() { "是(Y)", "否(N)" };

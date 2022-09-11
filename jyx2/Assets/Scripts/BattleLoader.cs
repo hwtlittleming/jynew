@@ -1,12 +1,4 @@
-/*
- * 金庸群侠传3D重制版
- * https://github.com/jynew/jynew
- *
- * 这是本开源项目文件头，所有代码均使用MIT协议。
- * 但游戏内资源和第三方插件、dll等请仔细阅读LICENSE相关授权协议文档。
- *
- * 金庸老先生千古！
- */
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -151,7 +143,7 @@ public class BattleLoader : MonoBehaviour
             RoleInstance s = runtime.GetRole(roleId);
             r = DeepCopy(s);
             r.skills = s.skills;
-            r.Data.Model = s.Data.Model;//这些gameobject深拷贝不进去 赋值引用
+            r.configData.Model = s.configData.Model;//这些gameobject深拷贝不进去 赋值引用
             r.Zhaoshis = s.Zhaoshis;
             r.Items = s.Items;
             r.team = 1;

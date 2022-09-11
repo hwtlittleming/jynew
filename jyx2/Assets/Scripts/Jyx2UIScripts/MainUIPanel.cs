@@ -1,12 +1,4 @@
-/*
- * 金庸群侠传3D重制版
- * https://github.com/jynew/jynew
- *
- * 这是本开源项目文件头，所有代码均使用MIT协议。
- * 但游戏内资源和第三方插件、dll等请仔细阅读LICENSE相关授权协议文档。
- *
- * 金庸老先生千古！
- */
+
 using Jyx2;
 using UnityEngine;
 using System;
@@ -136,20 +128,19 @@ public partial class MainUIPanel : Jyx2_UIBase, IUIAnimator
 
 	async void OnBagBtnClick()
 	{
-		await Jyx2_UIManager.Instance.ShowUIAsync(nameof(BagUIPanel), GameRuntimeData.Instance.Items, new Action<int>(OnUseItem));
+		await Jyx2_UIManager.Instance.ShowUIAsync(nameof(BagUIPanel), GameRuntimeData.Instance.AllRoles[0].Items, new Action<String>(OnUseItem));
 	}
 
-	async void OnUseItem(int id)
+	async void OnUseItem(String id)
 	{
-		if (id == -1) return;
-
-		var item = GameConfigDatabase.Instance.Get<Jyx2ConfigItem>(id);
+		if (id == null) return;
+		//同物品的不同实例 id相同的问题 todo
+		var item =  GameRuntimeData.Instance.AllRoles[0].GetItem(id); //注意allroles中主角放第一个
 		if (item == null)
 		{
 			Debug.LogError("use item error, id=" + id);
 			return;
 		}
-
 		//剧情类和暗器不能使用
 		if ((int)item.ItemType == 0)
 		{
@@ -165,7 +156,7 @@ public partial class MainUIPanel : Jyx2_UIBase, IUIAnimator
 			{
 				if (selectRole == null) return;
 
-				if (selectRole.GetJyx2RoleId() == runtime.GetItemUser(item.Id)) return;
+				if (selectRole.GetJyx2RoleId() == runtime.GetItemUser(item)) return;
 
 				if (selectRole.CanUseItem(id))
 				{
@@ -175,9 +166,9 @@ public partial class MainUIPanel : Jyx2_UIBase, IUIAnimator
 						//武器
 						if ((int)item.ItemType == 10)
 						{
-							if (runtime.GetItemUser(item.Id) != -1)
+							if (runtime.GetItemUser(item) != -1)
 							{
-								RoleInstance roleInstance = runtime.GetRoleInTeam(runtime.GetItemUser(item.Id));
+								RoleInstance roleInstance = runtime.GetRoleInTeam(runtime.GetItemUser(item));
 								roleInstance.UnequipItem(roleInstance.Equipments[0],0);
 							}
 
@@ -189,9 +180,9 @@ public partial class MainUIPanel : Jyx2_UIBase, IUIAnimator
 						//防具
 						else if ((int)item.ItemType == 11)
 						{
-							if (runtime.GetItemUser(item.Id) != -1)
+							if (runtime.GetItemUser(item) != -1)
 							{
-								RoleInstance roleInstance = runtime.GetRoleInTeam(runtime.GetItemUser(item.Id));
+								RoleInstance roleInstance = runtime.GetRoleInTeam(runtime.GetItemUser(item));
 								roleInstance.UnequipItem(roleInstance.Equipments[1],1);
 							}
 							selectRole.UnequipItem(selectRole.Equipments[1],1);
@@ -204,7 +195,7 @@ public partial class MainUIPanel : Jyx2_UIBase, IUIAnimator
 					else if ((int)item.ItemType == 3)
 					{
 						selectRole.UseItem(item);
-						runtime.AddItem(id, -1);
+						runtime.AllRoles[0].AlterItem(item.ConfigId, -1,item.Quality);
 						GameUtil.DisplayPopinfo($"{selectRole.Name}使用了{item.Name}");
 					}
 				}

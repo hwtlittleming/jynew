@@ -1,12 +1,4 @@
-/*
- * 金庸群侠传3D重制版
- * https://github.com/jynew/jynew
- *
- * 这是本开源项目文件头，所有代码均使用MIT协议。
- * 但游戏内资源和第三方插件、dll等请仔细阅读LICENSE相关授权协议文档。
- *
- * 金庸老先生千古！
- */
+
 using Jyx2;
 
 using Jyx2;
@@ -128,7 +120,7 @@ public partial class ShopUIPanel : Jyx2_UIBase
 			Transform trans = childList[i];
 			var data = curShopData.ShopItems[i];
 			ShopUIItem uiItem = trans.GetComponent<ShopUIItem>();
-			int currentNum = GetHasBuyNum(data.Item.Id);
+			int currentNum = GetHasBuyNum(data.Item.ConfigId);//todo   以前是int currentNum = GetHasBuyNum(data.Item.Id)
 			uiItem.Refresh(data, i, currentNum);
 
 			if (itemHeight == 0)
@@ -178,7 +170,7 @@ public partial class ShopUIPanel : Jyx2_UIBase
 		if (count <= 0)
 			return;
 		Jyx2ConfigShopItem item = curShopData.ShopItems[curSelectItem.GetIndex()];
-		Jyx2ConfigItem itemCfg = item.Item;
+		ItemInstance itemCfg = item.Item;
 		if (itemCfg == null)
 			return;
 		int moneyCost = count * item.Price;
@@ -187,11 +179,11 @@ public partial class ShopUIPanel : Jyx2_UIBase
 			GameUtil.DisplayPopinfo("持有银两不足");
 			return;
 		}
-		runtime.AddItem(itemCfg.Id, count);
-		AddBuyCount(itemCfg.Id, count);
+		runtime.AllRoles[0].AlterItem(itemCfg.ConfigId, count,itemCfg.Quality);
+		AddBuyCount(itemCfg.ConfigId, count); //todo   以前是AddBuyCount(itemCfg.Id, count)
 		GameUtil.DisplayPopinfo($"购买{itemCfg.Name},数量{count}");
-		runtime.AddItem(GameConst.MONEY_ID, -moneyCost);
-
+		runtime.AllRoles[0].AlterItem(GameConst.MONEY_ID, -moneyCost);
+		
 		RefreshChild();
 		RefreshMoney();
 	}

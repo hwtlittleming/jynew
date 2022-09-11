@@ -31,32 +31,14 @@ MonoBehaviour:
   Agile: 1234
   Luck: 12345
   Skills:
-  - rid: 0
-  - rid: 1
-  - rid: 2
-  - rid: 3
-  - rid: 4
-  - rid: 5
-  - rid: 6
-  - rid: 7
-  - rid: 8
-  - rid: 9
-  - rid: 10
-  - rid: 11
+  - rid: 2369322468789190656
+  Equipments: []
   Items:
-  - Item: {fileID: 11400000, guid: f8227e32091b7384dac0886aef8a714e, type: 2}
-    Count: 2
-  - Item: {fileID: 11400000, guid: 6b9de4f4a7a64af4482a4472b17db8eb, type: 2}
-    Count: 3
-  - Item: {fileID: 11400000, guid: 31170ecdf069866458a2fe77b34ada21, type: 2}
-    Count: 3
   - Item: {fileID: 11400000, guid: b54b5129cbe7c1f41b33d499121adc19, type: 2}
-    Count: 100
+    Count: 5
   - Item: {fileID: 11400000, guid: e48b1e789c05d664b90adf395dc9436b, type: 2}
     Count: 1
-  - Item: {fileID: 11400000, guid: 7b6c151dab6900644bdf392a912e0fe2, type: 2}
-    Count: 2
-  - Item: {fileID: 11400000, guid: fa6882d37a49c734ab01a2885e31a77f, type: 2}
+  - Item: {fileID: 11400000, guid: f8227e32091b7384dac0886aef8a714e, type: 2}
     Count: 0
   MaxHp: 380000
   MaxMp: 666
@@ -69,72 +51,13 @@ MonoBehaviour:
   Miss: 0
   Attach: 
   Exp: 0
-  Weapon: {fileID: 0}
-  Armor: {fileID: 0}
-  Shoes: {fileID: 0}
-  Treasure: {fileID: 0}
   LeaveStoryId: 
   Model: {fileID: 11400000, guid: a04197a5f95a83c4e899063c285998c3, type: 2}
   references:
     version: 2
     RefIds:
-    - rid: 0
+    - rid: 2369322468789190656
       type: {class: Jyx2ConfigCharacterSkill, ns: Jyx2Configs, asm: Assembly-CSharp}
       data:
         Skill: {fileID: 11400000, guid: babd4ea6e36e95943a93c1f72b04f73b, type: 2}
-        Level: 0
-    - rid: 1
-      type: {class: Jyx2ConfigCharacterSkill, ns: Jyx2Configs, asm: Assembly-CSharp}
-      data:
-        Skill: {fileID: 11400000, guid: 798ccc1e51b35994bbf92a57a4d069c0, type: 2}
-        Level: 0
-    - rid: 2
-      type: {class: Jyx2ConfigCharacterSkill, ns: Jyx2Configs, asm: Assembly-CSharp}
-      data:
-        Skill: {fileID: 11400000, guid: 78f5d745c66793a49ae68ecac3aa9bcb, type: 2}
-        Level: 0
-    - rid: 3
-      type: {class: Jyx2ConfigCharacterSkill, ns: Jyx2Configs, asm: Assembly-CSharp}
-      data:
-        Skill: {fileID: 11400000, guid: 9ff9afa094a346d45a51f983715e3bfc, type: 2}
-        Level: 0
-    - rid: 4
-      type: {class: Jyx2ConfigCharacterSkill, ns: Jyx2Configs, asm: Assembly-CSharp}
-      data:
-        Skill: {fileID: 11400000, guid: 5cd67f17bb1de674e8cfc3fc831c1e06, type: 2}
-        Level: 0
-    - rid: 5
-      type: {class: Jyx2ConfigCharacterSkill, ns: Jyx2Configs, asm: Assembly-CSharp}
-      data:
-        Skill: {fileID: 11400000, guid: 0533e6d63da4f624992672858a0b6d09, type: 2}
-        Level: 0
-    - rid: 6
-      type: {class: Jyx2ConfigCharacterSkill, ns: Jyx2Configs, asm: Assembly-CSharp}
-      data:
-        Skill: {fileID: 11400000, guid: f8151c5b9ad3d6f4494274ca4d633af1, type: 2}
-        Level: 0
-    - rid: 7
-      type: {class: Jyx2ConfigCharacterSkill, ns: Jyx2Configs, asm: Assembly-CSharp}
-      data:
-        Skill: {fileID: 11400000, guid: 057fc96ded3661649a52babad461f385, type: 2}
-        Level: 0
-    - rid: 8
-      type: {class: Jyx2ConfigCharacterSkill, ns: Jyx2Configs, asm: Assembly-CSharp}
-      data:
-        Skill: {fileID: 11400000, guid: c5c87e0f7e593a64d97add8146b57869, type: 2}
-        Level: 0
-    - rid: 9
-      type: {class: Jyx2ConfigCharacterSkill, ns: Jyx2Configs, asm: Assembly-CSharp}
-      data:
-        Skill: {fileID: 11400000, guid: 9c89af9444d5608468da1dfcb540174b, type: 2}
-        Level: 0
-    - rid: 10
-      type: {class: Jyx2ConfigCharacterSkill, ns: Jyx2Configs, asm: Assembly-CSharp}
-      data:
-        Skill: {fileID: 11400000, guid: 1bfadcaa3e61e9b498b7c4475962a64f, type: 2}
-        Level: 0
-    - rid: 11
-      type: {class: Jyx2ConfigCharacterSkill, ns: Jyx2Configs, asm: Assembly-CSharp}
-      data:
-        Skill: {fileID: 11400000, guid: dcf2c2741d5b65648aec0afd1ff50a46, type: 2}
         Level: 0

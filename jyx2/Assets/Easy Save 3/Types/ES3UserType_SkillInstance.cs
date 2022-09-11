@@ -1,4 +1,4 @@
-using System;
+/*using System;
 using UnityEngine;
 
 namespace ES3Types
@@ -59,4 +59,4 @@ namespace ES3Types
 			Instance = this;
 		}
 	}
-}
+}*/

@@ -1,12 +1,4 @@
-/*
- * 金庸群侠传3D重制版
- * https://github.com/jynew/jynew
- *
- * 这是本开源项目文件头，所有代码均使用MIT协议。
- * 但游戏内资源和第三方插件、dll等请仔细阅读LICENSE相关授权协议文档。
- *
- * 金庸老先生千古！
- */
+
 using Jyx2;
 using Jyx2.Middleware;
 
@@ -280,9 +272,9 @@ public partial class BattleActionUIPanel : Jyx2_UIBase
 
 	async void OnUseItemClick()
 	{
-		bool Filter(Jyx2ConfigItem item) => (int)item.ItemType == 3 || (int)item.ItemType == 4;
+		bool Filter(ItemInstance item) => (int)item.ItemType == 3 || (int)item.ItemType == 4;
 
-		await Jyx2_UIManager.Instance.ShowUIAsync(nameof(BagUIPanel), GameRuntimeData.Instance.Items, new Action<int>((itemId) =>
+		await Jyx2_UIManager.Instance.ShowUIAsync(nameof(BagUIPanel), GameRuntimeData.Instance.AllRoles[0].Items, new Action<int>((itemId) =>
 		{
 
 			if (itemId == -1)
@@ -291,13 +283,13 @@ public partial class BattleActionUIPanel : Jyx2_UIBase
 			var item = GameConfigDatabase.Instance.Get<Jyx2ConfigItem>(itemId);
 			if ((int)item.ItemType == 3) //使用道具逻辑
 			{
-				if (m_currentRole.CanUseItem(itemId))
+				/*if (m_currentRole.CanUseItem(itemId))
 				{
 					//TryCallback(new BattleLoop.ManualResult() { aiResult = new AIResult() { Item = item } });
-				}
+				}*/
 			}
 
-		}), (Func<Jyx2ConfigItem, bool>)Filter);
+		}), (Func<ItemInstance, bool>)Filter);
 	}
 	void OnRestClick()
 	{
