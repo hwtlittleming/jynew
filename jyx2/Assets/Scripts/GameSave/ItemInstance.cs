@@ -114,5 +114,13 @@ using UnityEngine.UI;
         {
             return ;
         }
+        public Boolean isEquipment()
+        {
+            if ((int)ItemType >= 10  && (int)ItemType <20)
+            {
+                return true;
+            }
+            return false;
+        }
     }
 

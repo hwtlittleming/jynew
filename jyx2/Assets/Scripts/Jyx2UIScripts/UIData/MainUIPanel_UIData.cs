@@ -7,8 +7,7 @@ using UnityEngine.UI;
 public partial class MainUIPanel
 {
 	private RectTransform AnimRoot_RectTransform;
-	private Text Level_Text;
-	private Text Exp_Text;
+	private Text Date_Text;
 	private Text Name_Text;
 	private Text MapName_Text;
 	private Button XiakeButton_Button;
@@ -28,8 +27,7 @@ public partial class MainUIPanel
 	public void InitTrans()
 	{
 		AnimRoot_RectTransform = transform.Find("AnimRoot").GetComponent<RectTransform>();
-		Level_Text = transform.Find("AnimRoot/PlayerStatus/Level").GetComponent<Text>();
-		Exp_Text = transform.Find("AnimRoot/PlayerStatus/Exp").GetComponent<Text>();
+		Date_Text = transform.Find("AnimRoot/PlayerStatus/Date").GetComponent<Text>();
 		Name_Text = transform.Find("AnimRoot/PlayerStatus/Name").GetComponent<Text>();
 		XiakeButton_Button = transform.Find("AnimRoot/BtnRoot/BtnRoot/XiakeButton").GetComponent<Button>();
 		BagButton_Button = transform.Find("AnimRoot/BtnRoot/BtnRoot/BagButton").GetComponent<Button>();

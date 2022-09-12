@@ -221,20 +221,25 @@ public partial class XiakeUIPanel : Jyx2_UIBase
 			(itemId) => //点击使用
 			{
 				var item = runtime.Player.GetItem(itemId);
-				//选择了当前使用的装备，则卸下
-				if ( yetItem!=null && yetItem.Id == itemId)
+				
+				//新装备的上一持有者 = 当前角色 单纯卸下
+				if (runtime.GetRoleInTeam(item.UseRoleId) !=null && runtime.GetRoleInTeam(item.UseRoleId).Id == m_currentRole.Id)
 				{
-					m_currentRole.UnequipItem(yetItem,index);
-					//该角色装备栏清空该项
-					if (m_currentRole.Equipments[index] !=null)
-					{
-						m_currentRole.Equipments[index] = null;
-					}
+					m_currentRole.UnequipItem(item,index);
 				}
-				//否则更新
-				else
+				else //进行替换
 				{
-					m_currentRole.UnequipItem(yetItem,index); //卸下原装备
+					//新装备的上一持有者卸下
+					if (item.UseRoleId != -1)
+					{
+						runtime.GetRoleInTeam(item.UseRoleId).UnequipItem(item,index);
+					}
+				
+					//使用者原装备卸下
+					ItemInstance yetItem =  m_currentRole.Equipments[index]; 
+					if(yetItem!=null) m_currentRole.UnequipItem(yetItem,index);
+				
+					//使用者使用新装备
 					m_currentRole.Equipments[index] = item;//替换存储的角色装备
 					m_currentRole.UseItem(m_currentRole.Equipments[index]); //加减属性
 					runtime.SetItemUser(item.Id, m_currentRole.Id);
@@ -252,7 +257,7 @@ public partial class XiakeUIPanel : Jyx2_UIBase
 			if (itemId != null && !m_currentRole.CanUseItem(itemId))
 			{
 				var item = GameRuntimeData.Instance.Player.GetItem(itemId);
-				GameUtil.DisplayPopinfo((int)item.ItemType == 1 ? "此人不适合配备此物品" : "此人不适合修炼此物品");
+				GameUtil.DisplayPopinfo("角色资质不足");
 				return;
 			}
 

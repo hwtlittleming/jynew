@@ -39,7 +39,7 @@ namespace Jyx2
         [SerializeField] public SubMapSaveData SubMapData; //当前所处子地图存储数据
         [SerializeField] public WorldMapSaveData WorldData; //世界地图信息
         
-        [SerializeField] public Dictionary<string, string> KeyValues = new Dictionary<string, string>(); //宝箱状态,地图打开状态
+        [SerializeField] public Dictionary<string, string> KeyValues = new Dictionary<string, string>(); //宝箱状态,地图打开状态,天数
         [SerializeField] public Dictionary<string, int> ShopItems= new Dictionary<string, int>(); //小宝商店物品，{ID，数量}
         [SerializeField] public Dictionary<string, int> EventCounter = new Dictionary<string, int>();
         [SerializeField] public Dictionary<string, int> MapPic = new Dictionary<string, int>();

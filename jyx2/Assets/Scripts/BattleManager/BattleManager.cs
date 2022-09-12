@@ -354,62 +354,8 @@ public class BattleManager : MonoBehaviour
             role.Exp = Tools.Limit(role.Exp, 0, GameConst.MAX_EXP);
       
 
-            //升级
-            int change = 0;
-            while (role.CanLevelUp())
-            {
-                role.LevelUp();
-                change++;
-                //---------------------------------------------------------------------------
-                //rst += $"{role.Name}升级了！等级{role.Level}\n";
-                //---------------------------------------------------------------------------
-                //特定位置的翻译【战斗胜利角色升级的提示】
-                //---------------------------------------------------------------------------
-                rst += string.Format("{0}升级了！等级{1}\n".GetContent(nameof(BattleManager)), role.Name, role.Level);
-                //---------------------------------------------------------------------------
-                //---------------------------------------------------------------------------
-            }
-
-            //TODO：升级的展示
-
-            /*if (practiseItem != null)
-            {
-
-                change = 0;
-
-                //修炼秘籍
-                while (role.CanFinishedItem() && isWugongCanUpgrade)
-                {
-                    role.UseItem(practiseItem);
-                    change++;
-                    //---------------------------------------------------------------------------
-                    //rst += $"{role.Name} 修炼 {practiseItem.Name} 成功\n";
-                    //---------------------------------------------------------------------------
-                    //特定位置的翻译【战斗胜利角色修炼武功提示】
-                    //---------------------------------------------------------------------------
-                    rst += string.Format("{0} 修炼 {1} 成功\n".GetContent(nameof(BattleManager)), role.Name, practiseItem.Name);
-                    //---------------------------------------------------------------------------
-                    //---------------------------------------------------------------------------
-                    if (practiseItem.Skill != null)
-                    {
-                        var level = role.GetWugongLevel(practiseItem.Skill.Id);
-                        if (level > 1)
-                        {
-                            //---------------------------------------------------------------------------
-                            //rst += string.Format("{0} 升为 ", practiseItem.Skill.Name) + level.ToString() + " 级\n";
-                            //---------------------------------------------------------------------------
-                            //特定位置的翻译【战斗胜利角色修炼武功升级提示】
-                            //---------------------------------------------------------------------------
-                            rst += string.Format("{0} 升为 {1}级\n".GetContent(nameof(BattleManager)), practiseItem.Skill.Name, level.ToString());
-                            //---------------------------------------------------------------------------
-                            //---------------------------------------------------------------------------
-                        }
-                    }
-                }
-
-                //炼制物品
-                rst += role.LianZhiItem(practiseItem);
-            }*/
+            //根据资质增长属性
+            Boolean t = role.CanLevelUp();
         }
 
         return rst;
@@ -422,14 +368,7 @@ public class BattleManager : MonoBehaviour
     #endregion
     
      //中毒受伤
-        /// </summary>
-        /// 中毒掉血计算公式可以参考：https://github.com/ZhanruiLiang/jinyong-legend
-        ///
-        /// 
-        /// </summary>
-        /// <param name="role"></param>
-        /// <returns></returns>
-        async UniTask RunPosionHurtLogic(RoleInstance role)
+     async UniTask RunPosionHurtLogic(RoleInstance role)
         {
             int hurtEffect = role.Hurt / 20;
 

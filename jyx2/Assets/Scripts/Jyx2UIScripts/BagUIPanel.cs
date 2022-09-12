@@ -146,9 +146,7 @@ public partial class BagUIPanel : Jyx2_UIBase
 		if (m_selectItem != null)
 			scrollIntoView(ItemsArea_ScrollRect, m_selectItem.transform as RectTransform, 
 				ItemRoot_GridLayout, 0);
-
-		setBtnText();
-
+		
 		ShowItemDes();
 
 
@@ -178,8 +176,6 @@ public partial class BagUIPanel : Jyx2_UIBase
 			m_selectItem.Select(false);
 		m_selectItem = itemUI;
 		m_selectItem.Select(true);
-
-		setBtnText();
 
 		ShowItemDes();
 
@@ -218,17 +214,7 @@ public partial class BagUIPanel : Jyx2_UIBase
 		m_filter = null;
 		HSUnityTools.DestroyChildren(ItemRoot_RectTransform);
 	}
-
-	void setBtnText()
-	{
-		if (m_selectItem == null) return;
-		if (GameRuntimeData.Instance.Player.GetItem(m_selectItem._id).UseRoleId  == -1)
-			UseBtn_Text.text = "使 用".GetContent(nameof(BagUIPanel));
-		else
-			UseBtn_Text.text = "卸 下".GetContent(nameof(BagUIPanel));
-	}
-
-
+	
 	void RefreshFocusFilter()
 	{
 		foreach (var btn in m_Filters)

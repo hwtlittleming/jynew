@@ -24,11 +24,14 @@ MonoBehaviour:
   Moral: 
   Descripe: 
   State: 
-  Strength: 0
+  Strength: 111
   IQ: 75
-  Constitution: 0
-  Agile: 0
-  Luck: 0
+  Constitution: 222
+  Agile: 333
+  Luck: 222
+  Skills: []
+  Equipments: []
+  Items: []
   MaxHp: 56
   MaxMp: 42
   Attack: 46
@@ -40,6 +43,8 @@ MonoBehaviour:
   Miss: 0
   Attach: 
   Exp: 150
-  Equipments: []
   LeaveStoryId: 950
   Model: {fileID: 11400000, guid: 7ea3de51beed66a44900fe3bfae91b71, type: 2}
+  references:
+    version: 2
+    RefIds: []

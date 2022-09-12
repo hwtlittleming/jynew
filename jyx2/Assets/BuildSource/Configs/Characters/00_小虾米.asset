@@ -39,13 +39,9 @@ MonoBehaviour:
     Count: 5
   - Item: {fileID: 11400000, guid: e48b1e789c05d664b90adf395dc9436b, type: 2}
     Count: 1
-  - Item: {fileID: 11400000, guid: f8227e32091b7384dac0886aef8a714e, type: 2}
-    Count: 1
   - Item: {fileID: 11400000, guid: 6f308bf0db5d21348ad51e527ab8d5ce, type: 2}
     Count: 1
   - Item: {fileID: 11400000, guid: 1cede6b1ed0c0e2468ad339b0cd20ebd, type: 2}
-    Count: 1
-  - Item: {fileID: 11400000, guid: e48b1e789c05d664b90adf395dc9436b, type: 2}
     Count: 1
   - Item: {fileID: 11400000, guid: 7b6c151dab6900644bdf392a912e0fe2, type: 2}
     Count: 1

@@ -135,25 +135,5 @@ public class GameUtil
             blackCover.gameObject.SetActive(false);
         });
     }
-
-    public static async UniTask ShowYesOrNoUseItem(ItemInstance item, Action action)
-    {
-        if (GameRuntimeData.Instance.GetItemUser(item) != -1)
-        {
-            string msg = (int)item.ItemType == 1 ? "此物品已经有人配备，是否换人配备？" : "此物品已经有人修炼，是否换人修炼？";
-            List<string> selectionContent = new List<string>() { "是(Y)", "否(N)" };
-            await Jyx2_UIManager.Instance.ShowUIAsync(nameof(ChatUIPanel), ChatType.Selection, "0", msg, selectionContent, new Action<int>((index) =>
-            {
-                if (index == 0)
-                {
-                    action();
-                }
-            }));
-        }
-        else
-        {
-            action();
-        }
-
-    }
+    
 }

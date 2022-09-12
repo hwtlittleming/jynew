@@ -97,9 +97,8 @@ public partial class MainUIPanel : Jyx2_UIBase, IUIAnimator
 	void RefreshDynamic()
 	{
 		RoleInstance role = GameRuntimeData.Instance.Player;
-		string expText = string.Format("EXP:{0}/{1}", role.Exp, role.GetLevelUpExp());
-		Exp_Text.text = expText;
-		Level_Text.text = role.Level.ToString();
+		//todo 存档日期到keyvalue
+		Date_Text.text = string.Format("第{0}天-{1}",GameRuntimeData.Instance.KeyValues.GetValueOrDefault("day","1"), GameRuntimeData.Instance.KeyValues.GetValueOrDefault("dayTime","晨")); 
 	}
 
 	void RefreshNameMapName()
@@ -146,63 +145,50 @@ public partial class MainUIPanel : Jyx2_UIBase, IUIAnimator
 
 		var runtime = GameRuntimeData.Instance;
 
-		async void Action()
+		async void Callback(RoleInstance selectRole)
 		{
-			async void Callback(RoleInstance selectRole)
+			if (selectRole == null) return;
+
+			if (selectRole.Id == runtime.GetItemUser(item)) return;
+
+			if (selectRole.CanUseItem(id))
 			{
-				if (selectRole == null) return;
-
-				if (selectRole.Id == runtime.GetItemUser(item)) return;
-
-				if (selectRole.CanUseItem(id))
+				ItemInstance item = runtime.Player.GetItem(id);
+				if (item.isEquipment())
 				{
-					//武器
-					if ((int)item.ItemType == 10)
+					int index = (int) item.ItemType - 10;
+					//新装备的上一持有者卸下
+					if (item.UseRoleId != -1)
 					{
-						if (runtime.GetItemUser(item) != -1)
-						{
-							RoleInstance roleInstance = runtime.GetRoleInTeam(runtime.GetItemUser(item));
-							roleInstance.UnequipItem(roleInstance.Equipments[0],0);
-						}
+						runtime.GetRoleInTeam(item.UseRoleId).UnequipItem(item,index);
+					}
 
-						selectRole.UnequipItem(selectRole.Equipments[0],0);
-						selectRole.UseItem(selectRole.Equipments[0]);
-						runtime.SetItemUser(item.Id, selectRole.Id);
-						GameUtil.DisplayPopinfo($"{selectRole.Name}使用了{item.Name}");
-					}
-					//防具
-					else if ((int)item.ItemType == 11)
-					{
-						if (runtime.GetItemUser(item) != -1)
-						{
-							RoleInstance roleInstance = runtime.GetRoleInTeam(runtime.GetItemUser(item));
-							roleInstance.UnequipItem(roleInstance.Equipments[1],1);
-						}
-						selectRole.UnequipItem(selectRole.Equipments[1],1);
-						selectRole.UseItem(selectRole.Equipments[1]);
-						runtime.SetItemUser(item.Id, selectRole.Id);
-						GameUtil.DisplayPopinfo($"{selectRole.Name}使用了{item.Name}");
-					}
-					//药品
-					else if ((int)item.ItemType == 3)
-					{
-						selectRole.UseItem(item);
-						runtime.Player.AlterItem(item.ConfigId, -1,item.Quality);
-						GameUtil.DisplayPopinfo($"{selectRole.Name}使用了{item.Name}");
-					}
+					//使用者原装备卸下
+					ItemInstance yetItem =  selectRole.Equipments[index]; 
+					if(yetItem!=null) selectRole.UnequipItem(yetItem,index);
+					
+					//使用者使用新装备
+					selectRole.Equipments[index] = item;//替换存储的角色装备
+					selectRole.UseItem(selectRole.Equipments[index]); //加减属性
+					runtime.SetItemUser(item.Id, selectRole.Id);
 				}
-				else
+				//药品
+				else if ((int)item.ItemType == 3)
 				{
-					GameUtil.DisplayPopinfo((int)item.ItemType == 1 ? "此人不适合配备此物品" : "此人不适合修炼此物品");
-					return;
+					selectRole.UseItem(item);
+					runtime.Player.AlterItem(item.ConfigId, -1,item.Quality);
+					GameUtil.DisplayPopinfo($"{selectRole.Name}使用了{item.Name}");
 				}
 			}
-
-			await GameUtil.SelectRole(runtime.GetTeam(), Callback);
+			else
+			{
+				GameUtil.DisplayPopinfo("此人不适合使用此物品");
+				return;
+			}
 		}
-
-		await GameUtil.ShowYesOrNoUseItem(item, Action);
-
+		
+		await GameUtil.SelectRole(runtime.GetTeam(), Callback);
+		
 	}
 
 	async void OnSystemBtnClick()

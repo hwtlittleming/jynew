@@ -66,7 +66,6 @@ namespace Jyx2
         public int currentMotivation  = 10; //当前行动力，可赋初始值
         public int motivationPerSecond = 10;//每秒获得的行动力
         public BattleBlockData blockData = new BattleBlockData();//当前所处格子坐标
-        //public Vector3 Block;
 
         public RoleInstance()
         {
@@ -165,7 +164,7 @@ namespace Jyx2
             
         }
 
-        //从存档中获取技能
+        //获取技能
         public SkillInstance getSkill(int magicId)
         {
             foreach (var skill in skills)
@@ -189,14 +188,14 @@ namespace Jyx2
             }
         }
         
-        #region JYX2等级相关
+        #region 等级相关
         
-        //JYX2
+        //战斗完属性增长
         public bool CanLevelUp()
         {
             if (this.Level >= 1 && this.Level < GameConst.MAX_ROLE_LEVEL)
             {
-                if (this.Exp >= getLevelUpExp(this.Level))
+                if (this.Exp >= GameConst._levelUpExpList[this.Level - 1])
                 {
                     return true;
                 }
@@ -204,55 +203,13 @@ namespace Jyx2
 
             return false;
         }
-
-        int getLevelUpExp(int level)
-        {
-            return GameConst._levelUpExpList[level - 1];
-        }
-
+        
         public int GetLevelUpExp()
         {
             return GameConst._levelUpExpList[Level - 1];
         }
         
-        public void LevelUp()
-        {
-            Level++;
-            //MaxHp += (Data.HpInc + Random.Range(0, 3)) * 3;
-            SetHPAndRefreshHudBar(this.MaxHp);
-            //当0 <= 资质 < 30, a = 2;
-            //当30 <= 资质 < 50, a = 3;
-            //当50 <= 资质 < 70, a = 4;
-            //当70 <= 资质 < 90, a = 5;
-            //当90 <= 资质 <= 100, a = 6;
-            //a = random(a) + 1;
-            int a = Random.Range(0, (int)Math.Floor((double)(IQ - 10) / 20) + 2) + 1;
-            MaxMp += (9 - a) * 4;
-            Mp = MaxMp;
-
-            Hurt = 0;
-
-            Attack += a;
-            Speed += a;
-            Defense += a;
-
-            Heal = checkUp(Heal, 20, 3);
-
-            Debug.Log($"{this.Name}升到{this.Level}级！");
-        }
-
-        int checkUp(int value, int limit, int max_inc)
-        {
-            if (value >= limit)
-            {
-                value += Random.Range(0, max_inc);
-            }
-
-            return value;
-        }
-
-
-        public int ExpGot; //战斗中获得的经验
+        public int ExpGot; //战斗中额外获得的经验
 
         #endregion
 
@@ -303,18 +260,18 @@ namespace Jyx2
         {
             if (isCertainId)
             {
-                return Items.Find(it => (itemIdOrName).Equals(it.Id)); //物品实例id获取
+                return GameRuntimeData.Instance.Player.Items.Find(it => (itemIdOrName).Equals(it.Id)); //物品实例id获取
             }
             else 
             {
                 var isEquipment = GameConfigDatabase.Instance.Get<Jyx2ConfigItem>(itemIdOrName).isEquipment(); //从配置表取物品类型
                 if (isEquipment) 
                 { 
-                    return Items.Find(it => itemIdOrName.Equals(it.ConfigId) || itemIdOrName.Equals(it.Name));
+                    return GameRuntimeData.Instance.Player.Items.Find(it => itemIdOrName.Equals(it.ConfigId) || itemIdOrName.Equals(it.Name));
                 }
                 else 
                 {
-                    return Items.Find(it => ( itemIdOrName.Equals(it.ConfigId) || itemIdOrName.Equals(it.Name) ) &&  quality == it.Quality);
+                    return GameRuntimeData.Instance.Player.Items.Find(it => ( itemIdOrName.Equals(it.ConfigId) || itemIdOrName.Equals(it.Name) ) &&  quality == it.Quality);
                 }
             }
             //获取失败
@@ -324,7 +281,6 @@ namespace Jyx2
         // 物品增减 + 已生成的装备增减
         /*
          物品  钱的加减 道具 类目id或名称+quality的加减
-         
          装备 传全id
          */
         public void AlterItem(String itemConfigId,int count,int quality = 0)
@@ -398,7 +354,7 @@ namespace Jyx2
             this.Defense += item.Defence;
             this.Speed += item.Speed;
 
-            if (CanFinishedItem())
+            if (false)
             {
                 this.LearnMagic(item.Skill);
             }
@@ -424,11 +380,6 @@ namespace Jyx2
             this.Defense -= item.Defence;
             this.Speed -= item.Speed;
             
-        }
-
-        public bool CanFinishedItem()
-        {
-            return false;
         }
         
         #endregion
