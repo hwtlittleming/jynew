@@ -201,8 +201,8 @@ public partial class BagUIPanel : Jyx2_UIBase
 		if (m_selectItem == null || m_callback == null)
 			return;
 		Action<String> call = m_callback;
-
-		Jyx2_UIManager.Instance.HideUI(nameof(BagUIPanel));
+		RefreshScroll();
+		//Jyx2_UIManager.Instance.HideUI(nameof(BagUIPanel));
 		call(m_selectItem._id);
 	}
 
