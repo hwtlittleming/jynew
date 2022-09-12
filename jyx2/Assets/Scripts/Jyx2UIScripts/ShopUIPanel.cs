@@ -113,7 +113,7 @@ public partial class ShopUIPanel : Jyx2_UIBase
 			Transform trans = childList[i];
 			var data = curShopData.ShopItems[i];
 			ShopUIItem uiItem = trans.GetComponent<ShopUIItem>();
-			int currentNum = GetHasBuyNum(data.Item.ConfigId);//todo   以前是int currentNum = GetHasBuyNum(data.Item.Id)
+			int currentNum = GetHasBuyNum(int.Parse(data.Item.ConfigId));//todo   以前是int currentNum = GetHasBuyNum(data.Item.Id)
 			uiItem.Refresh(data, i, currentNum);
 
 			if (itemHeight == 0)
@@ -172,10 +172,10 @@ public partial class ShopUIPanel : Jyx2_UIBase
 			GameUtil.DisplayPopinfo("持有银两不足");
 			return;
 		}
-		runtime.AllRoles[0].AlterItem(itemCfg.ConfigId, count,itemCfg.Quality);
-		AddBuyCount(itemCfg.ConfigId, count); //todo   以前是AddBuyCount(itemCfg.Id, count)
+		runtime.Player.AlterItem(itemCfg.ConfigId, count,itemCfg.Quality);
+		AddBuyCount( int.Parse(itemCfg.ConfigId), count); //todo   以前是AddBuyCount(itemCfg.Id, count)
 		GameUtil.DisplayPopinfo($"购买{itemCfg.Name},数量{count}");
-		runtime.AllRoles[0].AlterItem(GameConst.MONEY_ID, -moneyCost);
+		runtime.Player.AlterItem(GameConst.MONEY_ID.ToString(), -moneyCost);
 		
 		RefreshChild();
 		RefreshMoney();

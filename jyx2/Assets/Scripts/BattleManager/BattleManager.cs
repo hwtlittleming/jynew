@@ -620,7 +620,7 @@ public class BattleManager : MonoBehaviour
 
             if (role.team == 0 && role.Id == 0) //如果是己方角色，则从背包里扣。 队友暂时是扔自己配置了携带的物品，是否要改？
             {
-                GameRuntimeData.Instance.AllRoles[0].AlterItem(item.ConfigId, -1);
+                GameRuntimeData.Instance.Player.AlterItem(item.ConfigId, -1);
             }
             else //否则从角色身上扣
             {

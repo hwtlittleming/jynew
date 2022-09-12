@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization.Json;
 using System.Text;
@@ -110,6 +111,17 @@ namespace Jyx2
             
             //将存档的角色等各数据给当前runtime实例
             _instance = r;
+            for(int ig = 0; ig <_instance.AllRoles.Count; ig++)
+            {//读档时，role里的对象数据实例化
+                var kv = _instance.AllRoles.ElementAt(ig);
+                //configData实例化数据
+                kv.Value.configData = GameConfigDatabase.Instance.Get<Jyx2ConfigCharacter>(kv.Key); 
+                //存档中的技能 除了类型为对象的 其他已都有值
+                for (int io = 0; io<kv.Value.skills.Count;io++)
+                {
+                    kv.Value.skills[io].Display = GameConfigDatabase.Instance.Get<Jyx2SkillDisplayAsset>(kv.Value.skills[io].DisplayId);
+                }
+            }
             
             //加载地图
             var loadPara = new LevelMaster.LevelLoadPara() {loadType = LevelMaster.LevelLoadPara.LevelLoadType.Load};
@@ -162,12 +174,6 @@ namespace Jyx2
             get { return AllRoles[0]; }
         }
         
-        //背包数据
-        public List<ItemInstance> itemList
-        {
-            get { return AllRoles[0].Items; }
-        }
-
 
         //获取队伍所有角色
         public IEnumerable<RoleInstance> GetTeam()
@@ -200,7 +206,7 @@ namespace Jyx2
                 foreach (var item in role.Items)
                 {
                     if (item.Count == 0) item.Count = 1;
-                    AllRoles[0].AlterItem(item.ConfigId, item.Count,item.Quality);
+                    Player.AlterItem(item.ConfigId, item.Count,item.Quality);
                     if (item.Count > 0 && showGetItem)
                     {
                         StoryEngine.Instance.DisplayPopInfo("得到物品:".GetContent(nameof(GameRuntimeData)) + item.Name + "×" + Math.Abs(item.Count));
@@ -277,24 +283,21 @@ namespace Jyx2
         #endregion
         
         //获取背包某物品数量
-        public int GetItemCount(int id)
+        public int GetItemCount(String id,int quality = 0)
         {
-            int count = 0;
-            if (AllRoles[0].GetItem(id) != null) 
-                count = AllRoles[0].GetItem(GameConst.MONEY_ID).Count;
-            return count;
+            return Player.GetItem(id,quality,false).Count;
         }
         
         //设置物品使用人
         public void SetItemUser(String itemId, int roleId)
         {
-            _instance.AllRoles[0].GetItem(itemId).UseRoleId = roleId;
+            Player.GetItem(itemId).UseRoleId = roleId;
         }
 
         //获取物品使用人
         public int GetItemUser(ItemInstance item)
         {
-            return _instance.AllRoles[0].GetItem(item.Id).UseRoleId;
+            return Player.GetItem(item.Id).UseRoleId;
         }
         
         //改变事件

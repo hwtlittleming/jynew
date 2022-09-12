@@ -20,35 +20,28 @@ public class Jyx2ItemUI : MonoBehaviour
 
     private const string ITEM_UI_PREFAB = "Jyx2ItemUI";
     
-    public static Jyx2ItemUI Create(String id,int count)
+    public static Jyx2ItemUI Create(ItemInstance item)
     {
         var prefab = Jyx2ResourceHelper.GetCachedPrefab(ITEM_UI_PREFAB);
         var obj = Instantiate(prefab); 
         var itemUI = obj.GetComponent<Jyx2ItemUI>();
-        itemUI.Show(id, count).Forget();
+        itemUI.Show(item).Forget();
         return itemUI;
     }
 
-    private String _id;
-
-    // 获取主角携带的物品
-    public ItemInstance GetItem()
+    public String _id; //物品实例Id
+    
+    private async UniTaskVoid Show(ItemInstance item)
     {
-        return   GameRuntimeData.Instance.AllRoles[0].GetItem(_id);  //GameConfigDatabase.Instance.Get<Jyx2ConfigItem>(_id);
-    }
-
-    private async UniTaskVoid Show(String id,int count)
-    {
-        _id = id;
-        var item = GetItem();//0-阴性内力，1-阳性内力，2-中性内力
-        var color = ColorStringDefine.Default;
+        _id = item.Id;
+        var color = ColorStringDefine.Default; //todo 按品质变色
             /*(int)item.ItemType == 2
                 ? (int)item.NeedMPType == 2 ? ColorStringDefine.Default :
                 (int)item.NeedMPType == 1 ? ColorStringDefine.Mp_type1 : ColorStringDefine.Mp_type0
                 : ColorStringDefine.Default;*/
         
         m_NameText.text = $"<color={color}>{item.Name}</color>";
-        m_CountText.text = (count > 1 ? count.ToString() : "");
+        m_CountText.text = item.Count.ToString();
         
         m_Image.LoadAsyncForget(item.GetPic());
 

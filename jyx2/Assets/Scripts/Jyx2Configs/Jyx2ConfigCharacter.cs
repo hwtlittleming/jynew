@@ -74,7 +74,7 @@ namespace Jyx2Configs
         public List<Jyx2ConfigCharacterSkill> Skills;
         
         
-        [BoxGroup(CGroupItems)] [LabelText("携带装备2")][TableList]
+        [BoxGroup(CGroupItems)] [LabelText("携带装备")][TableList]
         public List<Jyx2ConfigItem> Equipments;
         
         [BoxGroup(CGroupItems)] [LabelText("携带道具")][TableList]

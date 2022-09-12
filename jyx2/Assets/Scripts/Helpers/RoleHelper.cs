@@ -52,7 +52,7 @@ public static class RoleHelper
     /// <param name="roleView">角色模型</param>
     public static void CreateRoleInstance(this MapRole roleView, int roleKey)
     {
-        roleView.BindRoleInstance(new RoleInstance(roleKey)).Forget();
+        roleView.BindRoleInstance(GameRuntimeData.Instance.AllRoles[roleKey]).Forget();
         roleView.DataInstance.Hp = roleView.DataInstance.MaxHp; //默认满血
     }
 

@@ -3,17 +3,16 @@
 using Jyx2;
 using Jyx2.Middleware;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
 using System.Text;
 using Cysharp.Threading.Tasks;
 using i18n.TranslatorDef;
+using Jyx2.MOD;
 using UnityEngine;
 using UnityEngine.UI;
 
 using Jyx2Configs;
+using UnityEngine.AddressableAssets;
 using Vector3 = UnityEngine.Vector3;
 
 public partial class XiakeUIPanel : Jyx2_UIBase
@@ -25,12 +24,16 @@ public partial class XiakeUIPanel : Jyx2_UIBase
 	RoleUIItem m_currentShowItem;
 	private int m_currentRole_index = 0;
 	private List<RoleUIItem> m_roleUIItems = new List<RoleUIItem>();
-
+	private Sprite defaultSprite;
+	
 	protected override void OnCreate()
 	{
 		InitTrans();
 		IsBlockControl = true;
-
+		Addressables.LoadAssetAsync<Sprite>("Assets/BuildSource/UI/06.png").Completed += r =>
+		{
+			defaultSprite = r.Result;
+		}; 
 		//there is button for this, so doesn't get into the listing of dpad nav
 		BindListener(BackButton_Button, OnBackClick, false);
 		
@@ -40,8 +43,7 @@ public partial class XiakeUIPanel : Jyx2_UIBase
 		BindListener(ButtonSelectTreasure_Button, () => OnEquipmentClick(3));
 		BindListener(LeaveButton_Button, OnLeaveClick);
 	}
-
-
+	
 	protected override void OnShowPanel(params object[] allParams)
 	{
 		base.OnShowPanel(allParams);
@@ -49,15 +51,10 @@ public partial class XiakeUIPanel : Jyx2_UIBase
 		if (allParams.Length > 1)
 			m_roleList = allParams[1] as List<RoleInstance>;
 		
-		DoRefresh();
-	}
-
-	void DoRefresh()
-	{
 		RefreshScrollView();
 		RefreshCurrent();
 	}
-
+	
 	private void OnEnable()
 	{
 		GlobalHotkeyManager.Instance.RegistHotkey(this, KeyCode.Escape, OnBackClick);
@@ -75,6 +72,7 @@ public partial class XiakeUIPanel : Jyx2_UIBase
 		HSUnityTools.DestroyChildren(RoleParent_RectTransform);
 	}
 
+	//todo 技能生成 点击时出来说明 可以使用的选项
 	void RefreshCurrent()
 	{
 		if (m_currentRole == null)
@@ -82,10 +80,12 @@ public partial class XiakeUIPanel : Jyx2_UIBase
 			Debug.LogError("has not current role");
 			return;
 		}
-
+		
+		//左侧角色名字和图片刷新
 		NameText_Text.text = m_currentRole.Name;
 		PreImage_Image.LoadAsyncForget(m_currentRole.configData.GetPic());
 		
+		//右侧内容刷新
 		InfoText_Text.text = GetInfoText(m_currentRole);
 		SkillText_Text.text = GetSkillText(m_currentRole);
 		RefreshEquipments(m_currentRole);
@@ -124,6 +124,7 @@ public partial class XiakeUIPanel : Jyx2_UIBase
 		}
 	}
 
+	//切换选择的角色
 	void OnItemClick(RoleUIItem item)
 	{
 		if (m_currentShowItem != null && m_currentShowItem == item)
@@ -212,30 +213,94 @@ public partial class XiakeUIPanel : Jyx2_UIBase
 		return sb.ToString();
 	}
 
+	//四个装备按钮之一被按下
+	async void OnEquipmentClick(int index)
+	{
+		ItemInstance yetItem =  m_currentRole.Equipments[index];
+		await SelectFromBag(
+			(itemId) => //点击使用
+			{
+				var item = runtime.Player.GetItem(itemId);
+				//选择了当前使用的装备，则卸下
+				if ( yetItem!=null && yetItem.Id == itemId)
+				{
+					m_currentRole.UnequipItem(yetItem,index);
+					//该角色装备栏清空该项
+					if (m_currentRole.Equipments[index] !=null)
+					{
+						m_currentRole.Equipments[index] = null;
+					}
+				}
+				//否则更新
+				else
+				{
+					m_currentRole.UnequipItem(yetItem,index); //卸下原装备
+					m_currentRole.Equipments[index] = item;//替换存储的角色装备
+					m_currentRole.UseItem(m_currentRole.Equipments[index]); //加减属性
+					runtime.SetItemUser(item.Id, m_currentRole.Id);
+				}
+
+				RefreshEquipments(m_currentRole);
+			},
+			(item) => { return (int)item.ItemType == (index + 10) && item.Count > 0 ; } );
+	}
+	
+	async UniTask SelectFromBag(Action<String> callback, Func<ItemInstance, bool> filter)
+	{
+		await Jyx2_UIManager.Instance.ShowUIAsync(nameof(BagUIPanel), runtime.Player.Items, new Action<String>((itemId) =>
+		{
+			if (itemId != null && !m_currentRole.CanUseItem(itemId))
+			{
+				var item = GameRuntimeData.Instance.Player.GetItem(itemId);
+				GameUtil.DisplayPopinfo((int)item.ItemType == 1 ? "此人不适合配备此物品" : "此人不适合修炼此物品");
+				return;
+			}
+
+			if (itemId != null)
+			{
+				//卸下或使用选择装备
+				callback(itemId);
+			}
+
+			RefreshCurrent();
+		}), filter);
+	}
+	
+	//按角色携带装备刷新装备区的显示数据
 	void RefreshEquipments(RoleInstance role)
 	{
-		foreach (var equip in role.Equipments)
+		var defaultName = "武器";
+		for( int i = 0; i<role.Equipments.Count ; i++)
 		{
-			if(equip == null) continue;
 			Text equipName = ButtonSelectWeapon_Button.transform.Find("NameText").GetComponent<Text>();
 			Image equipHead = ButtonSelectWeapon_Button.transform.Find("Image").GetComponent<Image>();
 			
-			int type = (int) equip.ItemType;
-			if (type == 10)
-			{
-			}else if (type == 11)
+			if (i == 1)
 			{
 				equipName = ButtonSelectArmor_Button.transform.Find("NameText").GetComponent<Text>();
 				equipHead = ButtonSelectArmor_Button.transform.Find("Image").GetComponent<Image>();
-			}else if (type == 12)
+				defaultName = "防具";
+			}else if (i == 2)
 			{
 				equipName = ButtonSelectShoes_Button.transform.Find("NameText").GetComponent<Text>();
 				equipHead = ButtonSelectShoes_Button.transform.Find("Image").GetComponent<Image>();
-			}else if (type == 13)
+				defaultName = "代步";
+			}else if (i == 3)
 			{
 				equipName = ButtonSelectTreasure_Button.transform.Find("NameText").GetComponent<Text>();
 				equipHead = ButtonSelectTreasure_Button.transform.Find("Image").GetComponent<Image>();
+				defaultName = "宝物";
 			}
+
+			var equip = role.Equipments[i];
+			//如果卸下或失去装备 清空名称和图片
+			if (equip == null)
+			{
+				equipName.text =defaultName;
+				equipHead.sprite = defaultSprite;
+				continue;
+			}
+			
 			equipName.text = equip.Name;
 			equipHead.LoadAsyncForget(equip.GetPic());
 		}
@@ -274,65 +339,15 @@ public partial class XiakeUIPanel : Jyx2_UIBase
 	{
 		m_roleList.Remove(m_currentRole);
 		m_currentRole = GameRuntimeData.Instance.Player;
-		DoRefresh();
+		RefreshScrollView();
+		RefreshCurrent();
 	}
 
 	GameRuntimeData runtime
 	{
 		get { return GameRuntimeData.Instance; }
 	}
-
-	async void OnEquipmentClick(int index)
-	{
-		ItemInstance yetItem =  m_currentRole.Equipments[index];
-		await SelectFromBag(
-			(itemId) =>
-			{
-				var item = runtime.AllRoles[0].GetItem(itemId);
-				//选择了当前使用的装备，则卸下
-				if ( yetItem!=null && yetItem.Id == itemId)
-				{
-					m_currentRole.UnequipItem(yetItem,index);
-					//反射有方法给特定对象的属性赋值
-					if (m_currentRole.Equipments[index] !=null)
-					{
-						m_currentRole.Equipments[index] = null;
-					}
-				}
-				//否则更新
-				else
-				{
-					m_currentRole.UnequipItem(yetItem,index); //卸下原装备
-					m_currentRole.Equipments[index] = item;//替换存储的角色装备
-					m_currentRole.UseItem(m_currentRole.Equipments[index]); //加减属性
-					runtime.SetItemUser(item.Id, m_currentRole.Id);
-				}
-			},
-			(item) => { return (int)item.ItemType == (index + 10) && (runtime.GetItemUser(item) == m_currentRole.Id || runtime.GetItemUser(item) == -1); },
-			m_currentRole.Equipments[index] == null ? null : m_currentRole.Equipments[index].Id );
-	}
 	
-	async UniTask SelectFromBag(Action<String> callback, Func<ItemInstance, bool> filter, String currentItemId)
-	{
-		await Jyx2_UIManager.Instance.ShowUIAsync(nameof(BagUIPanel), runtime.AllRoles[0].Items, new Action<String>((itemId) =>
-		{
-			if (itemId != null && !m_currentRole.CanUseItem(itemId))
-			{
-				var item = GameRuntimeData.Instance.AllRoles[0].GetItem(itemId);
-				GameUtil.DisplayPopinfo((int)item.ItemType == 1 ? "此人不适合配备此物品" : "此人不适合修炼此物品");
-				return;
-			}
-
-			if (itemId != null)
-			{
-				//卸下或使用选择装备
-				callback(itemId);
-			}
-
-			RefreshCurrent();
-		}), filter, currentItemId);
-	}
-
 	protected override bool captureGamepadAxis => true;
 
 	protected override void handleGamepadButtons()

@@ -20,9 +20,7 @@ public partial class BagUIPanel : Jyx2_UIBase
 	List<ItemInstance> m_itemsData;
 	Jyx2ItemUI m_selectItem;
 	Func<ItemInstance, bool> m_filter = null;
-	private bool castFromSelectPanel = false;
-	private String current_item;
-
+	
 	enum BagFilter
 	{
 		All = 0,
@@ -61,13 +59,7 @@ public partial class BagUIPanel : Jyx2_UIBase
 			m_callback = (Action<String>)allParams[1];
 		if (allParams.Length > 2)
 			m_filter = (Func<ItemInstance, bool>)allParams[2];
-		if (allParams.Length > 3)
-		{
-			castFromSelectPanel = true; 
-			current_item = allParams[3] == null ? null : allParams[3].ToString();;
-		}
-		else castFromSelectPanel = false;
-
+		
 		//道具类型过滤器
 		int index = 0;
 		currentFilterIndex = 0;
@@ -109,10 +101,6 @@ public partial class BagUIPanel : Jyx2_UIBase
 
 		foreach (ItemInstance item in m_itemsData)
 		{
-			String id = item.Id;
-			int count = item.Count;
-			
-			//item filter
 			if (m_filter != null && m_filter(item) == false)
 				continue;
 
@@ -122,7 +110,7 @@ public partial class BagUIPanel : Jyx2_UIBase
 			if (_filter == BagFilter.Equipment && (int)item.ItemType != 1) continue;
 
 			//循环创建物品单元
-			var itemUI = Jyx2ItemUI.Create(id, count);
+			var itemUI = Jyx2ItemUI.Create(item);
 			itemUI.transform.SetParent(ItemRoot_RectTransform);
 			itemUI.transform.localScale = Vector3.one;
 			var btn = itemUI.GetComponent<Button>();
@@ -177,7 +165,7 @@ public partial class BagUIPanel : Jyx2_UIBase
 
 		ItemDes_RectTransform.gameObject.SetActive(true);
 		UseBtn_Button.gameObject.SetActive(true);
-		var item = m_selectItem.GetItem();
+		var item = GameRuntimeData.Instance.Player.GetItem(m_selectItem._id);
 		DesText_Text.text = UIHelper.GetItemDesText(item);
 	}
 
@@ -217,19 +205,15 @@ public partial class BagUIPanel : Jyx2_UIBase
 		if (m_selectItem == null || m_callback == null)
 			return;
 		Action<String> call = m_callback;
-		var item = m_selectItem.GetItem();
 
-		//if (item.ItemType == 3) //使用未遂，不关闭bag
-		//{
 		Jyx2_UIManager.Instance.HideUI(nameof(BagUIPanel));
-		//}
-		call(item.Id);
+		call(m_selectItem._id);
 	}
 
 	protected override void OnHidePanel()
 	{
 		base.OnHidePanel();
-		m_selectItem = null;
+		//m_selectItem = null;
 		m_callback = null;
 		m_filter = null;
 		HSUnityTools.DestroyChildren(ItemRoot_RectTransform);
@@ -238,12 +222,10 @@ public partial class BagUIPanel : Jyx2_UIBase
 	void setBtnText()
 	{
 		if (m_selectItem == null) return;
-		if (castFromSelectPanel && m_selectItem.GetItem().Id == current_item)
-			UseBtn_Text.text = "卸 下".GetContent(nameof(BagUIPanel));
-		else
+		if (GameRuntimeData.Instance.Player.GetItem(m_selectItem._id).UseRoleId  == -1)
 			UseBtn_Text.text = "使 用".GetContent(nameof(BagUIPanel));
-		//---------------------------------------------------------------------------
-		//---------------------------------------------------------------------------
+		else
+			UseBtn_Text.text = "卸 下".GetContent(nameof(BagUIPanel));
 	}
 
 

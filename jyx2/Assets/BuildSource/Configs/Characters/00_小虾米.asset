@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: "00_\u5C0F\u867E\u7C73"
   m_EditorClassIdentifier: 
   Id: 0
-  Name: "\u5E05\u6B7B\u516B\u4E2A\u4EBA"
+  Name: ikun
   Sexual: 1
   Race: 
   Pic:
@@ -25,21 +25,30 @@ MonoBehaviour:
   Descripe: "\u4F60\u770B\u8D77\u6765\u4E8C\u5341\u6765\u5C81\uFF0C\u7709\u6E05\u76EE\u79C0\uFF0C\u6B66\u529F\u770B\u8D77\u6765\u6BEB\u4E0D\u8DB3\u8651;
     \u643A\u5E26:\u6728\u5251\uFF0C\u5E03\u8863"
   State: 
-  Strength: 8
+  Strength: 22
   IQ: 39
   Constitution: 123
   Agile: 1234
   Luck: 12345
   Skills:
   - rid: 2369322468789190656
-  Equipments: []
+  Equipments:
+  - {fileID: 11400000, guid: f8227e32091b7384dac0886aef8a714e, type: 2}
   Items:
   - Item: {fileID: 11400000, guid: b54b5129cbe7c1f41b33d499121adc19, type: 2}
     Count: 5
   - Item: {fileID: 11400000, guid: e48b1e789c05d664b90adf395dc9436b, type: 2}
     Count: 1
   - Item: {fileID: 11400000, guid: f8227e32091b7384dac0886aef8a714e, type: 2}
-    Count: 0
+    Count: 1
+  - Item: {fileID: 11400000, guid: 6f308bf0db5d21348ad51e527ab8d5ce, type: 2}
+    Count: 1
+  - Item: {fileID: 11400000, guid: 1cede6b1ed0c0e2468ad339b0cd20ebd, type: 2}
+    Count: 1
+  - Item: {fileID: 11400000, guid: e48b1e789c05d664b90adf395dc9436b, type: 2}
+    Count: 1
+  - Item: {fileID: 11400000, guid: 7b6c151dab6900644bdf392a912e0fe2, type: 2}
+    Count: 1
   MaxHp: 380000
   MaxMp: 666
   Attack: 1

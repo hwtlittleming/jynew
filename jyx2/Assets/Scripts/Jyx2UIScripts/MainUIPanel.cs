@@ -37,11 +37,7 @@ public partial class MainUIPanel : Jyx2_UIBase, IUIAnimator
 		base.BindListener(button, callback, supportGamepadButtonsNav);
 		getButtonImage(button)?.gameObject.SetActive(false);
 	}
-
-	static HashSet<string> IgnorePanelTypes = new HashSet<string>(new[]
-	{
-		"CommonTipsUIPanel"
-	});
+	
 	private bool initialized;
 
 	public override void Update()
@@ -56,7 +52,7 @@ public partial class MainUIPanel : Jyx2_UIBase, IUIAnimator
 
 		if (Compass != null )
 		{
-			Compass.gameObject.SetActive(LevelMaster.Instance.IsInWorldMap && Jyx2LuaBridge.HaveItem(182));
+			Compass.gameObject.SetActive(LevelMaster.Instance.IsInWorldMap && Jyx2LuaBridge.HaveItem("182"));
 			if (Compass.gameObject.activeSelf)
 			{
 				var p = LevelMaster.Instance.GetPlayerPosition();
@@ -128,15 +124,14 @@ public partial class MainUIPanel : Jyx2_UIBase, IUIAnimator
 
 	async void OnBagBtnClick()
 	{
-		await Jyx2_UIManager.Instance.ShowUIAsync(nameof(BagUIPanel), GameRuntimeData.Instance.AllRoles[0].Items, new Action<String>(OnUseItem));
+		await Jyx2_UIManager.Instance.ShowUIAsync(nameof(BagUIPanel), GameRuntimeData.Instance.Player.Items, new Action<String>(OnUseItem));
 	}
 
 	//使用物品
 	async void OnUseItem(String id)
 	{
 		if (id == null) return;
-		//同物品的不同实例 id相同的问题 todo
-		var item =  GameRuntimeData.Instance.AllRoles[0].GetItem(id); //注意allroles中主角放第一个
+		var item =  GameRuntimeData.Instance.Player.GetItem(id); 
 		if (item == null)
 		{
 			Debug.LogError("use item error, id=" + id);
@@ -192,7 +187,7 @@ public partial class MainUIPanel : Jyx2_UIBase, IUIAnimator
 					else if ((int)item.ItemType == 3)
 					{
 						selectRole.UseItem(item);
-						runtime.AllRoles[0].AlterItem(item.ConfigId, -1,item.Quality);
+						runtime.Player.AlterItem(item.ConfigId, -1,item.Quality);
 						GameUtil.DisplayPopinfo($"{selectRole.Name}使用了{item.Name}");
 					}
 				}
@@ -212,8 +207,14 @@ public partial class MainUIPanel : Jyx2_UIBase, IUIAnimator
 
 	async void OnSystemBtnClick()
 	{
-		SettingsPanel.gameObject.SetActive(true);
 		var levelMaster = LevelMaster.Instance;
+		if (SettingsPanel.gameObject.active == true)
+		{
+			SettingsPanel.gameObject.SetActive(false);
+			levelMaster.SetPlayerCanController(true);
+			return;
+		}
+		SettingsPanel.gameObject.SetActive(true);
 		levelMaster.SetPlayerCanController(false);
 		levelMaster.StopPlayerNavigation();
 	}
@@ -273,10 +274,7 @@ public partial class MainUIPanel : Jyx2_UIBase, IUIAnimator
 	{
 		GlobalHotkeyManager.Instance.RegistHotkey(this, KeyCode.Escape, () =>
 		{
-			if (LevelMaster.Instance.IsPlayerCanControl())
-			{
-				OnSystemBtnClick();
-			}
+			OnSystemBtnClick();
 		});
 		GlobalHotkeyManager.Instance.RegistHotkey(this, KeyCode.X, () =>
 		{
@@ -296,7 +294,7 @@ public partial class MainUIPanel : Jyx2_UIBase, IUIAnimator
 
 	private void OnDisable()
 	{
-		GlobalHotkeyManager.Instance.UnRegistHotkey(this, KeyCode.Escape);
+		//GlobalHotkeyManager.Instance.UnRegistHotkey(this, KeyCode.Escape);
 		GlobalHotkeyManager.Instance.UnRegistHotkey(this, KeyCode.X);
 		GlobalHotkeyManager.Instance.UnRegistHotkey(this, KeyCode.B);
 	}

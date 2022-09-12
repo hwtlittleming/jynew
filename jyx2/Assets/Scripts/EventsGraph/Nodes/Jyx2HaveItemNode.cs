@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Jyx2;
@@ -11,7 +12,7 @@ public class Jyx2HaveItemNode : Jyx2BaseNode
     [Output] public Node yes;
     [Output] public Node no;
     [Header("物品id")]
-	public int itemId;  
+	public String itemId;  
     private void Reset() {
         name = "判断是否拥有道具";
     }

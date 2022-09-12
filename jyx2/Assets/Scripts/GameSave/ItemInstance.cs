@@ -15,7 +15,7 @@ using UnityEngine.UI;
         #region 存档数据定义
         [SerializeField] public String Id;
         [SerializeField] public String Name;
-        [SerializeField] public int ConfigId;
+        [SerializeField] public String ConfigId;
         //动态数据
         [SerializeField] public int UseRoleId;//使用人id        剧情道具 = 0,技能书 = 2, 消耗品 = 3, 武器 = 10, 防具 = 11, 代步 = 12, 宝物 = 13,
         [SerializeField] public String Desc;//物品说明
@@ -67,7 +67,7 @@ using UnityEngine.UI;
             }
             
             Name = configItem.Name;
-            ConfigId = configItem.Id;
+            ConfigId = configItem.Id.ToString();
             Count = count;
             UseRoleId = -1;
             Desc = configItem.Desc;

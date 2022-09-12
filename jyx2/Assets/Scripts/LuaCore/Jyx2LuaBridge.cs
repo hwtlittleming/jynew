@@ -55,20 +55,6 @@ namespace Jyx2
             Wait();
         }
         
-        /// 添加（减少）物品，不显示提示
-        public static void AddItemWithoutHint(int itemId, int count,int quality = 0)
-        {
-            RunInMainThread(() =>
-            {
-                var item = runtime.AllRoles[0].GetItem(itemId,quality); // todo 如果是对装备操作
-                if (item == null)
-                {
-                    Debug.LogError("调用了未定义的物品:" + itemId);
-                    return;
-                }
-                runtime.AllRoles[0].AlterItem(itemId,count,item.Quality);
-            });
-        }
 
         /// <summary>
         /// 修改事件
@@ -291,9 +277,9 @@ namespace Jyx2
             RunInMainThread(Run);
         }
 
-        public static bool HaveItem(int itemId)
+        public static bool HaveItem(String itemId,int quality = 0)
         {
-            return runtime.AllRoles[0].GetItem(itemId) != null;
+            return runtime.Player.GetItem(itemId,quality,false) != null;
         }
 
         //当前正在使用的物品ID
@@ -733,8 +719,6 @@ namespace Jyx2
             jyx2_ReplaceSceneObject("","NPC/华山弟子","");
             jyx2_ReplaceSceneObject("","NPC/battleNPC","");
             LightScence();
-            Talk(0,"历经千辛万苦，我终于打败群雄，得到这武林盟主之位及神杖．但是”圣堂”在那呢？为什麽没人告诉我，难道大家都不知道．这会儿又有的找了．","talkname0", 1);
-            AddItem(143,1);
         }
         
         //判断场景贴图。ModifyEvent里如果p7!=-2时，会更新对应{场景}_{事件}的贴图信息，可以用此方法JudegeScenePic检查对应的贴图信息
@@ -796,7 +780,7 @@ namespace Jyx2
         public static void NPCGetItem(int roleId,int itemId,int count)
         {
             var role = runtime.AllRoles[roleId];
-            if (role != null) role.AlterItem(itemId, count);
+            if (role != null) role.AlterItem(itemId.ToString(), count);
         }
 
         public static void PlayWave(int waveIndex)
@@ -885,25 +869,25 @@ namespace Jyx2
         
         /// 添加（减少）物品，并显示提示
         /// <param name="count">可为负数</param>
-        public static void AddItem(int itemId, int count,int quality = 0)
+        public static void AddItem(int itemId, int count,int quality = 0,Boolean isHint = false)
         {
             RunInMainThread(() =>
             {
-                var item = runtime.AllRoles[0].GetItem(itemId,quality);  // todo 如果是对装备操作 
-                if (item == null)
+                var item = runtime.Player.GetItem(itemId.ToString(),quality); 
+                runtime.Player.AlterItem(itemId.ToString(),count,item.Quality);
+                
+                if (isHint)
                 {
-                    Debug.LogError("调用了未定义的物品:" + itemId);
-                    return;
+                    if (count < 0)
+                    {
+                        storyEngine.DisplayPopInfo("失去物品:".GetContent(nameof(Jyx2LuaBridge)) + item.Name + "×" + Math.Abs(count));
+                    }
+                    else
+                    {
+                        storyEngine.DisplayPopInfo("得到物品:".GetContent(nameof(Jyx2LuaBridge)) + item.Name + "×" + Math.Abs(count));
+                    }
                 }
-                if (count < 0)
-                {
-                    storyEngine.DisplayPopInfo("失去物品:".GetContent(nameof(Jyx2LuaBridge)) + item.Name + "×" + Math.Abs(count));
-                }
-                else
-                {
-                    storyEngine.DisplayPopInfo("得到物品:".GetContent(nameof(Jyx2LuaBridge)) + item.Name + "×" + Math.Abs(count));
-                }
-                runtime.AllRoles[0].AlterItem(itemId,count,item.Quality);
+                
             });
         }
         

@@ -33,11 +33,8 @@ public class UIHelper
 
         return result;
     }
-
-    /// <summary>
+    
     /// 获取使用物品的需求 //NeedMPType; 
-    /// </summary>
-    /// <param name="item"></param>
     public static Dictionary<int, int> GetUseItemRequire(ItemInstance item) 
     {
         Dictionary<int, int> result = new Dictionary<int, int>();
@@ -52,83 +49,55 @@ public class UIHelper
 
         return result;
     }
+    
 
-    //使用人
-    static string GetItemUser(ItemInstance item)
+    //获取物品描述文字
+    public static string GetItemDesText(ItemInstance item)
     {
-        StringBuilder sb = new StringBuilder();
-
-        RoleInstance user = GameRuntimeData.Instance.GetRoleInTeam(GameRuntimeData.Instance.GetItemUser(item));
+        StringBuilder strBuilder = new StringBuilder();
+        strBuilder.Append($"<size=35><color=#FFDB00>{item.Name}</color></size>\n");
+        strBuilder.Append($"{item.Desc}");
+        
+        //物品使用人
+        RoleInstance user =  GameRuntimeData.Instance.GetRoleInTeam(GameRuntimeData.Instance.GetItemUser(item));
         if (user != null)
         {
-            sb.Append($"{user.Name}\n");
+            strBuilder.Append($"\n\n");
+            strBuilder.Append("<size=28><color=#FFDB00>使用人</color></size>\n");
+            strBuilder.Append($"{user.Name}\n");
         }
-
-        return sb.ToString();
-    }
-
-    //效果
-    static string GetEffectText(ItemInstance item)
-    {
+        //物品效果
         Dictionary<int, int> effects = UIHelper.GetItemEffect(item);
-        StringBuilder sb = new StringBuilder();
+        StringBuilder effectString = new StringBuilder();
         foreach (var effect in effects)
         {
             if (!GameConst.ProItemDic.ContainsKey(effect.Key.ToString()))
                 continue;
             PropertyItem pro = GameConst.ProItemDic[effect.Key.ToString()];
             string valueText = effect.Value > 0 ? $"+{effect.Value}" : effect.Value.ToString();
-            sb.Append($"{pro.Name}:  {valueText}\n");
+            effectString.Append($"{pro.Name}:  {valueText}\n");
         }
-        return sb.ToString();
-    }
 
-    //使用要求
-    static string GetUseRquire(ItemInstance item)
-    {
-        Dictionary<int, int> effects = UIHelper.GetUseItemRequire(item);
-        StringBuilder sb = new StringBuilder();
-
-        foreach (var effect in effects)
-        {
-            if (!GameConst.ProItemDic.ContainsKey(effect.Key.ToString()))
-                continue;
-            PropertyItem pro = GameConst.ProItemDic[effect.Key.ToString()];
-            sb.Append($"{pro.Name}:  {effect.Value.ToString()}\n");
-        }
-        return sb.ToString();
-    }
-
-    public static string GetItemDesText(ItemInstance item)
-    {
-        StringBuilder strBuilder = new StringBuilder();
-        strBuilder.Append($"<size=35><color=#FFDB00>{item.Name}</color></size>\n");
-        strBuilder.Append($"{item.Desc}");
-
-        string user = GetItemUser(item);
-        if (!string.IsNullOrEmpty(user))
+        if (!string.IsNullOrEmpty(effectString.ToString()))
         {
             strBuilder.Append($"\n\n");
-            strBuilder.Append("<size=28><color=#FFDB00>使用人</color></size>\n");
-            strBuilder.Append(user);
-        }
-        string effect = GetEffectText(item);
-        if (!string.IsNullOrEmpty(effect))
-        {
-            strBuilder.Append($"\n\n");
-            //---------------------------------------------------------------------------
-            //strBuilder.Append("<size=28><color=#FFDB00>效果</color></size>\n");
-            //---------------------------------------------------------------------------
-            //特定位置的翻译【MainMenu右下角当前版本的翻译】
-            //---------------------------------------------------------------------------
             strBuilder.Append("<size=28><color=#FFDB00>效果</color></size>\n".GetContent(nameof(UIHelper)));
-            //---------------------------------------------------------------------------
-            //---------------------------------------------------------------------------
-            strBuilder.Append(effect);
+            strBuilder.Append(effectString);
+        }
+        //使用要求
+
+        Dictionary<int, int> requires = UIHelper.GetUseItemRequire(item);
+        StringBuilder useRequire = new StringBuilder();
+
+        foreach (var require in requires)
+        {
+            if (!GameConst.ProItemDic.ContainsKey(require.Key.ToString()))
+                continue;
+            PropertyItem pro = GameConst.ProItemDic[require.Key.ToString()];
+            useRequire.Append($"{pro.Name}:  {require.Value.ToString()}\n");
         }
 
-        string useRequire = GetUseRquire(item);
-        if (!string.IsNullOrEmpty(useRequire))
+        if (!string.IsNullOrEmpty(useRequire.ToString()))
         {
             strBuilder.Append($"\n\n");
             strBuilder.Append("<size=28><color=#FFDB00>使用需求</color></size>\n");

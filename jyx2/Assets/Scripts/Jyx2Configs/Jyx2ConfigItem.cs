@@ -24,7 +24,6 @@ namespace Jyx2Configs
     [CreateAssetMenu(menuName = "配置文件/道具", fileName = "道具ID_道具名")]
     public class Jyx2ConfigItem : Jyx2ConfigBase
     {
-        
         [BoxGroup(DEFAULT_GROUP_NAME)][LabelText("图标")]
         public AssetReferenceTexture2D Pic;
         private Sprite _sprite;
@@ -102,6 +101,14 @@ namespace Jyx2Configs
         [BoxGroup(CONDITION_GROUP)][LabelText("需幸运")] //宝物需要幸运
         public int ConditionLuck;
         
+        public Boolean isEquipment()
+        {
+            if ((int)ItemType >= 10  && (int)ItemType <20)
+            {
+                return true;
+            }
+            return false;
+        }
         
         public override async UniTask WarmUp()
         {

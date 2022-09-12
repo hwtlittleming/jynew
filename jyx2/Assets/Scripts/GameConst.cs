@@ -103,7 +103,7 @@ public class GameConst
     public const int MAX_ROLE_WUGONG_COUNT = 10;
 
     //银两ID
-    public const int MONEY_ID = 0;
+    public const String MONEY_ID = "0";
 
     //最大队伍人数
     public const int MAX_TEAMCOUNT = 6;
@@ -159,8 +159,7 @@ public class GameConst
         ["18"] = new PropertyItem(18, "Attack", "攻击力".GetContent(nameof(GameConst)), 9999, 20),
         ["22"] = new PropertyItem(22, "Moral", "品德".GetContent(nameof(GameConst)), 30, 20),
         ["25"] = new PropertyItem(25, "IQ", "资质".GetContent(nameof(GameConst)), 100, 30),
-        //---------------------------------------------------------------------------
-        //---------------------------------------------------------------------------
+
 
     };
 

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb1f0b3f56141f442b2d23d0f9fe5f39, type: 3}
   m_Name: "1_\u5356\u7CD6\u846B\u82A6\u8001\u5934"
   m_EditorClassIdentifier: 
-  Id: 1
+  Id: 190
   Name: "\u5356\u7CD6\u846B\u82A6\u8001\u5934"
   Sexual: 0
   Race: 
@@ -30,6 +30,9 @@ MonoBehaviour:
   Constitution: 0
   Agile: 0
   Luck: 0
+  Skills: []
+  Equipments: []
+  Items: []
   MaxHp: 100
   MaxMp: 100
   Attack: 1
@@ -41,6 +44,8 @@ MonoBehaviour:
   Miss: 0
   Attach: 
   Exp: 0
-  Equipments: []
   LeaveStoryId: 
   Model: {fileID: 0}
+  references:
+    version: 2
+    RefIds: []

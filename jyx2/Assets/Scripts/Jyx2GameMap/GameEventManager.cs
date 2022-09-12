@@ -140,7 +140,7 @@ public class GameEventManager : MonoBehaviour
 
     async void OnClickedUseItemButton()
     {
-        await Jyx2_UIManager.Instance.ShowUIAsync(nameof(BagUIPanel), GameRuntimeData.Instance.AllRoles[0].Items, new Action<int>((itemId) =>
+        await Jyx2_UIManager.Instance.ShowUIAsync(nameof(BagUIPanel), GameRuntimeData.Instance.Player.Items, new Action<int>((itemId) =>
         {
             if (itemId == -1) //取消使用
                 return;

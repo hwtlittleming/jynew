@@ -19,14 +19,12 @@ MonoBehaviour:
     m_SubObjectName: 
     m_SubObjectType: 
     m_EditorAssetChanged: 0
-  bestDistance: 0
-  attackRange: 
-  ExtraAttack: 0
-  PairedWugong: {fileID: 0}
   Desc: "\u5F88\u597D\u7528\u7684\u4E1C\u897F\uFF0C\u751A\u81F3\u80FD\u4F7F\u9B3C\u63A8\u78E8"
   ItemType: 0
-  Quality: 
-  Skill: {fileID: 0}
+  Quality: 0
+  bestDistance: 0
+  attackRange: 
+  Skill: 0
   AddHp: 0
   AddMaxHp: 0
   AddMp: 0

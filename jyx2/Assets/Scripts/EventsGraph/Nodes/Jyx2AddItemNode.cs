@@ -22,13 +22,6 @@ public class Jyx2AddItemNode : Jyx2SimpleNode
 
 	protected override void DoExecute()
 	{
-		if (this.GetInputValue<bool>(nameof(isHint)))
-		{
-			Jyx2LuaBridge.AddItem(itemId, count);
-		}
-		else
-		{
-			Jyx2LuaBridge.AddItemWithoutHint(itemId, count);
-		}
+		Jyx2LuaBridge.AddItem(itemId, count,0,isHint);
 	}
 }

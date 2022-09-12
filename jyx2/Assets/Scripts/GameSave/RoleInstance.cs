@@ -73,56 +73,45 @@ namespace Jyx2
         }
 
         //初始化角色实例，从配置表中复制数据 loadFlag区分是否是第一次初始化
-        public RoleInstance(int roleId,Boolean loadFlag = false)
+        public RoleInstance(int roleId)
         {
-            if (loadFlag) //读档
+            // 第一次初始化数据
+            Id = roleId; 
+            configData = GameConfigDatabase.Instance.Get<Jyx2ConfigCharacter>(Id); 
+            InitData(); //复制属性数据
+        
+            //添加配置的初始技能 配置技能数据+level ->存档的技能数据
+            if (configData == null)Assert.Fail();
+            if (skills.Count == 0)
             {
-                
-                
-                //存档中的技能 除了类型为对象的 其他已都有值
-                foreach (var skill in skills)
+                if (configData.Skills == null || configData.Skills.Count == 0) //没配技能 加一个普攻技能
                 {
-                    skill.Display = GameConfigDatabase.Instance.Get<Jyx2SkillDisplayAsset>(skill.DisplayId);
+                    skills.Add(new SkillInstance(0,0));
                 }
-                
+                else
+                {
+                    foreach (var skill in configData.Skills)
+                    {
+                        skills.Add(new SkillInstance(skill.Skill.Id,skill.Level));
+                    }
+                }
             }
-            else //第一次初始化数据
-            { 
-                //获取配置的初始数据
-                Id = roleId; 
-                configData = GameConfigDatabase.Instance.Get<Jyx2ConfigCharacter>(Id); //读档时塞不塞这个再看
-                InitData(); //复制属性数据
-            
-                //添加配置的初始技能 配置技能数据+level ->存档的技能数据
-                if (configData == null)Assert.Fail();
-                if (skills.Count == 0)
+            //添加配置的初始物品
+            Items.Clear();
+            foreach (var item in configData.Items)
+            {
+                Items.Add(new ItemInstance(item.Item.Id,item.Count));
+            }
+            //添加配置的初始装备
+            Equipments = new List<ItemInstance>() {null, null, null, null};
+            foreach (var item in configData.Equipments)
+            {
+                if ( item != null &&  10 <= (int)item.ItemType && (int)item.ItemType < 20)
                 {
-                    if (configData.Skills == null || configData.Skills.Count == 0) //没配技能 加一个普攻技能
-                    {
-                        skills.Add(new SkillInstance(0,0));
-                    }
-                    else
-                    {
-                        foreach (var skill in configData.Skills)
-                        {
-                            skills.Add(new SkillInstance(skill.Skill.Id,skill.Level));
-                        }
-                    }
-                }
-                //添加配置的初始物品
-                Items.Clear();
-                foreach (var item in configData.Items)
-                {
-                    Items.Add(new ItemInstance(item.Item.Id,item.Count));
-                }
-                //添加配置的初始装备
-                Equipments = new List<ItemInstance>() {null, null, null, null};
-                foreach (var item in configData.Equipments)
-                {
-                    if ( item != null &&  10 <= (int)item.ItemType && (int)item.ItemType < 20)
-                    {
-                        Equipments.Add(new ItemInstance(item.Id,1)); 
-                    }
+                    var Equipment = new ItemInstance(item.Id, 1);
+                    Equipments[(int)item.ItemType - 10] = Equipment;
+                    Equipments[(int) item.ItemType - 10].UseRoleId = roleId;//使用人主要在物品中判断
+                    Items.Add(Equipment);
                 }
             }
 
@@ -301,40 +290,76 @@ namespace Jyx2
             }
         }
 
-        #region JYX2道具相关
+        #region 道具相关
         
-        //获取角色携带的物品 适配String
-        public ItemInstance GetItem(String itemId)
+        //获得随机装备,入包裹
+        public void AddRanEquipment()
         {
-            return Items.Find(it => itemId.Equals(it.Id));
+            return;
         }
-        //获取角色携带的物品 默认获取最低级的 默认获取非装备 ---- 给Lua使用 提供为API的
-        public ItemInstance GetItem(int configItemId,int quality = 0, String equipmentId = "-1")
+        
+        //获取一个背包道具;装备由id唯一确定;物品由 configId + quality 唯一确定;isCertainId = false则为模糊获取
+        public ItemInstance GetItem(String itemIdOrName,int quality = 0,Boolean isCertainId = true)
         {
-            if (!"-1".Equals(equipmentId))
+            if (isCertainId)
             {
-                return Items.Find(it => (configItemId.ToString() + "_" + quality).Equals(it.Id));
+                return Items.Find(it => (itemIdOrName).Equals(it.Id)); //物品实例id获取
             }
-            return Items.Find(it => equipmentId.Equals(it.Id));
-        }
-
-        /// 对角色包里的 某数量+某个特定物品 进行增减
-        public void AlterItem(int configItemId,int count,int quality = 0)
-        { //todo 如果是已装备的装备，请先卸下
-            var item = GetItem(configItemId);
+            else 
+            {
+                var isEquipment = GameConfigDatabase.Instance.Get<Jyx2ConfigItem>(itemIdOrName).isEquipment(); //从配置表取物品类型
+                if (isEquipment) 
+                { 
+                    return Items.Find(it => itemIdOrName.Equals(it.ConfigId) || itemIdOrName.Equals(it.Name));
+                }
+                else 
+                {
+                    return Items.Find(it => ( itemIdOrName.Equals(it.ConfigId) || itemIdOrName.Equals(it.Name) ) &&  quality == it.Quality);
+                }
+            }
+            //获取失败
             
-            if (count < 0 && item == null)Debug.Log("要扣减的物品不存在！");
-
-            if ( item != null)
+        }
+        
+        // 物品增减 + 已生成的装备增减
+        /*
+         物品  钱的加减 道具 类目id或名称+quality的加减
+         
+         装备 传全id
+         */
+        public void AlterItem(String itemConfigId,int count,int quality = 0)
+        {
+            var isEquipment = GameConfigDatabase.Instance.Get<Jyx2ConfigItem>(itemConfigId).isEquipment(); //从配置表取物品类型
+            
+            var item = GetItem(itemConfigId,quality,false); //从背包获取
+            if (count < 0 && item == null) return;//扣减物品不存在
+            
+            if (isEquipment) 
             {
-                item.Count += count;
-                if (count <  0 && item.Count <= 0)
+                if (count > 0)
+                {
+                    Items.Add(new ItemInstance(int.Parse(itemConfigId),1,quality));
+                }else
+                {
+                    //解除已携带关系
+                    item.UseRoleId = -1;
                     Items.Remove(item);
-            }
-            else //新生成物品 从config取
+                }
+            }else
             {
-                Items.Add(new ItemInstance(configItemId,count,quality));
+                if ( item != null)
+                {
+                    item.Count += count;
+                    if (count <  0 && item.Count <= 0)
+                        Items.Remove(item);
+                }
+                else //新生成物品 从config取
+                {
+                    Items.Add(new ItemInstance(int.Parse(itemConfigId),count,quality));
+                }
             }
+
+
         }
         
         public bool CanUseItem(String itemId)
@@ -398,9 +423,7 @@ namespace Jyx2
             this.Attack -= item.Attack;
             this.Defense -= item.Defence;
             this.Speed -= item.Speed;
-
-            int defenceTime = item.Defence < 0 ? 0 : 1;
-            int qinggongTime = item.Speed < 0 ? 0 : 1;
+            
         }
 
         public bool CanFinishedItem()
