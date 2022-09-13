@@ -69,10 +69,10 @@ public class LevelMaster : MonoBehaviour
 
 	CameraHelper m_CameraHelper;
 
-	public static Jyx2ConfigMap LastGameMap = null; //前一个地图
-	private static Jyx2ConfigMap _currentMap;
+	public static ConfigMap LastGameMap = null; //前一个地图
+	private static ConfigMap _currentMap;
 
-	public static void SetCurrentMap(Jyx2ConfigMap map)
+	public static void SetCurrentMap(ConfigMap map)
 	{
 		_currentMap = map;
 	}
@@ -99,7 +99,7 @@ public class LevelMaster : MonoBehaviour
 	/// 获取当前所在地图
 	/// </summary>
 	/// <returns></returns>
-	public static Jyx2ConfigMap GetCurrentGameMap()
+	public static ConfigMap GetCurrentGameMap()
 	{
 		return _currentMap;
 	}
@@ -224,7 +224,7 @@ public class LevelMaster : MonoBehaviour
 		IsInited = true;
 	}
 
-	private void PlayMusic(Jyx2ConfigMap gameMap)
+	private void PlayMusic(ConfigMap gameMap)
 	{
 		if (gameMap == null) return;
 

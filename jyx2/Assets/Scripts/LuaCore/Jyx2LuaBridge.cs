@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Cinemachine;
+using Configs;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
@@ -220,7 +221,7 @@ namespace Jyx2
             RunInMainThread(() => {
                 
                 //记录当前地图和位置
-                Jyx2ConfigMap currentMap = LevelMaster.GetCurrentGameMap();
+                ConfigMap currentMap = LevelMaster.GetCurrentGameMap();
                 var pos = LevelMaster.Instance.GetPlayerPosition();
                 var rotate = LevelMaster.Instance.GetPlayerOrientation();
                 
@@ -475,7 +476,7 @@ namespace Jyx2
                 //只有设置了显示，并且角色在队伍的时候才显示
                 if(noDisplay != 0 && runtime.TeamId.Contains(roleId))
                 {
-                    var skill = GameConfigDatabase.Instance.Get<Jyx2ConfigSkill>(magicId);
+                    var skill = GameConfigDatabase.Instance.Get<ConfigSkill>(magicId);
                     storyEngine.DisplayPopInfo(role.Name + "习得武学" + skill.Name);
                 }
                 Next();
@@ -633,7 +634,7 @@ namespace Jyx2
         //打开所有场景
         public static void OpenAllScene()
         {
-            foreach(var map in GameConfigDatabase.Instance.GetAll<Jyx2ConfigMap>())
+            foreach(var map in GameConfigDatabase.Instance.GetAll<ConfigMap>())
             {
                 runtime.SetSceneEntraceCondition(map.Id, 0);
             }
@@ -904,7 +905,7 @@ namespace Jyx2
                 }
 
                 string mapId = LevelMaster.GetCurrentGameMap().Id.ToString();
-                var hasData = GameConfigDatabase.Instance.Has<Jyx2ConfigShop>(mapId); // mapId和shopId对应
+                var hasData = GameConfigDatabase.Instance.Has<ConfigShop>(mapId); // mapId和shopId对应
                 if (!hasData)
                 {
                     storyEngine.DisplayPopInfo($"地图{mapId}没有配置商店，可在excel/JYX2小宝商店.xlsx中查看");

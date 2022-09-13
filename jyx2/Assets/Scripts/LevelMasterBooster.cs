@@ -20,7 +20,7 @@ public class LevelMasterBooster : MonoBehaviour
     [LabelText("所属地图")]
     [InfoBox("仅用于在本场景启动调试时参考使用")]
     [HideIf("@this.m_IsBattleMap")]
-    public Jyx2ConfigMap m_GameMap;
+    public ConfigMap m_GameMap;
 
     [LabelText("战斗地图")] public bool m_IsBattleMap = false;
     

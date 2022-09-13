@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System;
 using System.Linq;
+using Configs;
 using i18n.TranslatorDef;
 using Jyx2Configs;
 using UnityEngine;
@@ -16,7 +17,7 @@ public partial class ShopUIPanel : Jyx2_UIBase
 {
 	ChildGoComponent childMgr;
 	int curShopId;
-	Jyx2ConfigShop curShopData;
+	ConfigShop curShopData;
 	ShopUIItem curSelectItem
 	{
 		get
@@ -71,7 +72,7 @@ public partial class ShopUIPanel : Jyx2_UIBase
 		base.OnShowPanel(allParams);
 		//curShopId = (int)allParams[0];
 		curShopId = LevelMaster.GetCurrentGameMap().Id;
-		curShopData = GameConfigDatabase.Instance.Get<Jyx2ConfigShop>(curShopId);
+		curShopData = GameConfigDatabase.Instance.Get<ConfigShop>(curShopId);
 
 		RefreshChild();
 		//only change to first item, when first time showing

@@ -21,23 +21,7 @@ using Random = System.Random;
 public class BattleLoader : MonoBehaviour
 {
     [LabelText("载入战斗ID")] public int m_BattleId = 0;
-
-
     [HideInInspector] public Action<BattleResult> Callback;
-
-
-    public bool IsTestCase = false;
-
-    public struct BattlePosRole
-    {
-        public string pos;
-
-        public int team;
-
-        public int roleKey;
-    }
-
-    public List<BattlePosRole> m_Roles;
     
     // Start is called before the first frame update
     async void Start()
@@ -67,11 +51,11 @@ public class BattleLoader : MonoBehaviour
                 return result;
             }
         }
-        
         Debug.Log("概率和不为100");
         return result;
     }
 
+    //对象深拷贝方法
     public static T DeepCopy<T>(T obj)
     {
         //如果是字符串或值类型则直接返回
@@ -103,7 +87,7 @@ public class BattleLoader : MonoBehaviour
         //需要传入地图或线路  暂时搞个id对应地图的对应关系，以后改成直接传入地图或线路名
         //todo 战场仅几种通用类型，特殊再设计，模糊化当前场景，再实化战斗要素
         //todo 改成从excel取数据
-        Jyx2ConfigBattle battle = Jyx2ConfigBattle.Get(id);
+        ConfigBattle battle = ConfigBattle.Get(id);
         if (battle == null)
         {
             Debug.LogError("载入了未定义的战斗，id=" + id);

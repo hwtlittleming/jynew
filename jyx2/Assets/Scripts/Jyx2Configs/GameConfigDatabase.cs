@@ -8,8 +8,9 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using Jyx2.MOD;
 using Jyx2.Middleware;
+using Jyx2Configs;
 
-namespace Jyx2Configs
+namespace Configs
 {
     //用于存储和加载 静态数据  类继承ScriptableObject后，可将类的一些不常变的实例作为数据 存储于asset文件中供取用 
     //类的属性值 在游戏运行期间改变后 不需要保存下来的数据 就可以考虑用此方法
@@ -49,13 +50,13 @@ namespace Jyx2Configs
             
             _isInited = true;
             int total = 0;
-            total += await Init<Jyx2ConfigCharacter>("Assets/BuildSource/Configs/Characters");
-            total += await Init<Jyx2ConfigItem>("Assets/BuildSource/Configs/Items");
-            total += await Init<Jyx2ConfigSkill>("Assets/BuildSource/Configs/Skills");
-            total += await Init<Jyx2SkillDisplayAsset>("Assets/BuildSource/Configs/SkillDisplays");
-            total += await Init<Jyx2ConfigShop>("Assets/BuildSource/Configs/Shops");
-            total += await Init<Jyx2ConfigMap>("Assets/BuildSource/Configs/Maps");
-            total += await Init<Jyx2ConfigBattle>("Assets/BuildSource/Configs/Battles");
+            total += await Init<ConfigCharacter>("Assets/BuildSource/Configs/Characters");
+            total += await Init<ConfigItem>("Assets/BuildSource/Configs/Items");
+            total += await Init<ConfigSkill>("Assets/BuildSource/Configs/Skills");
+            total += await Init<SkillDisplayAsset>("Assets/BuildSource/Configs/SkillDisplays");
+            total += await Init<ConfigShop>("Assets/BuildSource/Configs/Shops");
+            total += await Init<ConfigMap>("Assets/BuildSource/Configs/Maps");
+            total += await Init<ConfigBattle>("Assets/BuildSource/Configs/Battles");
             
             Debug.Log($"载入完成，总数{total}个配置asset");
         }

@@ -26,12 +26,12 @@ public class Jyx2DatabaseEditor : OdinMenuEditorWindow
         var tree = new OdinMenuTree();
         tree.Selection.SupportsMultiSelect = false;
 
-        CreateAssetsMenu<Jyx2ConfigCharacter>(tree, "角色", "Assets/BuildSource/Configs/Characters");
-        CreateAssetsMenu<Jyx2ConfigSkill>(tree, "技能", "Assets/BuildSource/Configs/Skills");
-        CreateAssetsMenu<Jyx2ConfigItem>(tree, "道具", "Assets/BuildSource/Configs/Items");
-        CreateAssetsMenu<Jyx2ConfigMap>(tree, "场景", "Assets/BuildSource/Configs/Maps");
-        CreateAssetsMenu<Jyx2ConfigShop>(tree, "商店", "Assets/BuildSource/Configs/Shops");
-        CreateAssetsMenu<Jyx2ConfigBattle>(tree, "战斗", "Assets/BuildSource/Configs/Battles");
+        CreateAssetsMenu<ConfigCharacter>(tree, "角色", "Assets/BuildSource/Configs/Characters");
+        CreateAssetsMenu<ConfigSkill>(tree, "技能", "Assets/BuildSource/Configs/Skills");
+        CreateAssetsMenu<ConfigItem>(tree, "道具", "Assets/BuildSource/Configs/Items");
+        CreateAssetsMenu<ConfigMap>(tree, "场景", "Assets/BuildSource/Configs/Maps");
+        CreateAssetsMenu<ConfigShop>(tree, "商店", "Assets/BuildSource/Configs/Shops");
+        CreateAssetsMenu<ConfigBattle>(tree, "战斗", "Assets/BuildSource/Configs/Battles");
 
         tree.MarkDirty();
         return tree;

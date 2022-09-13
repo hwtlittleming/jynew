@@ -12,7 +12,7 @@ public class MapTeleportor : MonoBehaviour
 {	
 	[Required]
 	[LabelText("对应地图")]
-	public Jyx2ConfigMap m_GameMap;
+	public ConfigMap m_GameMap;
 
 	[InfoBox("对应指定场景的Level/Triggers下节点")]
 	[LabelText("传送的位置名")] 

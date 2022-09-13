@@ -1,5 +1,6 @@
 
 using System;
+using Configs;
 using Cysharp.Threading.Tasks;
 using Jyx2.MOD;
 using Jyx2Configs;
@@ -29,7 +30,7 @@ namespace Jyx2
         #endregion
         
         //技能外观 非存档数据 只要不加[SerializeField] ES3就不会存档；只要初始化时和变更时同时给其赋值就可以了
-        public Jyx2SkillDisplayAsset Display;
+        public SkillDisplayAsset Display;
         
         public SkillInstance()
         {
@@ -41,7 +42,7 @@ namespace Jyx2
             //1.取配置的默认值
             Key = configId;
             ConfigId = configId;
-            Jyx2ConfigSkill configSkill = GameConfigDatabase.Instance.Get<Jyx2ConfigSkill>(ConfigId);
+            ConfigSkill configSkill = GameConfigDatabase.Instance.Get<ConfigSkill>(ConfigId);
             
             Name = configSkill.Name;
             Level = 0;
@@ -51,7 +52,7 @@ namespace Jyx2
             FixedDamage = configSkill.FixedDamage;
             DamageLevel = configSkill.DamageLevel;
             DisplayId = configSkill.Display.Id;
-            Display = GameConfigDatabase.Instance.Get<Jyx2SkillDisplayAsset>(DisplayId);
+            Display = GameConfigDatabase.Instance.Get<SkillDisplayAsset>(DisplayId);
             
             //2.进行实例化替换  todo level的set方法写更换技能等级带来的属性变化
             ChangeForLevel(Level);

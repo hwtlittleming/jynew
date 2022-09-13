@@ -53,7 +53,7 @@ namespace Jyx2
         public BattleZhaoshiInstance Zhaoshi;
 
 
-        Jyx2SkillDisplayAsset GetDisplay()
+        SkillDisplayAsset GetDisplay()
         {
             return Zhaoshi.Data.Display;
         }

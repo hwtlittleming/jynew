@@ -140,26 +140,15 @@ public class GameEventManager : MonoBehaviour
 
     async void OnClickedUseItemButton()
     {
-        await Jyx2_UIManager.Instance.ShowUIAsync(nameof(BagUIPanel), GameRuntimeData.Instance.Player.Items, new Action<int>((itemId) =>
+        await Jyx2_UIManager.Instance.ShowUIAsync(nameof(BagUIPanel), GameRuntimeData.Instance.Player.Items, new Action<String>((itemId) =>
         {
-            if (itemId == -1) //取消使用
+            if (itemId == null) //取消使用
                 return;
-
             //使用道具
-            ExecuteJyx2Event(curEvent.m_UseItemEventId, new JYX2EventContext() { currentItemId = itemId });
-        }));
+            ExecuteJyx2Event(curEvent.m_UseItemEventId, new JYX2EventContext() { currentItemId = int.Parse(itemId) });
+        }),null);
     }
     
-    
-    bool IsNoEvent(int eventId)
-    {
-        if (eventId == NO_EVENT) return true;
-        if (eventId < 0)
-            return true;
-        return false;
-    }
-
-
     bool TryTrigger(GameEvent evt)
     {
         //直接触发
@@ -181,8 +170,6 @@ public class GameEventManager : MonoBehaviour
 
         return true;
     }
-
-
 
     public void ExecuteJyx2Event(int eventId, JYX2EventContext context = null)
     {

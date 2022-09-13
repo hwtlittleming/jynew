@@ -24,10 +24,10 @@ public partial class BagUIPanel : Jyx2_UIBase
 	enum BagFilter
 	{
 		All = 0,
-		Item,
 		Cost,
 		Equipment,
 		Book,
+		Item,
 	}
 
 	private BagFilter _filter = BagFilter.All;
@@ -107,7 +107,7 @@ public partial class BagUIPanel : Jyx2_UIBase
 			if (_filter == BagFilter.Item && (int)item.ItemType != 0) continue;
 			if (_filter == BagFilter.Book && (int)item.ItemType != 2) continue;
 			if (_filter == BagFilter.Cost && (int)item.ItemType != 3) continue;
-			if (_filter == BagFilter.Equipment && (int)item.ItemType != 1) continue;
+			if (_filter == BagFilter.Equipment && !item.isEquipment()) continue;
 
 			//循环创建物品单元
 			var itemUI = Jyx2ItemUI.Create(item);
@@ -136,20 +136,14 @@ public partial class BagUIPanel : Jyx2_UIBase
 				itemHeight = (itemUI.transform as RectTransform).rect.height;
 			}
 		}
-
-		//setAreasHeightForItemCompleteView(itemHeight, new[]
-		//{
-		//	ItemsArea_ScrollRect.rectTransform(),
-		//	ItemDes_RectTransform
-		//}); 
-
+		
 		if (m_selectItem != null)
 			scrollIntoView(ItemsArea_ScrollRect, m_selectItem.transform as RectTransform, 
 				ItemRoot_GridLayout, 0);
 		
 		ShowItemDes();
 
-
+		//if( visibleItems!= null) m_selectItem = visibleItems[0];
 	}
 
 	void ShowItemDes()
@@ -215,6 +209,7 @@ public partial class BagUIPanel : Jyx2_UIBase
 		HSUnityTools.DestroyChildren(ItemRoot_RectTransform);
 	}
 	
+	//左侧筛选按钮
 	void RefreshFocusFilter()
 	{
 		foreach (var btn in m_Filters)

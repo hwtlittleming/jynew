@@ -21,7 +21,7 @@ public class BattleStartParams
 {
     public Action<BattleResult> callback; //战斗结果
     public List<RoleInstance> roles; //参与战斗的角色
-    public Jyx2ConfigBattle battleData; //战斗地图数据
+    public ConfigBattle battleData; //战斗地图数据
 }
 
 public class BattleManager : MonoBehaviour
@@ -324,7 +324,7 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    string CalExpGot(Jyx2ConfigBattle battleData)
+    string CalExpGot(ConfigBattle battleData)
     {
         List<RoleInstance> alive_teammate = m_BattleModel.Teammates;
         List<RoleInstance> dead_teammates = m_BattleModel.Dead.Where(r => r.team == 0).ToList();

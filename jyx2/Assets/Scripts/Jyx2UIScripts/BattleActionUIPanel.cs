@@ -7,6 +7,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Configs;
 using Cysharp.Threading.Tasks;
 using Jyx2.Battle;
 using Jyx2Configs;
@@ -280,7 +281,7 @@ public partial class BattleActionUIPanel : Jyx2_UIBase
 			if (itemId == -1)
 				return;
 
-			var item = GameConfigDatabase.Instance.Get<Jyx2ConfigItem>(itemId);
+			var item = GameConfigDatabase.Instance.Get<ConfigItem>(itemId);
 			if ((int)item.ItemType == 3) //使用道具逻辑
 			{
 				/*if (m_currentRole.CanUseItem(itemId))

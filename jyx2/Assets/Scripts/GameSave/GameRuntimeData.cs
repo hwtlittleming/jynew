@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization.Json;
 using System.Text;
+using Configs;
 using ES3Types;
 using i18n.TranslatorDef;
 using Jyx2Configs;
@@ -51,7 +52,7 @@ namespace Jyx2
             _instance = new GameRuntimeData();
             
             //创建所有角色
-            foreach (var r in GameConfigDatabase.Instance.GetAll<Jyx2ConfigCharacter>())
+            foreach (var r in GameConfigDatabase.Instance.GetAll<ConfigCharacter>())
             {
                 var role = new RoleInstance(r.Id);
                 _instance.AllRoles.Add(r.Id, role);
@@ -115,11 +116,11 @@ namespace Jyx2
             {//读档时，role里的对象数据实例化
                 var kv = _instance.AllRoles.ElementAt(ig);
                 //configData实例化数据
-                kv.Value.configData = GameConfigDatabase.Instance.Get<Jyx2ConfigCharacter>(kv.Key); 
+                kv.Value.configData = GameConfigDatabase.Instance.Get<ConfigCharacter>(kv.Key); 
                 //存档中的技能 除了类型为对象的 其他已都有值
                 for (int io = 0; io<kv.Value.skills.Count;io++)
                 {
-                    kv.Value.skills[io].Display = GameConfigDatabase.Instance.Get<Jyx2SkillDisplayAsset>(kv.Value.skills[io].DisplayId);
+                    kv.Value.skills[io].Display = GameConfigDatabase.Instance.Get<SkillDisplayAsset>(kv.Value.skills[io].DisplayId);
                 }
             }
             
@@ -139,7 +140,7 @@ namespace Jyx2
                 loadPara.Rotate = r.SubMapData.CurrentOri;
             }
 
-            LevelLoader.LoadGameMap(GameConfigDatabase.Instance.Get<Jyx2ConfigMap>(mapId), loadPara,
+            LevelLoader.LoadGameMap(GameConfigDatabase.Instance.Get<ConfigMap>(mapId), loadPara,
                 () => { LevelMaster.Instance.TryBindPlayer(); });
             return true;
         }
@@ -381,7 +382,7 @@ namespace Jyx2
         /// 获取场景进入条件码
         public int GetSceneEntranceCondition(int mapId)
         {
-            var gameMap = Jyx2ConfigMap.Get(mapId);
+            var gameMap = ConfigMap.Get(mapId);
             if (gameMap == null) return -1;
             
             //大地图

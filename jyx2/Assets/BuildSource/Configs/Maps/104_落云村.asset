@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: "104_\u843D\u4E91\u6751"
   m_EditorClassIdentifier: 
   Id: 110
-  Name: "\u843D\u4E91\u67512"
+  Name: "\u843D\u4E91\u6751"
   MapScene:
     m_AssetGUID: 777e8bcbbe2ec584f846fa760b212919
     m_SubObjectName: 
@@ -24,12 +24,6 @@ MonoBehaviour:
     m_SubObjectName: 
     m_SubObjectType: 
     m_EditorAssetChanged: 0
-  OutMusic:
-    m_AssetGUID: cdc12cfa0f76cee45bf77ac0a3f812b6
-    m_SubObjectName: 
-    m_SubObjectType: 
-    m_EditorAssetChanged: 0
   EnterCondition: 1
   Tags: 
   MapKind: 
-  ForceSetLeaveMusicId: -1

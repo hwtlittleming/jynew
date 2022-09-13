@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Configs;
 using UnityEngine;
 using UniRx;
 using Jyx2Configs;
@@ -58,7 +59,7 @@ namespace Jyx2
         [SerializeField] public int CurrentSkill = 0; //进入战斗时 默认选中的武功序号
         #endregion
 
-        public Jyx2ConfigCharacter configData;
+        public ConfigCharacter configData;
         //额外增加的属性 确定要用后再加至存档 todo
         
         public int bestAttackDistance = 1;//最佳攻击距离，决定站位前后
@@ -71,12 +72,12 @@ namespace Jyx2
         {
         }
 
-        //初始化角色实例，从配置表中复制数据 loadFlag区分是否是第一次初始化
+        //初始化角色实例，从配置表中复制数据
         public RoleInstance(int roleId)
         {
             // 第一次初始化数据
             Id = roleId; 
-            configData = GameConfigDatabase.Instance.Get<Jyx2ConfigCharacter>(Id); 
+            configData = GameConfigDatabase.Instance.Get<ConfigCharacter>(Id); 
             InitData(); //复制属性数据
         
             //添加配置的初始技能 配置技能数据+level ->存档的技能数据
@@ -229,7 +230,7 @@ namespace Jyx2
                 yield break;
         }
 
-        //将角色实例的技能复制到角色实例的战斗技能  todo 战斗前引用该方法
+        //将角色实例的技能复制到角色实例的战斗技能 
         public void ResetBattleSkill()
         {
             if (Zhaoshis == null)
@@ -264,8 +265,8 @@ namespace Jyx2
             }
             else 
             {
-                var isEquipment = GameConfigDatabase.Instance.Get<Jyx2ConfigItem>(itemIdOrName).isEquipment(); //从配置表取物品类型
-                if (isEquipment) 
+                var isEquipment = GameConfigDatabase.Instance.Get<ConfigItem>(itemIdOrName); //从配置表取物品类型
+                if (isEquipment!= null && isEquipment.isEquipment()) 
                 { 
                     return GameRuntimeData.Instance.Player.Items.Find(it => itemIdOrName.Equals(it.ConfigId) || itemIdOrName.Equals(it.Name));
                 }
@@ -285,7 +286,7 @@ namespace Jyx2
          */
         public void AlterItem(String itemConfigId,int count,int quality = 0)
         {
-            var isEquipment = GameConfigDatabase.Instance.Get<Jyx2ConfigItem>(itemConfigId).isEquipment(); //从配置表取物品类型
+            var isEquipment = GameConfigDatabase.Instance.Get<ConfigItem>(itemConfigId).isEquipment(); //从配置表取物品类型
             
             var item = GetItem(itemConfigId,quality,false); //从背包获取
             if (count < 0 && item == null) return;//扣减物品不存在
@@ -619,7 +620,7 @@ namespace Jyx2
         /// 冷月宝刀+胡家刀法 攻击+70
         /// 金蛇剑+金蛇剑法 攻击力+80
         /// 霹雳狂刀+霹雳刀法 攻击+100
-        public int GetExtraAttack(Jyx2ConfigSkill wugong)
+        public int GetExtraAttack(ConfigSkill wugong)
         {
             /*if (Equipments[0] !=null && Equipments[0].Id != -1 && this.Equipments[0].PairedWugong != null && this.Equipments[0].PairedWugong.Id == wugong.Id)
                 return this.Equipments[0].ExtraAttack;*/

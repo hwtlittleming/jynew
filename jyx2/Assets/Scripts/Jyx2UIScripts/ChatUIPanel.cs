@@ -4,6 +4,7 @@ using Jyx2;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Configs;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
@@ -177,7 +178,7 @@ public partial class ChatUIPanel : Jyx2_UIBase, IUIAnimator
 		}
 
 		//再从人物库找
-		var role = GameConfigDatabase.Instance.Get<Jyx2ConfigCharacter>(headId);
+		var role = GameConfigDatabase.Instance.Get<ConfigCharacter>(headId);
 		return role.Name;
 	}
 

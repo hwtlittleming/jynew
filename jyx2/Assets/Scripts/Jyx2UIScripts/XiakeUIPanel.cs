@@ -5,6 +5,7 @@ using Jyx2.Middleware;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Configs;
 using Cysharp.Threading.Tasks;
 using i18n.TranslatorDef;
 using Jyx2.MOD;
@@ -328,7 +329,7 @@ public partial class XiakeUIPanel : Jyx2_UIBase
 			GameUtil.DisplayPopinfo("主角不能离开队伍");
 			return;
 		}
-		var eventLuaPath = GameConfigDatabase.Instance.Get<Jyx2ConfigCharacter>(m_currentRole.Id).LeaveStoryId;
+		var eventLuaPath = GameConfigDatabase.Instance.Get<ConfigCharacter>(m_currentRole.Id).LeaveStoryId;
 		if (!string.IsNullOrEmpty(eventLuaPath))
 		{
 			Jyx2.LuaExecutor.Execute("jygame/ka" + eventLuaPath, RefreshView);

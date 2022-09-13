@@ -1,5 +1,6 @@
 
 using System.Linq;
+using Configs;
 using Jyx2;
 using Jyx2Configs;
 using UnityEngine;
@@ -18,7 +19,7 @@ public static class Jyx2Console
             case "scene":
             {
                 int id = int.Parse(paras[1]);
-                var map = Jyx2ConfigMap.Get(id);
+                var map = ConfigMap.Get(id);
                 if (map != null)
                 {
                     LevelLoader.LoadGameMap(map);
@@ -108,7 +109,7 @@ public static class Jyx2Console
         var isTalkedToWei = false;
         if (isWeiAtCurMap != null && isWeiAtCurMap.activeSelf)
         {
-            var hotelList = GameConfigDatabase.Instance.GetAll<Jyx2ConfigShop>().ToList();
+            var hotelList = GameConfigDatabase.Instance.GetAll<ConfigShop>().ToList();
             LevelMasterBooster level = GameObject.FindObjectOfType<LevelMasterBooster>();
             var ran = new System.Random();
             var index = ran.Next(0, hotelList.Count);
@@ -136,7 +137,7 @@ public static class Jyx2Console
 
             if (isTalkedToWei)
             {
-                var curTriggerId = GameConfigDatabase.Instance.Get<Jyx2ConfigShop>(cur.Id).Trigger;
+                var curTriggerId = GameConfigDatabase.Instance.Get<ConfigShop>(cur.Id).Trigger;
                 Debug.Log("transport Wei to " + hotelList[index].Id);
                 level.ReplaceSceneObject(cur.Id.ToString(), weiPath, "0");
                 level.ReplaceSceneObject(hotelList[index].Id.ToString(), weiPath, "1");

@@ -45,6 +45,12 @@ MonoBehaviour:
     Count: 1
   - Item: {fileID: 11400000, guid: 7b6c151dab6900644bdf392a912e0fe2, type: 2}
     Count: 1
+  - Item: {fileID: 11400000, guid: 0872e760ca2a37a4bb07bda005d34857, type: 2}
+    Count: 1
+  - Item: {fileID: 11400000, guid: 450c9ab497647a94793ce92321c170e8, type: 2}
+    Count: 1
+  - Item: {fileID: 11400000, guid: e1cdd8fad74bb1f43acdc149daa386db, type: 2}
+    Count: 33
   MaxHp: 380000
   MaxMp: 666
   Attack: 1

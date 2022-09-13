@@ -38,7 +38,7 @@ namespace Jyx2
         /// <summary>
         /// 当前的技能播放
         /// </summary>
-        public Jyx2SkillDisplayAsset CurDisplay { get; set; }
+        public SkillDisplayAsset CurDisplay { get; set; }
 
         bool IsStandardModelAvata()
         {
@@ -52,7 +52,7 @@ namespace Jyx2
             if (this == null || CurDisplay == null)
                 return;
 
-            PlayAnimation(CurDisplay.LoadAnimation(Jyx2SkillDisplayAsset.Jyx2RoleAnimationType.Idle));
+            PlayAnimation(CurDisplay.LoadAnimation(SkillDisplayAsset.Jyx2RoleAnimationType.Idle));
         }
 
         public virtual void DeadOrIdle()
@@ -72,7 +72,7 @@ namespace Jyx2
             }
             else
             {
-                clip = CurDisplay.LoadAnimation(Jyx2SkillDisplayAsset.Jyx2RoleAnimationType.Behit);
+                clip = CurDisplay.LoadAnimation(SkillDisplayAsset.Jyx2RoleAnimationType.Behit);
             }
             
             PlayAnimation(clip, DeadOrIdle, 0.25f);
@@ -83,7 +83,7 @@ namespace Jyx2
             if (this == null)
                 return;
 
-            PlayAnimation(CurDisplay.LoadAnimation(Jyx2SkillDisplayAsset.Jyx2RoleAnimationType.Attack), 
+            PlayAnimation(CurDisplay.LoadAnimation(SkillDisplayAsset.Jyx2RoleAnimationType.Attack), 
                 Idle, 0.25f);
         }
 
@@ -99,7 +99,7 @@ namespace Jyx2
             }
             else
             {
-                clip = CurDisplay.LoadAnimation(Jyx2SkillDisplayAsset.Jyx2RoleAnimationType.Move);
+                clip = CurDisplay.LoadAnimation(SkillDisplayAsset.Jyx2RoleAnimationType.Move);
             }
 
             PlayAnimation(clip);

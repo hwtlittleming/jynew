@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Animancer;
-
+using Configs;
 using UnityEngine;
 using Jyx2;
 using Jyx2Configs;
@@ -25,7 +25,7 @@ public class Jyx2SkillEditorEnemy : Jyx2AnimationBattleRole
         await BeforeSceneLoad.loadFinishTask;
         
         animator = GetComponent<Animator>();
-        Jyx2ConfigSkill skill = GameConfigDatabase.Instance.Get<Jyx2ConfigSkill>(SkillId.ToString());
+        ConfigSkill skill = GameConfigDatabase.Instance.Get<ConfigSkill>(SkillId.ToString());
         this.CurDisplay = skill.Display;
 
         this.Idle();

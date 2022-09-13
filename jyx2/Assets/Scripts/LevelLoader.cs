@@ -1,6 +1,7 @@
 
 
 using System;
+using Configs;
 using Cysharp.Threading.Tasks;
 
 
@@ -14,14 +15,14 @@ namespace Jyx2
     public class LevelLoader
     {
         //加载地图
-        public static void LoadGameMap(Jyx2ConfigMap map, LevelMaster.LevelLoadPara para = null, Action callback = null)
+        public static void LoadGameMap(ConfigMap map, LevelMaster.LevelLoadPara para = null, Action callback = null)
         {
             LevelMaster.loadPara = para != null ? para : new LevelMaster.LevelLoadPara(); //默认生成一份
 
             DoLoad(map, callback).Forget();
         }
 
-        static async UniTask DoLoad(Jyx2ConfigMap map, Action callback)
+        static async UniTask DoLoad(ConfigMap map, Action callback)
         {
             LevelMaster.SetCurrentMap(map);
             await LoadingPanel.Create(map.MapScene);
@@ -29,20 +30,15 @@ namespace Jyx2
         }
         
         //加载战斗
-        public static void LoadBattle(int battleId, Action<BattleResult> callback)
+        public static async void LoadBattle(int battleId, Action<BattleResult> callback)
         {
-            var battle = GameConfigDatabase.Instance.Get<Jyx2ConfigBattle>(battleId);
+            var battle = GameConfigDatabase.Instance.Get<ConfigBattle>(battleId);
             if (battle == null)
             {
                 Debug.LogError($"战斗id={battleId}未定义");
                 return;
             }
             
-            DoloadBattle(battle, callback).Forget();
-        }
-
-        private static async UniTask DoloadBattle(Jyx2ConfigBattle battle, Action<BattleResult> callback)
-        {
             var formalMusic = AudioManager.GetCurrentMusic(); //记住当前的音乐，战斗后还原
 
             LevelMaster.IsInBattle = true;
@@ -60,7 +56,5 @@ namespace Jyx2
                 callback(rst);
             };
         }
-        
-        
     }
 }

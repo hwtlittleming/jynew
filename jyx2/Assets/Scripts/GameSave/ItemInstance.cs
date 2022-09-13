@@ -1,5 +1,6 @@
 
 using System;
+using Configs;
 using Cysharp.Threading.Tasks;
 using Jyx2;
 using Jyx2.MOD;
@@ -55,7 +56,7 @@ using UnityEngine.UI;
         public ItemInstance(int configId,int count = 1,int quality = 0)
         {
             //1.取配置的默认值
-            Jyx2ConfigItem configItem = GameConfigDatabase.Instance.Get<Jyx2ConfigItem>(configId);
+            ConfigItem configItem = GameConfigDatabase.Instance.Get<ConfigItem>(configId);
             //装备生成随机Id 不堆叠, 物品由 configId+品质来堆叠
             if ( 10<= (int)configItem.ItemType &&  (int)configItem.ItemType < 20  )
             {

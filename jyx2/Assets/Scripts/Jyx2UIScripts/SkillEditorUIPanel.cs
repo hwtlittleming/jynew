@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Configs;
 using Cysharp.Threading.Tasks;
 
 using Jyx2;
@@ -19,8 +20,8 @@ public partial class SkillEditorUIPanel:Jyx2_UIBase
     private int skillLevel;
     private int roleKey;
 
-    private readonly List<Jyx2ConfigSkill> allSkills = new List<Jyx2ConfigSkill>();
-    private readonly List<Jyx2ConfigCharacter> allRole = new List<Jyx2ConfigCharacter>();
+    private readonly List<ConfigSkill> allSkills = new List<ConfigSkill>();
+    private readonly List<ConfigCharacter> allRole = new List<ConfigCharacter>();
 	protected override void OnCreate()
     {
         InitTrans();
@@ -35,7 +36,7 @@ public partial class SkillEditorUIPanel:Jyx2_UIBase
         List<string> skills = new List<string>();
         List<string> levels = new List<string>();
         List<string> roles = new List<string>();
-        foreach(var skill in GameConfigDatabase.Instance.GetAll<Jyx2ConfigSkill>())
+        foreach(var skill in GameConfigDatabase.Instance.GetAll<ConfigSkill>())
         {
             allSkills.Add(skill);
             skills.Add(skill.Name);
@@ -48,7 +49,7 @@ public partial class SkillEditorUIPanel:Jyx2_UIBase
         }
         dropSkillLevel_Dropdown.AddOptions(levels);
         
-        foreach(var role in GameConfigDatabase.Instance.GetAll<Jyx2ConfigCharacter>())
+        foreach(var role in GameConfigDatabase.Instance.GetAll<ConfigCharacter>())
         {
             allRole.Add(role);
             roles.Add(role.Name);
@@ -194,7 +195,7 @@ public partial class SkillEditorUIPanel:Jyx2_UIBase
 
     public void SwitchToSkill(string skillName)
     {
-        var skill = GameConfigDatabase.Instance.GetAll<Jyx2ConfigSkill>().Single(p => p.Name.Equals(skillName));
+        var skill = GameConfigDatabase.Instance.GetAll<ConfigSkill>().Single(p => p.Name.Equals(skillName));
         if (skill != null)
         {
             int index = allSkills.IndexOf(skill);

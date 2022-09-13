@@ -542,7 +542,7 @@ public class MapRole : Jyx2AnimationBattleRole
     {
         //重写眩晕
         AnimationClip clip = null;
-        clip = (CurDisplay == null)?GlobalAssetConfig.Instance.defaultStunClip:CurDisplay.LoadAnimation(Jyx2SkillDisplayAsset.Jyx2RoleAnimationType.Stun);
+        clip = (CurDisplay == null)?GlobalAssetConfig.Instance.defaultStunClip:CurDisplay.LoadAnimation(SkillDisplayAsset.Jyx2RoleAnimationType.Stun);
         PlayAnimation(clip);
         
         if(_navMeshAgent)//TODO:这里之所以加这一行是因为如果在Skill测试场景中没有寻路，建议后期去掉
@@ -559,7 +559,7 @@ public class MapRole : Jyx2AnimationBattleRole
     {
         //重写解除眩晕并且简化逻辑
         AnimationClip clip = null;
-        clip = CurDisplay == null?GlobalAssetConfig.Instance.defaultIdleClip:CurDisplay.LoadAnimation(Jyx2SkillDisplayAsset.Jyx2RoleAnimationType.Idle);
+        clip = CurDisplay == null?GlobalAssetConfig.Instance.defaultIdleClip:CurDisplay.LoadAnimation(SkillDisplayAsset.Jyx2RoleAnimationType.Idle);
         PlayAnimation(clip);
         
         if (m_Health != MapRoleHealth.Death) m_Health = MapRoleHealth.Stun;

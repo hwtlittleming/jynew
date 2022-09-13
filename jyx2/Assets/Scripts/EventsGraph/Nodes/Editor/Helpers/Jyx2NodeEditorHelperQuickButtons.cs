@@ -1,6 +1,7 @@
 
 using System.IO;
 using System.Linq;
+using Configs;
 using Jyx2Configs;
 using Jyx2Editor;
 using UnityEditor;
@@ -51,7 +52,7 @@ static public class Jyx2NodeEditorHelperQuickButtons
 
     private static string GetSceneAssetPath(int sceneId)
     {
-        var jyx2Map = GameConfigDatabase.Instance.GetAll<Jyx2ConfigMap>()
+        var jyx2Map = GameConfigDatabase.Instance.GetAll<ConfigMap>()
             .SingleOrDefault(map => map.Id.Equals(sceneId.ToString()));
 
         if (jyx2Map == null)
