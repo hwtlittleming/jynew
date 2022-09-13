@@ -1,16 +1,9 @@
 
-using Jyx2;
-
-using Jyx2;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using AClockworkBerry;
 using System.Reflection;
-using Jyx2Configs;
 
 
 public class JYX2ConsolePanel : MonoBehaviour

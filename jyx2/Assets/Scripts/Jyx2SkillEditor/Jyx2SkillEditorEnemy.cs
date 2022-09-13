@@ -1,12 +1,7 @@
 
-using System.Collections;
-using System.Collections.Generic;
-using Animancer;
 using Configs;
 using UnityEngine;
 using Jyx2;
-using Jyx2Configs;
-
 
 public class Jyx2SkillEditorEnemy : Jyx2AnimationBattleRole
 {

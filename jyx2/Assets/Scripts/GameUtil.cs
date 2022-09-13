@@ -1,7 +1,6 @@
 
 using Jyx2;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Cysharp.Threading.Tasks;
@@ -9,7 +8,6 @@ using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
-using Jyx2Configs;
 
 /// JYX工具类
 public class GameUtil

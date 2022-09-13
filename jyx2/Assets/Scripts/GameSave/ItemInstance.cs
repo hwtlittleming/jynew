@@ -2,12 +2,8 @@
 using System;
 using Configs;
 using Cysharp.Threading.Tasks;
-using Jyx2;
 using Jyx2.MOD;
-using Jyx2Configs;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-using UnityEngine.UI;
 
 /// 物品实例  有品质区别  装备可附魂 
     [Serializable]

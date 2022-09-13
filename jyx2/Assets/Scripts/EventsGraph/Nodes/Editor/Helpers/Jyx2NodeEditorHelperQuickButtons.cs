@@ -2,7 +2,6 @@
 using System.IO;
 using System.Linq;
 using Configs;
-using Jyx2Configs;
 using Jyx2Editor;
 using UnityEditor;
 using UnityEditor.SceneManagement;

@@ -3,14 +3,9 @@ using Jyx2.Middleware;
 
 using Jyx2;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Text;
-using i18n.TranslatorDef;
-using Jyx2Configs;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Linq;
 
 public partial class BagUIPanel : Jyx2_UIBase
 {

@@ -13,7 +13,6 @@ using UnityEngine.Playables;
 using Sirenix.Utilities;
 using Cysharp.Threading.Tasks;
 using i18n.TranslatorDef;
-using Jyx2Configs;
 using Jyx2.Middleware;
 
 namespace Jyx2

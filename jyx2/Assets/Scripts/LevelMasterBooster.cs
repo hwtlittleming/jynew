@@ -1,14 +1,10 @@
-
-using System;
 using System.Collections.Generic;
+using Configs;
 using Cysharp.Threading.Tasks;
 
 using Jyx2;
-using Jyx2.Middleware;
 using Jyx2.MOD;
-using Jyx2Configs;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using Sirenix.OdinInspector;
 
 public class LevelMasterBooster : MonoBehaviour

@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Reflection;
+using Configs;
 using Excel;
-using Jyx2Configs;
 using ProtoBuf;
 using UnityEngine;
 
@@ -18,7 +18,7 @@ namespace Jyx2.Middleware
         /// <param name="dirPath"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public static void GenerateConfigsFromExcel<T>(string dirPath) where T: Jyx2ConfigBase
+        public static void GenerateConfigsFromExcel<T>(string dirPath) where T: ConfigBase
         {
             var files = Directory.GetFiles(dirPath, "*.xlsx", SearchOption.AllDirectories);
             

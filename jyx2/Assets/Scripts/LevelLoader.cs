@@ -3,12 +3,7 @@
 using System;
 using Configs;
 using Cysharp.Threading.Tasks;
-
-
-using Jyx2;
-using Jyx2Configs;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 
 namespace Jyx2
 {

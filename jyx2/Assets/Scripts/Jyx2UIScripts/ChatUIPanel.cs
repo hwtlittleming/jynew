@@ -8,8 +8,6 @@ using Configs;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
-using DG.Tweening;
-using Jyx2Configs;
 using UnityEngine.AddressableAssets;
 using UnityEngine.EventSystems;
 using Jyx2.MOD;

@@ -7,10 +7,7 @@ using i18n.TranslatorDef;
 using Jyx2.Middleware;
 using UnityEngine.UI;
 
-using Jyx2Configs;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Linq;
+using Configs;
 using Cysharp.Threading.Tasks;
 
 public partial class GameMainMenu : Jyx2_UIBase

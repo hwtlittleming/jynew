@@ -1,15 +1,11 @@
 
-
-using System;
+using Configs;
 using Jyx2;
 using Cysharp.Threading.Tasks;
 using i18n.TranslatorDef;
 using Jyx2.Middleware;
-using Jyx2Configs;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Threading.Tasks;
-using System.Threading;
 
 public class ShopUIItem : MonoBehaviour
 {
@@ -23,7 +19,7 @@ public class ShopUIItem : MonoBehaviour
 	Text itemNum;
 	Text totalCost;
 
-	Jyx2ConfigShopItem shopItem;
+	ConfigShopItem shopItem;
 	int buyCount;
 	int index;
 	int leftNum;
@@ -45,7 +41,7 @@ public class ShopUIItem : MonoBehaviour
 		reduceBtn.onClick.AddListener(OnReduceBtnClick);
 	}
 
-	public async UniTaskVoid Refresh(Jyx2ConfigShopItem shopItem, int index, int hasBuyNum)
+	public async UniTaskVoid Refresh(ConfigShopItem shopItem, int index, int hasBuyNum)
 	{
 		this.index = index;
 		this.shopItem = shopItem;

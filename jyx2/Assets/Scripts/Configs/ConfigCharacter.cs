@@ -7,11 +7,11 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
-namespace Jyx2Configs
+namespace Configs
 {
     [Serializable]
     [CreateAssetMenu(menuName = "配置文件/角色", fileName = "角色ID_角色名")]
-    public class ConfigCharacter : Jyx2ConfigBase
+    public class ConfigCharacter : ConfigBase
     {
         private const string CGroup1 = "基本信息";
         private const string CGroup2 = "属性";

@@ -5,10 +5,10 @@ using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace Jyx2Configs
+namespace Configs
 {
     [Serializable] 
-    abstract public class Jyx2ConfigBase : ScriptableObject
+    abstract public class ConfigBase : ScriptableObject
     {
         protected const string DEFAULT_GROUP_NAME = "基本配置";
         

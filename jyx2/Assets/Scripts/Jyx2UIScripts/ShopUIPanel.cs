@@ -1,15 +1,9 @@
 
 using Jyx2;
-
-using Jyx2;
-using System.Collections;
 using System.Collections.Generic;
-using System.Threading;
 using System;
-using System.Linq;
 using Configs;
 using i18n.TranslatorDef;
-using Jyx2Configs;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -163,7 +157,7 @@ public partial class ShopUIPanel : Jyx2_UIBase
 		int count = curSelectItem.GetBuyCount();
 		if (count <= 0)
 			return;
-		Jyx2ConfigShopItem item = curShopData.ShopItems[curSelectItem.GetIndex()];
+		ConfigShopItem item = curShopData.ShopItems[curSelectItem.GetIndex()];
 		ItemInstance itemCfg = item.Item;
 		if (itemCfg == null)
 			return;

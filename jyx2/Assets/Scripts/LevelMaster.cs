@@ -5,8 +5,8 @@ using UnityEngine.AI;
 using Jyx2;
 using System;
 using Cinemachine;
+using Configs;
 using Cysharp.Threading.Tasks;
-using Jyx2Configs;
 using Application = UnityEngine.Application;
 using UnityEngine.UI;
 

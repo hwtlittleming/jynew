@@ -1,12 +1,9 @@
 
 
 using Jyx2;
-using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using i18n.TranslatorDef;
-using Jyx2Configs;
-using UnityEngine;
 
 public class UIHelper
 {

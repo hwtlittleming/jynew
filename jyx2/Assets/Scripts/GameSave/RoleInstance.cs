@@ -4,7 +4,6 @@ using System.Reflection;
 using Configs;
 using UnityEngine;
 using UniRx;
-using Jyx2Configs;
 using NUnit.Framework;
 using Random = UnityEngine.Random;
 

@@ -3,12 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 
-using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 using Jyx2.MOD;
-using Jyx2.Middleware;
-using Jyx2Configs;
+
 
 namespace Configs
 {
@@ -38,8 +35,8 @@ namespace Configs
         }
     #endregion
 
-        private readonly Dictionary<Type, Dictionary<int, Jyx2ConfigBase>> _dataBase =
-            new Dictionary<Type, Dictionary<int, Jyx2ConfigBase>>();
+        private readonly Dictionary<Type, Dictionary<int, ConfigBase>> _dataBase =
+            new Dictionary<Type, Dictionary<int, ConfigBase>>();
 
         private bool _isInited = false;
         
@@ -61,7 +58,7 @@ namespace Configs
             Debug.Log($"载入完成，总数{total}个配置asset");
         }
 
-        public T Get<T>(int id) where T : Jyx2ConfigBase
+        public T Get<T>(int id) where T : ConfigBase
         {
             var type = typeof(T);
             if (_dataBase.TryGetValue(type, out var db))
@@ -73,17 +70,17 @@ namespace Configs
             }
             return null;
         }
-        public T Get<T>(string id) where T : Jyx2ConfigBase
+        public T Get<T>(string id) where T : ConfigBase
         {
             return Get<T>(int.Parse(id));
         }
 
-        public bool Has<T>(string id) where T : Jyx2ConfigBase
+        public bool Has<T>(string id) where T : ConfigBase
         {
             return Get<T>(id) != null;
         }
         
-        public IEnumerable<T> GetAll<T>() where T : Jyx2ConfigBase
+        public IEnumerable<T> GetAll<T>() where T : ConfigBase
         {
             var type = typeof(T);
             if (_dataBase.TryGetValue(type, out var db))
@@ -96,7 +93,7 @@ namespace Configs
         }
         
         /// 初始化指定类型配置
-        public async UniTask<int> Init<T>(string path) where T : Jyx2ConfigBase
+        public async UniTask<int> Init<T>(string path) where T : ConfigBase
         {
             if (_dataBase.ContainsKey(typeof(T)))
             {
@@ -107,7 +104,7 @@ namespace Configs
             
             var assets = await MODLoader.LoadAssets<T>(overridePaths);
 
-            var db = new Dictionary<int, Jyx2ConfigBase>();
+            var db = new Dictionary<int, ConfigBase>();
             _dataBase[typeof(T)] = db;
             foreach (var asset in assets)
             {

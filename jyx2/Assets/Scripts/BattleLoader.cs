@@ -1,18 +1,14 @@
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Configs;
 using Cysharp.Threading.Tasks;
-using i18n.TranslatorDef;
 using Jyx2;
 
-using Jyx2;
-using Jyx2Configs;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using Random = System.Random;
 
 /// <summary>
@@ -111,7 +107,7 @@ public class BattleLoader : MonoBehaviour
             Random seed = new Random();
             for (int i = 1; i <= count; i++)
             {
-                int result = MyRandom(lr,seed);
+                int result = 1;// tood  MyRandom(lr,seed);
                 enermyIdList.Add(result);
             }
         }else if (battle.BattleKind == "1")  //固定战斗 SampleRate配置角色id就行

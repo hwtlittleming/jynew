@@ -3,18 +3,17 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 
-namespace Jyx2Configs
+namespace Configs
 {
     [CreateAssetMenu(menuName = "配置文件/商店", fileName = "商店配置")]
-    public class ConfigShop : Jyx2ConfigBase
+    public class ConfigShop : ConfigBase
     {
         [LabelText("韦小宝触发器名")] 
         public int Trigger;
 
         [LabelText("商品列表")][TableList] 
-        public List<Jyx2ConfigShopItem> ShopItems;
+        public List<ConfigShopItem> ShopItems;
 
         public override async UniTask WarmUp()
         {
@@ -23,7 +22,7 @@ namespace Jyx2Configs
     }
     
     [Serializable]
-    public class Jyx2ConfigShopItem
+    public class ConfigShopItem
     {
         [LabelText("道具")] [SerializeReference] [InlineEditor]
         public ItemInstance Item;

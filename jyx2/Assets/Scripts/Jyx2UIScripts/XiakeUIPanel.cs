@@ -8,11 +8,8 @@ using System.Text;
 using Configs;
 using Cysharp.Threading.Tasks;
 using i18n.TranslatorDef;
-using Jyx2.MOD;
 using UnityEngine;
 using UnityEngine.UI;
-
-using Jyx2Configs;
 using UnityEngine.AddressableAssets;
 using Vector3 = UnityEngine.Vector3;
 

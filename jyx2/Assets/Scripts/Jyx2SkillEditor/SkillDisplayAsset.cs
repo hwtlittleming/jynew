@@ -3,9 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Configs;
 using Cysharp.Threading.Tasks;
 using Jyx2;
-using Jyx2Configs;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -15,7 +15,7 @@ using UnityEditor;
 #endif
 
 [CreateAssetMenu(fileName = "[技能名称]", menuName = "技能展现配置")]
-public partial class SkillDisplayAsset : Jyx2ConfigBase
+public partial class SkillDisplayAsset : ConfigBase
 {
     public static IList<SkillDisplayAsset> All;
 

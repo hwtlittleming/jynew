@@ -8,7 +8,6 @@ using Cysharp.Threading.Tasks;
 
 
 using Jyx2;
-using Jyx2Configs;
 using UnityEngine;
 using UnityEngine.UI;
 

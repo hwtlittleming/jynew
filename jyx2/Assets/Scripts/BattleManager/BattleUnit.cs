@@ -1,18 +1,6 @@
 namespace Jyx2.Battle
 {
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using Cinemachine;
-    using Cysharp.Threading.Tasks;
-    using DG.Tweening;
-    using i18n.TranslatorDef;
     using Jyx2;
-
-    using Jyx2.Battle;
-    using Jyx2.Middleware;
-    using Jyx2Configs;
     using UnityEngine;
     
     public class BattleUnit : MonoBehaviour

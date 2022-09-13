@@ -1,16 +1,13 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Jyx2;
 using SkillEffect;
-using UniRx;
 using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
 using Cysharp.Threading.Tasks;
 using Jyx2.Middleware;
-using Jyx2Configs;
 
 public class MapRole : Jyx2AnimationBattleRole
 {

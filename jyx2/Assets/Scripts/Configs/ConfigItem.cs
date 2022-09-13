@@ -1,11 +1,12 @@
 using System;
+using Configs;
 using Cysharp.Threading.Tasks;
 using Jyx2.MOD;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
-namespace Jyx2Configs
+namespace Configs
 {
     //物品基本是静态的，装备附魂用额外的dic在存档记录
     public enum Jyx2ConfigItemType
@@ -22,7 +23,7 @@ namespace Jyx2Configs
     }
     [Serializable]
     [CreateAssetMenu(menuName = "配置文件/道具", fileName = "道具ID_道具名")]
-    public class ConfigItem : Jyx2ConfigBase
+    public class ConfigItem : ConfigBase
     {
         [BoxGroup(DEFAULT_GROUP_NAME)][LabelText("图标")]
         public AssetReferenceTexture2D Pic;

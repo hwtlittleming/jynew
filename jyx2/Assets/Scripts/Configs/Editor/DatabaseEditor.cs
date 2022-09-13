@@ -1,24 +1,21 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
-using Jyx2;
-using Jyx2Configs;
+using Configs;
 using Sirenix.OdinInspector.Editor;
 using Sirenix.Utilities;
 using UnityEditor;
 using UnityEngine;
 
-public class Jyx2DatabaseEditor : OdinMenuEditorWindow
+public class DatabaseEditor : OdinMenuEditorWindow
 {
     [MenuItem("项目快速导航/项目数据库")]
     private static void OpenWindow()
     {
-        GetWindow<Jyx2DatabaseEditor>().titleContent = new GUIContent()
+        GetWindow<DatabaseEditor>().titleContent = new GUIContent()
         {
             text = "jynew数据库"
         };
-        GetWindow<Jyx2DatabaseEditor>().Show();
+        GetWindow<DatabaseEditor>().Show();
     }
 
     protected override OdinMenuTree BuildMenuTree()
@@ -37,7 +34,7 @@ public class Jyx2DatabaseEditor : OdinMenuEditorWindow
         return tree;
     }
 
-    private void CreateAssetsMenu<T>(OdinMenuTree tree, string title, string path) where T : Jyx2ConfigBase
+    private void CreateAssetsMenu<T>(OdinMenuTree tree, string title, string path) where T : ConfigBase
     {
         var query = tree.AddAllAssetsAtPath(title, path, 
             typeof(T), true, true);

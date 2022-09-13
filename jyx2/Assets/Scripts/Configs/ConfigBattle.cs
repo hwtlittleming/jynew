@@ -1,17 +1,16 @@
 using System;
 using System.Collections.Generic;
-using Configs;
 using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Serialization;
 
-namespace Jyx2Configs
+namespace Configs
 {
     //大体静态，可增加属性记录实现 到达某条件 某些值就用新的
     [CreateAssetMenu(menuName = "配置文件/战斗", fileName = "战斗ID")]
-    public class ConfigBattle : Jyx2ConfigBase
+    public class ConfigBattle : ConfigBase
     {
         public static ConfigBattle Get(int id)
         {

@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using Configs;
 using Cysharp.Threading.Tasks;
 using i18n.TranslatorDef;
 using Jyx2;
@@ -13,10 +11,10 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 #endif
 
-namespace Jyx2Configs
+namespace Configs
 {
     [CreateAssetMenu(menuName = "配置文件/地图", fileName = "地图ID_地图名")]
-    public class ConfigMap : Jyx2ConfigBase
+    public class ConfigMap : ConfigBase
     {
         public static ConfigMap Get(int id)
         {

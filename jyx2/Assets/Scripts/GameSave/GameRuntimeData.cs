@@ -2,15 +2,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Runtime.Serialization.Json;
 using System.Text;
 using Configs;
-using ES3Types;
 using i18n.TranslatorDef;
-using Jyx2Configs;
 using UnityEngine;
 
 namespace Jyx2

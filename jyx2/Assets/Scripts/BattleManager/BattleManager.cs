@@ -1,21 +1,16 @@
 
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Cinemachine;
+using Configs;
 using Cysharp.Threading.Tasks;
-using DG.Tweening;
 using i18n.TranslatorDef;
 using Jyx2;
 
 using Jyx2.Battle;
 using Jyx2.Middleware;
-using Jyx2Configs;
 using UnityEngine;
-using Random = UnityEngine.Random;
-
 
 public class BattleStartParams
 {
@@ -484,8 +479,8 @@ public class BattleManager : MonoBehaviour
                     // todo 名武器攻击格子 横1 竖2 
                 }*/
                 
-                ItemInstance weapon = role.Equipments[0];
-                int dis = weapon.bestDistance; //获得持有武器的最佳攻击距离
+                /*ItemInstance weapon = role.Equipments[0];
+                int dis = weapon.bestDistance; *///获得持有武器的最佳攻击距离
                 
                 blockList.Add(blockData);
                 blockTransList.Add(blockData.blockObject.transform);
