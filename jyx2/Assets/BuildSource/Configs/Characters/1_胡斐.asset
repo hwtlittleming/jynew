@@ -44,6 +44,7 @@ MonoBehaviour:
   Miss: 0
   Attach: 
   Exp: 150
+  costArr: 320000006400000064000000
   LeaveStoryId: 950
   Model: {fileID: 11400000, guid: 7ea3de51beed66a44900fe3bfae91b71, type: 2}
   references:
@@ -53,4 +54,4 @@ MonoBehaviour:
       type: {class: Jyx2ConfigCharacterSkill, ns: Configs, asm: Assembly-CSharp}
       data:
         Skill: {fileID: 11400000, guid: dc415c15fc35927439696e1bf1ccc53e, type: 2}
-        Level: 0
+        Level: 1

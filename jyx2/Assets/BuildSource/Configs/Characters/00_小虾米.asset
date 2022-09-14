@@ -31,8 +31,12 @@ MonoBehaviour:
   Agile: 1234
   Luck: 12345
   Skills:
-  - rid: 2369322532175872000
-  - rid: 2369322532175872001
+  - rid: 2369322532412325889
+  - rid: 2369322532412325891
+  - rid: 2369322532412325892
+  - rid: 2369322532412325893
+  - rid: 2369322532412325894
+  - rid: 2369322532412325895
   Equipments:
   - {fileID: 11400000, guid: f8227e32091b7384dac0886aef8a714e, type: 2}
   Items:
@@ -56,25 +60,46 @@ MonoBehaviour:
   MaxMp: 666
   Attack: 1
   Defense: 22
-  Speed: 33
+  Speed: 3000
   Heal: 444
   Critical: 555
   CriticalLevel: 6666
   Miss: 0
   Attach: 
   Exp: 0
+  costArr: 320000006400000064000000
   LeaveStoryId: 
   Model: {fileID: 11400000, guid: a04197a5f95a83c4e899063c285998c3, type: 2}
   references:
     version: 2
     RefIds:
-    - rid: 2369322532175872000
+    - rid: 2369322532412325889
       type: {class: Jyx2ConfigCharacterSkill, ns: Configs, asm: Assembly-CSharp}
       data:
-        Skill: {fileID: 11400000, guid: f043371a92550214fb4b1d96ce31d388, type: 2}
-        Level: 0
-    - rid: 2369322532175872001
+        Skill: {fileID: 11400000, guid: dc2fa55424f644e4980bec398fa51db0, type: 2}
+        Level: 1
+    - rid: 2369322532412325891
       type: {class: Jyx2ConfigCharacterSkill, ns: Configs, asm: Assembly-CSharp}
       data:
-        Skill: {fileID: 11400000, guid: ef78b96d6f8deea4e869462e829fad06, type: 2}
+        Skill: {fileID: 11400000, guid: 1bfadcaa3e61e9b498b7c4475962a64f, type: 2}
+        Level: 1
+    - rid: 2369322532412325892
+      type: {class: Jyx2ConfigCharacterSkill, ns: Configs, asm: Assembly-CSharp}
+      data:
+        Skill: {fileID: 11400000, guid: 9c89af9444d5608468da1dfcb540174b, type: 2}
+        Level: 1
+    - rid: 2369322532412325893
+      type: {class: Jyx2ConfigCharacterSkill, ns: Configs, asm: Assembly-CSharp}
+      data:
+        Skill: {fileID: 11400000, guid: ff54be53416c8054ea24e48aa7b0aaab, type: 2}
+        Level: 1
+    - rid: 2369322532412325894
+      type: {class: Jyx2ConfigCharacterSkill, ns: Configs, asm: Assembly-CSharp}
+      data:
+        Skill: {fileID: 11400000, guid: 125d2f9c9c8edf44b9a90700da210f1c, type: 2}
+        Level: 1
+    - rid: 2369322532412325895
+      type: {class: Jyx2ConfigCharacterSkill, ns: Configs, asm: Assembly-CSharp}
+      data:
+        Skill: {fileID: 11400000, guid: ec252bc182ed92c4f9976bd805896712, type: 2}
         Level: 1

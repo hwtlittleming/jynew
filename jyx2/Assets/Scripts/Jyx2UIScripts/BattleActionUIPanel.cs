@@ -22,18 +22,22 @@ public partial class BattleActionUIPanel : Jyx2_UIBase
 	ChildGoComponent childMgr;
 	
 	private Action<BattleManager.ManualResult> callback;
-	private BattleZhaoshiInstance currentZhaoshi;
+	private BattleZhaoshiInstance currentSkill;
 	private Dictionary<Button, Action> zhaoshiList = new Dictionary<Button, Action>();
 	private GameObject chooseRing;
 	private GameObject chooseEnermyRing;
-	public BattleBlockData currentAttackBlock;
+	public BattleBlockData currentAttackBlock; //当前攻击的格子
 
 	protected override void OnCreate()
 	{
 		InitTrans();
+		
+		//初始化技能个数
 		childMgr = GameUtil.GetOrAddComponent<ChildGoComponent>(Skills_RectTransform);
 		childMgr.Init(SkillItem_RectTransform);
+		//currentSkill = 
 		
+		//初始化选择环
 		chooseRing = Jyx2ResourceHelper.CreatePrefabInstance("CurrentBattleRoleTag");
 		Transform pos = GameObject.FindWithTag("Player").transform;
 		chooseRing.transform.position = pos.position;
@@ -131,7 +135,7 @@ public partial class BattleActionUIPanel : Jyx2_UIBase
 		}
 	}
 
-	protected override void changeCurrentSelection(int num)
+	/*protected override void changeCurrentSelection(int num)
 	{
 		if (num > -1)
 		{
@@ -140,10 +144,11 @@ public partial class BattleActionUIPanel : Jyx2_UIBase
 		}
 
 		base.changeCurrentSelection(num);
-	}
+	}*/
 
 	protected override bool resetCurrentSelectionOnShow => false;
 
+	//获取玩家操作
 	public override void Update()
 	{
 
@@ -155,24 +160,16 @@ public partial class BattleActionUIPanel : Jyx2_UIBase
 		if (block == null) return;
 		var b = BattleManager.Instance.block_list.Find(b => b.blockName == block.name);
 		if (b == null) return;
-
-		if (b.role!=null)//格子上有人就切换亮环位置
-		{
-			if (b.blockName.StartsWith("we"))
-			{
-				chooseRing.transform.position = b.WorldPos;
-			}
-			else
-			{
-				currentAttackBlock = b;
-				if (chooseEnermyRing == null)
-				{
-					chooseEnermyRing = Jyx2ResourceHelper.CreatePrefabInstance("CurrentBattleRoleTag");
-					chooseEnermyRing.transform.GetComponent<MeshRenderer>().material.color = Color.red;
-				}
-				chooseEnermyRing.transform.position = b.WorldPos;
-			}
-		}
+		
+		//通过格子名称找到角色
+		/*RoleInstance rol0 = null;
+		BattleManager.Instance.Enermys.TryGetValue(b.blockName, out  rol0);
+		if(rol0 == null) BattleManager.Instance.Teammates.TryGetValue(b.blockName, out rol0);*/
+		//切换亮环位置
+		currentAttackBlock = b;
+		chooseRing.transform.position = b.WorldPos;
+		chooseRing.transform.GetComponent<MeshRenderer>().material.color = Color.red;
+		
 		Debug.Log("选择了格子:" + b.blockName);
 		
 		//移动
@@ -194,11 +191,8 @@ public partial class BattleActionUIPanel : Jyx2_UIBase
 	protected override void OnHidePanel()
 	{
 		base.OnHidePanel();
-		m_currentRole = null;
 		m_curItemList.Clear();
-
-		//隐藏格子
-		BattleboxHelper.Instance?.HideAllBlocks();
+		
 		zhaoshiList.Clear();
 	}
 
@@ -216,7 +210,8 @@ public partial class BattleActionUIPanel : Jyx2_UIBase
 			int index = i;
 			SkillUIItem item = GameUtil.GetOrAddComponent<SkillUIItem>(childTransList[i]);
 			item.RefreshSkill(zhaoshis[i]);
-			item.SetSelect(i == m_currentRole.CurrentSkill);
+			//当前选中的技能 框上 其余取消框； 第一次进时，当前技能为角色默认初始技能
+			item.SetSelect(i == (currentSkill == null ?  m_currentRole.CurrentSkill : currentSkill.Data.Key)); 
 
 			Button btn = item.GetComponent<Button>();
 			bindZhaoshi(btn, () => { onZhaoshiStart(item, index); });
@@ -244,7 +239,7 @@ public partial class BattleActionUIPanel : Jyx2_UIBase
 		if (index > -1)
 			changeCurrentSelection(-1);
 		
-		currentZhaoshi = item.GetSkill();
+		currentSkill = item.GetSkill();
 		
 		m_curItemList.ForEach(t =>
 		{

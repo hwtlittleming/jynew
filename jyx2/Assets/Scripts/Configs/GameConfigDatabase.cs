@@ -108,10 +108,10 @@ namespace Configs
             _dataBase[typeof(T)] = db;
             foreach (var asset in assets)
             {
-                if (db.ContainsKey(asset.Id))
+                /*if (db.ContainsKey(asset.Id))
                 {
                     Debug.Log($"ID重复，覆盖写入: {asset.Name}-->{db[asset.Id].Name}");
-                }
+                }*/
                 db[asset.Id] = asset;
                 asset.WarmUp().Forget();
             }

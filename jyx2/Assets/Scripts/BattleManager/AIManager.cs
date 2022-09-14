@@ -132,7 +132,7 @@ public class AIManager
             if (r.Next(1, 11) > 6)
             {
                 skill = skills.ElementAt(r.Next(0, skills.Count())); //随机选择一个技能
-                if (skill.IsCastToEnemy() == true)
+                if (skill.Data.ToWhichSide == 1)
                 {
                     await _battleManager.AttackOnce(role, skill, toBlockData);
                 }
@@ -183,7 +183,7 @@ public class AIManager
             if ( r.Next(1, 11) > 4)
             {
                 skill = skills.ElementAt(r.Next(0, skills.Count()-1)); //随机选择一个技能
-                if (skill.IsCastToEnemy() == true)
+                if (skill.Data.ToWhichSide == 1)
                 {
                     await _battleManager.AttackOnce(role, skill, toBlockData);
                 }
@@ -206,8 +206,7 @@ public class AIManager
     public SkillCastResult GetSkillResult(RoleInstance r1, RoleInstance r2, BattleZhaoshiInstance skill)
     {        
         SkillCastResult rst = new SkillCastResult(r1, r2, skill);
-        int level_index = skill.Data.Level-1;//此方法返回的是显示的武功等级，1-10。用于calMaxLevelIndexByMP时需要先-1变为数组index再使用
-        level_index = skill.calMaxLevelIndexByMP(r1.Mp, level_index)+1;//此处计算是基于武功等级数据index，0-9.用于GetSkillLevelInfo时需要+1，因为用于GetSkillLevelInfo时需要里是基于GetLevel计算的，也就是1-10.
+        
         //普通攻击
         if (skill.Data.DamageType == 0)
         {

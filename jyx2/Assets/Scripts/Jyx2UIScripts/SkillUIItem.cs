@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class SkillUIItem : MonoBehaviour
 {
-    BattleZhaoshiInstance m_currentSkill;
+    public BattleZhaoshiInstance m_currentSkill;
 
     private bool hasInit = false;
     Image m_icon;
@@ -27,8 +27,9 @@ public class SkillUIItem : MonoBehaviour
     {
         InitTrans();
         m_currentSkill = skill;
+        m_currentSkill.Data = skill.Data;
         //TODO 更新icon
-        BattleZhaoshiInstance.ZhaoshiStatus state = skill.GetStatus();
+
         string skillText = $"{skill.Data.Name}\nLv.{skill.Data.Level}";
         m_skillText.text = skillText;
     }

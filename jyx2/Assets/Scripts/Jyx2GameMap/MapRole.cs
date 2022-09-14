@@ -92,10 +92,7 @@ public class MapRole : Jyx2AnimationBattleRole
         _lazyInitBattleAnimator = true;
     }
     
-    /// <summary>
     /// 获取角色的Animator组件
-    /// TODO:懒加载我没看懂，技术不到家，所以没动
-    /// </summary>
     /// <returns>物体身上的Animator组件</returns>
     public override Animator GetAnimator()
     {

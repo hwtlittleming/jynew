@@ -63,6 +63,9 @@ namespace Configs
         [BoxGroup(CGroup2)][LabelText("技能伤害系数")]
         public int DamageLevel;
         
+        [BoxGroup(CGroup2)][LabelText("作用于 0己方 1敌人")]
+        public int ToWhichSide = 1;
+        
         [InlineEditor] [BoxGroup("技能外观")] [SerializeReference]
         public SkillDisplayAsset Display;
 

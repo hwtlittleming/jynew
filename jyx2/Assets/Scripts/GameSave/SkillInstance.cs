@@ -21,7 +21,7 @@ namespace Jyx2
         [SerializeField] public int FixedDamage; //固定伤害
         [SerializeField] public int DamageLevel; //技能伤害系数
         [SerializeField] public int DisplayId; //技能外观ID
-
+        [SerializeField] public int ToWhichSide; //作用于 0己方 1敌人
         //技能等级升级后属性变化方法，携带道具类 换成xx instance
         #endregion
         
@@ -49,6 +49,7 @@ namespace Jyx2
             DamageLevel = configSkill.DamageLevel;
             DisplayId = configSkill.Display.Id;
             Display = GameConfigDatabase.Instance.Get<SkillDisplayAsset>(DisplayId);
+            ToWhichSide = configSkill.ToWhichSide;
             
             //2.进行实例化替换  todo level的set方法写更换技能等级带来的属性变化
             ChangeForLevel(Level);

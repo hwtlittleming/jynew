@@ -37,6 +37,7 @@ namespace Jyx2
         [SerializeField] public int Attack; //攻击力
         [SerializeField] public int Defense; //防御力
         [SerializeField] public int Speed; //速度
+        [SerializeField] public int NormalAttackSpeed; //普攻速度 默认3000 可被缩短
         [SerializeField] public String Attach; //攻击附带
         [SerializeField] public int Critical; //暴击
         [SerializeField] public int CriticalLevel; //暴击伤害系数
@@ -58,6 +59,9 @@ namespace Jyx2
         [SerializeField] public int CurrentSkill = 0; //进入战斗时 默认选中的武功序号
         [SerializeField] public int DefeatExp = 0; //打败后获得的经验数
         [SerializeField] public Boolean isInBattle;//参战标志
+        
+        [SerializeField] public int[] costArr ; //默认的 普攻消耗 技能消耗  移动消耗 
+        
         #endregion
 
         public ConfigCharacter configData;
@@ -153,6 +157,7 @@ namespace Jyx2
             
             Attack = configData.Attack;
             Speed = configData.Speed;
+            NormalAttackSpeed = configData.NormalAttackSpeed;
             Defense = configData.Defense;
             Heal = configData.Heal;
             Attach = configData.Attach;
@@ -162,7 +167,7 @@ namespace Jyx2
             Luck = configData.Luck;
 
             IQ = configData.IQ;
-            
+            costArr = configData.costArr;
         }
 
         //获取技能
@@ -390,10 +395,7 @@ namespace Jyx2
         #region 战斗相关
 
         public BattleFieldModel BattleModel;
-
-        //是否在战斗中
-        private bool _isInBattle = false;
-
+        
         //所属队伍，主角方为0
         public int team;
 
@@ -427,31 +429,14 @@ namespace Jyx2
         //是否已经行动
         public bool isActed = false;
         public bool isWaiting = false; //正在等待
-
-        public void EnterBattle()
-        {
-            if (_isInBattle) return;
-            
-            _isInBattle = true;
-
-            View.LazyInitAnimator();
-
-            //进入战斗时 默认选中的武功
-            if (CurrentSkill >= skills.Count)
-            {
-                CurrentSkill = 0;
-            }
-            _currentSkill = skills[CurrentSkill];
-            SwitchAnimationToSkill(_currentSkill, true);
-        }
-
+        
         public void SetHPAndRefreshHudBar(int hp)
         {
             Hp = hp;
             View?.MarkHpBarIsDirty();
         }
 
-        private SkillInstance _currentSkill = null;
+        public SkillInstance _currentSkill = null;
 
         public void SwitchAnimationToSkill(SkillInstance skill, bool force = false)
         {
@@ -462,13 +447,7 @@ namespace Jyx2
 
             _currentSkill = skill;
         }
-
-        public void LeaveBattle()
-        {
-            _isInBattle = false;
-        }
-
-
+        
         public void TimeRun()
         {
             IncSp();
@@ -502,8 +481,8 @@ namespace Jyx2
 
         public int CompareTo(RoleInstance other)
         {
-            int result = this.team.CompareTo(other.team);
-            return result;
+            //int result = this.team.CompareTo(other.team);
+            return (this.Speed.CompareTo(other.Speed)) ;
         }
 
         #endregion

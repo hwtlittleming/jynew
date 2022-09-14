@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms;
 using Configs;
 using Cysharp.Threading.Tasks;
 using i18n.TranslatorDef;
@@ -10,6 +11,7 @@ using Jyx2;
 
 using Jyx2.Battle;
 using Jyx2.Middleware;
+using Sirenix.Utilities;
 using UnityEngine;
 
 public class BattleStartParams
@@ -49,16 +51,9 @@ public class BattleManager : MonoBehaviour
     {
         return m_BattleModel;
     }
-
-
-    /*private RangeLogic rangeLogic;
-
-    public RangeLogic GetRangeLogic()
-    {
-        return rangeLogic;
-    }*/
-
-    private RoleInstance _player
+    
+    //设置主角
+    public RoleInstance _player
     {
         get { return Teammates.Values.First(); }
     }
@@ -104,47 +99,65 @@ public class BattleManager : MonoBehaviour
         //地图上所有单位进入战斗,加入战场，待命动画，面向对面
         foreach (var role in enermyRoleList.Values)
         {
-            role.ResetBattleSkill();
-            role.EnterBattle();
-            AddBattleRole(role);
+            role.ResetBattleSkill(); //将角色实例的技能复制到角色实例的战斗技能 
+            AddBattleRole(role); 
+
+            role.View.LazyInitAnimator();
+            
+            //默认选中的技能初始化
+            if (role.CurrentSkill >= role.skills.Count)
+            {
+                role.CurrentSkill = 0;
+            }
+            role._currentSkill = role.skills[role.CurrentSkill];
+            role.SwitchAnimationToSkill(role._currentSkill, true);
+
         }
         foreach (var role in ourRoleList.Values)
         {
-            role.ResetBattleSkill();
-            role.EnterBattle();
-            AddBattleRole(role);
+            role.ResetBattleSkill(); //将角色实例的技能复制到角色实例的战斗技能 
+            AddBattleRole(role); 
+
+            role.View.LazyInitAnimator();
+            
+            //默认选中的技能初始化
+            if (role.CurrentSkill >= role.skills.Count)
+            {
+                role.CurrentSkill = 0;
+            }
+            role._currentSkill = role.skills[role.CurrentSkill];
+            role.SwitchAnimationToSkill(role._currentSkill, true);
+           
         }
         
+        //战斗开始提示
         await Jyx2_UIManager.Instance.ShowUIAsync(nameof(CommonTipsUIPanel), TipsType.MiddleTop, "战斗开始".GetContent(nameof(BattleManager))); //提示UI
-
-        await Jyx2_UIManager.Instance.ShowUIAsync(nameof(BattleMainUIPanel), BattleMainUIState.ShowHUD); //展示角色血条
+        //展示角色血条
+        await Jyx2_UIManager.Instance.ShowUIAsync(nameof(BattleMainUIPanel), BattleMainUIState.ShowHUD); 
         
         //battleloop
         var model = GetModel();
 
-        //敌人开始自由攻击
-        for(int i = 0; i< enermyRoleList.Count;i++)
-        {
-            var transform = GameObject.Find(enermyRoleList.ElementAt(i).Key).transform;
-            transform.gameObject.AddComponent<BattleUnit>();
-            //给格子上的战斗单元脚本初始化属性
-            transform.gameObject.GetComponent<BattleUnit>()._role = enermyRoleList.ElementAt(i).Value;
-            transform.gameObject.GetComponent<BattleUnit>()._manager = this;
-        }
+        enermyRoleList.Values.ToList().Sort((x, y) => { return x.CompareTo(y); } ); //排序 未测
+        //添加脚本 开始攻击
+        addScript(Teammates);
+        addScript(enermyRoleList);
         
-        for(int j = 0; j< Teammates.Count ; j++)
+        
+    }
+    public async void addScript(Dictionary<String,RoleInstance> roleDic ){
+        for(int i = 0; i< roleDic.Count;i++)
         {
-            var transform = GameObject.Find(Teammates.ElementAt(j).Key).transform;
+            var transform = GameObject.Find(roleDic.ElementAt(i).Key).transform;
             transform.gameObject.AddComponent<BattleUnit>();
             //给格子上的战斗单元脚本初始化属性
-            transform.gameObject.GetComponent<BattleUnit>()._role = Teammates.ElementAt(j).Value;
+            transform.gameObject.GetComponent<BattleUnit>()._role = roleDic.ElementAt(i).Value;
             transform.gameObject.GetComponent<BattleUnit>()._manager = this;
-
-            await UniTask.Delay(1000);
+            await UniTask.Delay(1000); //速度快的先一秒动手
         }
-
     }
-    public async void planAndAttack(RoleInstance _role,BattleUnit b)
+
+    public async void planAndAttack(RoleInstance _role,BattleUnit b,int actPoints)
     {
         
         //如何体现出学习带来的强度:某一招多次使用对其威力下降或闪避提升(天赋效果 魔瓶滚动天赋UI)，我们怎么决策有优势他跟着学习，我们怎么决策给我方带来额外利益 他对抗之(吸蓝，提升自己某防御，封禁某法术，降低普攻)镜像boss
@@ -153,19 +166,17 @@ public class BattleManager : MonoBehaviour
         
         //获取AI计算结果 AI攻击方式 普攻 技能 投掷 使用物品
         await AIManager.Instance.GetAIResult(_role);
-        await UniTask.Delay(_role.Speed);
-        b.isActing = false;
+        await UniTask.Delay(_role.Speed); //普攻等待 和技能等待时间不同
+        b.isCd = false;
         //再执行具体逻辑
         //await ExecuteAIResult(_role, aiResult);
         BattleBlockData bd = block_list.Find((blockData) => blockData.x == 3 && blockData.y == 2 && blockData.team == "we");
         //await AttackOnce(_role, _role.GetZhaoshis(false).FirstOrDefault(), bd);
     }
 
-    public async void operate(RoleInstance _role)
+    public async void operate(RoleInstance _role,BattleUnit b,int actPoints)
     {
-        
-        while (true)
-        {
+
             UniTaskCompletionSource<ManualResult> t = new UniTaskCompletionSource<ManualResult>();
             
             Action<ManualResult> callback = delegate(ManualResult result) { t.TrySetResult(result); };
@@ -184,39 +195,17 @@ public class BattleManager : MonoBehaviour
             
             if (ret.choose == "normalAttack")
             {
-                await AttackOnce(_role, _role.GetZhaoshis(false).FirstOrDefault(), ret.BlockData);
+                await AttackOnce(_role, _role.GetZhaoshis(false).FirstOrDefault(), ret.BlockData); //todo 普攻动作的耗时要配短
+                //攻击间隔等待时间
+                await UniTask.Delay(_role.NormalAttackSpeed); 
             }else if (ret.choose == "skillAttack")
             {
                 await AttackOnce(_role, ret.Skill, ret.BlockData);
+                //攻击间隔等待时间
+                await UniTask.Delay(_role.Speed);
             }
-        }
-        /*if (ret.isRevert) //点击取消
-        {
-            isSelectMove = true;
-            role.movedStep = 0;
-            role.Pos = originalPos;
-        }
-        else if (ret.movePos != null && isSelectMove) //移动
-        {
-            isSelectMove = false;
-            role.movedStep += originalPos.GetDistance(ret.movePos);
-            await RoleMove(role, ret.movePos);
-        }else if (ret.isWait) //等待
-        {
-            _manager.GetModel().ActWait(role);
-            break;
-        }else if (ret.isAuto) //托管给AI
-        {
-            role.Pos = originalPos;
-            await RoleAIAction(role);
-            break;
-        }
-        else if (ret.aiResult != null) //具体执行行动逻辑（攻击、道具、用毒、医疗等）
-        {
-            role.movedStep = 0;
-            await ExecuteAIResult(role, ret.aiResult);
-            break;
-        }*/
+            
+            b.isCd = false;
 
     }
 
@@ -295,10 +284,10 @@ public class BattleManager : MonoBehaviour
         role.View.LookAtWorldPosInBattle(otherside);
 
         //死亡的关键角色默认晕眩
-        if (role.View.m_IsKeyRole && role.IsDead())
+        /*if (role.View.m_IsKeyRole && role.IsDead())
         {
             role.Stun(-1);
-        }
+        }*/
     }
 
     string CalExpGot(ConfigBattle battleData)
@@ -437,7 +426,7 @@ public class BattleManager : MonoBehaviour
         //做一次施展伤害技能或普攻,普攻也视为一次特殊skill；blockData:攻击选择点所在格子信息
         public async UniTask AttackOnce(RoleInstance role, BattleZhaoshiInstance skill,BattleBlockData blockData)
         {
-            Debug.Log(role.Name + "使用" + skill.Data.Name + "攻击" + blockData.blockName);
+            //Debug.Log(role.Name + "使用" + skill.Data.Name + "攻击" + blockData.blockName);
             if (role == null || skill == null || blockData == null)
             {
                 GameUtil.LogError("AttaclOncel失败");
@@ -469,8 +458,7 @@ public class BattleManager : MonoBehaviour
             }
             else
             {
-                skill.CastCD(); //技能CD
-                skill.CastCost(role);skill.CastMP(role); //技能消耗
+                skill.CastMP(role); //技能消耗
                 var covertype = skill.Data.SkillCoverType;
                 // todo 技能的攻击格子
                 blockList.Add(blockData);

@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using Configs;
 using Cysharp.Threading.Tasks;
 using Jyx2;
@@ -81,8 +80,7 @@ public class BattleLoader : MonoBehaviour
     async UniTask LoadJyx2Battle(int battleMapId,String battleKind,String ranEnermy,List<String> limitOurRole,List<String> ExtraOurRole,List<String> fixedEnermy,Action<BattleResult> callback)
     {   
         Debug.Log("-----------BattleLoading...");
-        //上中下三排5*3半透明格子，普攻锁定到人，魔法可以躲
-        //每秒获得行动力 技能消耗 普攻消耗 移动消耗 拳头1刀剑枪2 弓杖3
+        //上中下三排5*3半透明格子，普攻锁定到人，魔法可以躲 攻击距离拳头1刀剑枪2 弓杖3
         //攻击先点击选择攻击格子，再按普攻和魔法，则会以选中点为中心实时攻击，魔法会有延迟；未因什么而阻断时怪物和帮手都是按行动力即时开始攻击
         //被打对象无受击动画，额外施加受击掉血效果
 

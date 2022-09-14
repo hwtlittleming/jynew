@@ -114,6 +114,10 @@ namespace Configs
         [BoxGroup(CGroup2)][LabelText("战斗经验")] //经验每满一定程度 属性按资质增长，宠物可额外通过吞食获得经验
         public int Exp;
 
+        [BoxGroup(CGroup2)][LabelText("各操作行动力消耗(普攻,技能,移动)")] //默认的 普攻消耗 技能消耗  移动消耗 
+        public int[] costArr = {50,100,100}; 
+ 
+        public int NormalAttackSpeed = 1000; //普攻速度 默认3000 可被缩短
         //固定配置
 
         [BoxGroup("其他")][LabelText("队友离场对话")] 

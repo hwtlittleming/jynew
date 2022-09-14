@@ -15,15 +15,22 @@ MonoBehaviour:
   Id: 11
   Name: "\u6768\u900D"
   Sexual: 0
+  Race: 
   Pic:
     m_AssetGUID: 84e79ab367d5e9b4da17fc5a9d403b0e
     m_SubObjectName: 
     m_SubObjectType: 
     m_EditorAssetChanged: 0
-  Pinde: 50
+  Moral: 
+  Descripe: 
+  State: 
+  Strength: 0
   IQ: 60
-  Skills:
-  - id: 0
+  Constitution: 0
+  Agile: 0
+  Luck: 0
+  Skills: []
+  Equipments: []
   Items:
   - Item: {fileID: 11400000, guid: a6003dd1ec240dc40bcd78c08c2c57aa, type: 2}
     Count: 6
@@ -33,33 +40,18 @@ MonoBehaviour:
     Count: 10
   MaxHp: 308
   MaxMp: 350
-  HpInc: 6
-  Level: 16
-  Exp: 9250
-  MpType: 0
   Attack: 75
-  Qinggong: 66
-  Defence: 75
+  Defense: 0
+  Speed: 0
   Heal: 0
-  UsePoison: 0
-  DePoison: 0
-  AntiPoison: 0
-  Quanzhang: 0
-  Yujian: 75
-  Shuadao: 0
-  Qimen: 0
-  Anqi: 30
-  Wuxuechangshi: 0
-  AttackPoison: 0
-  Zuoyouhubo: 0
-  Weapon: {fileID: 0}
-  Armor: {fileID: 0}
+  Critical: 0
+  CriticalLevel: 0
+  Miss: 0
+  Attach: 
+  Exp: 9250
+  costArr: 320000006400000064000000
   LeaveStoryId: 
   Model: {fileID: 11400000, guid: aa4a369c1dd5e6d41908e74bfe65bf3f, type: 2}
   references:
-    version: 1
-    00000000:
-      type: {class: Jyx2ConfigCharacterSkill, ns: Jyx2Configs, asm: Assembly-CSharp}
-      data:
-        Skill: {fileID: 11400000, guid: 082a256218b9fbb47ae6005db9491a60, type: 2}
-        Level: 900
+    version: 2
+    RefIds: []

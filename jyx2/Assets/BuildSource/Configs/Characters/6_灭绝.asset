@@ -15,17 +15,22 @@ MonoBehaviour:
   Id: 6
   Name: "\u706D\u7EDD"
   Sexual: 1
-  Rate: 0
+  Race: 
   Pic:
     m_AssetGUID: f65790148c1ee0441aea11bcad6d4e96
     m_SubObjectName: 
     m_SubObjectType: 
     m_EditorAssetChanged: 0
   Moral: 0
-  IQ: 50
   Descripe: 
-  Skills:
-  - id: 0
+  State: 
+  Strength: 0
+  IQ: 50
+  Constitution: 0
+  Agile: 0
+  Luck: 0
+  Skills: []
+  Equipments: []
   Items:
   - Item: {fileID: 11400000, guid: bfb7589407b8b4545aab31b6da774121, type: 2}
     Count: 5
@@ -36,30 +41,17 @@ MonoBehaviour:
   MaxHp: 260
   MaxMp: 400
   Attack: 80
-  MagicAttack: 0
-  Speed: 2000
   Defense: 0
-  MagicDefence: 0
+  Speed: 2000
   Heal: 10
-  Attach: 
   Critical: 0
   CriticalLevel: 0
   Miss: 0
-  Luck: 0
-  Strength: 0
-  Intelligence: 0
-  Constitution: 0
-  Agile: 0
-  Weapon: {fileID: 0}
-  Armor: {fileID: 0}
-  Shoes: {fileID: 0}
-  Treasure: {fileID: 0}
+  Attach: 
+  Exp: 0
+  costArr: 320000006400000064000000
   LeaveStoryId: 
   Model: {fileID: 11400000, guid: 4547878c48f59734abd2d44f51ad76aa, type: 2}
   references:
-    version: 1
-    00000000:
-      type: {class: Jyx2ConfigCharacterSkill, ns: Jyx2Configs, asm: Assembly-CSharp}
-      data:
-        Skill: {fileID: 11400000, guid: bf8a897b52c3b624cb6671a97364eb14, type: 2}
-        Level: 900
+    version: 2
+    RefIds: []
