@@ -60,7 +60,7 @@ public class BattleManager : MonoBehaviour
 
     private RoleInstance _player
     {
-        get { return GameRuntimeData.Instance.Player; }
+        get { return Teammates.Values.First(); }
     }
 
     #endregion
@@ -77,25 +77,21 @@ public class BattleManager : MonoBehaviour
     public GameObject m_roleFocusRing;
 
     //队友
-    public List<RoleInstance> Teammates;
+    public Dictionary<String,RoleInstance> Teammates;
 
     //敌人
-    public List<RoleInstance> Enermys;
+    public Dictionary<String,RoleInstance> Enermys;
 
-    public async UniTask StartBattle(List<RoleInstance> enermyRoleList,List<RoleInstance> ourRoleList,Action<BattleResult> callback)
+    public async UniTask StartBattle(Dictionary<String,RoleInstance> enermyRoleList,Dictionary<String,RoleInstance> ourRoleList,Action<BattleResult> callback)
     {
-        Debug.Log("StartBattle called");
+        Debug.Log("-----StartBattle----");
 
         Teammates = ourRoleList;
         Enermys = enermyRoleList;
         
         if (IsInBattle) return;
         var tempView = _player.View;
-        if (tempView == null)
-        {
-            tempView = ourRoleList[0].View;
-        }
-
+        
         IsInBattle = true;
         //初始化战斗model
         m_BattleModel = new BattleFieldModel();
@@ -106,29 +102,20 @@ public class BattleManager : MonoBehaviour
         await UniTask.WaitForEndOfFrame();
 
         //地图上所有单位进入战斗,加入战场，待命动画，面向对面
-        foreach (var role in enermyRoleList)
+        foreach (var role in enermyRoleList.Values)
+        {
+            role.ResetBattleSkill();
+            role.EnterBattle();
+            AddBattleRole(role);
+        }
+        foreach (var role in ourRoleList.Values)
         {
             role.ResetBattleSkill();
             role.EnterBattle();
             AddBattleRole(role);
         }
         
-        foreach (var role in ourRoleList)
-        {
-            role.ResetBattleSkill();
-            role.EnterBattle();
-            AddBattleRole(role);
-        }
-
-        m_BattleModel.InitBattleModel(); //战场初始化 行动顺序排序这些
-        //---------------------------------------------------------------------------
-        //await Jyx2_UIManager.Instance.ShowUIAsync(nameof(CommonTipsUIPanel), TipsType.MiddleTop, "战斗开始"); //提示UI
-        //---------------------------------------------------------------------------
-        //特定位置的翻译【战斗开始时候的弹窗提示】
-        //---------------------------------------------------------------------------
         await Jyx2_UIManager.Instance.ShowUIAsync(nameof(CommonTipsUIPanel), TipsType.MiddleTop, "战斗开始".GetContent(nameof(BattleManager))); //提示UI
-        //---------------------------------------------------------------------------
-        //---------------------------------------------------------------------------
 
         await Jyx2_UIManager.Instance.ShowUIAsync(nameof(BattleMainUIPanel), BattleMainUIState.ShowHUD); //展示角色血条
         
@@ -136,21 +123,21 @@ public class BattleManager : MonoBehaviour
         var model = GetModel();
 
         //敌人开始自由攻击
-        foreach (var r in enermyRoleList)
+        for(int i = 0; i< enermyRoleList.Count;i++)
         {
-            var transform = GameObject.Find(r.blockData.blockName).transform;
+            var transform = GameObject.Find(enermyRoleList.ElementAt(i).Key).transform;
             transform.gameObject.AddComponent<BattleUnit>();
             //给格子上的战斗单元脚本初始化属性
-            transform.gameObject.GetComponent<BattleUnit>()._role = r;
+            transform.gameObject.GetComponent<BattleUnit>()._role = enermyRoleList.ElementAt(i).Value;
             transform.gameObject.GetComponent<BattleUnit>()._manager = this;
         }
         
-        foreach (var r in Teammates)
+        for(int j = 0; j< Teammates.Count ; j++)
         {
-            var transform = GameObject.Find(r.blockData.blockName).transform;
+            var transform = GameObject.Find(Teammates.ElementAt(j).Key).transform;
             transform.gameObject.AddComponent<BattleUnit>();
             //给格子上的战斗单元脚本初始化属性
-            transform.gameObject.GetComponent<BattleUnit>()._role = r;
+            transform.gameObject.GetComponent<BattleUnit>()._role = Teammates.ElementAt(j).Value;
             transform.gameObject.GetComponent<BattleUnit>()._manager = this;
 
             await UniTask.Delay(1000);
@@ -291,13 +278,8 @@ public class BattleManager : MonoBehaviour
         //rangeLogic = null;
         m_BattleModel.Roles.Clear();
     }
-
-
-    /// <summary>
+    
     /// 添加角色到战场里面
-    /// </summary>
-    /// <param name="role"></param>
-    /// <param name="team"></param>
     public void AddBattleRole(RoleInstance role)
     {
         int team = role.team;
@@ -327,7 +309,7 @@ public class BattleManager : MonoBehaviour
         string rst = "";
         foreach (var role in alive_teammate)
         {
-            int expAdd = battleData.Exp / alive_teammate.Count();
+            int expAdd = 0;//battleData.Exp / alive_teammate.Count();
             role.ExpGot += expAdd;
         }
 

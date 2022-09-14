@@ -65,11 +65,12 @@ namespace Configs
         public int Agile;// 1.0速度,0.01闪避,0.2防御
         
         [BoxGroup(CGroup3)][LabelText("幸运")][SerializeReference]
-        public int Luck;//+点数点闪避,事件触发 
+        public int Luck;//+点数点闪避,事件触发,赚钱率 
         
         /* ------- 分割线 ------- */
         
-        [InfoBox("注：等级level 一般0-2级")]
+        [InfoBox("必须至少有一个技能", InfoMessageType.Error, "@this.Skills==null || this.Skills.Count == 0")]
+        [InfoBox("注：等级level 一般1-3级")]
         [BoxGroup(CGroupSkill)] [LabelText("技能")][SerializeReference][TableList]
         public List<Jyx2ConfigCharacterSkill> Skills;
         
@@ -140,8 +141,8 @@ namespace Configs
         [LabelText("技能")][SerializeReference][InlineEditor]
         public ConfigSkill Skill;
 
-        [LabelText("等级")] 
-        public int Level;
+        [LabelText("等级")]
+        public int Level = 1;
     }
     [Serializable]
     public class Jyx2ConfigCharacterItem

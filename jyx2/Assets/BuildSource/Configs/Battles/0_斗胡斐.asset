@@ -19,25 +19,8 @@ MonoBehaviour:
     m_SubObjectName: 
     m_SubObjectType: 
     m_EditorAssetChanged: 0
-  Exp: 150
   Music:
     m_AssetGUID: 1650711a69d0b4d49817578b7a4d67cd
     m_SubObjectName: 
     m_SubObjectType: 
     m_EditorAssetChanged: 0
-  TeamMates:
-  - {fileID: 11400000, guid: 24e670afec1b1a3488ea5f2cded76ef8, type: 2}
-  AutoTeamMates: []
-  Enemies:
-  - {fileID: 11400000, guid: ced0ac0d3b00424458249be694283257, type: 2}
-  BattleKind: 
-  CountLevel: 
-  RoleRate:
-  - id: 0
-  references:
-    version: 1
-    00000000:
-      type: {class: SamepleRate, ns: Jyx2Configs, asm: Assembly-CSharp}
-      data:
-        Sameple: 1
-        Rate: 1

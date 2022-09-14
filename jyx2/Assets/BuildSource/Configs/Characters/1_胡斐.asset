@@ -29,7 +29,8 @@ MonoBehaviour:
   Constitution: 222
   Agile: 333
   Luck: 222
-  Skills: []
+  Skills:
+  - rid: 2369322532175872002
   Equipments: []
   Items: []
   MaxHp: 56
@@ -47,4 +48,9 @@ MonoBehaviour:
   Model: {fileID: 11400000, guid: 7ea3de51beed66a44900fe3bfae91b71, type: 2}
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 2369322532175872002
+      type: {class: Jyx2ConfigCharacterSkill, ns: Configs, asm: Assembly-CSharp}
+      data:
+        Skill: {fileID: 11400000, guid: dc415c15fc35927439696e1bf1ccc53e, type: 2}
+        Level: 0

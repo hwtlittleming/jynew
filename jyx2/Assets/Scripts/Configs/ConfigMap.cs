@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using i18n.TranslatorDef;
 using Jyx2;
@@ -18,7 +19,6 @@ namespace Configs
     {
         public static ConfigMap Get(int id)
         {
-            
             return GameConfigDatabase.Instance.Get<ConfigMap>(id);
         }
         
@@ -37,8 +37,9 @@ namespace Configs
         public string Tags;
         
         //陆地天空河流各一种战斗地图 或者 每个大城镇 每种小地形一种地图;
-        [LabelText("地图类型")] 
-        public String MapKind;
+        //该场景若发生战斗，进入哪个战斗地图
+        [LabelText("战斗地图类型")] 
+        public String BattleMapKind;
         
         public override async UniTask WarmUp()
         {
@@ -48,7 +49,6 @@ namespace Configs
         
         public string GetShowName()
         {
-            //特定位置的翻译【小地图左上角的主角居显示】
             if (GlobalAssetConfig.Instance.defaultHomeName.Equals(Name)) return GameRuntimeData.Instance.Player.Name + "居".GetContent(nameof(ConfigMap));
             return Name;
         }

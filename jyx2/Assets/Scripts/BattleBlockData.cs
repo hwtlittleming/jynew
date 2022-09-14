@@ -24,13 +24,13 @@ namespace Jyx2
         //格子名称
         public String blockName;
         
-        //格子上的角色
+        //格子上的角色 待删
         public RoleInstance role;
         
-        //格子的游戏对象
+        //格子的游戏对象 
         public GameObject blockObject;
         
-        //对应绘制的对象
+        //对应绘制的对象 待看是否可删
         public GameObject gameObject;
 
         public int maxX = 1;

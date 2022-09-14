@@ -46,8 +46,8 @@ public class AIManager
 
     public async UniTask GetAIResult(RoleInstance role)
     {
-        var Enermies = _battleManager.Enermys;
-        var Teammates = _battleManager.Teammates;
+        var Enermies = _battleManager.Enermys.Values.ToList();
+        var Teammates = _battleManager.Teammates.Values.ToList();
 
         if (role.team == 1) //如果是敌方 相对关系转换
         {

@@ -56,6 +56,8 @@ namespace Jyx2
         [SerializeField] public List<ItemInstance> Equipments = new List<ItemInstance>(); //装备：0武器 1防具 2鞋子 4宝物
         
         [SerializeField] public int CurrentSkill = 0; //进入战斗时 默认选中的武功序号
+        [SerializeField] public int DefeatExp = 0; //打败后获得的经验数
+        [SerializeField] public Boolean isInBattle;//参战标志
         #endregion
 
         public ConfigCharacter configData;
@@ -81,20 +83,19 @@ namespace Jyx2
         
             //添加配置的初始技能 配置技能数据+level ->存档的技能数据
             if (configData == null)Assert.Fail();
-            if (skills.Count == 0)
+
+            if (configData.Skills == null || configData.Skills.Count == 0) //没配技能 加一个普攻技能
             {
-                if (configData.Skills == null || configData.Skills.Count == 0) //没配技能 加一个普攻技能
+                skills.Add(new SkillInstance(0,0));
+            }
+            else
+            {
+                foreach (var skill in configData.Skills)
                 {
-                    skills.Add(new SkillInstance(0,0));
-                }
-                else
-                {
-                    foreach (var skill in configData.Skills)
-                    {
-                        skills.Add(new SkillInstance(skill.Skill.Id,skill.Level));
-                    }
+                    skills.Add(new SkillInstance(skill.Skill.Id,skill.Level));
                 }
             }
+            
             //添加配置的初始物品
             Items.Clear();
             foreach (var item in configData.Items)
@@ -241,9 +242,9 @@ namespace Jyx2
                 Zhaoshis.Clear();
             }
 
-            foreach (var wugong in skills)
+            foreach (var s in skills)
             {
-                Zhaoshis.Add(new BattleZhaoshiInstance(wugong));
+                Zhaoshis.Add(new BattleZhaoshiInstance(s));
             }
         }
 
@@ -480,7 +481,6 @@ namespace Jyx2
         }
 
         //获得行动力
-        //参考：https://github.com/ZhanruiLiang/jinyong-legend
         public int GetMoveAbility()
         {
             int speed = this.Speed;

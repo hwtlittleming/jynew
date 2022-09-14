@@ -13,7 +13,6 @@ using UnityEngine.SceneManagement;
 
 public class BattleboxHelper : MonoBehaviour
 {
-	public const float BATTLEBLOCK_DECAL_ALPHA = 0.4f;
 	public static BattleboxHelper Instance
 	{
 		get
@@ -23,10 +22,7 @@ public class BattleboxHelper : MonoBehaviour
 		}
 	}
 	private static BattleboxHelper _instance;
-
-	//绘制区域（主角身边的范围）
-	public int m_MoveZoneDrawRange = 16;
-
+	
 	private BattleboxManager _currentBattlebox;
 
 	private const string RootPath = "BattleboxRoot";
@@ -92,19 +88,7 @@ public class BattleboxHelper : MonoBehaviour
 		var centerY = (int)tempXY.Y;
 		return GetBlockData(centerX, centerY);
 	}
-
-	//判断格子是否存在（必须是有效格子）
-	public bool IsBlockExists(int xindex, int yindex)
-	{
-		if (!GeneralPreJudge()) return false;
-
-		if (!_currentBattlebox.Exist(xindex, yindex)) return false;
-
-		var block = _currentBattlebox.GetBlockData(xindex, yindex);
-		if (block != null) return false;
-
-		return true;
-	}
+	
 
 	private int[] xPositions = new int[0];
 	private int xMiddlePos = -1;

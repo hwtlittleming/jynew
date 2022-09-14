@@ -119,10 +119,7 @@ public class GameConst
 
     //最大生命和内力
     public const int MAX_HPMP = 999;
-
-    //最大战斗上场人数
-    public const int MAX_BATTLE_TEAMMATE_COUNT = 6;
-
+    
     //对话框最大可以显示字符
     public const int MAX_CHAT_CHART_NUM = 156;
 
@@ -162,7 +159,13 @@ public class GameConst
 
 
     };
-
+    
+    //所有地图遇怪概率设置 ;key=遇怪模式id  value = 数量级;角色a:概率a,角色b:概率b  如: 1-3;1:50,2:50
+    public static Dictionary<String,String> mapEnermy = new Dictionary<string, string>()
+    {
+        {"1","1-5;1:50,2:50"},
+    };
+    
     //存档的数量
     public const int SAVE_COUNT = 3;
     public static string GetUPNumber(int index)

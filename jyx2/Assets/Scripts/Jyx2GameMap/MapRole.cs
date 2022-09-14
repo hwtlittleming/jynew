@@ -82,15 +82,11 @@ public class MapRole : Jyx2AnimationBattleRole
     
     #region 动画脚本设置
     
-    /// <summary>
     /// 是否懒加载
-    /// TODO:是否须臾奥原本值设置为false?因为按照逻辑来说都是true。
-    /// </summary>
+    /// 是否原本值设置为false?因为按照逻辑来说都是true。
     private bool _lazyInitBattleAnimator = true;
     
-    /// <summary>
     /// 懒加载函数
-    /// </summary>
     public void LazyInitAnimator()
     {
         _lazyInitBattleAnimator = true;

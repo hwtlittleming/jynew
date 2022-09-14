@@ -21,31 +21,19 @@ namespace Configs
         [LabelText("地图")] 
         public AssetReference MapScene;
 
-        [LabelText("获得经验")] 
-        public int Exp;
-        
         [LabelText("音乐")]
-        public AssetReferenceT<AudioClip> Music; //音乐
-
-        [BoxGroup("战斗人物设置")] [LabelText("队友")] [SerializeReference]
-        public List<ConfigCharacter> TeamMates;
+        public AssetReferenceT<AudioClip> Music; 
         
-        [BoxGroup("战斗人物设置")] [LabelText("自动队友")] [SerializeReference]
-        public List<ConfigCharacter> AutoTeamMates;
-        
-        [BoxGroup("战斗人物设置")] [LabelText("固定的战斗敌人")] [SerializeReference]
-        public List<ConfigCharacter> Enemies;
-        
-        //传入的战斗地图id命名规则，结尾0/1/2
-        //每个地图或线路 0:随机战斗，每个地图只有一种随机战斗；1:NPC单挑，1名敌人，读传入的roleId;2:自由设计战斗，自由设置敌人，可定义多种配置；0和2都可复用后面字段
-        [BoxGroup("新增内容")] [LabelText("战斗类型")] [SerializeReference]
-        public String BattleKind;
 
-        [BoxGroup("新增内容")] [LabelText("数量等级(随机战斗专用)")] [SerializeReference]
-        public String CountLevel;
-
-        [BoxGroup("新增内容")] [LabelText("出现各敌人的概率(roleid:rate)")] [SerializeReference]
-        public List<SampleRate> RoleRate;
+        /*[BoxGroup("战斗人物设置")] [LabelText("限制队友")] [SerializeReference]
+        public List<String> LimitTeamMates;
+        
+        [BoxGroup("战斗人物设置")] [LabelText("增加队友")] [SerializeReference]
+        public List<String> AutoTeamMates;
+        
+        [BoxGroup("战斗人物设置")] [LabelText("固定敌人")] [SerializeReference]
+        public List<String> Enemies;*/
+        
         
         public override async UniTask WarmUp()
         {

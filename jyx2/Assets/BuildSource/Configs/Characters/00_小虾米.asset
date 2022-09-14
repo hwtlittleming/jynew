@@ -31,7 +31,8 @@ MonoBehaviour:
   Agile: 1234
   Luck: 12345
   Skills:
-  - rid: 2369322468789190656
+  - rid: 2369322532175872000
+  - rid: 2369322532175872001
   Equipments:
   - {fileID: 11400000, guid: f8227e32091b7384dac0886aef8a714e, type: 2}
   Items:
@@ -67,8 +68,13 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 2369322468789190656
-      type: {class: Jyx2ConfigCharacterSkill, ns: Jyx2Configs, asm: Assembly-CSharp}
+    - rid: 2369322532175872000
+      type: {class: Jyx2ConfigCharacterSkill, ns: Configs, asm: Assembly-CSharp}
       data:
-        Skill: {fileID: 11400000, guid: babd4ea6e36e95943a93c1f72b04f73b, type: 2}
+        Skill: {fileID: 11400000, guid: f043371a92550214fb4b1d96ce31d388, type: 2}
         Level: 0
+    - rid: 2369322532175872001
+      type: {class: Jyx2ConfigCharacterSkill, ns: Configs, asm: Assembly-CSharp}
+      data:
+        Skill: {fileID: 11400000, guid: ef78b96d6f8deea4e869462e829fad06, type: 2}
+        Level: 1

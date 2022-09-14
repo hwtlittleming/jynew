@@ -27,12 +27,8 @@ public static class RoleHelper
         }
         return obj.GetComponent<MapRole>();
     }
-
-    /// <summary>
+    
     /// 通过已有数据实例在地图中创建角色
-    /// TODO:这一段没改，因为不太清楚缓存这个
-    /// </summary>
-    /// <param name="role"></param>
     public static MapRole CreateRoleView(this RoleInstance role, string tag = "NPC")
     {
         var roleViewPre = Jyx2ResourceHelper.GetCachedPrefab("MapRole");
