@@ -11,7 +11,6 @@ public partial class BattleMainUIPanel
 	private Text NameText_Text;
 	private Text DetailText_Text;
 	private Image PreImage_Image;
-	private Toggle AutoBattle_Toggle;
 	private RectTransform HUDItem_RectTransform;
 
 	public void InitTrans()
@@ -21,7 +20,6 @@ public partial class BattleMainUIPanel
 		NameText_Text = transform.Find("CurrentRole/NameText").GetComponent<Text>();
 		DetailText_Text = transform.Find("CurrentRole/DetailText").GetComponent<Text>();
 		PreImage_Image = transform.Find("CurrentRole/HeadAvataPre/Mask/PreImage").GetComponent<Image>();
-		AutoBattle_Toggle = transform.Find("AutoBattle").GetComponent<Toggle>();
 		HUDItem_RectTransform = transform.Find("Prefabs/HUDItem").GetComponent<RectTransform>();
 
 	}

@@ -12,7 +12,6 @@ public class SkillUIItem : MonoBehaviour
     private bool hasInit = false;
     Image m_icon;
     Text m_skillText;
-    Transform m_select;
     void InitTrans() 
     {
         if (hasInit)
@@ -20,7 +19,6 @@ public class SkillUIItem : MonoBehaviour
         hasInit = true;
         m_icon = transform.Find("Icon").GetComponent<Image>();
         m_skillText = transform.Find("SkillText").GetComponent<Text>();
-        m_select = transform.Find("CurrentTag");
     }
 
     public void RefreshSkill(SkillInstance skill) 
@@ -31,12 +29,7 @@ public class SkillUIItem : MonoBehaviour
         string skillText = $"{skill.Name}\nLv.{skill.Level}";
         m_skillText.text = skillText;
     }
-
-    public void SetSelect(bool se) 
-    {
-        m_select.gameObject.SetActive(se);
-    }
-
+    
     public SkillInstance GetSkill() 
     {
         return m_currentSkill;

@@ -13,8 +13,6 @@ namespace Jyx2.Battle
         public bool isCd = false;
 
         public int actPoints = -300; //策略产生 1000 2000
-        
-        public Boolean isPause = false; //是否暂停 策略中会暂停
 
         public int beforeStartTime = 3000;
         //角色是否死亡
@@ -33,7 +31,7 @@ namespace Jyx2.Battle
             while (!isDead) //角色死亡行动终止
             {
                 await UniTask.Delay(1000);
-                if(!isPause) actPoints = actPoints + _role.Speed;
+                if(!_manager.isPause) actPoints = actPoints + _role.Speed;
                
                 //计算出行动力够点的按钮 亮灭
                 
@@ -45,7 +43,7 @@ namespace Jyx2.Battle
         {
             //角色死亡则移除脚本
             
-            if (_role == null || _role.Hp <= 0 || isCd || isPause) return;
+            if (_role == null || _role.Hp <= 0 || isCd || _manager.isPause) return;
             _role.Attack = 1;
             isCd = true;
             if (_manager._player.Id == _role.Id) //主角自选操作

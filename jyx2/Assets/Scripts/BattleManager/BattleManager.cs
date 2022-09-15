@@ -3,7 +3,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms;
 using Configs;
 using Cysharp.Threading.Tasks;
 using i18n.TranslatorDef;
@@ -11,7 +10,6 @@ using Jyx2;
 
 using Jyx2.Battle;
 using Jyx2.Middleware;
-using Sirenix.Utilities;
 using UnityEngine;
 
 public class BattleStartParams
@@ -38,6 +36,8 @@ public class BattleManager : MonoBehaviour
             return _instance;
         }
     }
+    
+    public Boolean isPause = false; //是否暂停 策略中会暂停
 
     public List<BattleBlockData> block_list = new List<BattleBlockData>(); //战场上的格子总列表
     

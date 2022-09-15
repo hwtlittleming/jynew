@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: b0fcacbf6faa473419224ab1674afafb
+guid: 7fcebc96ba98b634d9ec1875fcc8390f
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -24,11 +24,11 @@ TextureImporter:
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
-  grayScaleToAlpha: 0
+  grayScaleToAlpha: 1
   generateCubemap: 6
   cubemapConvolution: 0
   seamlessCubemap: 0
-  textureFormat: 4
+  textureFormat: 1
   maxTextureSize: 1024
   textureSettings:
     serializedVersion: 2
@@ -49,10 +49,10 @@ TextureImporter:
   spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
-  alphaUsage: 1
+  alphaUsage: 2
   alphaIsTransparency: 0
   spriteTessellationDetail: -1
-  textureType: 0
+  textureType: 10
   textureShape: 1
   singleChannelComponent: 0
   flipbookRows: 1

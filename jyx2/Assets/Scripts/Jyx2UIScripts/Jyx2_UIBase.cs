@@ -145,9 +145,7 @@ public abstract class Jyx2_UIBase : MonoBehaviour
 	{
 		return ColorStringDefine.system_item_normal;
 	}
-
-	//TODO: handle bottom buttons navigation with gamepad
-
+	
 	public virtual void BindListener(Button button, Action callback, bool supportGamepadButtonsNav = true)
 	{
 		_buttonList = new Dictionary<Button, Action>();

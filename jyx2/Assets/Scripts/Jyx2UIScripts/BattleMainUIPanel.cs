@@ -26,10 +26,6 @@ public partial class BattleMainUIPanel:Jyx2_UIBase
         InitTrans();
         childMgr = GameUtil.GetOrAddComponent<ChildGoComponent>(BattleHpRoot_RectTransform);
         childMgr.Init(HUDItem_RectTransform, OnHUDCreate);
-
-        AutoBattle_Toggle.isOn = false;//默认取消
-        AutoBattle_Toggle.gameObject.SetActive(false);
-        AutoBattle_Toggle.onValueChanged.AddListener(OnAutoBattleValueChange);
     }
 
     protected override void OnShowPanel(params object[] allParams)
@@ -58,10 +54,8 @@ public partial class BattleMainUIPanel:Jyx2_UIBase
         if (m_currentRole == null)
         {
             CurrentRole_RectTransform.gameObject.SetActive(false);
-            AutoBattle_Toggle.gameObject.SetActive(false);
             return;
         }
-        AutoBattle_Toggle.gameObject.SetActive(true);
         CurrentRole_RectTransform.gameObject.SetActive(true);
         NameText_Text.text = m_currentRole.Name;
         var color1 = m_currentRole.GetHPColor1();
@@ -80,29 +74,7 @@ public partial class BattleMainUIPanel:Jyx2_UIBase
 
         PreImage_Image.LoadAsyncForget(m_currentRole.configData.GetPic());
     }
-
-    void OnAutoBattleValueChange(bool active) 
-    {
-        var battleModel = BattleManager.Instance.GetModel();
-        if (battleModel == null)
-            return;
-        foreach (var role in battleModel.Teammates)
-        {
-            role.isAI = active;
-        }
-
-
-        BattleActionUIPanel panel = FindObjectOfType<BattleActionUIPanel>();
-        if (panel != null )
-        {
-            var role = panel.GetCurrentRole();
-            if (role != null && active && role.team == 0)
-            {
-                panel.OnAutoClicked();
-            }
-        }
-    }
-
+    
 	public override void Update()
 	{
         //battle action ui handles update by itself, this is calling it twice
@@ -137,8 +109,6 @@ public partial class BattleMainUIPanel:Jyx2_UIBase
     protected override void OnHidePanel()
     {
         base.OnHidePanel();
-        AutoBattle_Toggle.isOn = false;
-        AutoBattle_Toggle.gameObject.SetActive(false);
         childMgr=null;
         m_currentRole=null;
     }

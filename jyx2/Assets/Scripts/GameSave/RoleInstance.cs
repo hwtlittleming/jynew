@@ -370,10 +370,7 @@ namespace Jyx2
 
         //集气数量
         public float sp;
-
-        //AI
-        public bool isAI;
-
+        
         private BattleBlockVector _pos;
 
         //位置
@@ -440,12 +437,6 @@ namespace Jyx2
                 speed = 0;
             }
             return speed;
-        }
-
-        //是否是AI控制
-        bool IsAI()
-        {
-            return isAI;
         }
 
         public int CompareTo(RoleInstance other)

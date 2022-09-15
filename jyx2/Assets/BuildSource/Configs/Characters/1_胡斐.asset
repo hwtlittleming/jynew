@@ -44,7 +44,12 @@ MonoBehaviour:
   Miss: 0
   Attach: 
   Exp: 150
-  costArr: 320000006400000064000000
+  CostArr: 320000006400000064000000
+  StrategyList:
+  - "\u5F3A\u653B"
+  - "\u5747\u8861"
+  - "\u9632\u5B88"
+  NormalAttackSpeed: 1000
   LeaveStoryId: 950
   Model: {fileID: 11400000, guid: 7ea3de51beed66a44900fe3bfae91b71, type: 2}
   references:
@@ -53,5 +58,5 @@ MonoBehaviour:
     - rid: 2369322532175872002
       type: {class: Jyx2ConfigCharacterSkill, ns: Configs, asm: Assembly-CSharp}
       data:
-        Skill: {fileID: 11400000, guid: dc415c15fc35927439696e1bf1ccc53e, type: 2}
+        Skill: {fileID: 11400000, guid: b488e0ac9b72f0f4ebeb9fc68ba77b89, type: 2}
         Level: 1

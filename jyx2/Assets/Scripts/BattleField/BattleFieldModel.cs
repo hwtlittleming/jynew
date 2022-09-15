@@ -60,7 +60,6 @@ namespace Jyx2
             role.BattleModel = this;
             role.Pos = pos;
             role.team = team;
-            role.isAI = isAI;
             role.isActed = false;
             role.isWaiting = false;
             if (!Roles.Contains(role)) Roles.Add(role);
