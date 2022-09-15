@@ -7,8 +7,8 @@ using UnityEngine.UI;
 
 public class SkillUIItem : MonoBehaviour
 {
-    public BattleZhaoshiInstance m_currentSkill;
-
+    public SkillInstance m_currentSkill;
+    
     private bool hasInit = false;
     Image m_icon;
     Text m_skillText;
@@ -23,14 +23,12 @@ public class SkillUIItem : MonoBehaviour
         m_select = transform.Find("CurrentTag");
     }
 
-    public void RefreshSkill(BattleZhaoshiInstance skill) 
+    public void RefreshSkill(SkillInstance skill) 
     {
         InitTrans();
         m_currentSkill = skill;
-        m_currentSkill.Data = skill.Data;
-        //TODO 更新icon
 
-        string skillText = $"{skill.Data.Name}\nLv.{skill.Data.Level}";
+        string skillText = $"{skill.Name}\nLv.{skill.Level}";
         m_skillText.text = skillText;
     }
 
@@ -39,7 +37,7 @@ public class SkillUIItem : MonoBehaviour
         m_select.gameObject.SetActive(se);
     }
 
-    public BattleZhaoshiInstance GetSkill() 
+    public SkillInstance GetSkill() 
     {
         return m_currentSkill;
     }

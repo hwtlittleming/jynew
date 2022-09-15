@@ -22,8 +22,8 @@ public partial class BattleActionUIPanel : Jyx2_UIBase
 	ChildGoComponent childMgr;
 	
 	private Action<BattleManager.ManualResult> callback;
-	private BattleZhaoshiInstance currentSkill;
-	private Dictionary<Button, Action> zhaoshiList = new Dictionary<Button, Action>();
+	private SkillInstance currentSkill;
+	private Dictionary<Button, Action> skillList = new Dictionary<Button, Action>();
 	private GameObject chooseRing;
 	private GameObject chooseEnermyRing;
 	public BattleBlockData currentAttackBlock; //当前攻击的格子
@@ -43,45 +43,20 @@ public partial class BattleActionUIPanel : Jyx2_UIBase
 		chooseRing.transform.position = pos.position;
 		_buttonList = new Dictionary<Button, Action>();
 		
-		BindListener(Move_Button, OnMoveClick);
+		BindListener(Defend_Button, OnDefendClick);
+		BindListener(Auto_Button, OnAutoClick);
+		BindListener(Save_Button, OnSaveClick);
+		BindListener(Catch_Button, OnCatchClick);
+		
+		BindListener(Strategy_Button, OnStrategyClick);
 		BindListener(Item_Button, OnUseItemClick);
-		BindListener(Rest_Button, OnRestClick);
+		
 		BindListener(NormalAttack_Button, OnNormalAttackClick);
 		
 		/*ShowUIAsync(nameof(BattleMainUIPanel), BattleMainUIState.None);
 		BattleMainUIPanel.*/
 	}
-
-	protected override bool captureGamepadAxis { get { return true; } }
-
-	protected override Text getButtonText(Button button)
-	{
-		if (button.gameObject.transform.childCount == 1)
-			return base.getButtonText(button);
-
-		for (var i = 0; i < button.gameObject.transform.childCount; i++)
-		{
-			var text = button.gameObject.transform.GetChild(i).GetComponent<Text>();
-			if (text != null)
-				return text;
-		}
-
-		return null;
-	}
-
-	protected Image getZhaoshiButtonImage(Button button)
-	{
-		Transform trans = button.gameObject.transform;
-		for (var i = 0; i < trans.childCount; i++)
-		{
-			var image = trans.GetChild(i).GetComponent<Image>();
-			if (image != null && image.name == "ActionIcon")
-				return image;
-		}
-
-		return null;
-	}
-
+	
 	protected override void OnShowPanel(params object[] allParams)
 	{
 		base.OnShowPanel(allParams);
@@ -95,56 +70,7 @@ public partial class BattleActionUIPanel : Jyx2_UIBase
 	}
 
 	private int cur_zhaoshi = 0;
-
-	private void changeCurrentZhaoshiSelection(int number)
-	{
-		if (zhaoshiList.Count == 0)
-			return;
-
-		cur_zhaoshi = number;
-
-		if (number > -1)
-		{
-			changeCurrentSelection(-1);
-			BattleboxHelper.Instance.AnalogMoved = false;
-		}
-
-		var curBtnKey = number < 0 || number > zhaoshiList.Count ?
-			null :
-			zhaoshiList.ElementAt(number).Key;
-
-		foreach (var btn in zhaoshiList)
-		{
-			bool isInvokedButton = btn.Key == curBtnKey;
-			var text = getButtonText(btn.Key);
-			if (text != null)
-			{
-				text.color = isInvokedButton ?
-					base.selectedButtonColor() :
-					base.normalButtonColor();
-				text.fontStyle = isInvokedButton ?
-					FontStyle.Bold :
-					FontStyle.Normal;
-			}
-
-			var action = getZhaoshiButtonImage(btn.Key);
-			if (action != null)
-			{
-				action.gameObject.SetActive(isInvokedButton);
-			}
-		}
-	}
-
-	/*protected override void changeCurrentSelection(int num)
-	{
-		if (num > -1)
-		{
-			changeCurrentZhaoshiSelection(-1);
-			BattleboxHelper.Instance.AnalogMoved = false;
-		}
-
-		base.changeCurrentSelection(num);
-	}*/
+	
 
 	protected override bool resetCurrentSelectionOnShow => false;
 
@@ -181,54 +107,45 @@ public partial class BattleActionUIPanel : Jyx2_UIBase
 		if (!BattleboxHelper.Instance.AnalogMoved && cur_zhaoshi == -1)
 			base.buttonClickAt(position);
 	}
-
-	//点击了自动
-	public void OnAutoClicked()
-	{
-		//TryCallback(new BattleLoop.ManualResult() { isAuto = true });
-	}
-
+	
 	protected override void OnHidePanel()
 	{
 		base.OnHidePanel();
 		m_curItemList.Clear();
 		
-		zhaoshiList.Clear();
+		skillList.Clear();
 	}
 
-	void RefreshSkill()
+	void RefreshSkill() //没蓝的技能要置灰 每次刷新重新加载技能未改是防以后要改为可操作其他人物 
 	{
 		m_curItemList.Clear();
-		var zhaoshis = m_currentRole.GetZhaoshis(true).ToList();
+		var zhaoshis = m_currentRole.skills.ToList();
 		if (zhaoshis.IsNullOrEmpty()) return;
 		childMgr.RefreshChildCount(zhaoshis.Count);
 		List<Transform> childTransList = childMgr.GetUsingTransList();
-		zhaoshiList.Clear();
+		skillList.Clear();
 
 		for (int i = 0; i < zhaoshis.Count; i++)
 		{
 			int index = i;
+			//初始化所有技能 绑定事件
 			SkillUIItem item = GameUtil.GetOrAddComponent<SkillUIItem>(childTransList[i]);
-			item.RefreshSkill(zhaoshis[i]);
+			item.RefreshSkill(zhaoshis[i]); 
 			//当前选中的技能 框上 其余取消框； 第一次进时，当前技能为角色默认初始技能
-			item.SetSelect(i == (currentSkill == null ?  m_currentRole.CurrentSkill : currentSkill.Data.Key)); 
+			item.SetSelect(i == (currentSkill == null ?  m_currentRole.CurrentSkill : currentSkill.Key)); 
 
 			Button btn = item.GetComponent<Button>();
-			bindZhaoshi(btn, () => { onZhaoshiStart(item, index); });
+			BindListener(btn, () => { SkillButtonClick(item, index); }, false);
+			skillList[btn] = () => { SkillButtonClick(item, index); };
+
 			m_curItemList.Add(item);
 		}
 
-		changeCurrentZhaoshiSelection(-1);
-	}
-
-	void bindZhaoshi(Button btn, Action callback)
-	{
-		BindListener(btn, callback, false);
-		zhaoshiList[btn] = callback;
+		cur_zhaoshi = -1;
 	}
 	
-	//上面bindZhaoshi时 将每个技能按钮和该方法绑定了
-	void onZhaoshiStart(SkillUIItem item, int index)
+	//技能按钮绑定的方法
+	void SkillButtonClick(SkillUIItem item, int index)
 	{
 		//点击技能时去用技能攻击 第一次进不能直接在这里invoke 会直接setresult返回
 		if (index != -1 && currentAttackBlock != null && item.GetSkill() != null)
@@ -246,19 +163,14 @@ public partial class BattleActionUIPanel : Jyx2_UIBase
 			t.SetSelect(t == item);
 		});
 		
-		m_currentRole.SwitchAnimationToSkill(item.GetSkill().Data);
+		m_currentRole.SwitchAnimationToSkill(item.GetSkill());
 	}
 
 	void OnNormalAttackClick()
 	{
 		if(currentAttackBlock != null) callback?.Invoke(new BattleManager.ManualResult() { choose = "normalAttack",BlockData = currentAttackBlock});
 	}
-
-	async void OnMoveClick()
-	{
-		
-	}
-
+	
 	async void OnUseItemClick()
 	{
 		bool Filter(ItemInstance item) => (int)item.ItemType == 3 || (int)item.ItemType == 4;
@@ -280,8 +192,142 @@ public partial class BattleActionUIPanel : Jyx2_UIBase
 
 		}), (Func<ItemInstance, bool>)Filter);
 	}
-	void OnRestClick()
+
+	void OnDefendClick()
+	{
+		Text Text = Defend_Button.GetComponentInChildren<Text>();
+		if (IsLocked(Text)) return; //按钮已被锁定不执行操作
+		
+		if (Text.text == "防御")
+		{
+			//文字颜色置黄,内容改变，其余按钮透明度降低
+			Color color = new Color(1f,0.5f,0.05f,1f); //按钮文字橙色
+			Text.text = "解除防御";
+			Text.color = color;
+		
+			lockOtherButton(Defend_Button);
+		}
+		else
+		{
+			Color color = new Color(1f,1f,0.6f,1f); //按钮原本颜色
+			Text.text = "防御";
+			Text.color = color;
+			lockOtherButton(Defend_Button,0.5f);
+		}
+
+	}
+	
+	//使用技能后 把Mp不足用的技能置为透明
+	void refreshSkill()
+	{
+		foreach (var skill in skillList.Keys)
+		{
+			/*if (skill.)
+			{
+				btn.transform.Find("Icon").GetComponent<Image>().color =new Color(1.0f,1.0f,1f,0.3f);
+				btn.transform.Find("SkillText").GetComponent<Text>().color =new Color(1.0f,1.0f,1f,0.3f) ;
+				
+			}*/
+		}
+	}
+
+	//其余按钮 置灰和恢复方法
+	void lockOtherButton(Button b,float f = -0.5f)
+	{
+		NormalAttack_Button.gameObject.SetActive(false);
+		
+		Color c = new Color();Color c2 = new Color();
+		foreach (var btn in RightActions_RectTransform.GetComponentsInChildren<Button>() )
+		{
+			if (!btn.Equals(b))
+			{
+				c = btn.GetComponentInChildren<Text>().color;
+				c.a = c.a + f;
+				btn.GetComponentInChildren<Text>().color = c; //文字也透明
+				
+				c2 = btn.image.color;
+				c2.a = c2.a + f;
+				btn.image.color = c2;
+			}
+			
+		}
+		foreach (var btn in LeftActions_RectTransform.GetComponentsInChildren<Button>() )
+		{
+			if (!btn.Equals(b))
+			{
+				c = btn.GetComponentInChildren<Text>().color;
+				c.a = c.a + f;
+				btn.GetComponentInChildren<Text>().color = c; //文字也透明
+				
+				c2 = btn.image.color;
+				c2.a = c2.a + f;
+				btn.image.color = c2;
+			}
+		}
+		foreach (var btn in Skills_RectTransform.GetComponentsInChildren<Button>() )
+		{
+			if (!btn.Equals(b))
+			{
+				c = btn.transform.Find("Icon").GetComponent<Image>().color;
+				c.a = c.a + f;
+				btn.transform.Find("Icon").GetComponent<Image>().color = c; //文字也透明
+				
+				c2 = btn.transform.Find("SkillText").GetComponent<Text>().color;
+				c2.a = c2.a + f;
+				btn.transform.Find("SkillText").GetComponent<Text>().color= c2;
+			}
+		}
+		
+
+	}
+
+	void OnAutoClick()
+	{
+		Text Text = Auto_Button.GetComponentInChildren<Text>();
+		if (IsLocked(Text)) return; //按钮已被锁定不执行操作
+		
+		if (Text.text == "自动")
+		{
+			//文字颜色置黄,内容改变，其余按钮透明度降低
+			Color color = new Color(1f,0.5f,0.05f,1f); //按钮文字橙色
+			Text.text = "解除自动";
+			Text.color = color;
+		
+			lockOtherButton(Auto_Button);
+		}
+		else
+		{
+			Color color = new Color(1f,1f,0.6f,1f); //按钮原本颜色
+			Text.text = "自动";
+			Text.color = color;
+			lockOtherButton(Auto_Button,0.5f);
+		}
+	}
+	
+	void OnSaveClick()
 	{
 		//TryCallback(new BattleLoop.ManualResult() { aiResult = new AIResult() { IsRest = true } });
 	}
+	
+	void OnCatchClick()
+	{
+		//TryCallback(new BattleLoop.ManualResult() { aiResult = new AIResult() { IsRest = true } });
+	}
+	
+	void OnStrategyClick()
+	{
+		//TryCallback(new BattleLoop.ManualResult() { aiResult = new AIResult() { IsRest = true } });
+	}
+	public void OnAutoClicked()
+	{
+		//TryCallback(new BattleLoop.ManualResult() { isAuto = true });
+	}
+	
+	public  Boolean IsLocked(Text te)
+	{
+		return te.color.a >= 255;
+	}
+
+
+
 }

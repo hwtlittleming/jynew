@@ -60,8 +60,9 @@ namespace Jyx2
         [SerializeField] public int DefeatExp = 0; //打败后获得的经验数
         [SerializeField] public Boolean isInBattle;//参战标志
         
-        [SerializeField] public int[] costArr ; //默认的 普攻消耗 技能消耗  移动消耗 
-        
+        [SerializeField] public int[] CostArr ; //默认的 普攻消耗 技能消耗  移动消耗 
+        [SerializeField] public String[] StrategyList ; //角色可进行的策略组
+        [SerializeField] public String[] AbnormalList ; //角色异常状态组
         #endregion
 
         public ConfigCharacter configData;
@@ -167,7 +168,9 @@ namespace Jyx2
             Luck = configData.Luck;
 
             IQ = configData.IQ;
-            costArr = configData.costArr;
+            CostArr = configData.CostArr;
+            StrategyList = configData.StrategyList;
+            //AbnormalList = configData.AbnormalList;
         }
 
         //获取技能
@@ -218,41 +221,7 @@ namespace Jyx2
         public int ExpGot; //战斗中额外获得的经验
 
         #endregion
-
-        /// 战斗中使用的招式
-        public List<BattleZhaoshiInstance> Zhaoshis;
         
-        /// 用于战斗中获取该角色蓝够的招式，（如果有医疗、用毒、解毒，也封装成招式）
-        public IEnumerable<BattleZhaoshiInstance> GetZhaoshis(bool forceAttackZhaoshi)
-        {
-            foreach (var zhaoshi in Zhaoshis)
-            {
-                if (this.Mp >= zhaoshi.Data.MpCost)
-                    yield return zhaoshi;
-            }
-            
-            if (forceAttackZhaoshi)
-                yield break;
-        }
-
-        //将角色实例的技能复制到角色实例的战斗技能 
-        public void ResetBattleSkill()
-        {
-            if (Zhaoshis == null)
-            {
-                Zhaoshis = new List<BattleZhaoshiInstance>();
-            }
-            else
-            {
-                Zhaoshis.Clear();
-            }
-
-            foreach (var s in skills)
-            {
-                Zhaoshis.Add(new BattleZhaoshiInstance(s));
-            }
-        }
-
         #region 道具相关
         
         //获得随机装备,入包裹

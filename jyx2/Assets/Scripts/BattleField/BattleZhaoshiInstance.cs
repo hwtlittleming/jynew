@@ -1,3 +1,4 @@
+/*
 using Jyx2.Middleware;
 using Random = UnityEngine.Random;
 
@@ -52,3 +53,4 @@ namespace Jyx2
     }
 
 }
+*/

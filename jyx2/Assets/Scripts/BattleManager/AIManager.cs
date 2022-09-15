@@ -98,7 +98,7 @@ public class AIManager
         Random r = new Random();
         BattleBlockData toBlockData = Enermies[UnityEngine.Random.Range(0,Enermies.Count-1)].blockData;//随机获取一个存活敌人位置
         BattleBlockData weBlockData = Teammates[UnityEngine.Random.Range(0,Teammates.Count-1)].blockData;//随机获取一个存活队友位置
-        IEnumerable<BattleZhaoshiInstance> skills = role.GetZhaoshis(false);//所有技能
+        IEnumerable<SkillInstance> skills = role.skills;//所有技能
         if (skills.Count() == 0)
         {
             Debug.Log(role.Name + "没有技能！");
@@ -107,7 +107,7 @@ public class AIManager
         var skill = skills.ElementAt(0);//默认的普攻 配置时要把不耗蓝的普攻放第一个技能，否则默认拿key=0的普攻动作
         if (skill == null)
         {
-            skill = new BattleZhaoshiInstance(new SkillInstance(0));
+            skill = new SkillInstance(0);
         }
         if (iq < 30)//低智 完全随机 技能使用率 0.2
         {
@@ -132,7 +132,7 @@ public class AIManager
             if (r.Next(1, 11) > 6)
             {
                 skill = skills.ElementAt(r.Next(0, skills.Count())); //随机选择一个技能
-                if (skill.Data.ToWhichSide == 1)
+                if (skill.ToWhichSide == 1)
                 {
                     await _battleManager.AttackOnce(role, skill, toBlockData);
                 }
@@ -183,7 +183,7 @@ public class AIManager
             if ( r.Next(1, 11) > 4)
             {
                 skill = skills.ElementAt(r.Next(0, skills.Count()-1)); //随机选择一个技能
-                if (skill.Data.ToWhichSide == 1)
+                if (skill.ToWhichSide == 1)
                 {
                     await _battleManager.AttackOnce(role, skill, toBlockData);
                 }
@@ -203,14 +203,14 @@ public class AIManager
         }
     }
 
-    public SkillCastResult GetSkillResult(RoleInstance r1, RoleInstance r2, BattleZhaoshiInstance skill)
+    public SkillCastResult GetSkillResult(RoleInstance r1, RoleInstance r2, SkillInstance skill)
     {        
         SkillCastResult rst = new SkillCastResult(r1, r2, skill);
         
         //普通攻击
-        if (skill.Data.DamageType == 0)
+        if (skill.DamageType == 0)
         {
-            if (r1.Mp <= skill.Data.MpCost) //已经不够内力释放了
+            if (r1.Mp <= skill.MpCost) //已经不够内力释放了
             {
                 rst.damage = 1 + UnityEngine.Random.Range(0, 10);
                 return rst;
@@ -246,7 +246,7 @@ public class AIManager
             //点、线、十字的伤害，距离就是两人相差的格子数，最小为1。
             //面攻击时，距离是两人相差的格子数＋敌人到攻击点的距离。
             int dist = 1;
-            if (skill.Data.SkillCoverType == 1)
+            if (skill.SkillCoverType == 1)
             {
                 dist += 1; //blockVector.GetDistance(r2.Pos);
             }
@@ -288,7 +288,7 @@ public class AIManager
   
             return rst;
         }
-        else if ((int)skill.Data.DamageType == 1) //吸内
+        else if ((int)skill.DamageType == 1) //吸内
         {
             /*var levelInfo = skill.Data.GetSkillLevelInfo();
             
@@ -308,7 +308,7 @@ public class AIManager
             
             return rst;
         }
-        else if ((int)skill.Data.DamageType == 4) //治疗
+        else if ((int)skill.DamageType == 4) //治疗
         {
             var _rst = medicine(r1, r2);
             rst.heal = _rst.heal;

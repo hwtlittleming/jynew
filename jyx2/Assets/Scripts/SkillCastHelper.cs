@@ -50,12 +50,12 @@ namespace Jyx2
         public Jyx2AnimationBattleRole Source;
         public IEnumerable<Jyx2AnimationBattleRole> Targets;
         public IEnumerable<Transform> CoverBlocks;
-        public BattleZhaoshiInstance Zhaoshi;
+        public SkillInstance Zhaoshi;
 
 
         SkillDisplayAsset GetDisplay()
         {
-            return Zhaoshi.Data.Display;
+            return Zhaoshi.Display;
         }
 
 

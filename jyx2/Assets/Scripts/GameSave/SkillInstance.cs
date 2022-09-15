@@ -48,7 +48,7 @@ namespace Jyx2
             FixedDamage = configSkill.FixedDamage;
             DamageLevel = configSkill.DamageLevel;
             DisplayId = configSkill.Display.Id;
-            Display = GameConfigDatabase.Instance.Get<SkillDisplayAsset>(DisplayId);
+            Display = configSkill.Display;   // id都为0为实例化 GameConfigDatabase.Instance.Get<SkillDisplayAsset>(DisplayId);
             ToWhichSide = configSkill.ToWhichSide;
             
             //2.进行实例化替换  todo level的set方法写更换技能等级带来的属性变化

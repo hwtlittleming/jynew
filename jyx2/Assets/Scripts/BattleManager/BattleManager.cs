@@ -99,7 +99,6 @@ public class BattleManager : MonoBehaviour
         //地图上所有单位进入战斗,加入战场，待命动画，面向对面
         foreach (var role in enermyRoleList.Values)
         {
-            role.ResetBattleSkill(); //将角色实例的技能复制到角色实例的战斗技能 
             AddBattleRole(role); 
 
             role.View.LazyInitAnimator();
@@ -115,7 +114,6 @@ public class BattleManager : MonoBehaviour
         }
         foreach (var role in ourRoleList.Values)
         {
-            role.ResetBattleSkill(); //将角色实例的技能复制到角色实例的战斗技能 
             AddBattleRole(role); 
 
             role.View.LazyInitAnimator();
@@ -195,14 +193,16 @@ public class BattleManager : MonoBehaviour
             
             if (ret.choose == "normalAttack")
             {
-                await AttackOnce(_role, _role.GetZhaoshis(false).FirstOrDefault(), ret.BlockData); //todo 普攻动作的耗时要配短
-                //攻击间隔等待时间
-                await UniTask.Delay(_role.NormalAttackSpeed); 
+                //普攻间隔后改为通过配置普攻技能时长控制
+                //await UniTask.Delay(_role.NormalAttackSpeed); 
+                await AttackOnce(_role, _role.skills.FirstOrDefault(), ret.BlockData); //todo 普攻动作的耗时要配短
+                
+                
             }else if (ret.choose == "skillAttack")
             {
                 await AttackOnce(_role, ret.Skill, ret.BlockData);
-                //攻击间隔等待时间
-                await UniTask.Delay(_role.Speed);
+                //攻击间隔等待时间 
+                //await UniTask.Delay(_role.Speed);
             }
             
             b.isCd = false;
@@ -424,7 +424,7 @@ public class BattleManager : MonoBehaviour
 
 
         //做一次施展伤害技能或普攻,普攻也视为一次特殊skill；blockData:攻击选择点所在格子信息
-        public async UniTask AttackOnce(RoleInstance role, BattleZhaoshiInstance skill,BattleBlockData blockData)
+        public async UniTask AttackOnce(RoleInstance role, SkillInstance skill,BattleBlockData blockData)
         {
             //Debug.Log(role.Name + "使用" + skill.Data.Name + "攻击" + blockData.blockName);
             if (role == null || skill == null || blockData == null)
@@ -436,13 +436,13 @@ public class BattleManager : MonoBehaviour
             List<RoleInstance> beHitAnimationList = new List<RoleInstance>();
             
             role.View.LookAtBattleBlock(blockData.WorldPos); //先面向目标
-            role.SwitchAnimationToSkill(skill.Data); //切换姿势
+            role.SwitchAnimationToSkill(skill); //切换姿势
 
             //获取攻击范围
             List<BattleBlockData> blockList = new List<BattleBlockData>(); //攻击涵盖的格子
             List<Transform> blockTransList = new List<Transform>(); //攻击涵盖的格子位置集合
             List<RoleInstance> toRoleList = new List<RoleInstance>(); //攻击涵盖的角色, todo 角色属性变化 格子上的角色属性是否能跟着变化
-            if (skill.Data.Name == "普通攻击")
+            if (skill.Name == "普通攻击")
             {
                 /*String attackRange = role.Equipments[0].attackRange.ToString(); //攻击范围，默认为空:点攻击，名武器才有值
                 if (attackRange != null && attackRange != "0")
@@ -458,8 +458,8 @@ public class BattleManager : MonoBehaviour
             }
             else
             {
-                skill.CastMP(role); //技能消耗
-                var covertype = skill.Data.SkillCoverType;
+                //skill.CastMP(role); //技能消耗
+                var covertype = skill.SkillCoverType;
                 // todo 技能的攻击格子
                 blockList.Add(blockData);
                 blockTransList.Add(blockData.blockObject.transform);
@@ -560,7 +560,7 @@ public class BattleManager : MonoBehaviour
         {
             public String choose;
             public BattleBlockData BlockData = null;
-            public BattleZhaoshiInstance Skill = null;
+            public SkillInstance Skill = null;
             //public AIResult aiResult = null;
         }
         

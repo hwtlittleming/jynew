@@ -37,6 +37,11 @@ MonoBehaviour:
   - rid: 2369322532412325893
   - rid: 2369322532412325894
   - rid: 2369322532412325895
+  - rid: 2369322554238173184
+  - rid: 2369322554238173185
+  - rid: 2369322554238173186
+  - rid: 2369322554238173187
+  - rid: 2369322554238173188
   Equipments:
   - {fileID: 11400000, guid: f8227e32091b7384dac0886aef8a714e, type: 2}
   Items:
@@ -68,6 +73,7 @@ MonoBehaviour:
   Attach: 
   Exp: 0
   costArr: 320000006400000064000000
+  NormalAttackSpeed: 0
   LeaveStoryId: 
   Model: {fileID: 11400000, guid: a04197a5f95a83c4e899063c285998c3, type: 2}
   references:
@@ -102,4 +108,29 @@ MonoBehaviour:
       type: {class: Jyx2ConfigCharacterSkill, ns: Configs, asm: Assembly-CSharp}
       data:
         Skill: {fileID: 11400000, guid: ec252bc182ed92c4f9976bd805896712, type: 2}
+        Level: 1
+    - rid: 2369322554238173184
+      type: {class: Jyx2ConfigCharacterSkill, ns: Configs, asm: Assembly-CSharp}
+      data:
+        Skill: {fileID: 11400000, guid: a94a2ae9749cf1e43a0ca86c4fcdc108, type: 2}
+        Level: 1
+    - rid: 2369322554238173185
+      type: {class: Jyx2ConfigCharacterSkill, ns: Configs, asm: Assembly-CSharp}
+      data:
+        Skill: {fileID: 11400000, guid: 5cd67f17bb1de674e8cfc3fc831c1e06, type: 2}
+        Level: 1
+    - rid: 2369322554238173186
+      type: {class: Jyx2ConfigCharacterSkill, ns: Configs, asm: Assembly-CSharp}
+      data:
+        Skill: {fileID: 11400000, guid: 653b5b5a36ed19b46add91f8f65bb335, type: 2}
+        Level: 1
+    - rid: 2369322554238173187
+      type: {class: Jyx2ConfigCharacterSkill, ns: Configs, asm: Assembly-CSharp}
+      data:
+        Skill: {fileID: 11400000, guid: dcf2c2741d5b65648aec0afd1ff50a46, type: 2}
+        Level: 1
+    - rid: 2369322554238173188
+      type: {class: Jyx2ConfigCharacterSkill, ns: Configs, asm: Assembly-CSharp}
+      data:
+        Skill: {fileID: 11400000, guid: aa40349704f9b9141b4044377b8e8b56, type: 2}
         Level: 1

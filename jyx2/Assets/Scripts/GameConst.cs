@@ -42,6 +42,9 @@ public class ColorStringDefine
     public static Color save_normal = new Color(1.0f,1.0f,1.0f);
     public static Color system_item_selected = new Color(1.0f,223/255.0f,181/255.0f);
     public static Color system_item_normal = new Color(1.0f,150/255.0f,16/255.0f,1.0f);
+    
+    public static Color transparent_white = new Color(1.0f,1.0f,0.6f,0.6f); //淡黄 透明策略文字
+    public static Color transparent_white2 = new Color(1.0f,1.0f,0.6f,0.3f);//淡黄 更透明策略文字
 }
 
 public class GameConst

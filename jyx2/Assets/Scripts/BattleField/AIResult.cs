@@ -17,7 +17,7 @@ namespace Jyx2
 
         //使用的招式
         [XmlIgnore]
-        public BattleZhaoshiInstance Zhaoshi;
+        public SkillInstance Zhaoshi;
         
         [XmlAttribute("skill")]
         public string zhaoshiPK
@@ -25,7 +25,7 @@ namespace Jyx2
             get
             {
                 if (Zhaoshi == null) return string.Empty;
-                return Zhaoshi.Data.Key.ToString();
+                return Zhaoshi.Key.ToString();
             }
             set { }
         }
@@ -53,7 +53,7 @@ namespace Jyx2
     {
         public SkillCastResult() { }
 
-        public SkillCastResult(RoleInstance sprite, RoleInstance target, BattleZhaoshiInstance tzhaoshi)
+        public SkillCastResult(RoleInstance sprite, RoleInstance target, SkillInstance tzhaoshi)
         {
             //self = new SkillCastRoleEffect(sprite);
             r1 = sprite;
@@ -62,7 +62,7 @@ namespace Jyx2
         }
 
         [XmlIgnore]
-        public BattleZhaoshiInstance zhaoshi;
+        public SkillInstance zhaoshi;
 
         [XmlIgnore]
         public RoleInstance r1;

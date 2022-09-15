@@ -115,8 +115,11 @@ namespace Configs
         public int Exp;
 
         [BoxGroup(CGroup2)][LabelText("各操作行动力消耗(普攻,技能,移动)")] //默认的 普攻消耗 技能消耗  移动消耗 
-        public int[] costArr = {50,100,100}; 
- 
+        public int[] CostArr = {50,100,100};
+        
+        [BoxGroup(CGroup2)][LabelText("角色可进行的策略组")] 
+        public String[] StrategyList = {"强攻","均衡","防守"}; //人物类 默认策略
+        
         public int NormalAttackSpeed = 1000; //普攻速度 默认3000 可被缩短
         //固定配置
 

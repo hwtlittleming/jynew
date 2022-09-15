@@ -7,13 +7,16 @@ using UnityEngine.UI;
 public partial class BattleActionUIPanel
 {
 	private RectTransform LeftActions_RectTransform;
-	private Button Move_Button;
-	private Button UsePoison_Button;
-	private Button Depoison_Button;
-	private Button Heal_Button;
+	private RectTransform RightActions_RectTransform;
+	private Button Defend_Button;
+	private Button Save_Button;
+	private Button Catch_Button;
+	private Button Auto_Button;
+	
+	private Button Strategy_Button;
 	private Button Item_Button;
-	private Button Wait_Button;
-	private Button Rest_Button;
+
+
 	private RectTransform Skills_RectTransform;
 	private RectTransform SkillItem_RectTransform;
 	private Button NormalAttack_Button;
@@ -21,13 +24,16 @@ public partial class BattleActionUIPanel
 	public void InitTrans()
 	{
 		LeftActions_RectTransform = transform.Find("LeftActions").GetComponent<RectTransform>();
-		Move_Button = transform.Find("LeftActions/Move").GetComponent<Button>();
-		UsePoison_Button = transform.Find("LeftActions/UsePoison").GetComponent<Button>();
-		Depoison_Button = transform.Find("LeftActions/Depoison").GetComponent<Button>();
-		Heal_Button = transform.Find("LeftActions/Heal").GetComponent<Button>();
+		RightActions_RectTransform = transform.Find("RightActions").GetComponent<RectTransform>();
+		
+		Defend_Button = transform.Find("RightActions/Defend").GetComponent<Button>();
+		Save_Button = transform.Find("RightActions/Save").GetComponent<Button>();
+		Catch_Button = transform.Find("RightActions/Catch").GetComponent<Button>();
+		Auto_Button = transform.Find("RightActions/Auto").GetComponent<Button>();
+
+		Strategy_Button = transform.Find("LeftActions/Strategy").GetComponent<Button>();
 		Item_Button = transform.Find("LeftActions/Item").GetComponent<Button>();
-		Wait_Button = transform.Find("LeftActions/Wait").GetComponent<Button>();
-		Rest_Button = transform.Find("LeftActions/Rest").GetComponent<Button>();
+		
 		Skills_RectTransform = transform.Find("Skills").GetComponent<RectTransform>();
 		SkillItem_RectTransform = transform.Find("Prefabs/SkillItem").GetComponent<RectTransform>();
 		NormalAttack_Button = transform.Find("NormalAttack").GetComponent<Button>();
