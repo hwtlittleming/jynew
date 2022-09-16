@@ -54,7 +54,7 @@ public class InputManager
     //获取点击的格子对象信息
     public GameObject GetMouseUpBattleBlock()
     {
-        if (Input.GetMouseButtonUp(0) && !IsPointerOverUIObjectExceptTouchpad() && !EventSystem.current.IsPointerOverGameObject())
+        if (Input.GetMouseButton(0) && !IsPointerOverUIObjectExceptTouchpad() && !EventSystem.current.IsPointerOverGameObject())
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 

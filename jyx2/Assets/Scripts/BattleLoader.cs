@@ -179,7 +179,7 @@ public class BattleLoader : MonoBehaviour
         {
             //按配置生成数量
             String[] CountLevel = countRan.Split('-');
-            int count =  UnityEngine.Random.Range(int.Parse(CountLevel[0]),int.Parse(CountLevel[1]));
+            int count =  UnityEngine.Random.Range(int.Parse(CountLevel[0]),int.Parse(CountLevel[1]) + 1);
             
             //求取每个数量生成的怪物
             lr.Sort();

@@ -90,10 +90,10 @@ public partial class BattleActionUIPanel : Jyx2_UIBase
 	}
 
 	//获取玩家操作
-	public override void Update()
+	public  void FixedUpdate()
 	{
 
-		base.Update();
+		//base.Update();
 
 		//寻找玩家点击的格子
 		var block = InputManager.Instance.GetMouseUpBattleBlock();
@@ -109,7 +109,7 @@ public partial class BattleActionUIPanel : Jyx2_UIBase
 		//切换亮环位置
 		currentAttackBlock = b;
 		chooseRing.transform.position = b.WorldPos;
-		chooseRing.transform.GetComponent<MeshRenderer>().material.color = Color.red;
+		//chooseRing.transform.GetComponent<MeshRenderer>().material.color = Color.red;
 		
 		Debug.Log("选择了格子:" + b.blockName);
 		

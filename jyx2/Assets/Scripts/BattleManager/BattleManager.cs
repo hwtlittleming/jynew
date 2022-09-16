@@ -157,7 +157,7 @@ public class BattleManager : MonoBehaviour
 
     public async void planAndAttack(RoleInstance _role,BattleUnit b,int actPoints)
     {
-        
+        _role.View.ShowAttackInfo($"<color=green>中毒</color>");//飘字 改大
         //如何体现出学习带来的强度:某一招多次使用对其威力下降或闪避提升(天赋效果 魔瓶滚动天赋UI)，我们怎么决策有优势他跟着学习，我们怎么决策给我方带来额外利益 他对抗之(吸蓝，提升自己某防御，封禁某法术，降低普攻)镜像boss
         var motivation = _role.currentMotivation;
         motivation += _role.motivationPerSecond;

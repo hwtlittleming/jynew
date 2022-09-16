@@ -44,7 +44,7 @@ namespace Jyx2.Battle
             //角色死亡则移除脚本
             
             if (_role == null || _role.Hp <= 0 || isCd || _manager.isPause) return;
-            _role.Attack = 1;
+            _role.Attack = 10; //
             isCd = true;
             if (_manager._player.Id == _role.Id) //主角自选操作
             {
