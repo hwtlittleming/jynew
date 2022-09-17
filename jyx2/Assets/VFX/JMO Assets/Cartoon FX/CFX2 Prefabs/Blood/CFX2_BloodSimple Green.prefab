@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 19900000}
   - component: {fileID: 11400000}
   m_Layer: 0
-  m_Name: CFXM2_BloodSimple_Add
+  m_Name: CFX2_BloodSimple Green
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -187,8 +187,8 @@ ParticleSystem:
     startColor:
       serializedVersion: 2
       minMaxState: 2
-      minColor: {r: 1, g: 0.13333334, b: 0.13333334, a: 1}
-      maxColor: {r: 0.7764706, g: 0, b: 0, a: 1}
+      minColor: {r: 0.2784314, g: 0.4117647, b: 0, a: 1}
+      maxColor: {r: 0.6627451, g: 0.91764706, b: 0, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -4718,7 +4718,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 85c3669be00c4c74aab9ae354f194a60, type: 2}
+  - {fileID: 2100000, guid: cfeb0e44c6f4bc34086102e1a7ace033, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
