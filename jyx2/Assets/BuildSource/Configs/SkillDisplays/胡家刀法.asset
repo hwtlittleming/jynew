@@ -12,26 +12,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7198f6f3a0b460847b34dadf568f5246, type: 3}
   m_Name: "\u80E1\u5BB6\u5200\u6CD5"
   m_EditorClassIdentifier: 
+  Id: 0
+  Name: 
   weaponCode: 2
   behitClip: {fileID: 0}
   moveClip: {fileID: 7400000, guid: af23cdc0c9027044f9a953eec1c05eaf, type: 2}
   idleClip: {fileID: 7400000, guid: a7b945d88b9b9bb4e9004e713ae37ddc, type: 2}
   attackClip: {fileID: 7400000, guid: 9abe812459c7e194fbe3340f08b104bd, type: 2}
   stunClip: {fileID: 0}
-  animationDelay: 0
-  duration: 2.5
-  behitDelay: 1.04
-  partilePrefab: {fileID: 1294101409476956, guid: 231e3be01ac50c047bb16d07fd8d2ba5,
+  animationDelay: 0.279
+  duration: 0.86
+  behitDelay: 0.7
+  partilePrefab: {fileID: 1044528419629608, guid: 3be98662c9e7ef5468cb9c4e11010dc7,
     type: 3}
-  particleDelay: 1
+  particleDelay: 0.89
   partileOffset: {x: 0, y: 0, z: 0}
   particleScale: 1
-  blockPartilePrefab: {fileID: 100000, guid: be42452df4fbdcd4b90a088f8f4a9ed2, type: 3}
-  blockParticleDelay: 1.04
+  blockPartilePrefab: {fileID: 100002, guid: 7d933eecfad69b84880c76006152b46b, type: 3}
+  blockParticleDelay: 0.58
   blockPartileOffset: {x: 0, y: 1, z: 0}
-  blockParticleScale: 5
-  blockPartilePrefabAdd: {fileID: 0}
-  blockParticleDelayAdd: 0.5
+  blockParticleScale: 2
+  blockPartilePrefabAdd: {fileID: 100000, guid: d4f5579fb5da2f646a0c2bee91bdf6b5,
+    type: 3}
+  blockParticleDelayAdd: 2.24
   bloackParticleAddDuration: 0
   blockPartileOffsetAdd: {x: 0, y: 0, z: 0}
   blockParticleScaleAdd: 1
@@ -41,4 +44,4 @@ MonoBehaviour:
   audioDelay2: 0.2
   controller: {fileID: 0}
   isGhostShadowOn: 0
-  ghostShadowColor: {r: 0, g: 0, b: 1, a: 1}
+  ghostShadowColor: {r: 0.9056604, g: 0.07262372, b: 0.16109398, a: 1}

@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7198f6f3a0b460847b34dadf568f5246, type: 3}
   m_Name: "\u795E\u738B\u6BD2\u638C"
   m_EditorClassIdentifier: 
+  Id: 0
+  Name: 
   weaponCode: 0
   behitClip: {fileID: 0}
   moveClip: {fileID: 0}
@@ -21,11 +23,11 @@ MonoBehaviour:
   animationDelay: 0
   duration: 1.5
   behitDelay: 0.7
-  partilePrefab: {fileID: 0}
+  partilePrefab: {fileID: 100000, guid: 21c232b45a0251346b0dd52994ae0e97, type: 3}
   particleDelay: 0
   partileOffset: {x: 0, y: 0, z: 0}
   particleScale: 1
-  blockPartilePrefab: {fileID: 0}
+  blockPartilePrefab: {fileID: 100008, guid: 2cbb11f601125694781603dc32a896a6, type: 3}
   blockParticleDelay: 0
   blockPartileOffset: {x: 0, y: 0, z: 0}
   blockParticleScale: 1

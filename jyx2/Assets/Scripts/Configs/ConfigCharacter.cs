@@ -121,6 +121,8 @@ namespace Configs
         public String[] StrategyList = {"强攻","均衡","防守"}; //人物类 默认策略
         
         public int NormalAttackSpeed = 1000; //普攻速度 默认3000 可被缩短
+        
+        [SerializeField] public String[] BattleTalkList ; //战斗中说话内容
         //固定配置
 
         [BoxGroup("其他")][LabelText("队友离场对话")] 

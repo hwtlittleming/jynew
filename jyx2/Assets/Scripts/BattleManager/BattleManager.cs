@@ -11,6 +11,8 @@ using Jyx2;
 using Jyx2.Battle;
 using Jyx2.Middleware;
 using UnityEngine;
+using UnityEngine.UI;
+using Object = UnityEngine.Object;
 
 public class BattleStartParams
 {
@@ -151,6 +153,7 @@ public class BattleManager : MonoBehaviour
             //给格子上的战斗单元脚本初始化属性
             transform.gameObject.GetComponent<BattleUnit>()._role = roleDic.ElementAt(i).Value;
             transform.gameObject.GetComponent<BattleUnit>()._manager = this;
+            transform.gameObject.GetComponent<BattleUnit>().trans = transform;
             await UniTask.Delay(1000); //速度快的先一秒动手
         }
     }
@@ -196,19 +199,53 @@ public class BattleManager : MonoBehaviour
                 //普攻间隔后改为通过配置普攻技能时长控制
                 //await UniTask.Delay(_role.NormalAttackSpeed); 
                 await AttackOnce(_role, _role.skills.FirstOrDefault(), ret.BlockData); //todo 普攻动作的耗时要配短
-                
-                
+                BattleTalk(_role,"琪哥牛逼");
+
             }else if (ret.choose == "skillAttack")
             {
                 await AttackOnce(_role, ret.Skill, ret.BlockData);
                 //攻击间隔等待时间 
                 //await UniTask.Delay(_role.Speed);
+            }else if (ret.choose == "defend")
+            {
+                await AttackOnce(_role, ret.Skill, ret.BlockData);
+                //攻击间隔等待时间 
+                //await UniTask.Delay(_role.Speed);
+            }else if (ret.choose == "useItem")
+            {
+                //使用道具
+               // await RoleUseItem(role, aiResult.Item,role);
             }
+
+
             
             b.isCd = false;
 
     }
 
+    //角色说话
+    async void BattleTalk(RoleInstance speaker,String content = null)
+    {
+        GameObject dialog =  Jyx2ResourceHelper.CreatePrefabInstance("Dialog");//Object.Instantiate( BattleActionUIPanel.Dialog0);
+        
+        dialog.SetActive(true);
+        dialog.transform.SetParent(BattleActionUIPanel.trans);
+        dialog.transform.localScale = Vector3.one;
+
+        //适当偏移
+        Vector2 v2 = Camera.main.WorldToScreenPoint(speaker.blockData.blockObject.transform.position);
+        v2.x = v2.x + 130;v2.y = v2.y + 130;
+        dialog.transform.position =v2;
+        dialog.transform.localPosition =v2;
+        
+        if(content == null) content = speaker.BattleTalkList[UnityEngine.Random.Range(0,speaker.BattleTalkList.Length)] ; //随机说话 取配置的
+        dialog.GetComponentInChildren<Text>().text =content;
+
+        
+        await UniTask.Delay(3000);
+        Destroy(dialog);
+    }
+    
     public void OnBattleEnd(BattleResult result)
     {
         switch (result)
@@ -333,107 +370,18 @@ public class BattleManager : MonoBehaviour
 
     #endregion
     
-     //中毒受伤
-     async UniTask RunPosionHurtLogic(RoleInstance role)
-        {
-            int hurtEffect = role.Hurt / 20;
-
-            int hurtEffectRst = Tools.Limit(hurtEffect, 0, role.Hp);
-
-            if (hurtEffect == 0 ) return;
-
-            if (hurtEffectRst > 0)
-            {
-                role.View?.ShowAttackInfo($"<color=white>-{hurtEffectRst}</color>");
-                role.Hp -= hurtEffectRst;
-            }
-
-            if (role.Hp < 1)
-                role.Hp = 1;
-
-            //只有实际中毒和受伤才等待
-            role.View?.MarkHpBarIsDirty();
-            await UniTask.Delay(TimeSpan.FromSeconds(0.8));
-        }
-
-        //AI角色行动
-        async UniTask RoleAIAction(RoleInstance role)
-        {
-            //获取AI计算结果
-            await AIManager.Instance.GetAIResult(role);
-            
-            //先移动
-            //await RoleMove(role, new BattleBlockVector(aiResult.MoveX, aiResult.MoveY));
-
-            //再执行具体逻辑
-            //await ExecuteAIResult(role, aiResult);
-        }
-
-        //执行具体逻辑
-        async UniTask ExecuteAIResult(RoleInstance role, AIResult aiResult)
-        {
-            if (aiResult.Item != null)
-            {
-                //使用道具
-                await RoleUseItem(role, aiResult.Item,role);
-            }
-            else if (aiResult.Zhaoshi != null)
-            {
-                //使用技能
-                //await RoleCastSkill(role, aiResult.Zhaoshi, new BattleBlockVector(aiResult.AttackX, aiResult.AttackY));
-            }
-            else
-            {
-                //休息
-                role.OnRest();
-            }
-        }
-
-        //角色移动
-        /*async UniTask RoleMove(RoleInstance role, BattleBlockVector moveTo)
-        {
-            if (role == null || moveTo == null)
-            {
-                GameUtil.LogError("enter move state failed");
-                return;
-            }
-
-            //寻找移动路径
-            var path = FindMovePath(role, moveTo);
-            if (path == null || path.Count == 0)
-                return;
-
-            //播放奔跑动画
-            role.View.Run();
-
-            //播放移动
-            await role.View.transform.DOPath(path.ToArray(), path.Count * 0.2f).SetLookAt(0).SetEase(Ease.Linear);
-
-            //idle动画
-            role.View.Idle();
-
-            //设置逻辑位置
-            role.Pos = moveTo;
-            /*var enemy = AIManager.Instance.GetNearestEnemy(role);
-            if (enemy != null)
-            {
-                //面向最近的敌人
-                role.View.LookAtWorldPosInBattle(enemy.View.transform.position);
-            }#1#
-        }*/
-
-
+    
         //做一次施展伤害技能或普攻,普攻也视为一次特殊skill；blockData:攻击选择点所在格子信息
         public async UniTask AttackOnce(RoleInstance role, SkillInstance skill,BattleBlockData blockData)
         {
             //Debug.Log(role.Name + "使用" + skill.Data.Name + "攻击" + blockData.blockName);
             if (role == null || skill == null || blockData == null)
             {
-                GameUtil.LogError("AttaclOncel失败");
+                GameUtil.LogError("AttackOnce入参为空");
                 return;
             }
-            //todo blockData 格子上要加人物 role,实例化格子游戏对象BattleBlockData 格子的事务
-            List<RoleInstance> beHitAnimationList = new List<RoleInstance>();
+
+            List<RoleInstance> beHitRoleList = new List<RoleInstance>();
             
             role.View.LookAtBattleBlock(blockData.WorldPos); //先面向目标
             role.SwitchAnimationToSkill(skill); //切换姿势
@@ -481,7 +429,7 @@ public class BattleManager : MonoBehaviour
                 if (result.IsDamage())
                 {
                     //加入到受击动作List
-                    beHitAnimationList.Add(b.role);
+                    beHitRoleList.Add(b.role);
                 }
                 else
                 {
@@ -494,7 +442,7 @@ public class BattleManager : MonoBehaviour
                 Source = role.View,
                 CoverBlocks = blockTransList,
                 Zhaoshi = skill,
-                Targets = beHitAnimationList.ToMapRoles(),
+                Targets = beHitRoleList.ToMapRoles(),
             };
 
             //攻击和受击动画播放
@@ -566,6 +514,6 @@ public class BattleManager : MonoBehaviour
         
         public BattleBlockData GetBlockData(int x,int y,String team)
         {
-            return block_list.Find(bd => bd.x == x && bd.y == y && bd.team == team);
+            return block_list.Find(bd => bd.x == x && bd.y == y && (bd.team == team || bd.team == "public"));
         }
 }

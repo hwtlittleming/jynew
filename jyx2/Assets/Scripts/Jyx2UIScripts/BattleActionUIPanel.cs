@@ -7,6 +7,8 @@ using Configs;
 using Sirenix.Utilities;
 using UnityEngine;
 using UnityEngine.UI;
+using Object = UnityEngine.Object;
+using Random = UnityEngine.Random;
 
 public partial class BattleActionUIPanel : Jyx2_UIBase
 {
@@ -25,6 +27,8 @@ public partial class BattleActionUIPanel : Jyx2_UIBase
 	private Dictionary<SkillInstance,Button> skillList = new Dictionary<SkillInstance,Button>(); 
 	private List<Button> greyButtons;//置灰的按钮记录
 	private GameObject chooseRing;
+	public static GameObject Dialog0;
+	public static Transform trans;
 
 	public BattleBlockData currentAttackBlock; //当前攻击的格子
 
@@ -53,8 +57,6 @@ public partial class BattleActionUIPanel : Jyx2_UIBase
 		
 		BindListener(NormalAttack_Button, OnNormalAttackClick);
 		
-		/*ShowUIAsync(nameof(BattleMainUIPanel), BattleMainUIState.None);
-		BattleMainUIPanel.*/
 	}
 	
 	protected override void OnShowPanel(params object[] allParams)
@@ -87,6 +89,10 @@ public partial class BattleActionUIPanel : Jyx2_UIBase
 		}
 
 		RefreshSkill();
+
+
+		Dialog0 = transform.Find("Dialog").gameObject;
+		trans = transform;
 	}
 
 	//获取玩家操作
@@ -122,8 +128,7 @@ public partial class BattleActionUIPanel : Jyx2_UIBase
 		base.OnHidePanel();
 		skillList.Clear();
 	}
-	
-	
+
 	//技能按钮绑定的方法
 	void SkillButtonClick(SkillUIItem item, int index)
 	{

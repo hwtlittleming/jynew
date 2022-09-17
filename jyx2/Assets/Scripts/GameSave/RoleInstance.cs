@@ -63,6 +63,7 @@ namespace Jyx2
         [SerializeField] public int[] CostArr ; //默认的 普攻消耗 技能消耗  移动消耗 
         [SerializeField] public String[] StrategyList ; //角色可进行的策略组
         [SerializeField] public String[] AbnormalList ; //角色异常状态组
+        [SerializeField] public String[] BattleTalkList ; //战斗中说话内容
         #endregion
 
         public ConfigCharacter configData;
@@ -171,6 +172,7 @@ namespace Jyx2
             CostArr = configData.CostArr;
             StrategyList = configData.StrategyList;
             //AbnormalList = configData.AbnormalList;
+            BattleTalkList = configData.BattleTalkList;
         }
 
         //获取技能

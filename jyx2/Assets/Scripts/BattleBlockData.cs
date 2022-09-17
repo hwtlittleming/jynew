@@ -14,7 +14,7 @@ namespace Jyx2
         //实际对应的世界坐标系的点
         public Vector3 WorldPos; 
 
-        //格子的队伍 we they
+        //格子的队伍 we they public
         public String team;
         
         //当前所处格子编号

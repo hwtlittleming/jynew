@@ -16,7 +16,7 @@ public class BattleLoader : MonoBehaviour
     [LabelText("载入战斗ID")] public int m_BattleId = 0;
     [HideInInspector] public Action<BattleResult> Callback;
     
-    int[] defaultPosition = {1,5,3,2,4}; // 一排5格子的地图的默认战位
+    int[] defaultPosition = {2,4,3,1,5,2,4}; // 一排5格子的地图的默认战位
     // Start is called before the first frame update
     async void Start()
     {
@@ -152,7 +152,7 @@ public class BattleLoader : MonoBehaviour
             {
                 int dis = r.bestAttackDistance;
                 x = defaultPosition[i];  //UnityEngine.Random.Range(1, BattleManager.Instance.block_list.FirstOrDefault().maxX);
-                y = dis;
+                y = dis - 1;
                 bd = BattleManager.Instance.GetBlockData(x,dis,"we" );//给角色信息里 添加位置
                 position = bd.WorldPos;
                 r.blockData = bd;
@@ -203,8 +203,8 @@ public class BattleLoader : MonoBehaviour
             RoleInstance r = enermyRoleList[i];
             int dis = r.bestAttackDistance;
             x = defaultPosition[i];//UnityEngine.Random.Range(1, BattleManager.Instance.block_list.FirstOrDefault().maxX);
-            y = dis;
-            BattleBlockData bd = BattleManager.Instance.GetBlockData(x,dis,"they" );
+            y = i+1;//
+            BattleBlockData bd = BattleManager.Instance.GetBlockData(x,Math.Min(y,2),"they" );
             position = bd.WorldPos;
             r.blockData = bd;//给角色信息里 添加位置
             enermyRoleDic.Add(bd.blockName,r);

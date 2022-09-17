@@ -12,6 +12,7 @@ namespace Jyx2.Battle
         public BattleManager _manager;
         public bool isCd = false;
 
+        public Transform trans;
         public int actPoints = -300; //策略产生 1000 2000
 
         public int beforeStartTime = 3000;
@@ -28,14 +29,32 @@ namespace Jyx2.Battle
 
         async void Start()
         {
-            while (!isDead) //角色死亡行动终止
-            {
+            /*GameObject Dialog = Jyx2ResourceHelper.CreatePrefabInstance("Dialog");
+            Dialog.SetActive(true);
+            Dialog.transform.SetParent(trans);
+            //GameObject Dialo g = transform.Find("Dialog").gameObject;
+            //Dialog = Object.Instantiate(Dialog);
+            Dialog.transform.position = trans.position;*/
+            
+            /*while (!isDead) //角色死亡行动终止
+            {*/
                 await UniTask.Delay(1000);
-                if(!_manager.isPause) actPoints = actPoints + _role.Speed;
+                
+                
+                /*GameObject dialog = Object.Instantiate( BattleActionUIPanel.Dialog0);
+                dialog.SetActive(true);
+                dialog.transform.SetParent(BattleActionUIPanel.trans);
+                Vector2 v2 = Camera.main.WorldToScreenPoint(_role.blockData.blockObject.transform.position);
+                v2.x = v2.x + 130;v2.y = v2.y + 130;
+                dialog.transform.position =v2;*/
+
+
                
+                //if(!_manager.isPause) actPoints = actPoints + _role.Speed;
+                
                 //计算出行动力够点的按钮 亮灭
                 
-            }
+            //}
             
         }
 
