@@ -12,24 +12,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7198f6f3a0b460847b34dadf568f5246, type: 3}
   m_Name: "\u666E\u901A\u653B\u51FB"
   m_EditorClassIdentifier: 
+  Id: 0
+  Name: 
   weaponCode: 0
   behitClip: {fileID: 0}
   moveClip: {fileID: 0}
   idleClip: {fileID: 7400000, guid: 013955a9295d22f4f8aa23814b95f6be, type: 2}
   attackClip: {fileID: 7400000, guid: b5e41fa9ddc054c48b16ea41ac4cf263, type: 2}
+  stunClip: {fileID: 0}
   animationDelay: 0
   duration: 1.7
   behitDelay: 1.4
-  partilePrefab: {fileID: 0}
+  partilePrefab: {fileID: 100000, guid: d4f5579fb5da2f646a0c2bee91bdf6b5, type: 3}
   particleDelay: 0
   partileOffset: {x: 0, y: 0, z: 0}
   particleScale: 1
-  blockPartilePrefab: {fileID: 1058461536169382, guid: ed5cca09c94a27849a6d803f60a3e42f,
-    type: 3}
+  blockPartilePrefab: {fileID: 100000, guid: a3be0e0a9aa4cac4bb6ae6e8328e6cc2, type: 3}
   blockParticleDelay: 1.4
   blockPartileOffset: {x: 0, y: 0, z: 0}
   blockParticleScale: 1
-  blockPartilePrefabAdd: {fileID: 0}
+  blockPartilePrefabAdd: {fileID: 100000, guid: d59b655847882c949a7866306dd5f9d6,
+    type: 3}
   blockParticleDelayAdd: 0.5
   bloackParticleAddDuration: 0
   blockPartileOffsetAdd: {x: 0, y: 0, z: 0}

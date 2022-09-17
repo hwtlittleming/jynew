@@ -69,7 +69,7 @@ namespace Configs
         
         /* ------- 分割线 ------- */
         
-        [InfoBox("必须至少有一个技能", InfoMessageType.Error, "@this.Skills==null || this.Skills.Count == 0")]
+        //[InfoBox("必须至少有一个技能", InfoMessageType.Error, "@this.Skills==null || this.Skills.Count == 0")]
         [InfoBox("注：等级level 一般1-3级")]
         [BoxGroup(CGroupSkill)] [LabelText("技能")][TableList]
         public List<ConfigCharacterSkill> Skills;

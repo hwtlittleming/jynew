@@ -92,7 +92,7 @@ namespace Jyx2
 
             if (configData.Skills == null || configData.Skills.Count == 0) //没配技能 加一个普攻技能
             {
-                skills.Add(new SkillInstance(0,0));
+                skills.Add(new SkillInstance(0,1));
             }
             else
             {

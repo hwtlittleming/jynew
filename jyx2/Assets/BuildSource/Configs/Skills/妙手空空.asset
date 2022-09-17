@@ -10,16 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ae247fb701e6afc44bc17b03ae2ef40c, type: 3}
-  m_Name: "67_\u80E1\u5BB6\u5200\u6CD5"
+  m_Name: "\u5999\u624B\u7A7A\u7A7A"
   m_EditorClassIdentifier: 
-  Id: 67
-  Name: "\u80E1\u5BB6\u5200\u6CD5"
+  Id: 100
+  Name: "\u5999\u624B\u7A7A\u7A7A"
+  SkillLevel: 1
   DamageType: 0
-  SkillCoverType: 0
-  MpCost: 3
-  Poison: 0
+  SkillCoverType: 1
+  MpCost: 2
   FixedDamage: 0
   DamageLevel: 0
-  Attach: 
-  SkillLevel: 1
-  Display: {fileID: 11400000, guid: 8f81f970e13d83b46930cf73953f71a6, type: 2}
+  ToWhichSide: 1
+  Display: {fileID: 11400000, guid: 01cc0e4a9a84fba4f82fe220fdc7a4a0, type: 2}

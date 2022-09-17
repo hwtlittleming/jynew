@@ -33,17 +33,173 @@ MonoBehaviour:
   Skills:
   - Skill: {fileID: 11400000, guid: f043371a92550214fb4b1d96ce31d388, type: 2}
     Level: 1
-  - Skill: {fileID: 11400000, guid: bfa5ed1bb4eef8644a390d067487ee5d, type: 2}
-    Level: 1
-  - Skill: {fileID: 11400000, guid: 4e368447ec686e04d9cd28704bf89278, type: 2}
-    Level: 1
-  - Skill: {fileID: 11400000, guid: ef78b96d6f8deea4e869462e829fad06, type: 2}
-    Level: 1
-  - Skill: {fileID: 11400000, guid: babd4ea6e36e95943a93c1f72b04f73b, type: 2}
-    Level: 1
   - Skill: {fileID: 11400000, guid: b6aac09552b0046458f642341f8a27d5, type: 2}
     Level: 1
-  - Skill: {fileID: 11400000, guid: 02339d2bca3751a4aa0d66cfb6595565, type: 2}
+  - Skill: {fileID: 11400000, guid: a5d345ee73c284942b528f305206f0b4, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: dc2fa55424f644e4980bec398fa51db0, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: c73eda3cf61e14445a30d3165d5d3479, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: 798ccc1e51b35994bbf92a57a4d069c0, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: 5b78ad958fcf55f42b495975b90133c8, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: b488e0ac9b72f0f4ebeb9fc68ba77b89, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: e408efb8bfc584b4495eafa48faaed16, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: dc415c15fc35927439696e1bf1ccc53e, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: a94a2ae9749cf1e43a0ca86c4fcdc108, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: ff76d1c00c75c464f8ef2830ec5f0064, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: 78f5d745c66793a49ae68ecac3aa9bcb, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: d11fd00d7cd3e2c4aa7b981393a2e17c, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: 321c81536cdbfd64aaec0122b3264e0b, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: 00e180da57706be4b832b6a64ceb3bf2, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: 9ff9afa094a346d45a51f983715e3bfc, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: e274e6d85e95fba4499ef2f4e1a7102c, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: b5732ad36e73dc54280966988799fa24, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: 9c89af9444d5608468da1dfcb540174b, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: 833b00c0a32c6514ab5e36b697bdbcd7, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: f61554724f27ae642a0dfead931d3858, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: 5cd67f17bb1de674e8cfc3fc831c1e06, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: 653b5b5a36ed19b46add91f8f65bb335, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: 1bfadcaa3e61e9b498b7c4475962a64f, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: 0533e6d63da4f624992672858a0b6d09, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: 0beeb70ed1ee7e1489e2759770b83094, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: aa40349704f9b9141b4044377b8e8b56, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: dcf2c2741d5b65648aec0afd1ff50a46, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: f10cbca1ed4bc8c42b08b705f76499ba, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: 98a2a1f8ba40a5a49b53971450b74530, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: 4825ee2d70607ee4f9f624f12b9c516f, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: 9f1a4b41d8068d940aaa0dbbbd0f01bf, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: 595a0e6e062e46245a18825fcc80398f, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: 3ad7a3adf8e29004f80bdb693ad3576e, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: 32d3b0a9e1a080144a894811931de9c3, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: b93693bc1c6eb3b42ad10985e2b05ae8, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: 125d2f9c9c8edf44b9a90700da210f1c, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: e885dd02d3cc016469d61cb640bbc8e3, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: c5c87e0f7e593a64d97add8146b57869, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: 6381ef0c2ee2d1d49abebc82ca93d3a0, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: a71fd72d182f44e4d80eaa757a1cf101, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: 5b39dd1cf23cebc44bb48534bd6f2c31, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: b0cb7b8338d8fcc49866bc53e235680d, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: ce7b454e81afe04429bd71393b2c6a6a, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: 082a256218b9fbb47ae6005db9491a60, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: a31c30f13f9e6a940aa22b6e69620d0d, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: bf8a897b52c3b624cb6671a97364eb14, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: 016fbbd3675d26147a0a55c77ddf02fa, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: 58e1c610d380a02448f1dc19b2c5c015, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: 1f8805fbf3c70894da85f65bc73a0766, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: 8f5da59949da91d45830ff0c231cad80, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: c6dbba38fa63bae41af1dacd4acc548b, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: 404d90676204f6945bedc57cbd4b5510, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: 79378ae126f771d48b89abe9ba6c1dc5, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: feee103bb1942984897d84697c00652c, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: 057fc96ded3661649a52babad461f385, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: c870ef69c2a8b19429b99a89667349ff, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: ff54be53416c8054ea24e48aa7b0aaab, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: b061860986c61e64ca8f7c026ccf5adb, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: 71259eb505df23b4db0ebb8ea42349a8, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: f8f617c99baec4e43bff7fc25409b38c, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: f8151c5b9ad3d6f4494274ca4d633af1, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: 33bf0df3eaf7eaa409771ea9789242da, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: 298fc03fc8b5b56448b80c2a5d82b95f, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: be972214a14a49e4495a6a7cd12acc1d, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: 32100464e83516f409146a7f58a34bf2, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: 966f51738ca2b6943a609bb67a9a7654, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: aa64c1c6744ed4c4eaa63fc23769bb3b, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: 028da10912d63f3429b819ca4b7ce1c0, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: db949ca8a6b8c8945974fb4529c699ed, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: 31f027656f238614fba40ce1ea23aad5, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: 361116cda380d3a4ea1456c2e405c695, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: 6e866b5f2b6eb14468cbf856fbd13d49, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: ec252bc182ed92c4f9976bd805896712, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: 8fee323410a31384b823bbe5b8c2998d, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: c2114a5449c46f749b6ff3834c0516b9, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: eee3fa967b762f347a9e6507fe5447dd, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: a9cf840a35e635345b33e906d7b4fc68, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: 965bbaff0bb3a9d4a919428b45b70fb1, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: 08694e7025047dd4aae925fc2fa76b82, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: ceb8fdbce7f8f97499c001eade7c78fd, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: 42dc4ebe23bc6f1419c39a71abffa4c7, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: 28ab788b72c1a0144899c0f96b673ebd, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: 911f0e623306d474a9dd77c4e075734f, type: 2}
     Level: 1
   Equipments:
   - {fileID: 11400000, guid: f8227e32091b7384dac0886aef8a714e, type: 2}

@@ -4777,7 +4777,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4166923876577972}
   m_Layer: 0
-  m_Name: Spell-Strong-Blue
+  m_Name: "\u6CBB\u7597\u6548\u679C"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

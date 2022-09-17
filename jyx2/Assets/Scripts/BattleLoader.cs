@@ -100,7 +100,7 @@ public class BattleLoader : MonoBehaviour
            ConfigMap map = LevelMaster.GetCurrentGameMap();
            battle = ConfigBattle.Get(int.Parse(map.BattleMapKind)) ;
         }
-        AudioManager.PlayMusic(battle.Music);
+       // AudioManager.PlayMusic(battle.Music);
         
         
         //我方战斗角色 格子位置 + roleInstance
