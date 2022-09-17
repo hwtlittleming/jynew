@@ -30,7 +30,8 @@ MonoBehaviour:
   Agile: 0
   Luck: 0
   Skills:
-  - rid: 2369322554238173189
+  - Skill: {fileID: 11400000, guid: 798ccc1e51b35994bbf92a57a4d069c0, type: 2}
+    Level: 1
   Equipments: []
   Items:
   - Item: {fileID: 11400000, guid: b54b5129cbe7c1f41b33d499121adc19, type: 2}
@@ -58,13 +59,6 @@ MonoBehaviour:
   - "\u5747\u8861"
   - "\u9632\u5B88"
   NormalAttackSpeed: 1000
+  BattleTalkList: []
   LeaveStoryId: 952
   Model: {fileID: 11400000, guid: b1e59dff8236e3d4bbb116ee9e20ecaf, type: 2}
-  references:
-    version: 2
-    RefIds:
-    - rid: 2369322554238173189
-      type: {class: Jyx2ConfigCharacterSkill, ns: Configs, asm: Assembly-CSharp}
-      data:
-        Skill: {fileID: 11400000, guid: a5d345ee73c284942b528f305206f0b4, type: 2}
-        Level: 1

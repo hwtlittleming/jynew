@@ -29,8 +29,7 @@ MonoBehaviour:
   Constitution: 0
   Agile: 0
   Luck: 0
-  Skills:
-  - rid: 2369322532412325888
+  Skills: []
   Equipments: []
   Items:
   - Item: {fileID: 11400000, guid: f8227e32091b7384dac0886aef8a714e, type: 2}
@@ -50,14 +49,12 @@ MonoBehaviour:
   Miss: 0
   Attach: 
   Exp: 0
-  costArr: 320000006400000064000000
+  CostArr: 320000006400000064000000
+  StrategyList:
+  - "\u5F3A\u653B"
+  - "\u5747\u8861"
+  - "\u9632\u5B88"
+  NormalAttackSpeed: 1000
+  BattleTalkList: []
   LeaveStoryId: 
   Model: {fileID: 11400000, guid: 7605dfa551c3d4a4daea7aa10fc90952, type: 2}
-  references:
-    version: 2
-    RefIds:
-    - rid: 2369322532412325888
-      type: {class: Jyx2ConfigCharacterSkill, ns: Configs, asm: Assembly-CSharp}
-      data:
-        Skill: {fileID: 11400000, guid: f043371a92550214fb4b1d96ce31d388, type: 2}
-        Level: 0

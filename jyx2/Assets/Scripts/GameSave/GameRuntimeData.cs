@@ -167,6 +167,7 @@ namespace Jyx2
         //主角
         public RoleInstance Player
         {
+            set { }
             get { return AllRoles[0]; }
         }
         

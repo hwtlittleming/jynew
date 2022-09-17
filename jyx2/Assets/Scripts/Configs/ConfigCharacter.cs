@@ -71,15 +71,15 @@ namespace Configs
         
         [InfoBox("必须至少有一个技能", InfoMessageType.Error, "@this.Skills==null || this.Skills.Count == 0")]
         [InfoBox("注：等级level 一般1-3级")]
-        [BoxGroup(CGroupSkill)] [LabelText("技能")][SerializeReference][TableList]
-        public List<Jyx2ConfigCharacterSkill> Skills;
+        [BoxGroup(CGroupSkill)] [LabelText("技能")][TableList]
+        public List<ConfigCharacterSkill> Skills;
         
         
         [BoxGroup(CGroupItems)] [LabelText("携带装备")][TableList]
         public List<ConfigItem> Equipments;
         
         [BoxGroup(CGroupItems)] [LabelText("携带道具")][TableList]
-        public List<Jyx2ConfigCharacterItem> Items;
+        public List<ConfigCharacterItem> Items;
 
         [BoxGroup(CGroup2)][LabelText("生命上限")]
         public int MaxHp;
@@ -145,7 +145,7 @@ namespace Configs
     
     //以下类型仅为初始配置时方便展示而建,不会存储
     [Serializable]
-    public class Jyx2ConfigCharacterSkill
+    public class ConfigCharacterSkill
     {
         [LabelText("技能")][SerializeReference][InlineEditor]
         public ConfigSkill Skill;
@@ -154,7 +154,7 @@ namespace Configs
         public int Level = 1;
     }
     [Serializable]
-    public class Jyx2ConfigCharacterItem
+    public class ConfigCharacterItem
     {
         [LabelText("道具")][SerializeReference][InlineEditor]
         public ConfigItem Item;
