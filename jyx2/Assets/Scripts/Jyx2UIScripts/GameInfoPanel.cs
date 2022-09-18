@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public partial class GameInfoPanel:Jyx2_UIBase
+public partial class GameInfoPanel:UIBase
 {
 	public override UILayer Layer => UILayer.Top;
 	public override bool AlwaysDisplay => true;

@@ -15,7 +15,7 @@ public enum BattleMainUIState
     ShowHUD = 2,//显示血条
 }
 
-public partial class BattleMainUIPanel:Jyx2_UIBase
+public partial class BattleMainUIPanel:UIBase
 {
     public override UILayer Layer => UILayer.MainUI;
 
@@ -61,12 +61,7 @@ public partial class BattleMainUIPanel:Jyx2_UIBase
         var color1 = m_currentRole.GetHPColor1();
         var color2 = m_currentRole.GetHPColor2();
         var color = m_currentRole.GetMPColor();
-        //---------------------------------------------------------------------------
-        //DetailText_Text.text = ($"体力 {m_currentRole.Tili}/100\n生命 <color={color1}>{m_currentRole.Hp}</color>/<color={color2}>{m_currentRole.MaxHp}</color>\n内力 <color={color}>{m_currentRole.Mp}/{m_currentRole.MaxMp}</color>");
-        //---------------------------------------------------------------------------
-        //特定位置的翻译【MainMenu右下角当前版本的翻译】
-        //---------------------------------------------------------------------------
-        //Who change the UI to Korean, that is shitty. Changing it back
+
         DetailText_Text.text = (string.Format(
             "生命 <color={1}>{2}</color>/<color={3}>{4}</color>\n能量 <color={5}>{6 }/{7}</color>".GetContent(nameof(BattleMainUIPanel))
             , m_currentRole.Hp, color2, m_currentRole.MaxHp, color, m_currentRole.Mp,

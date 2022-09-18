@@ -12,7 +12,7 @@ using Keiwando.NFSO;
 using UnityEngine.SceneManagement;
 using System.Globalization;
 
-public partial class SavePanel : Jyx2_UIBase
+public partial class SavePanel : UIBase
 {
 
 #if UNITY_STANDALONE_WIN

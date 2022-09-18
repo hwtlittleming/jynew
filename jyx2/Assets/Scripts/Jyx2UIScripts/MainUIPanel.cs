@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using i18n.TranslatorDef;
 
-public partial class MainUIPanel : Jyx2_UIBase, IUIAnimator
+public partial class MainUIPanel : UIBase, IUIAnimator
 {
 	public override UILayer Layer => UILayer.MainUI;
 

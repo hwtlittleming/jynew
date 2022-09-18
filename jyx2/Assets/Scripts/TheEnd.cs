@@ -7,7 +7,7 @@ using UnityEngine.UI;
 using Jyx2;
 using UnityEngine.SceneManagement;
 
-public class TheEnd : Jyx2_UIBase
+public class TheEnd : UIBase
 {
     private Image image;
     private Text finalT;

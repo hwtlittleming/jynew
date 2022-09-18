@@ -36,7 +36,7 @@ public class BattleLoader : MonoBehaviour
         
         
         // 1)战斗地图id 2)战斗类型:0随机1固定2混合  3)随机时，生成概率 4)我方限制队友 5)我方额外队友 6)地方固定角色 7)回调函数
-        await LoadJyx2Battle(battleMapId,"0",ranEnermy,null,null,null,Callback);
+        await LoadBattle(battleMapId,"0",ranEnermy,null,null,null,Callback);
     }
     
     GameRuntimeData runtime
@@ -81,7 +81,7 @@ public class BattleLoader : MonoBehaviour
     }
     
     //带传参数     
-    async UniTask LoadJyx2Battle(int battleMapId,String battleKind,String ranEnermy,List<String> limitOurRole,List<String> ExtraOurRole,List<String> fixedEnermy,Action<BattleResult> callback)
+    async UniTask LoadBattle(int battleMapId,String battleKind,String ranEnermy,List<String> limitOurRole,List<String> ExtraOurRole,List<String> fixedEnermy,Action<BattleResult> callback)
     {   
         Debug.Log("-----------BattleLoading...");
         //上中下三排5*3半透明格子，普攻锁定到人，魔法可以躲 攻击距离拳头1刀剑枪2 弓杖3

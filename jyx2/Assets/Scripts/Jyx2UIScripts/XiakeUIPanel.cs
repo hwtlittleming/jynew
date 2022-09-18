@@ -13,7 +13,7 @@ using UnityEngine.UI;
 using UnityEngine.AddressableAssets;
 using Vector3 = UnityEngine.Vector3;
 
-public partial class XiakeUIPanel : Jyx2_UIBase
+public partial class XiakeUIPanel : UIBase
 {
 	public override UILayer Layer => UILayer.NormalUI;
 

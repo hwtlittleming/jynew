@@ -8,7 +8,7 @@ using Cysharp.Threading.Tasks;
 using Jyx2;
 using UnityEngine;
 
-public partial class SkillEditorUIPanel:Jyx2_UIBase
+public partial class SkillEditorUIPanel:UIBase
 {
     
     public MapRole player;

@@ -160,9 +160,9 @@ public class BattleManager : MonoBehaviour
 
     public async void planAndAttack(RoleInstance _role,BattleUnit b,int actPoints)
     {   
-        return;
+        _role.View.Say("琪哥教我写代码琪哥教我写代码琪哥教我",2000);
         _role.View.ShowAttackInfo($"<color=green>中毒</color>");//飘字 改大
-        //如何体现出学习带来的强度:某一招多次使用对其威力下降或闪避提升(天赋效果 魔瓶滚动天赋UI)，我们怎么决策有优势他跟着学习，我们怎么决策给我方带来额外利益 他对抗之(吸蓝，提升自己某防御，封禁某法术，降低普攻)镜像boss
+        //如何体现出学习带来的强度:某一招多次使用对其威力下降或闪避提升(天赋效果 ，我们怎么决策有优势他跟着学习，我们怎么决策给我方带来额外利益 他对抗之(吸蓝，提升自己某防御，封禁某法术，降低普攻)镜像boss
         var motivation = _role.currentMotivation;
         motivation += _role.motivationPerSecond;
         
@@ -218,14 +218,14 @@ public class BattleManager : MonoBehaviour
                 {
                     skill = new SkillInstance(5);//物攻-射击
                 }
-
+               
                 //普攻间隔后改为通过配置普攻技能时长控制
                 //await UniTask.Delay(_role.NormalAttackSpeed); 
                 await AttackOnce(_role, _role.skills.FirstOrDefault(), ret.BlockData); //todo 普攻动作的耗时要配短
-                BattleTalk(_role,"琪哥牛逼");
+                
 
             }else if (ret.choose == "skillAttack")
-            {
+            { _role.View.Say("琪哥教我写代码琪哥教我写代码琪哥教我",2000);
                 await AttackOnce(_role, ret.Skill, ret.BlockData);
                 //攻击间隔等待时间 
                 //await UniTask.Delay(_role.Speed);
@@ -240,35 +240,10 @@ public class BattleManager : MonoBehaviour
                // await RoleUseItem(role, aiResult.Item,role);
             }
 
-
-            
             b.isCd = false;
 
     }
 
-    //角色说话
-    async void BattleTalk(RoleInstance speaker,String content = null)
-    {
-        GameObject dialog =  Jyx2ResourceHelper.CreatePrefabInstance("Dialog");//Object.Instantiate( BattleActionUIPanel.Dialog0);
-        
-        dialog.SetActive(true);
-        dialog.transform.SetParent(BattleActionUIPanel.trans);
-        dialog.transform.localScale = Vector3.one;
-
-        //适当偏移
-        Vector2 v2 = Camera.main.WorldToScreenPoint(speaker.blockData.blockObject.transform.position);
-        v2.x = v2.x + 130;v2.y = v2.y + 130;
-        dialog.transform.position =v2;
-        dialog.transform.localPosition =v2;
-        
-        if(content == null) content = speaker.BattleTalkList[UnityEngine.Random.Range(0,speaker.BattleTalkList.Length)] ; //随机说话 取配置的
-        dialog.GetComponentInChildren<Text>().text =content;
-
-        
-        await UniTask.Delay(3000);
-        Destroy(dialog);
-    }
-    
     public void OnBattleEnd(BattleResult result)
     {
         switch (result)
@@ -396,13 +371,13 @@ public class BattleManager : MonoBehaviour
                 return;
             }
             
-            //检测攻击距离合法性
-            if (skill.ToWhichSide == 0 && blockData.blockName.Contains("they"))
+            //检测攻击距离合法性 AI不校验
+            if (role.team == 0 && skill.ToWhichSide == 0 && blockData.blockName.Contains("they"))
             {
                 GameUtil.DisplayPopinfo("释放位置错误");
                 return;
             }
-            if (skill.ToWhichSide == 1 )
+            if (role.team == 0 && skill.ToWhichSide == 1 )
             {
                 if (blockData.blockName.Contains("we"))
                 {

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameSettingsPanel : Jyx2_UIBase
+public class GameSettingsPanel : UIBase
 {
     public Transform GeneralSettingsPanel;
     public Transform GraphicPanel;

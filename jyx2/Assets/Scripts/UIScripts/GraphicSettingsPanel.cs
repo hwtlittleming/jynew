@@ -9,7 +9,7 @@ using UnityEngine.UI;
 using Object = System.Object;
 using StylizedWater;
 
-public class GraphicSettingsPanel : Jyx2_UIBase
+public class GraphicSettingsPanel : UIBase
 {
     public Toggle m_FogToggle;
     public Toggle m_PostToggle;

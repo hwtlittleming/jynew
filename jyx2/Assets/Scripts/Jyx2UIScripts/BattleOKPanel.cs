@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public partial class BattleOKPanel:Jyx2_UIBase
+public partial class BattleOKPanel:UIBase
 {
     public override UILayer Layer => UILayer.PopupUI;
 

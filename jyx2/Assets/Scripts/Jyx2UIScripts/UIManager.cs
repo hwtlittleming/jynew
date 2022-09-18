@@ -43,10 +43,10 @@ public class UIManager : MonoBehaviour
     private Transform m_popParent;
     private Transform m_topParent;
 
-    private Dictionary<string, Jyx2_UIBase> m_uiDic = new Dictionary<string, Jyx2_UIBase>();
-    private Jyx2_UIBase m_currentMainUI;
-    private Stack<Jyx2_UIBase> m_normalUIStack = new Stack<Jyx2_UIBase>();
-    private Stack<Jyx2_UIBase> m_PopUIStack = new Stack<Jyx2_UIBase>();
+    private Dictionary<string, UIBase> m_uiDic = new Dictionary<string, UIBase>();
+    private UIBase m_currentMainUI;
+    private Stack<UIBase> m_normalUIStack = new Stack<UIBase>();
+    private Stack<UIBase> m_PopUIStack = new Stack<UIBase>();
 
     void Init()
     {
@@ -56,7 +56,7 @@ public class UIManager : MonoBehaviour
         m_topParent = transform.Find("Top");
     }
 
-    public bool IsTopVisibleUI(Jyx2_UIBase ui)
+    public bool IsTopVisibleUI(UIBase ui)
 	{
         if (!ui.gameObject.activeSelf)
             return false;
@@ -69,7 +69,7 @@ public class UIManager : MonoBehaviour
 		}
 		else if (ui.Layer == UILayer.NormalUI)
 		{
-            Jyx2_UIBase currentUi = m_normalUIStack.Count > 0 ? m_normalUIStack.Peek() : null;
+            UIBase currentUi = m_normalUIStack.Count > 0 ? m_normalUIStack.Peek() : null;
             if (currentUi == null)
                 return true;
             
@@ -134,7 +134,7 @@ public class UIManager : MonoBehaviour
     Dictionary<string, object[]> _loadingUIParams = new Dictionary<string, object[]>();
     public void ShowUI(string uiName,params object[] allParams) 
     {
-        Jyx2_UIBase uibase;
+        UIBase uibase;
         if (m_uiDic.ContainsKey(uiName))
         {
             uibase = m_uiDic[uiName];
@@ -160,7 +160,7 @@ public class UIManager : MonoBehaviour
 
     public async UniTask ShowUIAsync(string uiName, params object[] allParams)
     {
-        Jyx2_UIBase uibase;
+        UIBase uibase;
         if (m_uiDic.ContainsKey(uiName))
         {
             uibase = m_uiDic[uiName];
@@ -193,7 +193,7 @@ public class UIManager : MonoBehaviour
         object[] allParams = _loadingUIParams[uiName];
         Component com = GameUtil.GetOrAddComponent(go.transform, uiName);
         
-        Jyx2_UIBase uibase = com as Jyx2_UIBase;
+        UIBase uibase = com as UIBase;
         Transform parent = GetUIParent(uibase.Layer);
         go.transform.SetParent(parent);
 
@@ -210,12 +210,12 @@ public class UIManager : MonoBehaviour
         _loadingUIParams.Remove(uiName);
     }
 
-	private void Uibase_OnVisibilityToggle(Jyx2_UIBase ui, bool obj)
+	private void Uibase_OnVisibilityToggle(UIBase ui, bool obj)
 	{
 		UIVisibilityToggled?.Invoke(ui, obj);
 	}
 
-    public event Action<Jyx2_UIBase, bool> UIVisibilityToggled;
+    public event Action<UIBase, bool> UIVisibilityToggled;
 
 	//显示主界面 LoadingPanel中加载完场景调用 移到这里来 方便修改
 	public async UniTask ShowMainUI()
@@ -230,7 +230,7 @@ public class UIManager : MonoBehaviour
             await ShowUIAsync(nameof(MainUIPanel));
     }
 
-    void PushUI(Jyx2_UIBase uibase) 
+    void PushUI(UIBase uibase) 
     {
         switch (uibase.Layer)
         {
@@ -262,11 +262,11 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    void PopUI(Jyx2_UIBase ui, Stack<Jyx2_UIBase> uiStack) 
+    void PopUI(UIBase ui, Stack<UIBase> uiStack) 
     {
         if (!uiStack.Contains(ui))
             return;
-        Jyx2_UIBase node = uiStack.Pop();
+        UIBase node = uiStack.Pop();
         while (node) 
         {
             if (node == ui) 
@@ -285,7 +285,7 @@ public class UIManager : MonoBehaviour
     {
         if (!m_uiDic.ContainsKey(uiName))
             return;
-        Jyx2_UIBase uibase = m_uiDic[uiName];
+        UIBase uibase = m_uiDic[uiName];
         if (m_normalUIStack.Contains(uibase))
         {
             PopUI(uibase, m_normalUIStack);

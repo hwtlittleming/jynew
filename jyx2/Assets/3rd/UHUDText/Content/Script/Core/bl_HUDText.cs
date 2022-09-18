@@ -1,6 +1,9 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
+using Jyx2;
 
 public class bl_HUDText : MonoBehaviour {
     /// <summary>
@@ -240,21 +243,7 @@ public class bl_HUDText : MonoBehaviour {
     {
         NewText(text, trans, bl_Guidance.Up);
     }
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="text"></param>
-    /// <param name="trans"></param>
-    public void NewText(string text, Transform trans, Color color)
-    {
-        NewText(text, trans, color, 8, 20f, 1, 2.2f, bl_Guidance.Up);
-    }
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="text"></param>
-    /// <param name="trans"></param>
-    /// <param name="place"></param>
+
     public void NewText(string text, Transform trans, bl_Guidance place)
     {
         NewText(text, trans, Color.white, 8, 20f, 0, 2.2f, place);
@@ -310,13 +299,17 @@ public class bl_HUDText : MonoBehaviour {
             return;
         }
         GameObject prefab = (info.TextPrefab == null) ? TextPrefab : info.TextPrefab;
+        
         //Create new text info to instantiate 
         GameObject go = Instantiate(prefab) as GameObject;
         bl_Text item = go.GetComponent<bl_Text>();
+        if(item == null) item = go.GetComponentInChildren<bl_Text>();
         item.m_Speed = info.Speed;
         item.FadeSpeed = (info.FadeSpeed > 0) ? info.FadeSpeed : FadeSpeed;
         item.m_Color = info.Color;
         item.m_Transform = info.CacheTransform;
+        //对话框位置偏移
+        //item.m_Transform.position = new Vector3( info.CacheTransform.position.x + 0.1f, info.CacheTransform.position.y +0.1f, info.CacheTransform.position.z);
         item.m_text = info.Text;
         item.m_Size = info.Size;
         item.movement = info.Side;

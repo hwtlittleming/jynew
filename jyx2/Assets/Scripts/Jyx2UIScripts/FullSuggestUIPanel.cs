@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public partial class FullSuggestUIPanel : Jyx2_UIBase
+public partial class FullSuggestUIPanel : UIBase
 {
 	public override UILayer Layer => UILayer.PopupUI;
 

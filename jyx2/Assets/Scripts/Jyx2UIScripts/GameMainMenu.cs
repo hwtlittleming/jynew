@@ -10,7 +10,7 @@ using UnityEngine.UI;
 using Configs;
 using Cysharp.Threading.Tasks;
 
-public partial class GameMainMenu : Jyx2_UIBase
+public partial class GameMainMenu : UIBase
 {
 
 	private enum PanelType

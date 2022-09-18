@@ -9,7 +9,7 @@ using UnityEngine.UI;
 using UnityEngine.Audio;
 using UnityEngine.Events;
 
-public class GeneralSettingsPanel : Jyx2_UIBase
+public class GeneralSettingsPanel : UIBase
 {
     public Dropdown resolutionDropdown;
     public Dropdown windowDropdown;
@@ -92,23 +92,34 @@ public class GeneralSettingsPanel : Jyx2_UIBase
 
     public void InitResolutionDropdown()
     {
-#if !UNITY_ANDROID
+        var setting = (string) gameSetting[GameSettingManager.Catalog.Resolution];
+
         resolutions = Screen.resolutions;
         resolutionDropdown.ClearOptions();
         List<string> options = new List<string>();
 
+        int currentIndex = 0;
+        
         for (int i = 0; i < resolutions.Length; i++)
         {
-            string option = resolutions[i].width + " x " + resolutions[i].height;
-            options.Add(option);
+            string option = resolutions[i].width + "x" + resolutions[i].height;
+
+            if (!options.Contains(option))
+            {
+                //如果是当前的分辨率，则记下来
+                if (option.Equals(setting))
+                {
+                    currentIndex = i;
+                }
+                
+                options.Add(option);
+            }
+                
         }
         
         resolutionDropdown.AddOptions(options);
-
-        var setting = (int) gameSetting[GameSettingManager.Catalog.Resolution];
-        resolutionDropdown.value = setting;
+        resolutionDropdown.value = currentIndex;
         resolutionDropdown.RefreshShownValue();
-#endif
     }
 
     private void InitWindowDropdown()

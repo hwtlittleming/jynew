@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public partial class BagUIPanel : Jyx2_UIBase
+public partial class BagUIPanel : UIBase
 {
 	public override UILayer Layer => UILayer.NormalUI;
 

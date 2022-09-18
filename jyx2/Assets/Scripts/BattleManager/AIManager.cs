@@ -104,7 +104,7 @@ public class AIManager
             Debug.Log(role.Name + "没有技能！");
             return;
         }
-        var skill = skills.ElementAt(0);//默认的普攻 配置时要把不耗蓝的普攻放第一个技能，否则默认拿key=0的普攻动作
+        var skill = skills.ElementAt(0);//默认的普攻 配置时要把不耗蓝的普攻放第一个技能，否则默认拿key=0的普攻动作  去普攻池拿
         if (skill == null)
         {
             skill = new SkillInstance(0);

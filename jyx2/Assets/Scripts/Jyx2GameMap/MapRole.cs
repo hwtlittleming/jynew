@@ -8,6 +8,8 @@ using UnityEngine.AI;
 using Random = UnityEngine.Random;
 using Cysharp.Threading.Tasks;
 using Jyx2.Middleware;
+using UnityEditor;
+using UnityEngine.UI;
 
 public class MapRole : AnimationBattleRole
 {
@@ -139,24 +141,33 @@ public class MapRole : AnimationBattleRole
     /// </summary>
     public string[] m_NpcWords;
     
-    /// <summary>
-    /// 角色说话
-    /// </summary>
-    /// <param name="word">角色发言内容</param>
-    /// <param name="time">显示持续时间（默认5s）</param>
-    public void Say(string word, float time = 5f)
+    /// 战斗人物说话 文字带图片背景
+    public async void Say(string content, int time = 3000)
     {
         var hudRoot = StoryEngine.Instance.HUDRoot;
-
-        HUDTextInfo info = new HUDTextInfo(transform, word)
-        {
-            Size = 12,
-            Color = Color.white,
-            VerticalPositionOffset = 0.5f,
-            ExtraDelayTime = time
-        };
-        hudRoot.NewText(info);
+        
+        GameObject dialog = Jyx2ResourceHelper.GetCachedPrefab("Dialog");
+        GameObject prefab = Instantiate(dialog);
+        prefab.SetActive(true);
+     
+        prefab.transform.SetParent(BattleMainUIPanel.DialogRoot_RectTransform, false);
+        //prefab.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+        
+        //定位
+        Vector3 v3 = UIManager.Instance.GetUICamera().WorldToScreenPoint(_dataInstance.View.transform.position);
+        
+        //适当偏移
+        v3.x = v3.x + 130;v3.y = v3.y + 130;
+        prefab.transform.position = v3;
+        
+        if(content == null) content = _dataInstance.BattleTalkList[UnityEngine.Random.Range(0,_dataInstance.BattleTalkList.Length)] ; //随机说话 取配置的
+        prefab.GetComponentInChildren<Text>().text =content;
+        
+        await UniTask.Delay(time);
+        Destroy(prefab);
     }
+
+    
 
     /// <summary>
     /// NPC闲聊
@@ -169,7 +180,7 @@ public class MapRole : AnimationBattleRole
             HUDTextInfo info4 = new HUDTextInfo(transform, randomWord)
             {
                 Color = Color.white,
-                Size = 15,
+                Size = 25,
                 VerticalPositionOffset = 1f,
                 VerticalFactorScale = UnityEngine.Random.Range(1.2f, 3),
                 Side = bl_Guidance.Right,
@@ -192,25 +203,17 @@ public class MapRole : AnimationBattleRole
     //用于显示掉血效果
     private int _showDamage;
     
-    /// <summary>
     /// 设置伤害数值大小
-    /// TODO:原本有一个Hp选项，不知道有什么用，于是给删除了，目前看来似乎没用
-    /// </summary>
     /// <param name="damage">受到的伤害</param>
     public void SetDamage(int damage)
     {
         _showDamage = damage;
     }
     
-    /// <summary>
     /// 展示掉血信息
-    /// </summary>
     public override void ShowDamage()
     {
-        //JYX2逻辑，不存在MISS
-        if (_showDamage <= 0)
-            return;
-
+        
         if (StoryEngine.Instance == null) return;
 
         var hudRoot = StoryEngine.Instance.HUDRoot;
@@ -233,7 +236,8 @@ public class MapRole : AnimationBattleRole
             ExtraDelayTime = 0.2f,
             AnimationType = bl_HUDText.TextAnimationType.HorizontalSmall,
             FadeSpeed = 200,
-            ExtraFloatSpeed = -11
+            ExtraFloatSpeed = -11,
+            Size = 25,
         };
 
         info.TextPrefab = Jyx2ResourceHelper.GetCachedPrefab("AttackInfoText");
@@ -279,7 +283,7 @@ public class MapRole : AnimationBattleRole
         if (StoryEngine.Instance == null) return;
 
         var hudRoot = StoryEngine.Instance.HUDRoot;
-        HUDTextInfo info = new HUDTextInfo(transform, $"{mainText}")
+        HUDTextInfo info = new HUDTextInfo(transform, mainText)
         {
             Color = Color.white,
             Speed = Random.Range(0.2f, 1),
@@ -290,7 +294,8 @@ public class MapRole : AnimationBattleRole
             ExtraDelayTime = 0.2f,
             AnimationType = bl_HUDText.TextAnimationType.HorizontalSmall,
             FadeSpeed = 200,
-            ExtraFloatSpeed = -11
+            ExtraFloatSpeed = -11,
+            Size = 30,
         };
         info.Color = textColor;
 
@@ -312,7 +317,7 @@ public class MapRole : AnimationBattleRole
             //Size = Random.Range(1, 12),
             Speed = Random.Range(0.2f, 1),
             VerticalAceleration = Random.Range(-2, 2f),
-            VerticalPositionOffset = Random.Range(0, 0.8f),
+            VerticalPositionOffset = Random.Range(0, 1.2f),
             VerticalFactorScale = Random.Range(1.2f, 10),
             Side = (Random.Range(0, 2) == 1) ? bl_Guidance.LeftDown : bl_Guidance.RightDown,
             ExtraDelayTime = 0.2f,
@@ -493,17 +498,11 @@ public class MapRole : AnimationBattleRole
     #endregion
 
     #region 人物模型状态及其动作
-
-    /// <summary>
+    
     /// 人物健康状态
-    /// TODO:目前未知作用，应该是某些特定药品对于某些作用吧？
-    /// </summary>
     private MapRoleHealth m_Health = MapRoleHealth.Normal;
     
-    /// <summary>
     /// 人物死亡
-    /// </summary>
-    /// <param name="deathCode">TODO:不知道什么用，应该是判断死亡形态吧？总之还没开发完。</param>
     public void ShowDeath(int deathCode = -1)
     {
         var globalConfig = GlobalAssetConfig.Instance;
@@ -511,14 +510,15 @@ public class MapRole : AnimationBattleRole
         if (this._animator == null) return;
 
         //人型骨骼，播放死亡动作
+        var clip = Jyx2.Middleware.Tools.GetRandomElement(globalConfig.defaultDieClips);
         if (this._animator.runtimeAnimatorController == globalConfig.defaultAnimatorController)
         {
-            var clip = Jyx2.Middleware.Tools.GetRandomElement(globalConfig.defaultDieClips);
             PlayAnimation(clip, () => { Destroy(gameObject); });
         }
         else
         {
-            Destroy(gameObject);  
+            //非人型等待动画完成后再隐藏，解决鳄鱼等角色死亡后血槽不消失问题 by Tomato
+            GameUtil.CallWithDelay(clip.length, () => { gameObject.SetActive(false); });
         }
         
         m_Health = MapRoleHealth.Death;

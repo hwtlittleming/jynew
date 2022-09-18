@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 
-public partial class BattleActionOrderPanel:Jyx2_UIBase
+public partial class BattleActionOrderPanel:UIBase
 {
 
     private ChildGoComponent childMgrComponent;

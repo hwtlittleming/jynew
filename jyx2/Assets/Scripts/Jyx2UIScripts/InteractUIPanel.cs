@@ -2,7 +2,7 @@
 using System;
 using UnityEngine;
 
-public partial class InteractUIPanel : Jyx2_UIBase
+public partial class InteractUIPanel : UIBase
 {
 	public override UILayer Layer => UILayer.NormalUI;
 

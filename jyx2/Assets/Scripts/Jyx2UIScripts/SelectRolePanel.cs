@@ -42,7 +42,7 @@ public class SelectRoleParams
 	}
 }
 
-public partial class SelectRolePanel : Jyx2_UIBase
+public partial class SelectRolePanel : UIBase
 {
 	public static UniTask<List<RoleInstance>> Open(SelectRoleParams paras)
 	{

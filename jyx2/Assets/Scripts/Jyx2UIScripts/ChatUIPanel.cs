@@ -18,7 +18,7 @@ public enum ChatType
 	RoleId = 1,
 	Selection = 2,
 }
-public partial class ChatUIPanel : Jyx2_UIBase, IUIAnimator
+public partial class ChatUIPanel : UIBase, IUIAnimator
 {
 	public override UILayer Layer => UILayer.NormalUI;
 	public override bool IsOnly => true;

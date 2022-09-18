@@ -27,7 +27,7 @@ public class HUDTextInfo
         this.CacheTransform = transform;
         this.Text = text;
 
-        Size = 12;
+        Size = 25;
         Color = Color.white;
         Speed = 10;
         VerticalAceleration = 1;

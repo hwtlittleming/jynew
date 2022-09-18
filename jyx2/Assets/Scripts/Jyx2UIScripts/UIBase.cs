@@ -14,7 +14,7 @@ public interface IUIAnimator
 	void DoHideAnimator();
 }
 
-public abstract class Jyx2_UIBase : MonoBehaviour
+public abstract class UIBase : MonoBehaviour
 {
 	protected volatile bool currentlyReleased = true;
 
@@ -33,7 +33,7 @@ public abstract class Jyx2_UIBase : MonoBehaviour
 	protected virtual void OnShowPanel(params object[] allParams) { }
 	protected virtual void OnHidePanel() { }
 
-	public event Action<Jyx2_UIBase, bool> VisibilityToggled;
+	public event Action<UIBase, bool> VisibilityToggled;
 
 	protected void visiblityToggle(bool show)
 	{

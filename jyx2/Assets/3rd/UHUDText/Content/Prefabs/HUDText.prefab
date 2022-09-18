@@ -48,7 +48,7 @@ MonoBehaviour:
   CanvasParent: {fileID: 22400000}
   m_Type: 0
   TextPrefab: {fileID: 100000, guid: 9da2f097e8448ec4d9ec8d75b2b20e68, type: 3}
-  FadeSpeed: 53.8
+  FadeSpeed: 30.6
   FadeCurve:
     serializedVersion: 2
     m_Curve:
@@ -74,8 +74,8 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   m_TextAnimationType: 0
-  FloatingSpeed: 12.7
-  HideDistance: 300
+  FloatingSpeed: 42.3
+  HideDistance: 138
   FactorMultiplier: 0.25
   DelayStay: 0.3
   CanReuse: 1

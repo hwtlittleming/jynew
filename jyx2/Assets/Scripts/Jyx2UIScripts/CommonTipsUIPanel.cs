@@ -17,7 +17,7 @@ public enum TipsType
     MiddleTop = 1,
 }
 
-public partial class CommonTipsUIPanel:Jyx2_UIBase
+public partial class CommonTipsUIPanel:UIBase
 {
     public override UILayer Layer => UILayer.PopupUI;
     protected override void OnCreate()

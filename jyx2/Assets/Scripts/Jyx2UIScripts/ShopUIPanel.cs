@@ -7,7 +7,7 @@ using i18n.TranslatorDef;
 using UnityEngine;
 using UnityEngine.UI;
 
-public partial class ShopUIPanel : Jyx2_UIBase
+public partial class ShopUIPanel : UIBase
 {
 	ChildGoComponent childMgr;
 	int curShopId;

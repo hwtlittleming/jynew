@@ -5,7 +5,7 @@ using Jyx2;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GameOver : Jyx2_UIBase
+public class GameOver : UIBase
 {
     public Text name_text;
     public Text date_text;

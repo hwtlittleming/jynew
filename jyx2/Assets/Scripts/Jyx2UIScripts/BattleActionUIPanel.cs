@@ -10,7 +10,7 @@ using UnityEngine.UI;
 using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
 
-public partial class BattleActionUIPanel : Jyx2_UIBase
+public partial class BattleActionUIPanel : UIBase
 {
 	public override UILayer Layer => UILayer.NormalUI;
 	public RoleInstance GetCurrentRole()
