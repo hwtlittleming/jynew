@@ -314,7 +314,7 @@ public class BattleLoader : MonoBehaviour
             RoleInstance s = runtime.AllRoles[roleId];
             r = DeepCopy(s);
             r.skills = s.skills;
-            r.configData.Model = s.configData.Model;//这些gameobject深拷贝不进去 赋值引用
+            r.configData = s.configData;//这些gameobject深拷贝不进去 赋值引用
             r.Items = s.Items; //物品引用的对象仍是相同的
             r.team = team;
             result.Add(r);

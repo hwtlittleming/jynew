@@ -151,13 +151,13 @@ public class MapRole : AnimationBattleRole
         prefab.SetActive(true);
      
         prefab.transform.SetParent(BattleMainUIPanel.DialogRoot_RectTransform, false);
-        //prefab.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+        prefab.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
         
         //定位
         Vector3 v3 = UIManager.Instance.GetUICamera().WorldToScreenPoint(_dataInstance.View.transform.position);
         
         //适当偏移
-        v3.x = v3.x + 130;v3.y = v3.y + 130;
+        v3.x = v3.x + 50f;v3.y = v3.y + 60f;
         prefab.transform.position = v3;
         
         if(content == null) content = _dataInstance.BattleTalkList[UnityEngine.Random.Range(0,_dataInstance.BattleTalkList.Length)] ; //随机说话 取配置的
@@ -295,7 +295,7 @@ public class MapRole : AnimationBattleRole
             AnimationType = bl_HUDText.TextAnimationType.HorizontalSmall,
             FadeSpeed = 200,
             ExtraFloatSpeed = -11,
-            Size = 30,
+            Size = 25,
         };
         info.Color = textColor;
 
@@ -323,7 +323,8 @@ public class MapRole : AnimationBattleRole
             ExtraDelayTime = 0.2f,
             AnimationType = bl_HUDText.TextAnimationType.HorizontalSmall,
             FadeSpeed = 200,
-            ExtraFloatSpeed = -11
+            ExtraFloatSpeed = -11,
+            Size = 26,
         };
 
         info.TextPrefab = Jyx2ResourceHelper.GetCachedPrefab("AttackInfoText");

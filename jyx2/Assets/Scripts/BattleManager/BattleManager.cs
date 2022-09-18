@@ -158,9 +158,11 @@ public class BattleManager : MonoBehaviour
         }
     }
 
+    //AI行动
     public async void planAndAttack(RoleInstance _role,BattleUnit b,int actPoints)
-    {   
-        _role.View.Say("琪哥教我写代码琪哥教我写代码琪哥教我",2000);
+    {
+        return;
+        _role.View.Say("就你叫小白？",2000);
         _role.View.ShowAttackInfo($"<color=green>中毒</color>");//飘字 改大
         //如何体现出学习带来的强度:某一招多次使用对其威力下降或闪避提升(天赋效果 ，我们怎么决策有优势他跟着学习，我们怎么决策给我方带来额外利益 他对抗之(吸蓝，提升自己某防御，封禁某法术，降低普攻)镜像boss
         var motivation = _role.currentMotivation;
@@ -225,7 +227,7 @@ public class BattleManager : MonoBehaviour
                 
 
             }else if (ret.choose == "skillAttack")
-            { _role.View.Say("琪哥教我写代码琪哥教我写代码琪哥教我",2000);
+            {
                 await AttackOnce(_role, ret.Skill, ret.BlockData);
                 //攻击间隔等待时间 
                 //await UniTask.Delay(_role.Speed);

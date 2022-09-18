@@ -27,8 +27,6 @@ public partial class BattleActionUIPanel : UIBase
 	private Dictionary<SkillInstance,Button> skillList = new Dictionary<SkillInstance,Button>(); 
 	private List<Button> greyButtons;//置灰的按钮记录
 	private GameObject chooseRing;
-	public static GameObject Dialog0;
-	public static Transform trans;
 
 	public BattleBlockData currentAttackBlock; //当前攻击的格子
 
@@ -87,12 +85,7 @@ public partial class BattleActionUIPanel : UIBase
 			skillList[skills[i]] = btn;
 			
 		}
-
 		RefreshSkill();
-
-
-		Dialog0 = transform.Find("Dialog").gameObject;
-		trans = transform;
 	}
 
 	//获取玩家操作
@@ -108,17 +101,22 @@ public partial class BattleActionUIPanel : UIBase
 		var b = BattleManager.Instance.block_list.Find(b => b.blockName == block.name);
 		if (b == null) return;
 		
-		//通过格子名称找到角色
-		/*RoleInstance rol0 = null;
-		BattleManager.Instance.Enermys.TryGetValue(b.blockName, out  rol0);
-		if(rol0 == null) BattleManager.Instance.Teammates.TryGetValue(b.blockName, out rol0);*/
 		//切换亮环位置
 		currentAttackBlock = b;
 		chooseRing.transform.position = b.WorldPos;
 		//chooseRing.transform.GetComponent<MeshRenderer>().material.color = Color.red;
-		
 		Debug.Log("选择了格子:" + b.blockName);
 		
+		//通过格子名称找到角色
+		RoleInstance role0 = null;
+		BattleManager.Instance.Enermys.TryGetValue(b.blockName, out  role0);
+		if(role0 == null) BattleManager.Instance.Teammates.TryGetValue(b.blockName, out role0);
+		if (role0 != null)
+		{
+			//展示角色信息
+			UIManager.Instance.ShowUIAsync(nameof(BattleMainUIPanel), BattleMainUIState.ShowRole,role0); 
+		}
+
 		//移动
 		//blockConfirm(block, true);
 	}

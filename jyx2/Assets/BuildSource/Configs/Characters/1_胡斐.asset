@@ -30,7 +30,11 @@ MonoBehaviour:
   Agile: 333
   Luck: 222
   Skills:
-  - Skill: {fileID: 11400000, guid: f043371a92550214fb4b1d96ce31d388, type: 2}
+  - Skill: {fileID: 11400000, guid: 98a2a1f8ba40a5a49b53971450b74530, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: b93693bc1c6eb3b42ad10985e2b05ae8, type: 2}
+    Level: 1
+  - Skill: {fileID: 11400000, guid: e408efb8bfc584b4495eafa48faaed16, type: 2}
     Level: 1
   Equipments: []
   Items: []

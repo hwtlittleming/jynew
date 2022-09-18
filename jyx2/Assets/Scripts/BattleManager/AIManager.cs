@@ -206,13 +206,15 @@ public class AIManager
     public AIResult GetSkillResult(RoleInstance r1, RoleInstance r2, SkillInstance skill)
     {
         AIResult rst = new AIResult( r1,  r2);
+        rst.damage = 1;
+        return rst;
         //普通攻击
         if (skill.DamageType == 0)
         {
-            
-            int attack = r1.Attack ;
-            
-            int defence = r2.Defense;
+
+            int attack = 10;//r1.Attack ;
+
+            int defence = 10;//r2.Defense;
 
             //伤害 ＝ （总攻击力－总防御×3）×2 / 3 + RND(20) – RND(20)                  （公式1）
             int v = (attack - defence * 3) * 2 / 3 + UnityEngine.Random.Range(0, 20) - UnityEngine.Random.Range(0, 20);

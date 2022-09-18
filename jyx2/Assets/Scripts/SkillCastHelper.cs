@@ -98,6 +98,7 @@ namespace Jyx2
             }
             
             //播放受击动画和飘字
+            await UniTask.WaitForEndOfFrame();
             GameUtil.CallWithDelay(display.behitDelay, ExecuteBeHit);
 
             //残影

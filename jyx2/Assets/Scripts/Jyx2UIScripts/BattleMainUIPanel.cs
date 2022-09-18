@@ -63,8 +63,8 @@ public partial class BattleMainUIPanel:UIBase
         var color = m_currentRole.GetMPColor();
 
         DetailText_Text.text = (string.Format(
-            "生命 <color={1}>{2}</color>/<color={3}>{4}</color>\n能量 <color={5}>{6 }/{7}</color>".GetContent(nameof(BattleMainUIPanel))
-            , m_currentRole.Hp, color2, m_currentRole.MaxHp, color, m_currentRole.Mp,
+            "生命 <color={0}>{1}</color>/<color={2}>{3}</color>\n内力 <color={4}>{5}/{6}</color>".GetContent(nameof(BattleMainUIPanel)),
+             color1, m_currentRole.Hp, color2, m_currentRole.MaxHp, color, m_currentRole.Mp,
             m_currentRole.MaxMp));
 
         PreImage_Image.LoadAsyncForget(m_currentRole.configData.GetPic());

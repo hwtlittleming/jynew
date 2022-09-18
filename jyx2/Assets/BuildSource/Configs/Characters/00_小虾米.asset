@@ -33,13 +33,7 @@ MonoBehaviour:
   Skills:
   - Skill: {fileID: 11400000, guid: f043371a92550214fb4b1d96ce31d388, type: 2}
     Level: 1
-  - Skill: {fileID: 11400000, guid: b6aac09552b0046458f642341f8a27d5, type: 2}
-    Level: 1
-  - Skill: {fileID: 11400000, guid: a5d345ee73c284942b528f305206f0b4, type: 2}
-    Level: 1
   - Skill: {fileID: 11400000, guid: dc2fa55424f644e4980bec398fa51db0, type: 2}
-    Level: 1
-  - Skill: {fileID: 11400000, guid: c73eda3cf61e14445a30d3165d5d3479, type: 2}
     Level: 1
   - Skill: {fileID: 11400000, guid: 5b78ad958fcf55f42b495975b90133c8, type: 2}
     Level: 1
@@ -50,8 +44,6 @@ MonoBehaviour:
   - Skill: {fileID: 11400000, guid: dc415c15fc35927439696e1bf1ccc53e, type: 2}
     Level: 1
   - Skill: {fileID: 11400000, guid: a94a2ae9749cf1e43a0ca86c4fcdc108, type: 2}
-    Level: 1
-  - Skill: {fileID: 11400000, guid: ff76d1c00c75c464f8ef2830ec5f0064, type: 2}
     Level: 1
   - Skill: {fileID: 11400000, guid: 78f5d745c66793a49ae68ecac3aa9bcb, type: 2}
     Level: 1
@@ -85,25 +77,9 @@ MonoBehaviour:
     Level: 1
   - Skill: {fileID: 11400000, guid: aa40349704f9b9141b4044377b8e8b56, type: 2}
     Level: 1
-  - Skill: {fileID: 11400000, guid: dcf2c2741d5b65648aec0afd1ff50a46, type: 2}
-    Level: 1
-  - Skill: {fileID: 11400000, guid: f10cbca1ed4bc8c42b08b705f76499ba, type: 2}
-    Level: 1
-  - Skill: {fileID: 11400000, guid: 98a2a1f8ba40a5a49b53971450b74530, type: 2}
-    Level: 1
   - Skill: {fileID: 11400000, guid: 4825ee2d70607ee4f9f624f12b9c516f, type: 2}
     Level: 1
-  - Skill: {fileID: 11400000, guid: 9f1a4b41d8068d940aaa0dbbbd0f01bf, type: 2}
-    Level: 1
-  - Skill: {fileID: 11400000, guid: 595a0e6e062e46245a18825fcc80398f, type: 2}
-    Level: 1
-  - Skill: {fileID: 11400000, guid: 3ad7a3adf8e29004f80bdb693ad3576e, type: 2}
-    Level: 1
-  - Skill: {fileID: 11400000, guid: 32d3b0a9e1a080144a894811931de9c3, type: 2}
-    Level: 1
   - Skill: {fileID: 11400000, guid: b93693bc1c6eb3b42ad10985e2b05ae8, type: 2}
-    Level: 1
-  - Skill: {fileID: 11400000, guid: 125d2f9c9c8edf44b9a90700da210f1c, type: 2}
     Level: 1
   - Skill: {fileID: 11400000, guid: e885dd02d3cc016469d61cb640bbc8e3, type: 2}
     Level: 1
@@ -122,8 +98,6 @@ MonoBehaviour:
   - Skill: {fileID: 11400000, guid: 082a256218b9fbb47ae6005db9491a60, type: 2}
     Level: 1
   - Skill: {fileID: 11400000, guid: a31c30f13f9e6a940aa22b6e69620d0d, type: 2}
-    Level: 1
-  - Skill: {fileID: 11400000, guid: bf8a897b52c3b624cb6671a97364eb14, type: 2}
     Level: 1
   - Skill: {fileID: 11400000, guid: 016fbbd3675d26147a0a55c77ddf02fa, type: 2}
     Level: 1
@@ -151,19 +125,11 @@ MonoBehaviour:
     Level: 1
   - Skill: {fileID: 11400000, guid: 71259eb505df23b4db0ebb8ea42349a8, type: 2}
     Level: 1
-  - Skill: {fileID: 11400000, guid: f8f617c99baec4e43bff7fc25409b38c, type: 2}
-    Level: 1
-  - Skill: {fileID: 11400000, guid: f8151c5b9ad3d6f4494274ca4d633af1, type: 2}
-    Level: 1
-  - Skill: {fileID: 11400000, guid: 33bf0df3eaf7eaa409771ea9789242da, type: 2}
-    Level: 1
   - Skill: {fileID: 11400000, guid: 298fc03fc8b5b56448b80c2a5d82b95f, type: 2}
     Level: 1
   - Skill: {fileID: 11400000, guid: be972214a14a49e4495a6a7cd12acc1d, type: 2}
     Level: 1
   - Skill: {fileID: 11400000, guid: 32100464e83516f409146a7f58a34bf2, type: 2}
-    Level: 1
-  - Skill: {fileID: 11400000, guid: 966f51738ca2b6943a609bb67a9a7654, type: 2}
     Level: 1
   - Skill: {fileID: 11400000, guid: aa64c1c6744ed4c4eaa63fc23769bb3b, type: 2}
     Level: 1
@@ -173,13 +139,9 @@ MonoBehaviour:
     Level: 1
   - Skill: {fileID: 11400000, guid: 31f027656f238614fba40ce1ea23aad5, type: 2}
     Level: 1
-  - Skill: {fileID: 11400000, guid: 361116cda380d3a4ea1456c2e405c695, type: 2}
-    Level: 1
   - Skill: {fileID: 11400000, guid: 6e866b5f2b6eb14468cbf856fbd13d49, type: 2}
     Level: 1
   - Skill: {fileID: 11400000, guid: ec252bc182ed92c4f9976bd805896712, type: 2}
-    Level: 1
-  - Skill: {fileID: 11400000, guid: 8fee323410a31384b823bbe5b8c2998d, type: 2}
     Level: 1
   - Skill: {fileID: 11400000, guid: c2114a5449c46f749b6ff3834c0516b9, type: 2}
     Level: 1
@@ -191,13 +153,9 @@ MonoBehaviour:
     Level: 1
   - Skill: {fileID: 11400000, guid: 08694e7025047dd4aae925fc2fa76b82, type: 2}
     Level: 1
-  - Skill: {fileID: 11400000, guid: ceb8fdbce7f8f97499c001eade7c78fd, type: 2}
-    Level: 1
   - Skill: {fileID: 11400000, guid: 42dc4ebe23bc6f1419c39a71abffa4c7, type: 2}
     Level: 1
   - Skill: {fileID: 11400000, guid: 28ab788b72c1a0144899c0f96b673ebd, type: 2}
-    Level: 1
-  - Skill: {fileID: 11400000, guid: 911f0e623306d474a9dd77c4e075734f, type: 2}
     Level: 1
   Equipments:
   - {fileID: 11400000, guid: f8227e32091b7384dac0886aef8a714e, type: 2}

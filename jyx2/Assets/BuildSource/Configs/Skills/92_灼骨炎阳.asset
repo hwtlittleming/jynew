@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae247fb701e6afc44bc17b03ae2ef40c, type: 3}
+  m_Name: "92_\u707C\u9AA8\u708E\u9633"
+  m_EditorClassIdentifier: 
+  Id: 92
+  Name: "\u707C\u9AA8\u708E\u9633"
+  SkillLevel: 0
+  DamageType: 0
+  SkillCoverType: 3
+  MpCost: 10
+  FixedDamage: 0
+  DamageLevel: 0
+  ToWhichSide: 1
+  Display: {fileID: 11400000, guid: 9b9e959c6ddefe14ca55787e6190b411, type: 2}

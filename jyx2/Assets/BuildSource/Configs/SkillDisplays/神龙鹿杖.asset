@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7198f6f3a0b460847b34dadf568f5246, type: 3}
   m_Name: "\u795E\u9F99\u9E7F\u6756"
   m_EditorClassIdentifier: 
+  Id: 0
+  Name: 
   weaponCode: 3
   behitClip: {fileID: 0}
   moveClip: {fileID: 0}
@@ -19,7 +21,7 @@ MonoBehaviour:
   attackClip: {fileID: 7400000, guid: a9b9fb3556b9ae04588565fc0ff442da, type: 2}
   stunClip: {fileID: 0}
   animationDelay: 0
-  duration: 2
+  duration: 3.09
   behitDelay: 0.5
   partilePrefab: {fileID: 0}
   particleDelay: 0
@@ -27,7 +29,7 @@ MonoBehaviour:
   particleScale: 1
   blockPartilePrefab: {fileID: 1687490866974584, guid: 2eeec577995fc7043a57cbe56af9a29c,
     type: 3}
-  blockParticleDelay: 0.5
+  blockParticleDelay: 1.06
   blockPartileOffset: {x: 0, y: 0, z: 0}
   blockParticleScale: 1
   blockPartilePrefabAdd: {fileID: 0}

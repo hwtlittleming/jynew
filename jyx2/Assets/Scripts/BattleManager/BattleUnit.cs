@@ -38,18 +38,8 @@ namespace Jyx2.Battle
             
             /*while (!isDead) //角色死亡行动终止
             {*/
-                await UniTask.Delay(1000);
-                
-                
-                /*GameObject dialog = Object.Instantiate( BattleActionUIPanel.Dialog0);
-                dialog.SetActive(true);
-                dialog.transform.SetParent(BattleActionUIPanel.trans);
-                Vector2 v2 = Camera.main.WorldToScreenPoint(_role.blockData.blockObject.transform.position);
-                v2.x = v2.x + 130;v2.y = v2.y + 130;
-                dialog.transform.position =v2;*/
-
-
-               
+                //await UniTask.Delay(2000);
+            
                 //if(!_manager.isPause) actPoints = actPoints + _role.Speed;
                 
                 //计算出行动力够点的按钮 亮灭
@@ -73,7 +63,7 @@ namespace Jyx2.Battle
             {
                 if (beforeStartTime > 0)
                 {
-                    await UniTask.Delay(Math.Max(3000 - _role.Speed * 10,0)); // 战斗开始 AI第一次攻击的等待时间
+                    await UniTask.Delay(Math.Max(5000 - _role.Speed * 10,0)); // 战斗开始 AI第一次攻击的等待时间
                     beforeStartTime = 0;
                 }
                 
