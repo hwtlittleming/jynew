@@ -9,7 +9,7 @@ using Random = UnityEngine.Random;
 using Cysharp.Threading.Tasks;
 using Jyx2.Middleware;
 
-public class MapRole : Jyx2AnimationBattleRole
+public class MapRole : AnimationBattleRole
 {
     //模型资源
     private ModelAsset modelAsset

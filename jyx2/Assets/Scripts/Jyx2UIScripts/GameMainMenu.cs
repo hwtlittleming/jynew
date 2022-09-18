@@ -240,7 +240,7 @@ public partial class GameMainMenu : Jyx2_UIBase
 	{
 		m_panelType = PanelType.LoadGamePage;
 
-		await Jyx2_UIManager.Instance.ShowUIAsync(nameof(SavePanel), new Action<int>((index) =>
+		await UIManager.Instance.ShowUIAsync(nameof(SavePanel), new Action<int>((index) =>
 		{
 			if (!GameRuntimeData.DoLoadGame(index) && m_panelType == PanelType.LoadGamePage)
 			{
@@ -320,7 +320,7 @@ public partial class GameMainMenu : Jyx2_UIBase
 		{
 			//首次进入游戏音乐
 			AudioManager.PlayMusic(GameConst.GAME_START_MUSIC_ID);
-			Jyx2_UIManager.Instance.HideUI(nameof(GameMainMenu));
+			UIManager.Instance.HideUI(nameof(GameMainMenu));
 
 			LevelMaster.Instance.GetPlayer().transform.rotation = Quaternion.Euler(Vector3.zero);
 		});
@@ -379,7 +379,7 @@ public partial class GameMainMenu : Jyx2_UIBase
 	/// </summary>
 	public void OpenSettingsPanel()
 	{
-		Jyx2_UIManager.Instance.ShowUIAsync(nameof(GameSettingsPanel)).Forget();
+		UIManager.Instance.ShowUIAsync(nameof(GameSettingsPanel)).Forget();
 	}
 
 	bool isXSelection = false;

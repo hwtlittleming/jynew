@@ -250,7 +250,7 @@ public partial class XiakeUIPanel : Jyx2_UIBase
 	
 	async UniTask SelectFromBag(Action<String> callback, Func<ItemInstance, bool> filter)
 	{
-		await Jyx2_UIManager.Instance.ShowUIAsync(nameof(BagUIPanel), runtime.Player.Items, new Action<String>((itemId) =>
+		await UIManager.Instance.ShowUIAsync(nameof(BagUIPanel), runtime.Player.Items, new Action<String>((itemId) =>
 		{
 			if (itemId != null && !m_currentRole.CanUseItem(itemId))
 			{
@@ -311,7 +311,7 @@ public partial class XiakeUIPanel : Jyx2_UIBase
 
 	void OnBackClick()
 	{
-		Jyx2_UIManager.Instance.HideUI(nameof(XiakeUIPanel));
+		UIManager.Instance.HideUI(nameof(XiakeUIPanel));
 	}
 
 	//人物离队

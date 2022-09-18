@@ -47,7 +47,7 @@ public class HUDItem : MonoBehaviour
     Vector3 hpPos;
     void UpdatePosition() 
     {
-        hpPos = Jyx2_UIManager.Instance.GetUICamera().WorldToScreenPoint(currentRole.View.transform.position);
+        hpPos = UIManager.Instance.GetUICamera().WorldToScreenPoint(currentRole.View.transform.position);
         rectTrans.position = hpPos;
     }
 

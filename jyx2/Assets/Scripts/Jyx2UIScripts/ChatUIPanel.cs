@@ -97,7 +97,7 @@ public partial class ChatUIPanel : Jyx2_UIBase, IUIAnimator
 	{
 		if (_currentShowIndex >= _currentText.Length - 1)
 		{
-			Jyx2_UIManager.Instance.HideUI(nameof(ChatUIPanel));
+			UIManager.Instance.HideUI(nameof(ChatUIPanel));
 			_callback?.Invoke();
 			_callback = null;
 
@@ -218,7 +218,7 @@ public partial class ChatUIPanel : Jyx2_UIBase, IUIAnimator
 			{
 				if (selectionContentCount > 1)
 				{
-					Jyx2_UIManager.Instance.HideUI(nameof(ChatUIPanel));
+					UIManager.Instance.HideUI(nameof(ChatUIPanel));
 					selectionCallback?.Invoke(0);
 				}
 				else
@@ -230,7 +230,7 @@ public partial class ChatUIPanel : Jyx2_UIBase, IUIAnimator
 			{
 				if (selectionContentCount > 1)
 				{
-					Jyx2_UIManager.Instance.HideUI(nameof(ChatUIPanel));
+					UIManager.Instance.HideUI(nameof(ChatUIPanel));
 					selectionCallback?.Invoke(1);
 				}
 			}
@@ -265,19 +265,19 @@ public partial class ChatUIPanel : Jyx2_UIBase, IUIAnimator
 			selectionItem.transform.SetParent(Container_RectTransform, false);
 			BindListener(selectionItem, delegate
 			{
-				Jyx2_UIManager.Instance.HideUI(nameof(ChatUIPanel));
+				UIManager.Instance.HideUI(nameof(ChatUIPanel));
 				callback?.Invoke(currentIndex);
 			}, false);
 		}
 
 		GlobalHotkeyManager.Instance.RegistHotkey(this, KeyCode.Y, () =>
 		{
-			Jyx2_UIManager.Instance.HideUI(nameof(ChatUIPanel));
+			UIManager.Instance.HideUI(nameof(ChatUIPanel));
 			callback?.Invoke(0);
 		});
 		GlobalHotkeyManager.Instance.RegistHotkey(this, KeyCode.N, () =>
 		{
-			Jyx2_UIManager.Instance.HideUI(nameof(ChatUIPanel));
+			UIManager.Instance.HideUI(nameof(ChatUIPanel));
 			callback?.Invoke(1);
 		});
 		SelectionPanel_RectTransform.gameObject.SetActive(true);

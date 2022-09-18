@@ -18,10 +18,10 @@ public enum UILayer
     Top = 3,//top层 高于弹出层
 }
 
-public class Jyx2_UIManager : MonoBehaviour
+public class UIManager : MonoBehaviour
 {
-    static Jyx2_UIManager _instace;
-    public static Jyx2_UIManager Instance 
+    static UIManager _instace;
+    public static UIManager Instance 
     {
         get 
         {
@@ -30,7 +30,7 @@ public class Jyx2_UIManager : MonoBehaviour
                 var prefab = Resources.Load<GameObject>("MainCanvas");
                 var obj = Instantiate(prefab);
                 obj.gameObject.name = "MainCanvas";
-                _instace = obj.GetComponent<Jyx2_UIManager>();
+                _instace = obj.GetComponent<UIManager>();
                 _instace.Init();
                 DontDestroyOnLoad(_instace);
             }
@@ -108,7 +108,7 @@ public class Jyx2_UIManager : MonoBehaviour
         //---------------------------------------------------------------------------
         //特定位置的翻译【MainMenu右下角当前版本的翻译】
         //---------------------------------------------------------------------------
-        await ShowUIAsync(nameof(GameInfoPanel), string.Format("当前版本：{0}".GetContent(nameof(Jyx2_UIManager)), Application.version));
+        await ShowUIAsync(nameof(GameInfoPanel), string.Format("当前版本：{0}".GetContent(nameof(UIManager)), Application.version));
         //---------------------------------------------------------------------------
         //---------------------------------------------------------------------------
         GraphicSetting.GlobalSetting.Execute();

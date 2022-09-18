@@ -212,7 +212,7 @@ public partial class SavePanel : Jyx2_UIBase
 	void OnSaveItemClick(int index)
 	{
 		Action<int> cb = m_selectCallback;
-		Jyx2_UIManager.Instance.HideUI(nameof(SavePanel));
+		UIManager.Instance.HideUI(nameof(SavePanel));
 		cb?.Invoke(index);
 	}
 
@@ -220,7 +220,7 @@ public partial class SavePanel : Jyx2_UIBase
 	{
 		if (!IsInGameOverPage)
 		{
-			Jyx2_UIManager.Instance.HideUI(nameof(SavePanel));
+			UIManager.Instance.HideUI(nameof(SavePanel));
 			closeCallback?.Invoke();
 		}
 	}

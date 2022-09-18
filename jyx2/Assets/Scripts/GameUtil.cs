@@ -49,7 +49,7 @@ public class GameUtil
             callback(selectRole);
         };
 
-        await Jyx2_UIManager.Instance.ShowUIAsync(nameof(SelectRolePanel), selectParams);
+        await UIManager.Instance.ShowUIAsync(nameof(SelectRolePanel), selectParams);
     }
     
     /// 显示冒泡文字
@@ -60,7 +60,7 @@ public class GameUtil
 
     public static async void ShowFullSuggest(string content, string title = "", Action cb = null) 
     {
-        await Jyx2_UIManager.Instance.ShowUIAsync(nameof(FullSuggestUIPanel), content, title, cb);
+        await UIManager.Instance.ShowUIAsync(nameof(FullSuggestUIPanel), content, title, cb);
     }
 
     public static void GamePause(bool pause) 

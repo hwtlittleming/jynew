@@ -43,7 +43,7 @@ namespace Jyx2
             async void Run()
             {
                 storyEngine.BlockPlayerControl = true;
-                await Jyx2_UIManager.Instance.ShowUIAsync(nameof(ChatUIPanel), ChatType.RoleId, roleId, content, type, new Action(() =>
+                await UIManager.Instance.ShowUIAsync(nameof(ChatUIPanel), ChatType.RoleId, roleId, content, type, new Action(() =>
                 {
                     storyEngine.BlockPlayerControl = false;
                     Next();
@@ -185,7 +185,7 @@ namespace Jyx2
                     selectionContent.Add(ops);
                 }
                 storyEngine.BlockPlayerControl = true;
-                await Jyx2_UIManager.Instance.ShowUIAsync(nameof(ChatUIPanel), ChatType.Selection, "0", selectMessage, selectionContent, new Action<int>((index) =>
+                await UIManager.Instance.ShowUIAsync(nameof(ChatUIPanel), ChatType.Selection, "0", selectMessage, selectionContent, new Action<int>((index) =>
                 {
                     _selectResult = index;
                     storyEngine.BlockPlayerControl = false;
@@ -271,7 +271,7 @@ namespace Jyx2
 
             async void Run()
             {
-                await Jyx2_UIManager.Instance.ShowUIAsync(nameof(GameOver));
+                await UIManager.Instance.ShowUIAsync(nameof(GameOver));
             }
 
             RunInMainThread(Run);
@@ -912,7 +912,7 @@ namespace Jyx2
                     return;
                 }
 
-                await Jyx2_UIManager.Instance.ShowUIAsync(nameof(ShopUIPanel), "", new Action(() => { Next(); }));
+                await UIManager.Instance.ShowUIAsync(nameof(ShopUIPanel), "", new Action(() => { Next(); }));
             }
 
             RunInMainThread(Action);
@@ -1261,7 +1261,7 @@ namespace Jyx2
 
             async void Action()
             {
-                await Jyx2_UIManager.Instance.ShowUIAsync(nameof(TheEnd));
+                await UIManager.Instance.ShowUIAsync(nameof(TheEnd));
             }
 
             RunInMainThread(Action);
@@ -1306,7 +1306,7 @@ namespace Jyx2
             {
                 List<string> selectionContent = new List<string>() {"是(Y)", "否(N)"};
                 storyEngine.BlockPlayerControl = true;
-                await Jyx2_UIManager.Instance.ShowUIAsync(nameof(ChatUIPanel), ChatType.Selection, "0", selectMessage, selectionContent, new Action<int>((index) =>
+                await UIManager.Instance.ShowUIAsync(nameof(ChatUIPanel), ChatType.Selection, "0", selectMessage, selectionContent, new Action<int>((index) =>
                 {
                     _selectResult = index;
                     storyEngine.BlockPlayerControl = false;

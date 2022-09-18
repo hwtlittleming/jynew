@@ -181,7 +181,7 @@ public partial class BagUIPanel : Jyx2_UIBase
 			m_callback(null);
 		}
 		
-		Jyx2_UIManager.Instance.HideUI(nameof(BagUIPanel));
+		UIManager.Instance.HideUI(nameof(BagUIPanel));
 		visiblityToggle(false);
 	}
 

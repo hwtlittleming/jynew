@@ -44,7 +44,7 @@ public class TheEnd : Jyx2_UIBase
             if (Input.GetButton("Fire1") || Input.GetKeyDown(KeyCode.Space) ||
                 (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began))
             {
-                Jyx2_UIManager.Instance.HideUI(nameof(TheEnd));
+                UIManager.Instance.HideUI(nameof(TheEnd));
                 SceneManager.LoadScene(GameConst.DefaultMainMenuScene);
             }
         }

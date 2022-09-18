@@ -131,9 +131,9 @@ public class BattleManager : MonoBehaviour
         }
         
         //战斗开始提示
-        await Jyx2_UIManager.Instance.ShowUIAsync(nameof(CommonTipsUIPanel), TipsType.MiddleTop, "战斗开始".GetContent(nameof(BattleManager))); //提示UI
+        await UIManager.Instance.ShowUIAsync(nameof(CommonTipsUIPanel), TipsType.MiddleTop, "战斗开始".GetContent(nameof(BattleManager))); //提示UI
         //展示角色血条
-        await Jyx2_UIManager.Instance.ShowUIAsync(nameof(BattleMainUIPanel), BattleMainUIState.ShowHUD); 
+        await UIManager.Instance.ShowUIAsync(nameof(BattleMainUIPanel), BattleMainUIState.ShowHUD); 
         
         //battleloop
         var model = GetModel();
@@ -184,13 +184,13 @@ public class BattleManager : MonoBehaviour
             Action<ManualResult> callback = delegate(ManualResult result) { t.TrySetResult(result); };
             
             //显示战斗选项面板，等待返回选择的策略; 因异步加载战斗选项UI后 要等点击了某个技能再继续执行所以用到了UniTaskCompletionSource
-            await Jyx2_UIManager.Instance.ShowUIAsync(nameof(BattleActionUIPanel),_role, callback);
+            await UIManager.Instance.ShowUIAsync(nameof(BattleActionUIPanel),_role, callback);
             
             //等待完成
             await t.Task;
             
             //关闭面板
-            Jyx2_UIManager.Instance.HideUI(nameof(BattleActionUIPanel));
+            UIManager.Instance.HideUI(nameof(BattleActionUIPanel));
             
             //返回
             ManualResult ret = t.GetResult(0);
@@ -311,7 +311,7 @@ public class BattleManager : MonoBehaviour
     public void EndBattle()
     {
         IsInBattle = false;
-        Jyx2_UIManager.Instance.HideUI(nameof(BattleMainUIPanel));
+        UIManager.Instance.HideUI(nameof(BattleMainUIPanel));
 
         //临时，需要调整
         foreach (var role in m_BattleModel.Roles)
@@ -365,16 +365,8 @@ public class BattleManager : MonoBehaviour
         foreach (var role in teammates)
         {
             if (role.ExpGot > 0)
-                //---------------------------------------------------------------------------
-                //rst += string.Format("{0}获得经验{1}\n", role.Name, role.ExpGot);
-                //---------------------------------------------------------------------------
-                //特定位置的翻译【战斗胜利角色获得经验的提示】
-                //---------------------------------------------------------------------------
-                rst += string.Format("{0}获得经验{1}\n".GetContent(nameof(BattleManager)), role.Name, role.ExpGot);
-                //---------------------------------------------------------------------------
-                //---------------------------------------------------------------------------
-
-                role.Exp += role.ExpGot;
+                rst += string.Format("{0}获得战斗经验{1}\n".GetContent(nameof(BattleManager)), role.Name, role.ExpGot);
+            role.Exp += role.ExpGot;
 
             //避免越界
             role.Exp = Tools.Limit(role.Exp, 0, GameConst.MAX_EXP);
@@ -394,7 +386,7 @@ public class BattleManager : MonoBehaviour
     #endregion
     
     
-        //做一次施展伤害技能或普攻,普攻也视为一次特殊skill；blockData:攻击选择点所在格子信息
+        //普攻，伤害技能，治疗技能
         public async UniTask AttackOnce(RoleInstance role, SkillInstance skill,BattleBlockData blockData)
         {
             //Debug.Log(role.Name + "使用" + skill.Data.Name + "攻击" + blockData.blockName);
@@ -403,6 +395,26 @@ public class BattleManager : MonoBehaviour
                 GameUtil.LogError("AttackOnce入参为空");
                 return;
             }
+            
+            //检测攻击距离合法性
+            if (skill.ToWhichSide == 0 && blockData.blockName.Contains("they"))
+            {
+                GameUtil.DisplayPopinfo("释放位置错误");
+                return;
+            }
+            if (skill.ToWhichSide == 1 )
+            {
+                if (blockData.blockName.Contains("we"))
+                {
+                    GameUtil.DisplayPopinfo("释放位置错误");return;
+                }
+                if (blockData.y > role.bestAttackDistance)
+                {
+                    GameUtil.DisplayPopinfo("攻击距离不够");return;
+                }
+            }
+
+            
             
             //测试技能编辑器添加
            GameRuntimeData.Instance.Player = new RoleInstance(0);
@@ -417,13 +429,13 @@ public class BattleManager : MonoBehaviour
             //获取攻击范围
             List<BattleBlockData> blockList = new List<BattleBlockData>(); //攻击涵盖的格子
             List<Transform> blockTransList = new List<Transform>(); //攻击涵盖的格子位置集合
-            List<RoleInstance> toRoleList = new List<RoleInstance>(); //攻击涵盖的角色, todo 角色属性变化 格子上的角色属性是否能跟着变化
+            List<RoleInstance> toRoleList = new List<RoleInstance>(); //攻击涵盖的角色
             if (skill.Name == "普通攻击")
             {
                 /*String attackRange = role.Equipments[0].attackRange.ToString(); //攻击范围，默认为空:点攻击，名武器才有值
                 if (attackRange != null && attackRange != "0")
                 {
-                    // todo 名武器攻击格子 横1 竖2 
+                    // todo 名武器攻击格子    剑1 竖排 剑2横排；刀1 撇捺 杖1:上下左右 
                 }*/
                 
                 /*ItemInstance weapon = role.Equipments[0];
@@ -434,34 +446,35 @@ public class BattleManager : MonoBehaviour
             }
             else
             {
-                //skill.CastMP(role); //技能消耗
                 var covertype = skill.SkillCoverType;
-                // todo 技能的攻击格子
+                
                 blockList.Add(blockData);
                 blockTransList.Add(blockData.blockObject.transform);
             }
 
+            //获取覆盖格子上的人
             foreach (var b in blockList)
             {
-                //还活着
-                if (b.role == null || b.role.IsDead()) continue;
-                toRoleList.Add(b.role);
+                Enermys.TryGetValue(b.blockName, out RoleInstance toRole);
+                if (role.team == 1)
+                {
+                    Teammates.TryGetValue(b.blockName, out  toRole);
+                }
+                toRoleList.Add(toRole);
                 
-                // todo 伤害的计算
-                SkillCastResult rst = new SkillCastResult(role, b.role, skill);
-                var result = AIManager.Instance.GetSkillResult(role, b.role, skill); 
+                var result = AIManager.Instance.GetSkillResult(role, toRole, skill); 
 
                 result.Run();
 
                 //当需要播放受攻击动画时，不直接刷新血条，延后到播放受攻击动画时再刷新。其他情况直接刷新血条。
-                if (result.IsDamage())
+                if (result.damage > 0 || result.damageMp > 0)
                 {
                     //加入到受击动作List
-                    beHitRoleList.Add(b.role);
+                    beHitRoleList.Add(toRole);
                 }
                 else
                 {
-                    b.role.View.MarkHpBarIsDirty();
+                    toRole.View.MarkHpBarIsDirty();
                 }
             }
             
@@ -469,7 +482,7 @@ public class BattleManager : MonoBehaviour
             {
                 Source = role.View,
                 CoverBlocks = blockTransList,
-                Zhaoshi = skill,
+                skill = skill,
                 Targets = beHitRoleList.ToMapRoles(),
             };
 

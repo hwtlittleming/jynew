@@ -32,7 +32,7 @@ public class StoryEngine : MonoBehaviour
 
     public async void DisplayPopInfo(string msg, float duration = 2f)
     {
-        await Jyx2_UIManager.Instance.ShowUIAsync(nameof(CommonTipsUIPanel), TipsType.Common, msg, duration);
+        await UIManager.Instance.ShowUIAsync(nameof(CommonTipsUIPanel), TipsType.Common, msg, duration);
     }
 
     

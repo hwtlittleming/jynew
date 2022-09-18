@@ -38,7 +38,7 @@ public partial class FullSuggestUIPanel : Jyx2_UIBase
 		else
 		{
 			Action cb = m_callback;
-			Jyx2_UIManager.Instance.HideUI(nameof(FullSuggestUIPanel));
+			UIManager.Instance.HideUI(nameof(FullSuggestUIPanel));
 			cb?.Invoke();
 		}
 	}

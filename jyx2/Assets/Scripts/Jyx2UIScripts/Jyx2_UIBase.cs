@@ -282,7 +282,7 @@ public abstract class Jyx2_UIBase : MonoBehaviour
 
 	protected bool isOnTop()
 	{
-		return Jyx2_UIManager.Instance.IsTopVisibleUI(this);
+		return UIManager.Instance.IsTopVisibleUI(this);
 	}
 
 	protected virtual bool handleDpadMove()

@@ -71,7 +71,7 @@ public class LevelMasterBooster : MonoBehaviour
             obj.Reload();
         }
         
-        await Jyx2_UIManager.Instance.ShowMainUI();
+        await UIManager.Instance.ShowMainUI();
     }
 
     public void ReplaceSceneObject(string scene, string path, string replace)

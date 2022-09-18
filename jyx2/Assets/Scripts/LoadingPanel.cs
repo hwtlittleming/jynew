@@ -30,7 +30,7 @@ public class LoadingPanel : MonoBehaviour
 
     private async UniTask LoadLevel(AssetReference sceneAsset)
     {
-        Jyx2_UIManager.Instance.CloseAllUI();
+        UIManager.Instance.CloseAllUI();
         gameObject.SetActive(true);
         await UniTask.DelayFrame(1);
         await UniTask.WaitForEndOfFrame(); //否则BattleHelper还没有初始化

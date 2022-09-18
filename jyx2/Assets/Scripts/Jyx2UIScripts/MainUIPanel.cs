@@ -116,12 +116,12 @@ public partial class MainUIPanel : Jyx2_UIBase, IUIAnimator
 
 	async void OnXiakeBtnClick()
 	{
-		await Jyx2_UIManager.Instance.ShowUIAsync(nameof(XiakeUIPanel), GameRuntimeData.Instance.Player, GameRuntimeData.Instance.GetTeam().ToList());
+		await UIManager.Instance.ShowUIAsync(nameof(XiakeUIPanel), GameRuntimeData.Instance.Player, GameRuntimeData.Instance.GetTeam().ToList());
 	}
 
 	async void OnBagBtnClick()
 	{
-		await Jyx2_UIManager.Instance.ShowUIAsync(nameof(BagUIPanel), GameRuntimeData.Instance.Player.Items, new Action<String>(OnUseItem));
+		await UIManager.Instance.ShowUIAsync(nameof(BagUIPanel), GameRuntimeData.Instance.Player.Items, new Action<String>(OnUseItem));
 	}
 
 	//使用物品
@@ -210,7 +210,7 @@ public partial class MainUIPanel : Jyx2_UIBase, IUIAnimator
 	}
 	async void OnSaveBtnClick()
 	{
-		await Jyx2_UIManager.Instance.ShowUIAsync(nameof(SavePanel), new Action<int>((index) =>
+		await UIManager.Instance.ShowUIAsync(nameof(SavePanel), new Action<int>((index) =>
 		{
 			var levelMaster = FindObjectOfType<LevelMaster>();
 			levelMaster.OnManuelSave(index);
@@ -219,7 +219,7 @@ public partial class MainUIPanel : Jyx2_UIBase, IUIAnimator
 	
 	async void OnLoadBtnClick()
 	{
-		await Jyx2_UIManager.Instance.ShowUIAsync(nameof(SavePanel), new Action<int>((index) =>
+		await UIManager.Instance.ShowUIAsync(nameof(SavePanel), new Action<int>((index) =>
 		{
 			GameRuntimeData.DoLoadGame(index);
 		}), "选择读档位".GetContent(nameof(MainUIPanel)));
@@ -228,7 +228,7 @@ public partial class MainUIPanel : Jyx2_UIBase, IUIAnimator
 	async void OnMainMenuBtnClick()
 	{
 		List<string> selectionContent = new List<string>() { "是(Y)", "否(N)" };
-		await Jyx2_UIManager.Instance.ShowUIAsync(nameof(ChatUIPanel), ChatType.Selection, "0", "将丢失未保存进度，是否继续？", selectionContent, new Action<int>((index) =>
+		await UIManager.Instance.ShowUIAsync(nameof(ChatUIPanel), ChatType.Selection, "0", "将丢失未保存进度，是否继续？", selectionContent, new Action<int>((index) =>
 		{
 			if (index == 0)
 			{
@@ -239,7 +239,7 @@ public partial class MainUIPanel : Jyx2_UIBase, IUIAnimator
 	
 	async void OnSettingsBtnClick()
 	{
-		await Jyx2_UIManager.Instance.ShowUIAsync(nameof(GameSettingsPanel));
+		await UIManager.Instance.ShowUIAsync(nameof(GameSettingsPanel));
 	}
 	
 

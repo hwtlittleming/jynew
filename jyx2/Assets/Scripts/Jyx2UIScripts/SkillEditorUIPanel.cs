@@ -13,7 +13,7 @@ public partial class SkillEditorUIPanel:Jyx2_UIBase
     
     public MapRole player;
 
-    public Jyx2SkillEditorEnemy[] enemys;
+    public SkillEditorEnemy[] enemys;
 
     private int skillId;
     private int skillLevel;
@@ -90,7 +90,7 @@ public partial class SkillEditorUIPanel:Jyx2_UIBase
     {
         base.OnShowPanel(allParams);
         player = allParams[0] as MapRole;
-        enemys = allParams[1] as Jyx2SkillEditorEnemy[];
+        enemys = allParams[1] as SkillEditorEnemy[];
         //DoSwitchRoleModel().Forget();//这里也去掉，防止多次加载模型
     }
 
@@ -138,7 +138,7 @@ public partial class SkillEditorUIPanel:Jyx2_UIBase
         helper.Targets = enemys;
         
         wugong.Level = skillLevel;
-        helper.Zhaoshi = wugong;
+        helper.skill = wugong;
 
         //根据不同的技能覆盖类型，显示不同的效果
         Transform[] blocks = null;
@@ -206,9 +206,9 @@ public partial class SkillEditorUIPanel:Jyx2_UIBase
         }
     }
 
-    private Jyx2SkillEditor skillEditor;
+    private SkillEditor skillEditor;
     void Start()
     {
-        skillEditor = FindObjectOfType<Jyx2SkillEditor>();
+        skillEditor = FindObjectOfType<SkillEditor>();
     }
 }

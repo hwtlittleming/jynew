@@ -55,7 +55,7 @@ public class MapTeleportor : MonoBehaviour
 	{
 		if (!triggerEnabled) return;
 		//HideEnterButton();
-		Jyx2_UIManager.Instance.HideUI(nameof(InteractUIPanel));
+		UIManager.Instance.HideUI(nameof(InteractUIPanel));
 		UnityTools.DisHighLightObjects(m_EventTargets);
 	}
 
@@ -96,7 +96,7 @@ public class MapTeleportor : MonoBehaviour
 			showText = "进入";
 		}
 
-		await Jyx2_UIManager.Instance.ShowUIAsync(nameof(InteractUIPanel), showText, new Action(() =>
+		await UIManager.Instance.ShowUIAsync(nameof(InteractUIPanel), showText, new Action(() =>
 		{
 			DoTransport();
 		}));

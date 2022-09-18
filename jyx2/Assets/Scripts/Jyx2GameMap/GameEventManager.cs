@@ -46,7 +46,7 @@ public class GameEventManager : MonoBehaviour
         }
 
         UnityTools.DisHighLightObjects(evt.m_EventTargets);
-        Jyx2_UIManager.Instance.HideUI(nameof(InteractUIPanel));
+        UIManager.Instance.HideUI(nameof(InteractUIPanel));
     }
 
     public void OnExitAllEvents()
@@ -55,7 +55,7 @@ public class GameEventManager : MonoBehaviour
             return;
         
         UnityTools.DisHighLightObjects(curEvent.m_EventTargets);
-        Jyx2_UIManager.Instance.HideUI(nameof(InteractUIPanel));
+        UIManager.Instance.HideUI(nameof(InteractUIPanel));
         curEvent = null;
     }
     
@@ -114,19 +114,19 @@ public class GameEventManager : MonoBehaviour
 
         if (buttonCount == 1)
         {
-            await Jyx2_UIManager.Instance.ShowUIAsync(nameof(InteractUIPanel), uiParams[0], uiParams[1]);
+            await UIManager.Instance.ShowUIAsync(nameof(InteractUIPanel), uiParams[0], uiParams[1]);
         }
         else if (buttonCount == 2)
         {
-            await Jyx2_UIManager.Instance.ShowUIAsync(nameof(InteractUIPanel), uiParams[0], uiParams[1], uiParams[2], uiParams[3]);
+            await UIManager.Instance.ShowUIAsync(nameof(InteractUIPanel), uiParams[0], uiParams[1], uiParams[2], uiParams[3]);
         }
         else if (buttonCount == 3)
         {
-            await Jyx2_UIManager.Instance.ShowUIAsync(nameof(InteractUIPanel), uiParams[0], uiParams[1], uiParams[2], uiParams[3], uiParams[4], uiParams[5]);
+            await UIManager.Instance.ShowUIAsync(nameof(InteractUIPanel), uiParams[0], uiParams[1], uiParams[2], uiParams[3], uiParams[4], uiParams[5]);
         }
         else if (buttonCount == 4)
         {
-            await Jyx2_UIManager.Instance.ShowUIAsync(nameof(InteractUIPanel), uiParams[0], uiParams[1], uiParams[2], uiParams[3], uiParams[4], uiParams[5], uiParams[6], uiParams[7]);
+            await UIManager.Instance.ShowUIAsync(nameof(InteractUIPanel), uiParams[0], uiParams[1], uiParams[2], uiParams[3], uiParams[4], uiParams[5], uiParams[6], uiParams[7]);
         }
     }
 
@@ -140,7 +140,7 @@ public class GameEventManager : MonoBehaviour
 
     async void OnClickedUseItemButton()
     {
-        await Jyx2_UIManager.Instance.ShowUIAsync(nameof(BagUIPanel), GameRuntimeData.Instance.Player.Items, new Action<String>((itemId) =>
+        await UIManager.Instance.ShowUIAsync(nameof(BagUIPanel), GameRuntimeData.Instance.Player.Items, new Action<String>((itemId) =>
         {
             if (itemId == null) //取消使用
                 return;

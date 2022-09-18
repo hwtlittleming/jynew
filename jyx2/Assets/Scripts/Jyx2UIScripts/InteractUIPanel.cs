@@ -94,7 +94,7 @@ public partial class InteractUIPanel : Jyx2_UIBase
 			temp = m_callback4;
 		}
 
-		Jyx2_UIManager.Instance.HideUI(nameof(InteractUIPanel));
+		UIManager.Instance.HideUI(nameof(InteractUIPanel));
 		temp?.Invoke();
 	}
 
@@ -113,7 +113,7 @@ public partial class InteractUIPanel : Jyx2_UIBase
 				}
 				else if (Input.GetKeyDown(KeyCode.Escape) || GamepadHelper.IsJump())
 				{
-					Jyx2_UIManager.Instance.HideUI(nameof(InteractUIPanel));
+					UIManager.Instance.HideUI(nameof(InteractUIPanel));
 				}
 			}
 	}

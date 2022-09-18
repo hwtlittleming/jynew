@@ -53,7 +53,7 @@ public partial class SkillDisplayAsset : ConfigBase
                 return;
             }
 
-            var skillEditor = FindObjectOfType<Jyx2SkillEditor>();
+            var skillEditor = FindObjectOfType<SkillEditor>();
             skillEditor.PreviewSkill(this.name);
         }
     }

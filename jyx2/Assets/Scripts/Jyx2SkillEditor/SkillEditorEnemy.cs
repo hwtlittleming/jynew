@@ -3,7 +3,7 @@ using Configs;
 using UnityEngine;
 using Jyx2;
 
-public class Jyx2SkillEditorEnemy : Jyx2AnimationBattleRole
+public class SkillEditorEnemy : AnimationBattleRole
 {
     public int SkillId;
     

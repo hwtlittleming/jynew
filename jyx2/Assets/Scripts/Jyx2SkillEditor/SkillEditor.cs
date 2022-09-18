@@ -4,11 +4,11 @@ using UnityEngine;
 using Jyx2;
 using Sirenix.OdinInspector;
 
-public class Jyx2SkillEditor : MonoBehaviour
+public class SkillEditor : MonoBehaviour
 {
     public MapRole player;
 
-    public Jyx2SkillEditorEnemy[] enemys;
+    public SkillEditorEnemy[] enemys;
 
     public Transform[] faceTrans;
     public Transform[] lineTrans;
@@ -39,7 +39,7 @@ public class Jyx2SkillEditor : MonoBehaviour
 
         await BeforeSceneLoad.loadFinishTask;
         
-        await Jyx2_UIManager.Instance.ShowUIAsync(nameof(SkillEditorUIPanel),player,enemys);
+        await UIManager.Instance.ShowUIAsync(nameof(SkillEditorUIPanel),player,enemys);
     }
 
     /*

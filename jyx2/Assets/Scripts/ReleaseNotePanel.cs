@@ -38,7 +38,7 @@ public class ReleaseNotePanel : MonoBehaviour
 		if (GamepadHelper.IsCancel()
             || GamepadHelper.IsConfirm())
 		{
-            Jyx2_UIManager.Instance.HideUI(nameof(ReleaseNotePanel));
+            UIManager.Instance.HideUI(nameof(ReleaseNotePanel));
         }
     }
 }

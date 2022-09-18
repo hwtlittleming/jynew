@@ -8,28 +8,14 @@ namespace Jyx2
     public class AIResult
     {
         #region 行为结果
-        //移动到的位置
-        [XmlAttribute]
-        public int MoveX;
         
-        [XmlAttribute]
-        public int MoveY;
-
-        //使用的招式
-        [XmlIgnore]
-        public SkillInstance Zhaoshi;
-        
-        [XmlAttribute("skill")]
-        public string zhaoshiPK
+        public AIResult(RoleInstance sprite, RoleInstance target)
         {
-            get
-            {
-                if (Zhaoshi == null) return string.Empty;
-                return Zhaoshi.Key.ToString();
-            }
-            set { }
+            r1 = sprite;
+            r2 = target;
         }
-
+        
+        
         //攻击坐标
         [XmlAttribute]
         public int AttackX;
@@ -45,23 +31,8 @@ namespace Jyx2
         [XmlAttribute]
         public ItemInstance Item;
         #endregion
-
-
-    }
-
-    public class SkillCastResult
-    {
-        public SkillCastResult() { }
-
-        public SkillCastResult(RoleInstance sprite, RoleInstance target, SkillInstance tzhaoshi)
-        {
-            //self = new SkillCastRoleEffect(sprite);
-            r1 = sprite;
-            r2 = target;
-            zhaoshi = tzhaoshi;
-        }
-
         [XmlIgnore]
+        
         public SkillInstance zhaoshi;
 
         [XmlIgnore]
@@ -74,38 +45,9 @@ namespace Jyx2
         public int damageMp;
         public int addMp; //增加内力
         public int addMaxMp;
-        public int poison;
-        public int depoison;
         public int heal;
         public int hurt;
 
-        public double GetTotalScore()
-        {
-            if(r1.team != r2.team)
-            {
-                float scale = 1;
-                if (damage >= r2.Hp)
-                    scale = 1.25f;
-                float attackTwiceScale = 1;
-
-                return attackTwiceScale * scale * damage + attackTwiceScale * damageMp / 5 + poison;
-            }else if(r1.team == r2.team)
-            {
-                return depoison + heal;
-            }
-            return 0;
-        }
-
-        public bool IsDamage()
-        {
-            return damage > 0 || damageMp > 0;
-        }
-
-        /// <summary>
-        /// 具体执行改逻辑
-        /// 战斗经验计算公式可以参考：https://github.com/ZhanruiLiang/jinyong-legend
-        /// </summary>
-        /// <returns></returns>
         public void Run()
         {
             var rst = this;

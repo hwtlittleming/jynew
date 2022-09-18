@@ -203,22 +203,15 @@ public class AIManager
         }
     }
 
-    public SkillCastResult GetSkillResult(RoleInstance r1, RoleInstance r2, SkillInstance skill)
-    {        
-        SkillCastResult rst = new SkillCastResult(r1, r2, skill);
-        
+    public AIResult GetSkillResult(RoleInstance r1, RoleInstance r2, SkillInstance skill)
+    {
+        AIResult rst = new AIResult( r1,  r2);
         //普通攻击
         if (skill.DamageType == 0)
         {
-            if (r1.Mp <= skill.MpCost) //已经不够内力释放了
-            {
-                rst.damage = 1 + UnityEngine.Random.Range(0, 10);
-                return rst;
-            }
-            //总攻击力＝(人物攻击力×3 ＋ 武功当前等级攻击力)/2 ＋武器加攻击力 ＋ 防具加攻击力 ＋ 武器武功配合加攻击力 ＋我方武学常识之和
-            int attack = ((r1.Attack - r1.GetEquipmentProperty("Attack",0) - r1.GetEquipmentProperty("Attack",0)) * 3 ) / 2 + r1.GetEquipmentProperty("Attack",0) + r1.GetEquipmentProperty("Attack",0) ;
             
-            //总防御力 ＝ 人物防御力 ＋武器加防御力 ＋ 防具加防御力 ＋ 敌方武学常识之和
+            int attack = r1.Attack ;
+            
             int defence = r2.Defense;
 
             //伤害 ＝ （总攻击力－总防御×3）×2 / 3 + RND(20) – RND(20)                  （公式1）
@@ -231,80 +224,15 @@ public class AIManager
                 v = attack / 10 + UnityEngine.Random.Range(0, 4) - UnityEngine.Random.Range(0, 4);
             }
 
-            //7、如果伤害仍然 < 0 则    伤害 ＝ 0
-            if (v <= 0)
-            {
-                v = 0;
-            }
-            else
-            {
-                //8、if  伤害 > 0 then
-                //    伤害＝ 伤害 ＋ 我方体力/15  ＋ 敌人受伤点数/ 20
-                v = v  + r2.Hurt / 20;
-            }
+            rst.damage = 1;
+            //距离远 伤害的衰减
             
-            //点、线、十字的伤害，距离就是两人相差的格子数，最小为1。
-            //面攻击时，距离是两人相差的格子数＋敌人到攻击点的距离。
-            int dist = 1;
-            if (skill.SkillCoverType == 1)
-            {
-                dist += 1; //blockVector.GetDistance(r2.Pos);
-            }
-
-            //9、if 双方距离 <= 10 then
-            //    伤害 ＝ 伤害×（100 -  ( 距离–1 ) * 3 ）/ 100
-            //else
-            //    伤害 ＝ 伤害*2 /3
-            if (dist <= 10)
-            {
-                v = v * (100 - (dist - 1) * 3) / 100;
-            }
-            else
-            {
-                v = v * 2 / 3;
-            }
-
-            //10、if 伤害 < 1  伤害 ＝ 1
-            if (v < 1)
-                v = 1;
-
-            rst.damage = v;
-
-            //敌人受伤程度
-            rst.hurt = v / 10;
-
-            //攻击带毒
-            //中毒程度＝武功等级×武功中毒点数＋人物攻击带毒
-            int add = 10;
-            //if 敌人抗毒> 中毒程度 或 敌人抗毒> 90 则不中毒
-            //敌人中毒=敌人已中毒＋ 中毒程度/15
-            //if 敌人中毒> 100 then 敌人中毒 ＝100
-            //if 敌人中毒<0 then 敌人中毒=0
-            /*if (r2.AntiPoison <= add && r2.AntiPoison <= 90)
-            {
-                int poison = Tools.Limit(add / 15, 0, GameConst.MAX_ROLE_ATK_POISON);
-                rst.poison = poison;
-            }*/
-  
+            //战斗完评估受伤状态
+            
             return rst;
         }
         else if ((int)skill.DamageType == 1) //吸内
         {
-            /*var levelInfo = skill.Data.GetSkillLevelInfo();
-            
-            //杀伤内力逻辑
-            int v = levelInfo.KillMp;
-            v += UnityEngine.Random.Range(0, 3) - UnityEngine.Random.Range(0, 3);
-            rst.damageMp = v;
-
-            //吸取内力逻辑
-            int addMp = levelInfo.AddMp;
-            if (addMp > 0)
-            {
-                rst.addMaxMp = UnityEngine.Random.Range(0, addMp / 2);
-                addMp += UnityEngine.Random.Range(0, 3) - UnityEngine.Random.Range(0, 3);
-                rst.addMp = addMp;    
-            }*/
             
             return rst;
         }
@@ -331,17 +259,9 @@ public class AIManager
     }
 
     //医疗
-    /// </summary>
-    /// 医疗计算公式可以参考：https://tiexuedanxin.net/forum.php?mod=viewthread&tid=394465
-    /// 也参考ExecDoctor：https://github.com/ZhanruiLiang/jinyong-legend
-    /// 
-    /// </summary>
-    /// <param name="r1"></param>
-    /// <param name="r2"></param>
-    /// <returns></returns>
-    SkillCastResult medicine(RoleInstance r1, RoleInstance r2)
+    AIResult medicine(RoleInstance r1, RoleInstance r2)
     {
-        SkillCastResult rst = new SkillCastResult();
+        AIResult rst = new AIResult( r1,  r2);
         if (r2.Hurt > r1.Heal + 20)
         {
             GameUtil.DisplayPopinfo("受伤太重无法医疗");

@@ -9,7 +9,7 @@ namespace Jyx2
     /// <summary>
     /// 动画播放者
     /// </summary>
-    public abstract class Jyx2AnimationBattleRole : MonoBehaviour
+    public abstract class AnimationBattleRole : MonoBehaviour
     {
         public abstract Animator GetAnimator();
 
@@ -106,7 +106,7 @@ namespace Jyx2
         }
         
         
-        public virtual void ShowDamage()
+        public virtual void   ShowDamage()
         {
             //DONOTHING
         }

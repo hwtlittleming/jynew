@@ -47,17 +47,11 @@ namespace Jyx2
     /// </summary>
     public class SkillCastHelper
     {
-        public Jyx2AnimationBattleRole Source;
-        public IEnumerable<Jyx2AnimationBattleRole> Targets;
+        public AnimationBattleRole Source;
+        public IEnumerable<AnimationBattleRole> Targets;
         public IEnumerable<Transform> CoverBlocks;
-        public SkillInstance Zhaoshi;
-
-
-        SkillDisplayAsset GetDisplay()
-        {
-            return Zhaoshi.Display;
-        }
-
+        public SkillInstance skill;
+        
 
         /// <summary>
         /// 播放
@@ -65,10 +59,10 @@ namespace Jyx2
         /// <param name="forceChangeWeapon">是否强行更换武器，一般仅用于技能编辑时看效果</param>
         public async UniTask Play()
         {
-            var display = GetDisplay();
+            var display = skill.Display;
             if(display == null)
             {
-                Debug.LogError($"招式{Zhaoshi.Key}没有配置Display!");
+                Debug.LogError($"技能{skill.Key}没有配置Display!");
                 return;
             }
 
@@ -107,7 +101,7 @@ namespace Jyx2
             GameUtil.CallWithDelay(display.behitDelay, ExecuteBeHit);
 
             //残影
-            if (display.isGhostShadowOn)
+            if (true)//display.isGhostShadowOn
             {
                 var ghostShadow = GameUtil.GetOrAddComponent<GhostShadow>(Source.transform);
                 ghostShadow.m_fDuration = 15;
@@ -164,7 +158,7 @@ namespace Jyx2
 
         private void DisplayCastEft()
         {
-            var display = GetDisplay();
+            var display = skill.Display;
             var prefab = display.partilePrefab;
             var duration = HSUnityTools.ParticleSystemLength(prefab.transform);
             var scale = display.particleScale;
@@ -175,7 +169,7 @@ namespace Jyx2
 
         private void DisplayBlockEft()
         {
-            var display = GetDisplay();
+            var display = skill.Display;
             var prefab = display.blockPartilePrefab;
 
             var blockEftDuration = HSUnityTools.ParticleSystemLength(prefab.transform);

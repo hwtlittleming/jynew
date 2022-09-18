@@ -215,7 +215,7 @@ public class LevelMaster : MonoBehaviour
 			if (!IsInBattle)
 			{
 				//显示当前地图名，大地图不用显示
-				await Jyx2_UIManager.Instance.ShowUIAsync(nameof(CommonTipsUIPanel), TipsType.MiddleTop, gameMap.GetShowName());
+				await UIManager.Instance.ShowUIAsync(nameof(CommonTipsUIPanel), TipsType.MiddleTop, gameMap.GetShowName());
 			}
 		}
 

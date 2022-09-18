@@ -36,7 +36,7 @@ public partial class BattleOKPanel:Jyx2_UIBase
 
     void ResetPos() 
     {
-        Camera uiCamera = Jyx2_UIManager.Instance.GetUICamera();
+        Camera uiCamera = UIManager.Instance.GetUICamera();
         Vector3 pos = uiCamera.WorldToScreenPoint(followPos);
         Root_RectTransform.position = pos;
     }
@@ -64,7 +64,7 @@ public partial class BattleOKPanel:Jyx2_UIBase
 
     void OnOKClick() 
     {
-        Jyx2_UIManager.Instance.HideUI(nameof(BattleOKPanel));
+        UIManager.Instance.HideUI(nameof(BattleOKPanel));
         if (okCallback != null) 
         {
             okCallback();
@@ -74,7 +74,7 @@ public partial class BattleOKPanel:Jyx2_UIBase
 
     void OnCancelClick() 
     {
-        Jyx2_UIManager.Instance.HideUI(nameof(BattleOKPanel));
+        UIManager.Instance.HideUI(nameof(BattleOKPanel));
         if (cancelCallback != null)
         {
             cancelCallback();

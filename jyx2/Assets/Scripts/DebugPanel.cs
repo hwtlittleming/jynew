@@ -81,7 +81,7 @@ public class DebugPanel : MonoBehaviour
         {
             string msg = "<color=red>警告：不在大地图上执行传送可能会导致某些剧情中断，强烈建议您退到大地图再执行。是否强行执行？</color>";
             List<string> selectionContent = new List<string>() { "是(Y)", "否(N)" };
-            await Jyx2_UIManager.Instance.ShowUIAsync(nameof(ChatUIPanel), ChatType.Selection, "0", msg, selectionContent, new Action<int>((index) =>
+            await UIManager.Instance.ShowUIAsync(nameof(ChatUIPanel), ChatType.Selection, "0", msg, selectionContent, new Action<int>((index) =>
             {
                 if (index == 0)
                 {
@@ -105,7 +105,7 @@ public class DebugPanel : MonoBehaviour
         {
             string msg = "<color=red>警告：不在大地图上执行传送可能会导致某些剧情中断，强烈建议您退到大地图再执行。是否强行执行？</color>";
             List<string> selectionContent = new List<string>() { "是(Y)", "否(N)" };
-            await Jyx2_UIManager.Instance.ShowUIAsync(nameof(ChatUIPanel), ChatType.Selection, "0", msg, selectionContent, new Action<int>((index) =>
+            await UIManager.Instance.ShowUIAsync(nameof(ChatUIPanel), ChatType.Selection, "0", msg, selectionContent, new Action<int>((index) =>
             {
                 if (index == 0)
                 {

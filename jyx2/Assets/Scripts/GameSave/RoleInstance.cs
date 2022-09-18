@@ -331,6 +331,8 @@ namespace Jyx2
             this.Defense += item.Defence;
             this.Speed += item.Speed;
 
+            this.bestAttackDistance += item.bestDistance;
+
             if (false)
             {
                 this.LearnMagic(item.Skill);
@@ -356,7 +358,7 @@ namespace Jyx2
             this.Attack -= item.Attack;
             this.Defense -= item.Defence;
             this.Speed -= item.Speed;
-            
+            this.bestAttackDistance += item.bestDistance;
         }
         
         #endregion

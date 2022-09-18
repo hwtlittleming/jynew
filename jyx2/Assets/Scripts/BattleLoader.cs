@@ -7,6 +7,7 @@ using Configs;
 using Cysharp.Threading.Tasks;
 using Jyx2;
 using Sirenix.OdinInspector;
+using Sirenix.Utilities;
 using UnityEngine;
 using Random = System.Random;
 
@@ -15,8 +16,11 @@ public class BattleLoader : MonoBehaviour
 {
     [LabelText("载入战斗ID")] public int m_BattleId = 0;
     [HideInInspector] public Action<BattleResult> Callback;
-    
-    int[] defaultPosition = {2,4,3,1,5,2,4}; // 一排5格子的地图的默认战位
+    List<int> publicPosition = new List<int>() {3,2,4}; //公共格位置顺序;
+    List<int> defaultPosition = new List<int>() {3,1,5,2,4}; //该行主角已占一位
+    List<int> defaultPosition2 = new List<int>() {3,1,5,2,4}; // 一排5格子的地图的默认战位
+    List<int> defaultPosition3 = new List<int>() {3,1,5,2,4}; 
+    List<int> defaultPosition4 = new List<int>() {3,1,5,2,4}; 
     // Start is called before the first frame update
     async void Start()
     {
@@ -81,9 +85,7 @@ public class BattleLoader : MonoBehaviour
     {   
         Debug.Log("-----------BattleLoading...");
         //上中下三排5*3半透明格子，普攻锁定到人，魔法可以躲 攻击距离拳头1刀剑枪2 弓杖3
-        //攻击先点击选择攻击格子，再按普攻和魔法，则会以选中点为中心实时攻击，魔法会有延迟；未因什么而阻断时怪物和帮手都是按行动力即时开始攻击
-        //被打对象无受击动画，额外施加受击掉血效果
-
+        
         //单例的从存档读取的GameRuntimeData
         if (GameRuntimeData.Instance == null) //如果直接从场景进入战斗，读取配置的初始数据
         {
@@ -100,7 +102,7 @@ public class BattleLoader : MonoBehaviour
            ConfigMap map = LevelMaster.GetCurrentGameMap();
            battle = ConfigBattle.Get(int.Parse(map.BattleMapKind)) ;
         }
-       // AudioManager.PlayMusic(battle.Music);
+       // AudioManager.PlayMusic(battle.Music);  音乐
         
         
         //我方战斗角色 格子位置 + roleInstance
@@ -147,13 +149,49 @@ public class BattleLoader : MonoBehaviour
                 bd = BattleManager.Instance.GetBlockData(x,y,"we" );
                 position = bd.WorldPos;
                 r.blockData = bd;//给角色信息里 添加位置
+                defaultPosition.Remove(x);
             }
             else // 根据攻击距离加载队友位置 
             {
                 int dis = r.bestAttackDistance;
-                x = defaultPosition[i];  //UnityEngine.Random.Range(1, BattleManager.Instance.block_list.FirstOrDefault().maxX);
-                y = dis - 1;
-                bd = BattleManager.Instance.GetBlockData(x,dis,"we" );//给角色信息里 添加位置
+                if (dis == 1)
+                {
+                    if (!publicPosition.IsNullOrEmpty())
+                    {
+                        x = publicPosition[0];
+                        publicPosition.Remove(x);
+                    }
+                    else
+                    {
+                        dis = 2;
+                    }
+                }
+                if (dis == 2)
+                {
+                    if (!defaultPosition.IsNullOrEmpty())
+                    {
+                        x = defaultPosition[0];
+                        defaultPosition.Remove(x);
+                    }
+                    else
+                    {
+                        dis = 3;
+                    }
+                }
+                if (dis == 3)
+                {
+                    if (!defaultPosition2.IsNullOrEmpty())
+                    {
+                        x = defaultPosition2[0];
+                        defaultPosition2.Remove(x);
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+                
+                bd = BattleManager.Instance.GetBlockData(x,dis - 1,"we" );//给角色信息里 添加位置
                 position = bd.WorldPos;
                 r.blockData = bd;
             }
@@ -202,9 +240,43 @@ public class BattleLoader : MonoBehaviour
         {
             RoleInstance r = enermyRoleList[i];
             int dis = r.bestAttackDistance;
-            x = defaultPosition[i];//UnityEngine.Random.Range(1, BattleManager.Instance.block_list.FirstOrDefault().maxX);
-            y = i+1;//
-            BattleBlockData bd = BattleManager.Instance.GetBlockData(x,Math.Min(y,2),"they" );
+            if (dis == 1)
+            {
+                if (!publicPosition.IsNullOrEmpty())
+                {
+                    x = publicPosition[0];
+                    publicPosition.Remove(x);
+                }
+                else
+                {
+                    dis = 2;
+                }
+            }
+            if (dis == 2)
+            {
+                if (!defaultPosition3.IsNullOrEmpty())
+                {
+                    x = defaultPosition3[0];
+                    defaultPosition3.Remove(x);
+                }
+                else
+                {
+                    dis = 3;
+                }
+            }
+            if (dis == 3)
+            {
+                if (!defaultPosition4.IsNullOrEmpty())
+                {
+                    x = defaultPosition4[0];
+                    defaultPosition4.Remove(x);
+                }
+                else
+                {
+                    continue;
+                }
+            }
+            BattleBlockData bd = BattleManager.Instance.GetBlockData(x,dis - 1,"they" );
             position = bd.WorldPos;
             r.blockData = bd;//给角色信息里 添加位置
             enermyRoleDic.Add(bd.blockName,r);
