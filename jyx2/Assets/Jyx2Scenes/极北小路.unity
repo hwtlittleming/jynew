@@ -1736,9 +1736,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_EventTargets:
   - {fileID: 0}
+  m_EventType: -1
   m_InteractiveEventId: 13
   m_UseItemEventId: -1
-  m_EnterEventId: -1
+  m_HitEventId: 0
 --- !u!65 &230045190
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -16292,7 +16293,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 3.7785234, y: 1}
+    m_SensorSize: {x: 1.599585, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
