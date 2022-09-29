@@ -166,7 +166,7 @@ public class GameConst
     //所有地图遇怪概率设置 ;key=遇怪模式id  value = 数量级;角色a:概率a,角色b:概率b  如: 1-3;1:50,2:50
     public static Dictionary<String,String> mapEnermy = new Dictionary<string, string>()
     {
-        {"1","1-5;1:50,2:50"},
+        {"1","10-11;1:50,2:50"},
     };
     
     //存档的数量

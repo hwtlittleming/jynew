@@ -7,34 +7,12 @@ namespace Jyx2
     [XmlType]
     public class AIResult
     {
-        #region 行为结果
-        
         public AIResult(RoleInstance sprite, RoleInstance target)
         {
             r1 = sprite;
             r2 = target;
         }
         
-        
-        //攻击坐标
-        [XmlAttribute]
-        public int AttackX;
-
-        [XmlAttribute]
-        public int AttackY;
-
-        //是否休息
-        [XmlAttribute]
-        public bool IsRest;
-
-        //使用的道具
-        [XmlAttribute]
-        public ItemInstance Item;
-        #endregion
-        [XmlIgnore]
-        
-        public SkillInstance zhaoshi;
-
         [XmlIgnore]
         public RoleInstance r1;
 

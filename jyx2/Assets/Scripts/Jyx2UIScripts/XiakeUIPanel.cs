@@ -147,9 +147,9 @@ public partial class XiakeUIPanel : UIBase
 
 		sb.AppendLine(string.Format("生命 <color={0}>{1}</color>/<color={2}>{3}</color>".GetContent(nameof(XiakeUIPanel)), color1, role.Hp, color2,
 			role.MaxHp));
-		sb.Append(string.Format(("能量 <color={0}>{1}/{2}</color>" + FlexibleLength(role.Strength)).GetContent(nameof(XiakeUIPanel)), color, role.Mp, role.MaxMp));
-		sb.AppendLine(string.Format("状态 {0}        ".GetContent(nameof(XiakeUIPanel)), role.State));
-		sb.AppendLine(string.Format("战斗经验 {0}/{1}".GetContent(nameof(XiakeUIPanel)), role.Exp, role.GetLevelUpExp()));
+		sb.AppendLine(string.Format(("能量 <color={0}>{1}/{2}</color>"), color, role.Mp, role.MaxMp));
+		sb.Append(string.Format("战斗经验 {0}/{1}   ".GetContent(nameof(XiakeUIPanel)), role.Exp, role.GetLevelUpExp()));
+		sb.AppendLine(string.Format("状态 {0}".GetContent(nameof(XiakeUIPanel)), role.State));
 		
 		sb.AppendLine("<color=#FF9610>--资质" + "--</color>");
 		sb.Append(string.Format(("力量 {0}" + FlexibleLength(role.Strength)).GetContent(nameof(XiakeUIPanel)), role.Strength));
@@ -164,7 +164,8 @@ public partial class XiakeUIPanel : UIBase
 		sb.Append(string.Format(("暴击 {0}" + FlexibleLength(role.Critical)).GetContent(nameof(XiakeUIPanel)), role.Critical,role.CriticalLevel));
 		sb.AppendLine(string.Format("闪避 {0}".GetContent(nameof(XiakeUIPanel)), role.Miss));
 		sb.AppendLine(string.Format(("幸运 {0}" + FlexibleLength(role.Luck)).GetContent(nameof(XiakeUIPanel)), role.Luck));
-		sb.AppendLine(string.Format("描述: {0}".GetContent(nameof(XiakeUIPanel)), role.Describe));
+		sb.AppendLine("<color=#FF9610>--描述" + "--</color>");
+		sb.AppendLine(string.Format(role.Describe));
         		
 		sb.AppendLine();
 		return sb.ToString();

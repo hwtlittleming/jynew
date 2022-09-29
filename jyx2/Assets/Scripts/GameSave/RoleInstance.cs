@@ -393,7 +393,7 @@ namespace Jyx2
         public void UpdateViewPostion()
         {
             BattleBlockData posData = BattleboxHelper.Instance.GetBlockData(Pos.X, Pos.Y);
-            View.SetPosition(posData.WorldPos);
+            View.transform.position = posData.WorldPos;
         }
         
         //是否已经行动

@@ -161,16 +161,18 @@ public class BattleManager : MonoBehaviour
     //AI行动
     public async void planAndAttack(RoleInstance _role,BattleUnit b,int actPoints)
     {
+        /*_role.Stun(-1);
+        _role.View.ShowDeath();
         return;
         _role.View.Say("就你叫小白？",2000);
-        _role.View.ShowAttackInfo($"<color=green>中毒</color>");//飘字 改大
+        _role.View.ShowAttackInfo($"<color=green>中毒</color>");//飘字 改大*/
         //如何体现出学习带来的强度:某一招多次使用对其威力下降或闪避提升(天赋效果 ，我们怎么决策有优势他跟着学习，我们怎么决策给我方带来额外利益 他对抗之(吸蓝，提升自己某防御，封禁某法术，降低普攻)镜像boss
         var motivation = _role.currentMotivation;
         motivation += _role.motivationPerSecond;
         
         //获取AI计算结果 AI攻击方式 普攻 技能 投掷 使用物品
         await AIManager.Instance.GetAIResult(_role);
-        await UniTask.Delay(_role.Speed); //普攻等待 和技能等待时间不同
+        await UniTask.Delay(GameConfigDatabase.Instance.Get<ConfigCharacter>(0).Speed); //普攻等待 和技能等待时间不同  技能动作间隔 +等待时间 
         b.isCd = false;
         //再执行具体逻辑
         //await ExecuteAIResult(_role, aiResult);
@@ -306,7 +308,7 @@ public class BattleManager : MonoBehaviour
     }
     
     /// 添加角色到战场里面
-    public void AddBattleRole(RoleInstance role)
+    public async void AddBattleRole(RoleInstance role)
     {
         int team = role.team;
         //加入战场
@@ -314,17 +316,12 @@ public class BattleManager : MonoBehaviour
         
         //待命
         role.View.Idle();
-        
+
         //面向对面 暂且这样
         var otherside = new Vector3(role.View.transform.position.x + 3,role.View.transform.position.y,role.View.transform.position.z);
         if (team == 1) otherside = new Vector3(role.View.transform.position.x - 3,role.View.transform.position.y,role.View.transform.position.z);
-        role.View.LookAtWorldPosInBattle(otherside);
-
-        //死亡的关键角色默认晕眩
-        /*if (role.View.m_IsKeyRole && role.IsDead())
-        {
-            role.Stun(-1);
-        }*/
+        role.View.transform.LookAt(otherside);
+        
     }
 
     string CalExpGot(ConfigBattle battleData)
@@ -400,7 +397,7 @@ public class BattleManager : MonoBehaviour
 
             List<RoleInstance> beHitRoleList = new List<RoleInstance>();
             
-            role.View.LookAtBattleBlock(blockData.WorldPos); //先面向目标
+            role.View.transform.LookAt(blockData.WorldPos);//先面向目标
             role.SwitchAnimationToSkill(skill); //切换姿势
 
             //获取攻击范围

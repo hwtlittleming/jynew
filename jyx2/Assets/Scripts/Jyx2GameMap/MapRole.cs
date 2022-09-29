@@ -248,22 +248,16 @@ public class MapRole : AnimationBattleRole
 
     #region 血条设定
     
-    /// <summary>
     /// 是否为脏数据需要刷新
-    /// </summary>
     public bool HPBarIsDirty { private set; get; } = false;
     
-    /// <summary>
     /// 血条标记为需要刷新
-    /// </summary>
     public override void MarkHpBarIsDirty()
     {
         HPBarIsDirty = true;
     }
-
-    /// <summary>
+    
     /// 取消刷新血条标记
-    /// </summary>
     public override void UnmarkHpBarIsDirty()
     {
         HPBarIsDirty = false;
@@ -335,13 +329,7 @@ public class MapRole : AnimationBattleRole
 
     #region 模型动作相关
     
-    /// <summary>
     /// 命令行播放动画
-    /// TODO:这里应该是配合lua的，我先自己写一种方式，后续方式再看看吧
-    /// 示例:
-    /// Action:Idle,ChangeWeapon:1,SwitchSkillTo,1
-    /// </summary>
-    /// <param name="cmd">命令行</param>
     public void PlayAnimationCmd(string cmd)
     {
         foreach (var c in cmd.Split(','))
@@ -381,11 +369,8 @@ public class MapRole : AnimationBattleRole
             }
         }
     }
-
-    /// <summary>
+    
     /// 切换武学，载入动作后进入站立状态
-    /// </summary>
-    /// <param name="skill">技能实例</param>
     public void SwitchSkillTo(SkillInstance skill)
     {
         var display = skill.Display;
@@ -465,37 +450,7 @@ public class MapRole : AnimationBattleRole
         anim.runtimeAnimatorController = controller;
         callback();
     }
-
-
-    /// <summary>
-    /// 使人物朝向一个方向，根据战场格子计算
-    /// </summary>
-    /// <param name="pos">朝向的格子位置坐标</param>
-    public void LookAtBattleBlock(Vector3 WorldPos)
-    {
-        //平视，所以y轴和自身一致
-        transform.LookAt(WorldPos);
-    }
-
-    /// <summary>
-    /// 使人物朝向一个方向，根据世界坐标计算
-    /// </summary>
-    /// <param name="position">世界位置坐标</param>
-    public void LookAtWorldPosInBattle(Vector3 position)
-    {
-        //平视，所以y轴和自身一致
-        transform.LookAt(new Vector3(position.x, transform.position.y, position.z));
-    }
-
-    /// <summary>
-    /// 设置角色位置
-    /// </summary>
-    /// <param name="pos">世界位置坐标</param>
-    public void SetPosition(Vector3 pos) 
-    {
-        transform.position = pos;
-    }
-
+    
     #endregion
 
     #region 人物模型状态及其动作
@@ -609,14 +564,6 @@ public class MapRole : AnimationBattleRole
         
         //场景没有LevelMaster
         if (LevelMaster.Instance == null && DataInstance == null) this.CreateRoleInstance(m_RoleKey);
-        
-        //脚步声
-        //Observable.EveryFixedUpdate()
-        //    .Where(_ => _navMeshAgent != null)
-        //    .Subscribe(xs =>
-        //    {
-        //        PlayFootStepSoundEffect(_distFromPlayer);
-        //    });
         
         if (m_IsWaitingForActive)
         {

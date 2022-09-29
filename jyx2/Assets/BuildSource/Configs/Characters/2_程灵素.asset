@@ -29,9 +29,7 @@ MonoBehaviour:
   Constitution: 0
   Agile: 0
   Luck: 0
-  Skills:
-  - Skill: {fileID: 11400000, guid: 798ccc1e51b35994bbf92a57a4d069c0, type: 2}
-    Level: 1
+  Skills: []
   Equipments: []
   Items:
   - Item: {fileID: 11400000, guid: b54b5129cbe7c1f41b33d499121adc19, type: 2}

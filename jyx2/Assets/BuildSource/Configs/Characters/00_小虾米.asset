@@ -17,7 +17,7 @@ MonoBehaviour:
   Sexual: 1
   Race: 
   Pic:
-    m_AssetGUID: f6b44a2d06fdcfe4a99e350942ab6ea2
+    m_AssetGUID: e5b538f2db8d36f479701cbe0bf1dfe6
     m_SubObjectName: 
     m_SubObjectType: 
     m_EditorAssetChanged: 0
@@ -180,7 +180,7 @@ MonoBehaviour:
   MaxMp: 666
   Attack: 1
   Defense: 22
-  Speed: 3000
+  Speed: 0
   Heal: 444
   Critical: 555
   CriticalLevel: 6666

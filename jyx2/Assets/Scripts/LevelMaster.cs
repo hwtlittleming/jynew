@@ -134,28 +134,10 @@ public class LevelMaster : MonoBehaviour
 				}
 			}
 		}
-
-		if (Camera.main != null)
-		{
-			var brain = Camera.main.GetComponent<CinemachineBrain>();
-			if (brain != null)
-			{
-				brain.m_DefaultBlend = new CinemachineBlendDefinition(CinemachineBlendDefinition.Style.Cut, 0);
-			}
-		}
-
+		
 		var gameMap = GetCurrentGameMap();
 		if (gameMap != null && !IsInBattle)
 		{
-			if (gameMap.Tags.Contains("WORLDMAP"))//JYX2 临时测试
-			{
-				var btn = transform.Find("UI/MainUI/BackButton");
-				if (btn != null)
-				{
-					btn.gameObject.SetActive(false);
-				}
-			}
-
 			//播放音乐
 			PlayMusic(gameMap);
 		}
@@ -169,7 +151,9 @@ public class LevelMaster : MonoBehaviour
 		//尝试绑定主角
 		TryBindPlayer();
 		
-		//大地图不能使用跟随相机（目前好像比较卡？）
+		_playerNavAgent.speed = 20;//测试代码 加快移速
+		_playerNavAgent.enabled = true;
+		
 		if (gameMap != null && !gameMap.Tags.Contains("WORLDMAP"))
 		{
 			//初始化跟随相机
