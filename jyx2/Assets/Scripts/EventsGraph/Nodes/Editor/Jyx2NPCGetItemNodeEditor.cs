@@ -11,14 +11,14 @@ using XNodeEditor;
 [CustomNodeEditor(typeof(Jyx2NPCGetItemNode))]
 public class Jyx2NPCGetItemNodeEditor : NodeEditor
 {
-    private Jyx2NodeEditorHelperItem _itemDrawer;
-    private Jyx2NodeEditorHelperRole _roleDrawer;
+    private NodeEditorHelperItem _itemDrawer;
+    private NodeEditorHelperRole _roleDrawer;
 
     public override void OnCreate()
     {
         base.OnCreate();
-        _itemDrawer = new Jyx2NodeEditorHelperItem(this);
-        _roleDrawer = new Jyx2NodeEditorHelperRole(this);
+        _itemDrawer = new NodeEditorHelperItem(this);
+        _roleDrawer = new NodeEditorHelperRole(this);
     }
 
     public override void OnBodyGUI()

@@ -49,7 +49,7 @@ public class Jyx2ModifyEventNodeEditor : NodeEditor
         if (!isDefaultScene)
         {
             int sceneId = serializedObject.FindProperty("SceneId").intValue;
-            Jyx2NodeEditorHelperQuickButtons.NavigateToSceneButton(sceneId);
+            NodeEditorHelperQuickButtons.NavigateToSceneButton(sceneId);
         }
         DrawField("本触发器", -2, "EventId", ref isDefaultEvt);
         
@@ -58,7 +58,7 @@ public class Jyx2ModifyEventNodeEditor : NodeEditor
         {
             int sceneId = serializedObject.FindProperty("SceneId").intValue;
             int gameEventId = serializedObject.FindProperty("EventId").intValue;
-            Jyx2NodeEditorHelperQuickButtons.NavigateToGameEventObjButton(sceneId, gameEventId);
+            NodeEditorHelperQuickButtons.NavigateToGameEventObjButton(sceneId, gameEventId);
         }
 
         
@@ -124,7 +124,7 @@ public class Jyx2ModifyEventNodeEditor : NodeEditor
             NodeEditorGUILayout.PropertyField(serializedObject.FindProperty(fieldName));
             
             //跳转event按钮
-            Jyx2NodeEditorHelperQuickButtons.NavigateToEventButton(serializedObject.FindProperty(fieldName).intValue);
+            NodeEditorHelperQuickButtons.NavigateToEventButton(serializedObject.FindProperty(fieldName).intValue);
         }
         
     }

@@ -6,7 +6,7 @@ using XNode;
 
 [CreateNodeMenu("流程控制/判断触发器的交互事件")]
 [NodeWidth(150)]
-public class Jyx2JudgeEventNumNode : Jyx2BaseNode
+public class Jyx2JudgeEventNumNode : BaseNode
 {
     [Output] public Node yes;
     [Output] public Node no;
@@ -21,7 +21,7 @@ public class Jyx2JudgeEventNumNode : Jyx2BaseNode
 
     protected override string OnPlay()
     {
-        bool ret = Jyx2LuaBridge.JudgeEventNum(GameEventId, InteractiveEvtId);
+        bool ret = LuaBridge.JudgeEventNum(GameEventId, InteractiveEvtId);
         return ret ? nameof(yes) : nameof(no);
     }
 }

@@ -7,7 +7,7 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 
-static public class Jyx2NodeEditorHelperQuickButtons
+static public class NodeEditorHelperQuickButtons
 {
 
     public static void NavigateToGameEventObjButton(int sceneId, int gameEventId, string text = "快速导航到该触发器")

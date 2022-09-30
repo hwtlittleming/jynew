@@ -3,31 +3,31 @@ using System.Collections.Generic;
 using UnityEngine;
 using XNodeEditor;
 
-
-public class Jyx2NodeEditorHelperItem : Jyx2NodeEditorHelperBase
+public class NodeEditorHelperRole : NodeEditorHelperBase
 {
-    public Jyx2NodeEditorHelperItem(NodeEditor nodeEditor) : base(nodeEditor)
+    public NodeEditorHelperRole(NodeEditor nodeEditor) : base(nodeEditor)
     {
     }
 
     protected override string Field
     {
-        get => "itemId";
+        get => "roleId";
     }
+
     protected override int TextureHeight
     {
         get => 50;
     }
     protected override string PopupTitle
     {
-        get => "道具";
+        get => "角色";
     }
     protected override string[] SelectContent
     {
-        get => Jyx2EventsGraphStatic.s_itemList;
+        get => EventsGraphStatic.s_roleList;
     }
     protected override string PathFormat
     {
-        get => "Assets/BuildSource/Jyx2Items/{0}.png";
+        get => "Assets/BuildSource/head/{0}.png";
     }
 }

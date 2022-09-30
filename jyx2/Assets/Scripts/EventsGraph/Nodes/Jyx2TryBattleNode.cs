@@ -6,7 +6,7 @@ using XNode;
 
 [CreateNodeMenu("战斗")]
 [NodeWidth(170)]
-public class Jyx2TryBattleNode : Jyx2BaseNode
+public class Jyx2TryBattleNode : BaseNode
 {
     [Output] public Node win;
     [Output] public Node lose;
@@ -24,7 +24,7 @@ public class Jyx2TryBattleNode : Jyx2BaseNode
 
     protected override string OnPlay()
     {
-        bool ret = Jyx2LuaBridge.TryBattle(BattleId);
+        bool ret = LuaBridge.TryBattle(BattleId);
         return ret ? nameof(win) : nameof(lose);
     }
 }

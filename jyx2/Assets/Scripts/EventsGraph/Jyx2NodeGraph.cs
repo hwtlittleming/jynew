@@ -39,10 +39,10 @@ public class Jyx2NodeGraph : NodeGraph {
              return;
          }
  
-         var node = currentNode as Jyx2BaseNode;
+         var node = currentNode as BaseNode;
          if (node == null)
          {
-             Debug.LogError("执行错误：有节点不是派生自Jyx2BaseNode！");
+             Debug.LogError("执行错误：有节点不是派生自BaseNode！");
              return;
          }
  

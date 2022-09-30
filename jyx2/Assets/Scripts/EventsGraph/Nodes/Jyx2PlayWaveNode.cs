@@ -6,7 +6,7 @@ using XNode;
 
 [CreateNodeMenu("音乐音效/播放音效")]
 [NodeWidth(150)]
-public class Jyx2PlayWaveNode : Jyx2SimpleNode
+public class Jyx2PlayWaveNode : SimpleNode
 {   
     [Header("音效id")]
     public int waveId;
@@ -17,6 +17,6 @@ public class Jyx2PlayWaveNode : Jyx2SimpleNode
 
     protected override void DoExecute()
     {
-        Jyx2LuaBridge.PlayWave(waveId);
+        LuaBridge.PlayWave(waveId);
     }
 }

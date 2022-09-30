@@ -8,15 +8,15 @@ using UnityEngine;
 using XNodeEditor;
 
 
-[CustomNodeEditor(typeof(Jyx2TalkNode))]
-public class Jyx2TalkNodeEditor : NodeEditor
+[CustomNodeEditor(typeof(TalkNode))]
+public class TalkNodeEditor : NodeEditor
 {
-    private Jyx2NodeEditorHelperRole _roleDrawer;
+    private NodeEditorHelperRole _roleDrawer;
 
     public override void OnCreate()
     {
         base.OnCreate();
-        _roleDrawer = new Jyx2NodeEditorHelperRole(this);
+        _roleDrawer = new NodeEditorHelperRole(this);
         EditorStyles.textField.wordWrap = true; // 自动换行
     }
 

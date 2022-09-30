@@ -6,7 +6,7 @@ using XNode;
 
 [CreateNodeMenu("流程控制/判断银两数")]
 [NodeWidth(180)]
-public class Jyx2JudgeMoneyNode : Jyx2BaseNode
+public class Jyx2JudgeMoneyNode : BaseNode
 {
     [Output] public Node yes;
     [Output] public Node no;
@@ -19,7 +19,7 @@ public class Jyx2JudgeMoneyNode : Jyx2BaseNode
     
     protected override string OnPlay()
     {
-        bool ret = Jyx2LuaBridge.JudgeMoney(minValue);
+        bool ret = LuaBridge.JudgeMoney(minValue);
         return ret ? nameof(yes) : nameof(no);
     }
 }

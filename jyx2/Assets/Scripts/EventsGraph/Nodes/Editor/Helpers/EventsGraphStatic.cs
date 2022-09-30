@@ -8,9 +8,9 @@ using UnityEditor;
 using UnityEngine;
 
 
-static public class Jyx2EventsGraphStatic 
+static public class EventsGraphStatic 
 {
-    static Jyx2EventsGraphStatic()
+    static EventsGraphStatic()
     {
         var tmp = new List<string>();
 

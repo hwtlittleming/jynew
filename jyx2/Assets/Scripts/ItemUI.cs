@@ -11,7 +11,7 @@ using Jyx2;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Jyx2ItemUI : MonoBehaviour
+public class ItemUI : MonoBehaviour
 {
     public Image m_Image;
     public Text m_NameText;
@@ -19,11 +19,11 @@ public class Jyx2ItemUI : MonoBehaviour
 
     private const string ITEM_UI_PREFAB = "Jyx2ItemUI";
     
-    public static Jyx2ItemUI Create(ItemInstance item)
+    public static ItemUI Create(ItemInstance item)
     {
         var prefab = Jyx2ResourceHelper.GetCachedPrefab(ITEM_UI_PREFAB);
         var obj = Instantiate(prefab); 
-        var itemUI = obj.GetComponent<Jyx2ItemUI>();
+        var itemUI = obj.GetComponent<ItemUI>();
         itemUI.Show(item).Forget();
         return itemUI;
     }

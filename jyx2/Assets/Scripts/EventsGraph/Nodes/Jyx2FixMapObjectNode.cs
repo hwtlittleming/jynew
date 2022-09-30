@@ -9,7 +9,7 @@ using XNode;
 
 [CreateNodeMenu("场景/修改场景内物体位置")]
 [NodeWidth(150)]
-public class Jyx2FixMapObjectNode : Jyx2SimpleNode
+public class Jyx2FixMapObjectNode : SimpleNode
 {
 	private void Reset() {
 		name = "修改场景内物体位置";
@@ -23,6 +23,6 @@ public class Jyx2FixMapObjectNode : Jyx2SimpleNode
 	protected override void DoExecute()
 
 	{
-		Jyx2LuaBridge.jyx2_FixMapObject(key, value);
+		LuaBridge.jyx2_FixMapObject(key, value);
 	}
 }

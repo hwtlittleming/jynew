@@ -9,7 +9,7 @@ using XNode;
 
 [CreateNodeMenu("游戏数据/设置主角脸朝向")]
 [NodeWidth(180)]
-public class Jyx2SetRoleFaceNode : Jyx2SimpleNode
+public class Jyx2SetRoleFaceNode : SimpleNode
 {
 	private void Reset() {
 		name = "设置主角脸朝向";
@@ -20,6 +20,6 @@ public class Jyx2SetRoleFaceNode : Jyx2SimpleNode
 
 	protected override void DoExecute()
 	{
-		Jyx2LuaBridge.SetRoleFace(dir);
+		LuaBridge.SetRoleFace(dir);
 	}
 }

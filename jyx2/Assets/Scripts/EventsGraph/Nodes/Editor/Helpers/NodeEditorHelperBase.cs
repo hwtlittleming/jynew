@@ -5,7 +5,7 @@ using UnityEngine;
 using XNode;
 using XNodeEditor;
 
-abstract public class Jyx2NodeEditorHelperBase
+abstract public class NodeEditorHelperBase
 {
     protected NodeEditor _nodeEditor;
     protected int _selectedIndex;
@@ -16,7 +16,7 @@ abstract public class Jyx2NodeEditorHelperBase
     protected abstract string[] SelectContent { get; }
     protected abstract string PathFormat { get; }
     
-    public Jyx2NodeEditorHelperBase(NodeEditor nodeEditor)
+    public NodeEditorHelperBase(NodeEditor nodeEditor)
     {
         nodeEditor.serializedObject.Update();
         _nodeEditor = nodeEditor;

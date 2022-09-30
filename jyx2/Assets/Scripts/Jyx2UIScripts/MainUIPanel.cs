@@ -50,7 +50,7 @@ public partial class MainUIPanel : UIBase, IUIAnimator
 
 		if (Compass != null )
 		{
-			Compass.gameObject.SetActive(LevelMaster.Instance.IsInWorldMap && Jyx2LuaBridge.HaveItem("182"));
+			Compass.gameObject.SetActive(LevelMaster.Instance.IsInWorldMap && LuaBridge.HaveItem("182"));
 			if (Compass.gameObject.activeSelf)
 			{
 				var p = LevelMaster.Instance.GetPlayerPosition();
@@ -228,7 +228,7 @@ public partial class MainUIPanel : UIBase, IUIAnimator
 	async void OnMainMenuBtnClick()
 	{
 		List<string> selectionContent = new List<string>() { "是(Y)", "否(N)" };
-		await UIManager.Instance.ShowUIAsync(nameof(ChatUIPanel), ChatType.Selection, "0", "将丢失未保存进度，是否继续？", selectionContent, new Action<int>((index) =>
+		await UIManager.Instance.ShowUIAsync(nameof(ChatUIPanel), ChatType.Selection, "0", "将丢失未保存进度，是否继续？", selectionContent,new Action<int>((index) =>
 		{
 			if (index == 0)
 			{

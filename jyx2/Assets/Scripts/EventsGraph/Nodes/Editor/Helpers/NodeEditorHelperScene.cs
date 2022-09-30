@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using XNodeEditor;
 
-public class Jyx2NodeEditorHelperSkill : Jyx2NodeEditorHelperBase
+public class NodeEditorHelperScene : NodeEditorHelperBase
 {
-    public Jyx2NodeEditorHelperSkill(NodeEditor nodeEditor) : base(nodeEditor)
+    public NodeEditorHelperScene(NodeEditor nodeEditor) : base(nodeEditor)
     {
     }
 
     protected override string Field
     {
-        get => "skillId";
+        get => "sceneId";
     }
     protected override int TextureHeight
     {
@@ -19,11 +19,11 @@ public class Jyx2NodeEditorHelperSkill : Jyx2NodeEditorHelperBase
     }
     protected override string PopupTitle
     {
-        get => "武功";
+        get => "场景";
     }
     protected override string[] SelectContent
     {
-        get => Jyx2EventsGraphStatic.s_skillList;
+        get => EventsGraphStatic.s_sceneList;
     }
     protected override string PathFormat
     {

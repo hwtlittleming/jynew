@@ -7,7 +7,7 @@ using XNode;
 
 [CreateNodeMenu("流程控制/做选择")]
 [NodeWidth(256)]
-public class MakeChoiceNode : Jyx2BaseNode
+public class MakeChoiceNode : BaseNode
 {
     //暂时默认最大5个选项
     [Output] public Node a;
@@ -26,7 +26,7 @@ public class MakeChoiceNode : Jyx2BaseNode
     protected override string OnPlay()
     {
         String nextNode = nameof(a);
-        int ret = Jyx2LuaBridge.doChoice(content, options);
+        int ret = LuaBridge.doChoice(content, options);
         if (ret == 1)
         {
             nextNode = nameof(b);

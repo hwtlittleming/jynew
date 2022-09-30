@@ -145,7 +145,7 @@ public class GameEventManager : MonoBehaviour
             if (itemId == null) //取消使用
                 return;
             //使用道具
-            ExecuteJyx2Event(curEvent.m_UseItemEventId, new JYX2EventContext() { currentItemId = int.Parse(itemId) });
+            ExecuteJyx2Event(curEvent.m_UseItemEventId, new EventContext() { currentItemId = int.Parse(itemId) });
         }),null);
     }
     
@@ -171,7 +171,7 @@ public class GameEventManager : MonoBehaviour
         return true;
     }
 
-    public void ExecuteJyx2Event(int eventId, JYX2EventContext context = null)
+    public void ExecuteJyx2Event(int eventId, EventContext context = null)
     {
         if (eventId < 0)
         {
@@ -194,7 +194,7 @@ public class GameEventManager : MonoBehaviour
         SetCurrentGameEvent(curEvent);
         
         //设置运行环境上下文
-        JYX2EventContext.current = context;
+        EventContext.current = context;
 
         async UniTask ExecuteCurEvent()
         {
@@ -220,7 +220,7 @@ public class GameEventManager : MonoBehaviour
 
     void OnFinishEvent()
     {
-        JYX2EventContext.current = null;
+        EventContext.current = null;
 
         SetCurrentGameEvent(null);
         // fix drag motion continuous move the player when scene is playing

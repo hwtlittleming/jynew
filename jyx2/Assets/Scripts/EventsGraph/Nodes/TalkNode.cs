@@ -9,7 +9,7 @@ using XNode;
 
 [CreateNodeMenu("对话")]
 [NodeWidth(256)]
-public class Jyx2TalkNode : Jyx2SimpleNode
+public class TalkNode : SimpleNode
 {
 
 	private void Reset() {
@@ -30,9 +30,8 @@ public class Jyx2TalkNode : Jyx2SimpleNode
 		return null; // Replace this
 	}
 	
-	
 	protected override void DoExecute()
 	{
-		Jyx2LuaBridge.Talk(roleId, content, "", 0);
+		LuaBridge.Talk(roleId, content, "", 0);
 	}
 }

@@ -6,7 +6,7 @@ using XNode;
 
 [CreateNodeMenu("流程控制/判断队伍是否满")]
 [NodeWidth(150)]
-public class Jyx2TeamIsFullNode : Jyx2BaseNode
+public class Jyx2TeamIsFullNode : BaseNode
 {
     [Output] public Node yes;
     [Output] public Node no;
@@ -17,7 +17,7 @@ public class Jyx2TeamIsFullNode : Jyx2BaseNode
     
     protected override string OnPlay()
     {
-        bool ret = Jyx2LuaBridge.TeamIsFull();
+        bool ret = LuaBridge.TeamIsFull();
         return ret ? nameof(yes) : nameof(no);
     }
 }

@@ -9,7 +9,7 @@ using XNode;
 
 [CreateNodeMenu("游戏数据/增减道具")]
 [NodeWidth(200)]
-public class Jyx2AddItemNode : Jyx2SimpleNode
+public class Jyx2AddItemNode : SimpleNode
 {
 	private void Reset() {
 		name = "增减道具";
@@ -22,6 +22,6 @@ public class Jyx2AddItemNode : Jyx2SimpleNode
 
 	protected override void DoExecute()
 	{
-		Jyx2LuaBridge.AddItem(itemId, count,0,isHint);
+		LuaBridge.AddItem(itemId, count,0,isHint);
 	}
 }

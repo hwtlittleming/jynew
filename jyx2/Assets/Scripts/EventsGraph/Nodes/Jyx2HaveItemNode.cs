@@ -7,7 +7,7 @@ using XNode;
 
 [CreateNodeMenu("流程控制/是否拥有道具")]
 [NodeWidth(200)]
-public class Jyx2HaveItemNode : Jyx2BaseNode
+public class Jyx2HaveItemNode : BaseNode
 {
     [Output] public Node yes;
     [Output] public Node no;
@@ -19,7 +19,7 @@ public class Jyx2HaveItemNode : Jyx2BaseNode
     
     protected override string OnPlay()
     {
-        bool ret = Jyx2LuaBridge.HaveItem(itemId);
+        bool ret = LuaBridge.HaveItem(itemId);
         return ret ? nameof(yes) : nameof(no);
     }
 }

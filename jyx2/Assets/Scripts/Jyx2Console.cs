@@ -54,19 +54,13 @@ public static class Jyx2Console
                     count = int.Parse(paras[2]);
                 }
 
-                Jyx2LuaBridge.AddItem(itemId, count);
+                LuaBridge.AddItem(itemId, count);
                 break;
             }
             case "set_attack":
             {
                 int attack = int.Parse(paras[1]);
                 GameRuntimeData.Instance.Player.Attack = attack;
-                break;
-            }
-            case "quickbattle":
-            {
-                int isOn = int.Parse(paras[1]);
-                Jyx2LuaBridge.isQuickBattle = (isOn == 1);
                 break;
             }
             //开启无敌

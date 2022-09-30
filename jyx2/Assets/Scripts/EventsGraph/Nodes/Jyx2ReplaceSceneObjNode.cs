@@ -6,7 +6,7 @@ using UnityEngine;
 
 [CreateNodeMenu("场景/显示隐藏物体")]
 [NodeWidth(200)]
-public class Jyx2ReplaceSceneObjNode : Jyx2SimpleNode
+public class Jyx2ReplaceSceneObjNode : SimpleNode
 {
     private void Reset() {
         name = "显示隐藏物体";
@@ -18,6 +18,6 @@ public class Jyx2ReplaceSceneObjNode : Jyx2SimpleNode
     
     protected override void DoExecute()
     {
-        Jyx2LuaBridge.jyx2_ReplaceSceneObject(sceneId, path, isShow ? "1" : "0");
+        LuaBridge.jyx2_ReplaceSceneObject(sceneId, path, isShow ? "1" : "0");
     }
 }

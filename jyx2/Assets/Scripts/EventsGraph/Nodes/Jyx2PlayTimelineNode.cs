@@ -9,7 +9,7 @@ using XNode;
 
 [CreateNodeMenu("场景/播放动画")]
 [NodeWidth(200)]
-public class Jyx2PlayTimelineNode : Jyx2SimpleNode
+public class Jyx2PlayTimelineNode : SimpleNode
 {
 	private void Reset() {
 		name = "播放动画";
@@ -28,13 +28,13 @@ public class Jyx2PlayTimelineNode : Jyx2SimpleNode
 
 	protected override void DoExecute()
 	{
-		Jyx2LuaBridge.jyx2_PlayTimeline(timelineName, mode, isClone, tagRole);
+		LuaBridge.jyx2_PlayTimeline(timelineName, mode, isClone, tagRole);
 	}
 }
 
 [CreateNodeMenu("场景/播放简单动画")]
 [NodeWidth(200)]
-public class Jyx2PlayTimelineSimpleNode : Jyx2SimpleNode
+public class Jyx2PlayTimelineSimpleNode : SimpleNode
 {
 	private void Reset() {
 		name = "播放简单动画";
@@ -45,6 +45,6 @@ public class Jyx2PlayTimelineSimpleNode : Jyx2SimpleNode
 	
 	protected override void DoExecute()
 	{
-		Jyx2LuaBridge.jyx2_PlayTimelineSimple(timelineName);
+		LuaBridge.jyx2_PlayTimelineSimple(timelineName);
 	}
 }

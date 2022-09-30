@@ -9,7 +9,7 @@ using XNode;
 
 [CreateNodeMenu("游戏数据/显示品德值")]
 [NodeWidth(150)]
-public class Jyx2ShowEthicsNode : Jyx2SimpleNode
+public class Jyx2ShowEthicsNode : SimpleNode
 {
 	private void Reset() {
 		name = "显示品德值";
@@ -18,6 +18,6 @@ public class Jyx2ShowEthicsNode : Jyx2SimpleNode
 
 	protected override void DoExecute()
 	{
-		Jyx2LuaBridge.ShowEthics();
+		LuaBridge.ShowEthics();
 	}
 }

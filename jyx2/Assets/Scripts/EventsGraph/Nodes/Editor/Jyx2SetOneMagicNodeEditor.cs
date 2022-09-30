@@ -11,13 +11,13 @@ using XNodeEditor;
 [CustomNodeEditor(typeof(Jyx2SetOneMagicNode))]
 public class Jyx2SetOneMagicNodeEditor : NodeEditor
 {
-    private Jyx2NodeEditorHelperRole _roleDrawer;
-    private Jyx2NodeEditorHelperSkill _skillDrawer;
+    private NodeEditorHelperRole _roleDrawer;
+    private NodeEditorHelperSkill _skillDrawer;
     public override void OnCreate()
     {
         base.OnCreate();
-        _roleDrawer = new Jyx2NodeEditorHelperRole(this);
-        _skillDrawer = new Jyx2NodeEditorHelperSkill(this);
+        _roleDrawer = new NodeEditorHelperRole(this);
+        _skillDrawer = new NodeEditorHelperSkill(this);
     }
 
     public override void OnBodyGUI() 

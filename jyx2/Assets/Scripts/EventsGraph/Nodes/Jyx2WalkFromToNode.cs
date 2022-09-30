@@ -9,7 +9,7 @@ using XNode;
 
 [CreateNodeMenu("场景/强制移动")]
 [NodeWidth(150)]
-public class Jyx2WalkFromToNode : Jyx2SimpleNode
+public class Jyx2WalkFromToNode : SimpleNode
 {
 	private void Reset() {
 		name = "强制移动";
@@ -23,6 +23,6 @@ public class Jyx2WalkFromToNode : Jyx2SimpleNode
 
 	protected override void DoExecute()
 	{
-		Jyx2LuaBridge.jyx2_WalkFromTo(fromObj, toObj);
+		LuaBridge.jyx2_WalkFromTo(fromObj, toObj);
 	}
 }

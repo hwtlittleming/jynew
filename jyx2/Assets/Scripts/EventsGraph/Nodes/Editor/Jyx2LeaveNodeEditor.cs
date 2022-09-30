@@ -11,12 +11,12 @@ using XNodeEditor;
 [CustomNodeEditor(typeof(Jyx2LeaveNode))]
 public class Jyx2LeaveNodeEditor : NodeEditor
 {
-    private Jyx2NodeEditorHelperRole _roleDrawer;
+    private NodeEditorHelperRole _roleDrawer;
 
     public override void OnCreate()
     {
         base.OnCreate();
-        _roleDrawer = new Jyx2NodeEditorHelperRole(this);
+        _roleDrawer = new NodeEditorHelperRole(this);
     }
 
     public override void OnBodyGUI() 

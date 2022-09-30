@@ -13,7 +13,7 @@ public partial class BagUIPanel : UIBase
 
 	Action<String> m_callback;
 	List<ItemInstance> m_itemsData;
-	Jyx2ItemUI m_selectItem;
+	ItemUI m_selectItem;
 	Func<ItemInstance, bool> m_filter = null;
 	
 	enum BagFilter
@@ -81,7 +81,7 @@ public partial class BagUIPanel : UIBase
 		RefreshScroll();
 	}
 
-	List<Jyx2ItemUI> visibleItems = new List<Jyx2ItemUI>();
+	List<ItemUI> visibleItems = new List<ItemUI>();
 
 	void RefreshScroll()
 	{
@@ -105,7 +105,7 @@ public partial class BagUIPanel : UIBase
 			if (_filter == BagFilter.Equipment && !item.isEquipment()) continue;
 
 			//循环创建物品单元
-			var itemUI = Jyx2ItemUI.Create(item);
+			var itemUI = ItemUI.Create(item);
 			itemUI.transform.SetParent(ItemRoot_RectTransform);
 			itemUI.transform.localScale = Vector3.one;
 			var btn = itemUI.GetComponent<Button>();
@@ -156,7 +156,7 @@ public partial class BagUIPanel : UIBase
 		DesText_Text.text = UIHelper.GetItemDesText(item);
 	}
 
-	void OnItemSelect(Jyx2ItemUI itemUI, bool scroll)
+	void OnItemSelect(ItemUI itemUI, bool scroll)
 	{
 		if (m_selectItem == itemUI)
 			return;

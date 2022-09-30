@@ -9,7 +9,7 @@ using XNode;
 
 [CreateNodeMenu("游戏数据/角色入队")]
 [NodeWidth(180)]
-public class Jyx2JoinNode : Jyx2SimpleNode
+public class Jyx2JoinNode : SimpleNode
 {
 	private void Reset() {
 		name = "角色入队";
@@ -21,6 +21,6 @@ public class Jyx2JoinNode : Jyx2SimpleNode
 
 	protected override void DoExecute()
 	{
-		Jyx2LuaBridge.Join(roleId);
+		LuaBridge.Join(roleId);
 	}
 }

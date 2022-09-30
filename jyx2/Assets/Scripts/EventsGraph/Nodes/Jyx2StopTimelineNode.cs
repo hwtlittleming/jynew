@@ -9,7 +9,7 @@ using XNode;
 
 [CreateNodeMenu("场景/停止播放动画")]
 [NodeWidth(200)]
-public class Jyx2StopTimelineNode : Jyx2SimpleNode
+public class Jyx2StopTimelineNode : SimpleNode
 {
 	private void Reset() {
 		name = "播放动画";
@@ -20,6 +20,6 @@ public class Jyx2StopTimelineNode : Jyx2SimpleNode
 
 	protected override void DoExecute()
 	{
-		Jyx2LuaBridge.jyx2_StopTimeline(timelineName);
+		LuaBridge.jyx2_StopTimeline(timelineName);
 	}
 }

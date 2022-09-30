@@ -10,7 +10,7 @@ using XNode;
 
 [CreateNodeMenu("事件修改")]
 [NodeWidth(200)]
-public class Jyx2ModifyEventNode : Jyx2SimpleNode
+public class Jyx2ModifyEventNode : SimpleNode
 {
     private void Reset() {
         name = "事件修改";
@@ -36,6 +36,6 @@ public class Jyx2ModifyEventNode : Jyx2SimpleNode
 
     protected override void DoExecute()
     {
-        Jyx2LuaBridge.ModifyEvent(SceneId, EventId, 0,0,InteractiveEventId, UseItemEventId, EnterEventId, 0, 0,0,0,0, 0);
+        LuaBridge.ModifyEvent(SceneId, EventId, 0,0,InteractiveEventId, UseItemEventId, EnterEventId, 0, 0,0,0,0, 0);
     }
 }

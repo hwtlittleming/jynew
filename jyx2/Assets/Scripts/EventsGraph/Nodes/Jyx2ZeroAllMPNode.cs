@@ -9,7 +9,7 @@ using XNode;
 
 [CreateNodeMenu("游戏数据/清空全队内力")]
 [NodeWidth(150)]
-public class Jyx2ZeroAllMPNode : Jyx2SimpleNode
+public class Jyx2ZeroAllMPNode : SimpleNode
 {
 	private void Reset() {
 		name = "清空全队内力";
@@ -18,6 +18,6 @@ public class Jyx2ZeroAllMPNode : Jyx2SimpleNode
 
 	protected override void DoExecute()
 	{
-		Jyx2LuaBridge.ZeroAllMP();
+		LuaBridge.ZeroAllMP();
 	}
 }

@@ -9,7 +9,7 @@ using XNode;
 
 [CreateNodeMenu("游戏数据/设置武功等级")]
 [NodeWidth(200)]
-public class Jyx2SetOneMagicNode : Jyx2SimpleNode
+public class Jyx2SetOneMagicNode : SimpleNode
 {
     private void Reset() {
         name = "设置武功等级";
@@ -26,6 +26,6 @@ public class Jyx2SetOneMagicNode : Jyx2SimpleNode
     
     protected override void DoExecute()
 	{   
-		Jyx2LuaBridge.SetOneMagic(roleId, skillIndex, skillId, skillLevel);
+		LuaBridge.SetOneMagic(roleId, skillIndex, skillId, skillLevel);
 	}
 }

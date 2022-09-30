@@ -9,7 +9,7 @@ using XNode;
 
 [CreateNodeMenu("游戏数据/角色离队")]
 [NodeWidth(180)]
-public class Jyx2LeaveNode : Jyx2SimpleNode
+public class Jyx2LeaveNode : SimpleNode
 {
     private void Reset() {
         name = "角色离队";
@@ -19,7 +19,7 @@ public class Jyx2LeaveNode : Jyx2SimpleNode
     
     protected override void DoExecute()
 	{   
-        Debug.Assert(Jyx2LuaBridge.InTeam(roleId));
-		Jyx2LuaBridge.Leave(roleId);
+        Debug.Assert(LuaBridge.InTeam(roleId));
+		LuaBridge.Leave(roleId);
 	}
 }

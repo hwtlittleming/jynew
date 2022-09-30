@@ -9,7 +9,7 @@ using XNode;
 
 [CreateNodeMenu("流程控制/判断场景的图片")]
 [NodeWidth(200)]
-public class Jyx2JudgeScenePicNode : Jyx2BaseNode
+public class Jyx2JudgeScenePicNode : BaseNode
 {
     private void Reset() {
         name = "判断场景的图片";
@@ -24,7 +24,7 @@ public class Jyx2JudgeScenePicNode : Jyx2BaseNode
 	public int picId;
     protected override string OnPlay()
     {
-        bool ret = Jyx2LuaBridge.JudgeScenePic(sceneId, eventId, picId);;
+        bool ret = LuaBridge.JudgeScenePic(sceneId, eventId, picId);;
         return ret ? nameof(yes) : nameof(no);
     }
 }

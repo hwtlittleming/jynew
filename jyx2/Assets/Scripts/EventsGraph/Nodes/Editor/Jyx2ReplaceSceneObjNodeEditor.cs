@@ -11,12 +11,12 @@ using XNodeEditor;
 [CustomNodeEditor(typeof(Jyx2ReplaceSceneObjNode))]
 public class Jyx2ReplaceSceneObjNodeEditor : NodeEditor
 {
-    private Jyx2NodeEditorHelperScene _sceneDrawer;
+    private NodeEditorHelperScene _sceneDrawer;
 
     public override void OnCreate()
     {
         base.OnCreate();
-        _sceneDrawer = new Jyx2NodeEditorHelperScene(this);
+        _sceneDrawer = new NodeEditorHelperScene(this);
     }
 
     public override void OnBodyGUI() 

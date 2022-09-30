@@ -9,7 +9,7 @@ using XNode;
 
 [CreateNodeMenu("游戏数据/NPC获得道具")]
 [NodeWidth(200)]
-public class Jyx2NPCGetItemNode : Jyx2SimpleNode
+public class Jyx2NPCGetItemNode : SimpleNode
 {
 	private void Reset() {
 		name = "NPC获得道具";
@@ -24,6 +24,6 @@ public class Jyx2NPCGetItemNode : Jyx2SimpleNode
 
 	protected override void DoExecute()
 	{
-		Jyx2LuaBridge.NPCGetItem(roleId, itemId, quantity);
+		LuaBridge.NPCGetItem(roleId, itemId, quantity);
 	}
 }

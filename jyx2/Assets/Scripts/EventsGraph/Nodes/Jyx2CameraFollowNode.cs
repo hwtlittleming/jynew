@@ -9,7 +9,7 @@ using XNode;
 
 [CreateNodeMenu("场景/摄像机锁定到")]
 [NodeWidth(300)]
-public class Jyx2CameraFollowNode : Jyx2SimpleNode
+public class Jyx2CameraFollowNode : SimpleNode
 {
     private void Reset() {
         name = "摄像机锁定到";
@@ -19,6 +19,6 @@ public class Jyx2CameraFollowNode : Jyx2SimpleNode
     
     protected override void DoExecute()
 	{
-		Jyx2LuaBridge.jyx2_CameraFollow(path);
+		LuaBridge.jyx2_CameraFollow(path);
 	}
 }

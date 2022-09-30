@@ -6,7 +6,7 @@ using XNode;
 
 [CreateNodeMenu("流程控制/角色是否在队里")]
 [NodeWidth(180)]
-public class Jyx2InTeamNode : Jyx2BaseNode
+public class Jyx2InTeamNode : BaseNode
 {
     [Output] public Node yes;
     [Output] public Node no;
@@ -18,7 +18,7 @@ public class Jyx2InTeamNode : Jyx2BaseNode
     
     protected override string OnPlay()
     {
-        bool ret = Jyx2LuaBridge.InTeam(roleId);
+        bool ret = LuaBridge.InTeam(roleId);
         return ret ? nameof(yes) : nameof(no);
     }
 }

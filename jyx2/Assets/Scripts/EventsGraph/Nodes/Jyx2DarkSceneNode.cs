@@ -6,7 +6,7 @@ using UnityEngine;
 
 [CreateNodeMenu("效果/屏幕变暗")]
 [NodeWidth(100)]
-public class Jyx2DarkScenceNode : Jyx2SimpleNode
+public class Jyx2DarkScenceNode : SimpleNode
 {
     private void Reset() {
         name = "屏幕变暗";
@@ -14,6 +14,6 @@ public class Jyx2DarkScenceNode : Jyx2SimpleNode
 
     protected override void DoExecute()
     {
-        Jyx2LuaBridge.DarkScence();
+        LuaBridge.DarkScence();
     }
 }

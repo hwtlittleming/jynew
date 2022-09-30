@@ -9,7 +9,7 @@ using XNode;
 
 [CreateNodeMenu("场景/打开小宝商店")]
 [NodeWidth(150)]
-public class Jyx2WeiShopNode : Jyx2SimpleNode
+public class Jyx2WeiShopNode : SimpleNode
 {
 	private void Reset() {
 		name = "打开小宝商店";
@@ -18,6 +18,6 @@ public class Jyx2WeiShopNode : Jyx2SimpleNode
 
 	protected override void DoExecute()
 	{
-		Jyx2LuaBridge.WeiShop();
+		LuaBridge.WeiShop();
 	}
 }

@@ -9,7 +9,7 @@ using XNode;
 
 [CreateNodeMenu("场景/等待")]
 [NodeWidth(150)]
-public class Jyx2WaitNode : Jyx2SimpleNode
+public class Jyx2WaitNode : SimpleNode
 {
 	private void Reset() {
 		name = "等待";
@@ -22,6 +22,6 @@ public class Jyx2WaitNode : Jyx2SimpleNode
 
 	{
         Debug.Log($"Wait for {duration} secs");
-		Jyx2LuaBridge.jyx2_Wait(duration);
+		LuaBridge.jyx2_Wait(duration);
 	}
 }

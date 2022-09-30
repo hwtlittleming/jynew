@@ -11,6 +11,7 @@ using UnityEngine.UI;
 using UnityEngine.AddressableAssets;
 using UnityEngine.EventSystems;
 using Jyx2.MOD;
+using NUnit.Framework;
 
 public enum ChatType
 {
@@ -133,8 +134,16 @@ public partial class ChatUIPanel : UIBase, IUIAnimator
 		{
 			_currentShowIndex = _currentText.Length;
 		}
-		MainContent_Text.text = finalS;
+		
+		//打字机效果
+		foreach (var cha in finalS.ToCharArray())
+		{
+			MainContent_Text.text += finalS;
+			UniTask.Delay(100);
+		}
+		
 	}
+	
 
 	public void Show(int headId, string msg, int type, Action callback)
 	{

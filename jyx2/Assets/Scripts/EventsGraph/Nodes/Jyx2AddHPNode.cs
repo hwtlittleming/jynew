@@ -9,7 +9,7 @@ using XNode;
 
 [CreateNodeMenu("游戏数据/加血")]
 [NodeWidth(200)]
-public class Jyx2AddHPNode : Jyx2SimpleNode
+public class Jyx2AddHPNode : SimpleNode
 {
 	private void Reset() {
 		name = "加血";
@@ -23,6 +23,6 @@ public class Jyx2AddHPNode : Jyx2SimpleNode
 
 	protected override void DoExecute()
 	{
-		Jyx2LuaBridge.AddHp(roleId, increment);
+		LuaBridge.AddHp(roleId, increment);
 	}
 }

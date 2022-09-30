@@ -6,7 +6,7 @@ using XNode;
 
 [NodeWidth(256)]
 [CreateNodeMenu("")]
-public abstract class Jyx2BaseNode : Node
+public abstract class BaseNode : Node
 {
     [Input] public Node prev;
  
@@ -37,7 +37,7 @@ public abstract class Jyx2BaseNode : Node
 
 
 //只有一个next的节点的Node
-public abstract class Jyx2SimpleNode : Jyx2BaseNode
+public abstract class SimpleNode : BaseNode
 {
     [Output] public Node next;
 

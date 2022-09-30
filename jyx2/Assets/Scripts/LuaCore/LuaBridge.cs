@@ -17,20 +17,17 @@ using Jyx2.Middleware;
 
 namespace Jyx2
 {
-    public class JYX2EventContext
+    public class EventContext
     {
         public int currentItemId;
         
-        public static JYX2EventContext current = null;
+        public static EventContext current = null;
     }
-
-    /// <summary>
+    
     /// lua的桥接函数
-    /// 
     /// 注意：桥接函数都不是运行在Unity主线程中
-    /// </summary>
     [LuaCallCSharp]
-    public static class Jyx2LuaBridge
+    public static class LuaBridge
     {
         static StoryEngine storyEngine { get { return StoryEngine.Instance; } }
 
@@ -198,24 +195,12 @@ namespace Jyx2
             Wait();
             return _selectResult;
         }
-
-        //询问是否战斗
-        public static bool AskBattle()
-        {
-            return ShowYesOrNoSelectPanel("是否与之过招?");
-        }
-
+        
         private static bool _battleResult = false;
-
-        public static bool isQuickBattle = false;
+        
         //开始一场战斗
         public static bool TryBattle(int battleId)
         {
-            if(isQuickBattle)
-            {
-                return ShowYesOrNoSelectPanel("是否战斗胜利?");
-            }
-
             bool isWin = false;
             RunInMainThread(() => {
                 
@@ -243,10 +228,6 @@ namespace Jyx2
             return isWin;
         }
         
-        public static bool AskJoin()
-        {
-            return ShowYesOrNoSelectPanel("是否要求加入?");
-        }
 
         //角色加入，同时获得对方身上的物品
         public static void Join(int roleId)
@@ -285,10 +266,10 @@ namespace Jyx2
         //当前正在使用的物品ID
         public static bool UseItem(int itemId)
         {
-            if (JYX2EventContext.current == null)
+            if (EventContext.current == null)
                 return false;
 
-            return itemId == JYX2EventContext.current.currentItemId;
+            return itemId == EventContext.current.currentItemId;
         }
 
         //离队
@@ -430,12 +411,6 @@ namespace Jyx2
         public static bool TeamIsFull()
         {
             return runtime.TeamId.Count > GameConst.MAX_TEAMCOUNT - 1;
-        }
-        
-        //播放动画
-        public static void PlayAnimation(int p1,int p2,int p3) 
-        {
-            //这个函数已经不需要实现，使用jyx2_PlayTimeline来解决
         }
 
         public static bool JudgeAttack(int roleId,int low,int high)
@@ -692,11 +667,11 @@ namespace Jyx2
                 {
                     if (count < 0)
                     {
-                        storyEngine.DisplayPopInfo("失去物品:".GetContent(nameof(Jyx2LuaBridge)) + item.Name + "×" + Math.Abs(count));
+                        storyEngine.DisplayPopInfo("失去物品:".GetContent(nameof(LuaBridge)) + item.Name + "×" + Math.Abs(count));
                     }
                     else
                     {
-                        storyEngine.DisplayPopInfo("得到物品:".GetContent(nameof(Jyx2LuaBridge)) + item.Name + "×" + Math.Abs(count));
+                        storyEngine.DisplayPopInfo("得到物品:".GetContent(nameof(LuaBridge)) + item.Name + "×" + Math.Abs(count));
                     }
                 }
                 
@@ -1083,27 +1058,7 @@ namespace Jyx2
         }
 
         private static int _selectResult;
-
-        private static bool ShowYesOrNoSelectPanel(string selectMessage)
-        {
-            async void Action()
-            {
-                List<string> selectionContent = new List<string>() {"是(Y)", "否(N)"};
-                storyEngine.BlockPlayerControl = true;
-                await UIManager.Instance.ShowUIAsync(nameof(ChatUIPanel), ChatType.Selection, "0", selectMessage, selectionContent, new Action<int>((index) =>
-                {
-                    _selectResult = index;
-                    storyEngine.BlockPlayerControl = false;
-                    Next();
-                }));
-            }
-
-            RunInMainThread(Action);
-
-            Wait();
-            return _selectResult == 0;
-        }
-
+        
         private static bool JudgeRoleValue(int roleId, Predicate<RoleInstance> judge)
         {
             bool result = false;

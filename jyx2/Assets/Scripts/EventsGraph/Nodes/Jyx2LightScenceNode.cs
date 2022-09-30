@@ -6,7 +6,7 @@ using UnityEngine;
 
 [CreateNodeMenu("效果/屏幕亮起")]
 [NodeWidth(100)]
-public class Jyx2LightScenceNode : Jyx2SimpleNode
+public class Jyx2LightScenceNode : SimpleNode
 {
     private void Reset() {
         name = "屏幕亮起";
@@ -14,6 +14,6 @@ public class Jyx2LightScenceNode : Jyx2SimpleNode
 
     protected override void DoExecute()
     {
-        Jyx2LuaBridge.LightScence();
+        LuaBridge.LightScence();
     }
 }

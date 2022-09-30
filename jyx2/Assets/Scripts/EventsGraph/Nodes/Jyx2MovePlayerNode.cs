@@ -6,7 +6,7 @@ using UnityEngine;
 
 [CreateNodeMenu("场景/移动主角")]
 [NodeWidth(150)]
-public class Jyx2MovePlayerNode : Jyx2SimpleNode
+public class Jyx2MovePlayerNode : SimpleNode
 {
     private void Reset() {
         name = "移动主角";
@@ -17,6 +17,6 @@ public class Jyx2MovePlayerNode : Jyx2SimpleNode
     
     protected override void DoExecute()
     {
-        Jyx2LuaBridge.jyx2_MovePlayer(objPath, parentDir);
+        LuaBridge.jyx2_MovePlayer(objPath, parentDir);
     }
 }

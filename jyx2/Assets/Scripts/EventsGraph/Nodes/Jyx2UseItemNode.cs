@@ -9,7 +9,7 @@ using XNode;
 
 [CreateNodeMenu("流程控制/判断是否使用道具")]
 [NodeWidth(200)]
-public class Jyx2UseItemNode : Jyx2BaseNode
+public class Jyx2UseItemNode : BaseNode
 {
 	[Output] public Node yes;
 	[Output] public Node no;
@@ -23,7 +23,7 @@ public class Jyx2UseItemNode : Jyx2BaseNode
 
 	protected override string OnPlay()
 	{
-		var ret = Jyx2LuaBridge.UseItem(itemId);
+		var ret = LuaBridge.UseItem(itemId);
 		return ret ? nameof(yes) : nameof(no);
 	}
 }

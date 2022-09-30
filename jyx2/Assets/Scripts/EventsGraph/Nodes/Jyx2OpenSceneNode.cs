@@ -9,7 +9,7 @@ using XNode;
 
 [CreateNodeMenu("场景/标记场景可以进入")]
 [NodeWidth(200)]
-public class Jyx2OpenSceneNode : Jyx2SimpleNode
+public class Jyx2OpenSceneNode : SimpleNode
 {
     private void Reset() {
         name = "标记场景可以进入";
@@ -19,6 +19,6 @@ public class Jyx2OpenSceneNode : Jyx2SimpleNode
     
     protected override void DoExecute()
 	{   
-		Jyx2LuaBridge.OpenScene(sceneId);
+		LuaBridge.OpenScene(sceneId);
 	}
 }

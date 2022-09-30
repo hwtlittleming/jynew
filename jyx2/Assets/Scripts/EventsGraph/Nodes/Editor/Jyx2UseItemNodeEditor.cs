@@ -11,11 +11,11 @@ using XNodeEditor;
 [CustomNodeEditor(typeof(Jyx2UseItemNode))]
 public class Jyx2UseItemNodeEditor : NodeEditor
 {
-    private Jyx2NodeEditorHelperItem _itemDrawer;
+    private NodeEditorHelperItem _itemDrawer;
     public override void OnCreate()
     {
         base.OnCreate();
-        _itemDrawer = new Jyx2NodeEditorHelperItem(this);
+        _itemDrawer = new NodeEditorHelperItem(this);
     }
 
     public override void OnBodyGUI() 
