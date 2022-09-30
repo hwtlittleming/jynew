@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcbc68552f5f10f4fbade431c50a817d, type: 3}
   m_Name: "63_\u5929\u5B81\u5BFA"
   m_EditorClassIdentifier: 
-  Id: 63
+  Id: 78
   Name: "\u5929\u5B81\u5BFA"
   MapScene:
     m_AssetGUID: 6857cb9ca954f5341aa946938316fd97
@@ -24,10 +24,6 @@ MonoBehaviour:
     m_SubObjectName: 
     m_SubObjectType: 
     m_EditorAssetChanged: 0
-  OutMusic:
-    m_AssetGUID: cdc12cfa0f76cee45bf77ac0a3f812b6
-    m_SubObjectName: 
-    m_SubObjectType: 
-    m_EditorAssetChanged: 0
   EnterCondition: 1
   Tags: 
+  BattleMapKind: 

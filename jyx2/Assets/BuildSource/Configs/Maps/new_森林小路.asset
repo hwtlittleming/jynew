@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcbc68552f5f10f4fbade431c50a817d, type: 3}
   m_Name: "new_\u68EE\u6797\u5C0F\u8DEF"
   m_EditorClassIdentifier: 
-  Id: 9
+  Id: 56
   Name: "\u68EE\u6797\u5C0F\u8DEF"
   MapScene:
     m_AssetGUID: 8e42c4a249818324bb61754b9c72a50c
@@ -24,12 +24,6 @@ MonoBehaviour:
     m_SubObjectName: 
     m_SubObjectType: 
     m_EditorAssetChanged: 0
-  OutMusic:
-    m_AssetGUID: cdc12cfa0f76cee45bf77ac0a3f812b6
-    m_SubObjectName: 
-    m_SubObjectType: 
-    m_EditorAssetChanged: 0
   EnterCondition: 1
   Tags: 
-  MapKind: 
-  ForceSetLeaveMusicId: -1
+  BattleMapKind: 

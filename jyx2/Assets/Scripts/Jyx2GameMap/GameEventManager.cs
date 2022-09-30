@@ -102,7 +102,7 @@ public class GameEventManager : MonoBehaviour
         }
         
         //偷袭 todo 改点击事件内容
-        if (evt.m_EventType.Contains("3"))
+        if (evt.m_EventType.Contains("4"))
         {
             uiParams.Add("偷袭");
             uiParams.Add(new Action(() =>

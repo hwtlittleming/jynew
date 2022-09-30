@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcbc68552f5f10f4fbade431c50a817d, type: 3}
   m_Name: "42_\u65E0\u91CF\u5C71\u6D1E"
   m_EditorClassIdentifier: 
-  Id: 42
+  Id: 69
   Name: "\u65E0\u91CF\u5C71\u6D1E"
   MapScene:
     m_AssetGUID: 111d883303fb3b848bb26a333e83a6d6
@@ -24,10 +24,6 @@ MonoBehaviour:
     m_SubObjectName: 
     m_SubObjectType: 
     m_EditorAssetChanged: 0
-  OutMusic:
-    m_AssetGUID: 2c7145cbfab221848983657d6737cdb3
-    m_SubObjectName: 
-    m_SubObjectType: 
-    m_EditorAssetChanged: 0
   EnterCondition: 1
   Tags: POINTLIGHT
+  BattleMapKind: 

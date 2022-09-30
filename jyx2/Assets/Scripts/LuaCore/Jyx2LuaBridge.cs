@@ -39,7 +39,7 @@ namespace Jyx2
         static GameRuntimeData runtime { get { return GameRuntimeData.Instance; } }
 
         public static void Talk(int roleId, string content, string talkName, int type)
-        {
+        { 
             async void Run()
             {
                 storyEngine.BlockPlayerControl = true;
@@ -447,11 +447,6 @@ namespace Jyx2
             });
             return ret;
         }
-
-        public static void WalkFromTo(int x1,int y1,int x2,int y2)
-        {
-            //这个函数已经不需要实现，使用jyx2_WalkFromTo来解决
-        }
         
         public static void LearnMagic2(int roleId,int magicId,int noDisplay)
         {
@@ -482,20 +477,7 @@ namespace Jyx2
             });
             Wait();
         }
-
-        //增加资质
-        public static void AddAptitude(int roleId,int v)
-        {
-            RunInMainThread(() =>
-            {
-                var role = runtime.AllRoles[roleId];
-                role.IQ = Tools.Limit(role.IQ + v, 0, GameConst.MAX_ZIZHI);
-                storyEngine.DisplayPopInfo(role.Name + "资质增加" + v);
-                Next();
-            });
-            Wait();
-        }
-
+        
         public static void SetOneMagic(int roleId,int magicIndexRole,int magicId, int level)
         {
             RunInMainThread(() =>
@@ -527,61 +509,7 @@ namespace Jyx2
             });
             Wait();
         }
-
-        //判断队伍中是否有女性
-        public static bool JudgeFemaleInTeam()
-        {
-            foreach(var r in runtime.GetTeam())
-            {
-                if (r.Sex == "女")
-                    return true;
-            }
-            return false;
-        }
         
-        //增加轻功
-        public static void AddSpeed(int roleId, int value)
-        {
-            RunInMainThread(() => 
-            {
-                var r = runtime.AllRoles[roleId];
-                var v0 = r.Speed;
-                r.Speed = Tools.Limit(v0 + value, 0, GameConst.MAX_ROLE_ATTRITE);
-                storyEngine.DisplayPopInfo(r.Name + "轻功增加" + (r.Speed - v0));
-                Next();
-            });
-            Wait();
-        }
-
-        //内力
-        public static void AddMp(int roleId, int value)
-        {
-            RunInMainThread(() =>
-            {
-                var r = runtime.AllRoles[roleId];
-                var v0 = r.MaxMp;
-                r.MaxMp = Tools.Limit(v0 + value, 0, GameConst.MAX_HPMP);
-                r.Mp = Tools.Limit(r.Mp + value, 0, GameConst.MAX_HPMP);
-                storyEngine.DisplayPopInfo(r.Name + "内力增加" + (r.MaxMp - v0));
-                Next();
-            });
-            Wait();
-        }
-
-        //武力（原始属性）
-        public static void AddAttack(int roleId, int value)
-        {
-            RunInMainThread(() =>
-            {
-                var r = runtime.AllRoles[roleId];
-                var v0 = r.Attack;
-                r.Attack = Tools.Limit(v0 + value, 0, GameConst.MAX_ROLE_ATTRITE);
-                storyEngine.DisplayPopInfo(r.Name + "武力增加" + (r.Attack - v0));
-                Next();
-            });
-            Wait();
-        }
-
         //生命
         public static void AddHp(int roleId, int value)
         {
@@ -597,16 +525,6 @@ namespace Jyx2
             Wait();
         }
         
-        
-        public static void ShowMessage(string message)
-        {
-            RunInMainThread(() =>
-            {
-                MessageBox.Create(message, Next);
-            });
-            Wait();
-        }
-
         public static void ShowEthics()
         {
             RunInMainThread(() => {
@@ -641,84 +559,6 @@ namespace Jyx2
             runtime.SetSceneEntraceCondition(38, 2); //摩天崖 需要轻功大于75
             runtime.SetSceneEntraceCondition(75, 1); //桃花岛
             runtime.SetSceneEntraceCondition(80, 1); //绝情谷底
-        }
-
-        //武林大会
-        public static void FightForTop()
-        {
-            Dictionary<int, string> heads= new Dictionary<int, string>();
-            heads.Add(8,"唐文亮来领教阁下的高招．");
-            heads.Add(21,"贫尼定闲愿领教阁下高招．");
-            heads.Add(23,"贫道天门领教阁下高招．");
-            heads.Add(31,"小兄弟，我们再来玩玩．");
-            heads.Add(32,"小兄弟，秃笔翁陪你玩玩．");
-            heads.Add(43,"白某愿领教阁下高招．");
-            heads.Add(7,"何太冲来领教阁下的高招．");
-            heads.Add(11,"杨逍技痒，和少侠玩玩．");
-            heads.Add(14,"韦一笑技痒，和少侠玩玩．");
-            heads.Add(20,"莫某再次领教阁下高招．");
-            heads.Add(33,"小兄弟，黑白子向你讨教．");
-            heads.Add(34,"小兄弟，黄钟公向你讨教．");
-            heads.Add(10,"范某技痒，和少侠玩玩．");
-            heads.Add(12,"老朽技痒，和少侠玩玩．");
-            heads.Add(19,"岳某不才，向少侠挑战．");
-            heads.Add(22,"左冷禅愿领教阁下高招．");
-            heads.Add(56,"黄蓉愿领教阁下高招．");
-            heads.Add(68,"丘处机领教阁下高招．");
-            heads.Add(13,"谢某技痒，和少侠玩玩．");
-            heads.Add(55,"郭靖愿领教阁下高招．");
-            heads.Add(62,"老夫领教少侠高招！");
-            heads.Add(67,"裘千仞来领教阁下的高招．");
-            heads.Add(70,"阿弥陀佛，贫道愿向少侠挑战．");
-            heads.Add(71,"洪某拜教！");
-            heads.Add(26,"任某来领教阁下的高招．");
-            heads.Add(57,"少侠的确武功高强，我黄老邪来领教领教．");
-            heads.Add(60,"让我老毒物来会会你．");
-            heads.Add(64,"哇！你又学了这麽多新奇的功夫.来，来，老顽童陪你玩玩．");
-            heads.Add(3,"苗某向少侠讨教．");
-            heads.Add(69,"不错不错，七公我来领教领教．");
-            var ran=new System.Random();
-            var keys=heads.Keys.ToList();
-            var values=heads.Values.ToList();
-            for(int i=0;i<5;i++)
-            {
-                var tempList=new List<int>();
-                for(int i2=0;i2<3;i2++)
-                {
-                    int j=ran.Next(0,6);
-                    while(tempList.Contains(j))
-                    {
-                        j=ran.Next(0,6);
-                    }
-                    tempList.Add(j);
-                    Talk(keys[i*6+j],values[i*6+j],"",0);
-                    if (!TryBattle(102 + i*6+j))
-                    {
-                        Dead();
-                        return;
-                    }
-                }
-                if(i!=4){
-                    Talk(70,"少侠已连战三场，可先休息再战．","talkname0", 0);
-                    RestFight();
-                    DarkScence();
-                    LightScence();
-                }
-            }
-            
-            Talk(0,"接下来换谁？","talkname0", 1);
-            Talk(0,"．．．．．．．．","talkname0", 1);
-            Talk(0,"没有人了吗？","talkname0", 1);
-            Talk(70,"如果还没有人要出来向这位少侠挑战，那麽这武功天下第一之名，武林盟主之位，就由这位少侠夺得．","talkname0", 0);
-            Talk(70,"．．．．．．．．．．．．．．．．．．","talkname0", 0);
-            Talk(70,"好，恭喜少侠，这武林盟主之位就由少侠获得，而这把”武林神杖”也由你保管．","talkname0", 0);
-            Talk(12,"恭喜少侠！","talkname0", 0);
-            Talk(64,"小兄弟，恭喜你！","talkname0", 0);
-            Talk(19,"好，今年的武林大会到此已圆满结束，希望明年各位武林同道能再到我华山一游．","talkname0", 0);
-            DarkScence();
-            jyx2_ReplaceSceneObject("","NPC/华山弟子","");
-            jyx2_ReplaceSceneObject("","NPC/battleNPC","");
-            LightScence();
         }
         
         //判断场景贴图。ModifyEvent里如果p7!=-2时，会更新对应{场景}_{事件}的贴图信息，可以用此方法JudegeScenePic检查对应的贴图信息
@@ -791,13 +631,7 @@ namespace Jyx2
                 AudioManager.PlayClipAtPoint(path, Camera.main.transform.position).Forget();
             });
         }
-
-     
-        public static bool AskRest()
-        {
-            return ShowYesOrNoSelectPanel("是否休息?<color=red>（温馨提示：受伤太重或中毒不回复）</color>");
-        }
-
+        
         public static void DarkScence()
         {
             RunInMainThread(() =>
@@ -816,29 +650,8 @@ namespace Jyx2
             });
             Wait();
         }
-
-        public static void Rest()
-        {
-            RunInMainThread(() =>
-            {
-                foreach (var role in runtime.GetTeam())
-                {
-                    role.Recover(role.Hurt < 33);
-                }
-            });
-        }
-
-        public static void RestFight()
-        {
-            RunInMainThread(() =>
-            {
-                foreach (var role in runtime.GetTeam())
-                {
-                    role.Recover(role.Hurt < 50 );
-                }
-            });
-        }
-
+        
+        
         public static void LightScence()
         {
             RunInMainThread(() =>
@@ -860,8 +673,7 @@ namespace Jyx2
             });
             Wait();
         }
-
-
+        
         public static bool JudgeMoney(int money)
         {
             return (runtime.GetItemCount(GameConst.MONEY_ID) >= money);
@@ -948,6 +760,7 @@ namespace Jyx2
             Wait();
         }
 
+        //主角path= Level/Player
         public static void jyx2_CameraFollow(string path)
         {
             RunInMainThread(() =>
@@ -972,11 +785,6 @@ namespace Jyx2
                 Next();
             });
             Wait();
-        }
-        
-        public static void jyx2_CameraFollowPlayer()
-        {
-            jyx2_CameraFollow("Level/Player");
         }
 
         //fromName:-1, 获取主角当前位置作为起始点
@@ -1018,11 +826,6 @@ namespace Jyx2
         static Animator clonePlayer;
 
         private static float _timelineSpeed = 1;
-
-        public static void jyx2_SetTimelineSpeed(float speed)
-        {
-            _timelineSpeed = speed;
-        }
         
         /// 简单模式播放timeline，播放完毕后直接关闭
         public static void jyx2_PlayTimelineSimple(string timelineName, bool hidePlayer = false)
@@ -1209,7 +1012,6 @@ namespace Jyx2
         }
         
         /// 切换角色动作
-        ///
         /// 调用样例（胡斐居）
         /// jyx2_SwitchRoleAnimation("Level/NPC/胡斐", "Assets/BuildSource/AnimationControllers/打坐.controller")
         public static void jyx2_SwitchRoleAnimation(string rolePath, string animationControllerPath, string scene = "")
@@ -1254,21 +1056,7 @@ namespace Jyx2
 
             Wait();
         }
-
-        public static void jyx2_ShowEndScene()
-        {
-            DarkScence();
-
-            async void Action()
-            {
-                await UIManager.Instance.ShowUIAsync(nameof(TheEnd));
-            }
-
-            RunInMainThread(Action);
-            jyx2_Wait(1);
-            LightScence();
-        }
-
+        
         #endregion
 
 
@@ -1281,18 +1069,14 @@ namespace Jyx2
                 run();
             }, null);
         }
-
-        /// <summary>
+        
         /// 等待返回
-        /// </summary>
         private static void Wait()
         {
             sema.WaitOne();
         }
-
-        /// <summary>
+        
         /// 下一条指令
-        /// </summary>
         private static void Next()
         {
             sema.Release();
