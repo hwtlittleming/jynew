@@ -16,6 +16,8 @@ public class MakeChoiceNode : BaseNode
     [Output] public Node d;
     [Output] public Node e;
 
+    public int roleId;
+    public string talker_overwrite;
     public string content;
     public string[] options;
     
@@ -26,7 +28,7 @@ public class MakeChoiceNode : BaseNode
     protected override string OnPlay()
     {
         String nextNode = nameof(a);
-        int ret = LuaBridge.doChoice(content, options);
+        int ret = LuaBridge.doChoice(content, options,roleId.ToString(),talker_overwrite);
         if (ret == 1)
         {
             nextNode = nameof(b);

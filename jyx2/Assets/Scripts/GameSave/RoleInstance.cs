@@ -235,9 +235,16 @@ namespace Jyx2
         //获取一个背包道具;装备由id唯一确定;物品由 configId + quality 唯一确定;isCertainId = false则为模糊获取
         public ItemInstance GetItem(String itemIdOrName,int quality = 0,Boolean isCertainId = true)
         {
-            if (isCertainId)
+            if (isCertainId) //isCertainId=true 意思是传入的itemIdOrName是具体id，false的话传入的则是configId
             {
-                return GameRuntimeData.Instance.Player.Items.Find(it => (itemIdOrName).Equals(it.Id)); //物品实例id获取
+                if (itemIdOrName.StartsWith("Equipment_") || itemIdOrName.Contains("_"))
+                {
+                    return GameRuntimeData.Instance.Player.Items.Find(it => (itemIdOrName).Equals(it.Id)); //物品实例id获取
+                }
+                else
+                {
+                    return GameRuntimeData.Instance.Player.Items.Find(it => (quality + "_" +itemIdOrName).Equals(it.Id)); //物品实例id获取
+                }
             }
             else 
             {

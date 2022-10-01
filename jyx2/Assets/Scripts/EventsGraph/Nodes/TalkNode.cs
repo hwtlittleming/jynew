@@ -16,7 +16,7 @@ public class TalkNode : SimpleNode
 		name = "对话";
 	}
 	
-	public int roleId;
+	public String roleId;
 	public string talkerName;
 	public string content;
 	

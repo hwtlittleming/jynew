@@ -57,7 +57,7 @@ public partial class ChatUIPanel : UIBase, IUIAnimator
 		switch (_type)
 		{
 			case ChatType.RoleId:
-				Show((int)allParams[1], (string)allParams[2], allParams[3].ToString(), (Action)allParams[4]);
+				Show((string)allParams[1], (string)allParams[2], allParams[3].ToString(), (Action)allParams[4]);
 				break;
 			case ChatType.Selection:
 				ShowSelection((string)allParams[1], (string)allParams[2], (List<string>)allParams[3],allParams[4].ToString(), (Action<int>)allParams[5]);
@@ -87,9 +87,10 @@ public partial class ChatUIPanel : UIBase, IUIAnimator
 	//展示人物图片,姓名
 	private async UniTask ShowCharacter(String headId,String talker = null)
 	{
-		if (!talker.IsNullOrWhitespace())
-		{  //传了 talker  无图片的对话格式
+		if (!talker.IsNullOrWhitespace() && talker != "")
+		{  //传了 talker  无图片的对话格式 用于不想配置的角色讲话
 			NameTxt_Text.text =  talker;
+			HeadAvataPre_RectTransform.gameObject.SetActive(false);
 			kuang_RectTransform.gameObject.SetActive(false);
 			RoleHeadImage_Image.gameObject.SetActive(false);
 			Name_RectTransform.gameObject.SetActive(true);
@@ -108,6 +109,7 @@ public partial class ChatUIPanel : UIBase, IUIAnimator
 		else 
 		{
 			// 有图片 且根据角色ID修改左右位置
+			HeadAvataPre_RectTransform.gameObject.SetActive(true);
 			Name_RectTransform.gameObject.SetActive(true);
 			kuang_RectTransform.gameObject.SetActive(true);
 		
@@ -116,7 +118,7 @@ public partial class ChatUIPanel : UIBase, IUIAnimator
 			{
 				NameTxt_Text.text =  GameRuntimeData.Instance.Player.Name;
 			}
-			//从人物库找
+			//非主角从人物配置库找
 			var role = GameConfigDatabase.Instance.Get<ConfigCharacter>(headId);
 			NameTxt_Text.text =  role.Name;
 			
@@ -144,14 +146,7 @@ public partial class ChatUIPanel : UIBase, IUIAnimator
 
 			var url = $"Assets/BuildSource/head/{headId}.png";
 			RoleHeadImage_Image.gameObject.SetActive(true);
-			if (headId == "0")
-			{
-				RoleHeadImage_Image.LoadAsyncForget(role.GetPic());
-			}
-			else
-			{
-				RoleHeadImage_Image.sprite = await MODLoader.LoadAsset<Sprite>(url);
-			}
+			RoleHeadImage_Image.LoadAsyncForget(role.GetPic());
 		}
 		
 	}
@@ -209,14 +204,13 @@ public partial class ChatUIPanel : UIBase, IUIAnimator
 	}
 	
 
-	public void Show(int headId, string msg, String talker, Action callback)
+	public void Show(String headId, string msg, String talker, Action callback)
 	{
 		_currentText = $"{msg}";
 		_callback = callback;
 		SelectionPanel_RectTransform.gameObject.SetActive(false);
-
-		HeadAvataPre_RectTransform.gameObject.SetActive( headId != -1);
-		ShowCharacter(headId.ToString(),talker).Forget();
+		
+		ShowCharacter(headId,talker).Forget();
 		
         ShowText(); //talker有值则显示名称
 	}

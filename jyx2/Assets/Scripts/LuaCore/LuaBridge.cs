@@ -35,7 +35,7 @@ namespace Jyx2
 
         static GameRuntimeData runtime { get { return GameRuntimeData.Instance; } }
 
-        public static void Talk(int roleId, string content, string talker)
+        public static void Talk(String roleId, string content, string talker)
         { 
             async void Run()
             {
@@ -156,7 +156,7 @@ namespace Jyx2
         }
 
         //做选择
-        public static int doChoice(string selectMessage,String[] options)
+        public static int doChoice(string selectMessage,String[] options,String roleId,String talker = "")
         {
             async void Action()
             {
@@ -166,7 +166,7 @@ namespace Jyx2
                     selectionContent.Add(ops);
                 }
                 storyEngine.BlockPlayerControl = true;
-                await UIManager.Instance.ShowUIAsync(nameof(ChatUIPanel), ChatType.Selection, "0", selectMessage, selectionContent,GameRuntimeData.Instance.Player.Name, new Action<int>((index) =>
+                await UIManager.Instance.ShowUIAsync(nameof(ChatUIPanel), ChatType.Selection, roleId, selectMessage, selectionContent, talker, new Action<int>((index) =>
                 {
                     _selectResult = index;
                     storyEngine.BlockPlayerControl = false;
