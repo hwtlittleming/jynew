@@ -17,6 +17,7 @@ public class TalkNode : SimpleNode
 	}
 	
 	public int roleId;
+	public string talkerName;
 	public string content;
 	
 	// Use this for initialization
@@ -32,6 +33,6 @@ public class TalkNode : SimpleNode
 	
 	protected override void DoExecute()
 	{
-		LuaBridge.Talk(roleId, content, "", 0);
+		LuaBridge.Talk(roleId, content, talkerName);//talker如果传值则覆盖名称，即不用专门配一个角色来说话
 	}
 }

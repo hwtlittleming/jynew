@@ -27,9 +27,9 @@ public class TalkNodeEditor : NodeEditor
         NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("prev"));
         NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("next"));
         
-        //这里需要定制化角色头像和对话框，所以不使用_roleDrawer.DrawAll()，而是分步显示。
         _roleDrawer.DrawField();
         _roleDrawer.DrawPopup();
+        NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("talkerName"), new GUIContent("说话者名称(覆盖)"));
         //角色头像
         var roleHeadContent = new GUIContent(_roleDrawer.GetTexture());
         

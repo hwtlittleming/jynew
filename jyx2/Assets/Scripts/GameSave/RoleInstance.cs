@@ -516,7 +516,7 @@ namespace Jyx2
             if (magicId <= 0) return -1;
             SkillInstance skill = getSkill(magicId);
             Level = 1;
-            if ( skill == null)
+            if ( skill == null) //未拥有则学习1级
             {
                 SkillInstance s = new SkillInstance(magicId);
                 skills.Add(s);

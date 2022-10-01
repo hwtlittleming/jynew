@@ -23,7 +23,6 @@ namespace ES3Types
 			writer.WriteProperty("KeyValues", instance.KeyValues, ES3Internal.ES3TypeMgr.GetES3Type(typeof(System.Collections.Generic.Dictionary<System.String, System.String>)));
 			writer.WriteProperty("ShopItems", instance.ShopItems, ES3Internal.ES3TypeMgr.GetES3Type(typeof(System.Collections.Generic.Dictionary<System.String, System.Int32>)));
 			writer.WriteProperty("EventCounter", instance.EventCounter, ES3Internal.ES3TypeMgr.GetES3Type(typeof(System.Collections.Generic.Dictionary<System.String, System.Int32>)));
-			writer.WriteProperty("MapPic", instance.MapPic, ES3Internal.ES3TypeMgr.GetES3Type(typeof(System.Collections.Generic.Dictionary<System.String, System.Int32>)));
 			writer.WritePrivateField("_startDate", instance);
 		}
 
@@ -55,9 +54,6 @@ namespace ES3Types
 						break;
 					case "EventCounter":
 						instance.EventCounter = reader.Read<System.Collections.Generic.Dictionary<System.String, System.Int32>>();
-						break;
-					case "MapPic":
-						instance.MapPic = reader.Read<System.Collections.Generic.Dictionary<System.String, System.Int32>>();
 						break;
 					case "ItemAdded":
 						reader.SetPrivateField("ItemAdded", reader.Read<System.Collections.Generic.List<System.Int32>>(), instance);

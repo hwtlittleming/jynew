@@ -38,7 +38,6 @@ namespace Jyx2
         [SerializeField] public Dictionary<string, string> KeyValues = new Dictionary<string, string>(); //宝箱状态,地图打开状态,天数
         [SerializeField] public Dictionary<string, int> ShopItems= new Dictionary<string, int>(); //小宝商店物品，{ID，数量}
         [SerializeField] public Dictionary<string, int> EventCounter = new Dictionary<string, int>();
-        [SerializeField] public Dictionary<string, int> MapPic = new Dictionary<string, int>();
         #endregion
         
         //入口:新游戏的开始
@@ -322,35 +321,6 @@ namespace Jyx2
             }
         }
         
-        public int GetEventCount(int scene, int eventId, int eventName)
-        {
-            string key=(string.Format("{0}_{1}_{2}", scene, eventId, eventName));
-            if(EventCounter.ContainsKey(key)){
-                return EventCounter[key];
-            }
-            return 0;
-        }
-
-
-        public void SetMapPic(int scene, int eventId, int pic)
-        {
-            string key=(string.Format("{0}_{1}", scene, eventId));
-            if(MapPic.ContainsKey(key) && pic==-1){
-                MapPic.Remove(key);
-            }else{
-                MapPic[key]=pic;
-            }
-        }
-        
-        public int GetMapPic(int scene, int eventId)
-        {
-            string key=(string.Format("{0}_{1}", scene, eventId));
-            if(MapPic.ContainsKey(key)){
-                return MapPic[key];
-            }
-            return -1;
-        }
-
         //JYX2场景相关记录
         public Dictionary<string,string> GetSceneInfo(string scene)
         {
@@ -395,10 +365,8 @@ namespace Jyx2
             //否则取配置表初始值
             return gameMap.EnterCondition;
         }
-
-        /// <summary>
-        /// 设置场景进入条件码
-        /// </summary>
+        
+        /// 设置场景进入条件码 0为无条件
         public void SetSceneEntraceCondition(int mapId,int value)
         {
             string key = "SceneEntraceCondition_" + mapId;

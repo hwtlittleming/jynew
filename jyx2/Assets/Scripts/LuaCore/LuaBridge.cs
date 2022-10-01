@@ -35,12 +35,12 @@ namespace Jyx2
 
         static GameRuntimeData runtime { get { return GameRuntimeData.Instance; } }
 
-        public static void Talk(int roleId, string content, string talkName, int type)
+        public static void Talk(int roleId, string content, string talker)
         { 
             async void Run()
             {
                 storyEngine.BlockPlayerControl = true;
-                await UIManager.Instance.ShowUIAsync(nameof(ChatUIPanel), ChatType.RoleId, roleId, content, type, new Action(() =>
+                await UIManager.Instance.ShowUIAsync(nameof(ChatUIPanel), ChatType.RoleId, roleId, content, talker, new Action(() =>
                 {
                     storyEngine.BlockPlayerControl = false;
                     Next();
@@ -58,26 +58,15 @@ namespace Jyx2
         /// </summary>
         /// <param name="scene">场景，-2为当前场景</param>
         /// <param name="eventId">事件ID，-2为保留</param>
-        /// <param name="canPass">是否能够经过，-2为保留，在本作中没有作用</param>
-        /// <param name="changeToEventId">修改为的编号，-2为保留，在本作中没有作用</param>
         /// <param name="interactiveEventId">交互事件ID</param>
         /// <param name="useItemEventId">使用道具事件ID</param>
         /// <param name="enterEventId">进入事件ID</param>
-        /// <param name="p7">开始贴图</param>
-        /// <param name="p8">结束贴图</param>
-        /// <param name="p9">起始贴图</param>
-        /// <param name="p10">动画延迟</param>
-        /// <param name="p11">X坐标</param>
-        /// <param name="p12">Y坐标</param>
         public static void ModifyEvent(
             int scene,
             int eventId,
-            int canPass,
-            int changeToEventId,
             int interactiveEventId,
             int useItemEventId,
-            int enterEventId,
-            int p7, int p8, int p9, int p10, int p11, int p12)
+            int enterEventId)
         {
             RunInMainThread(() =>
             {
@@ -146,12 +135,7 @@ namespace Jyx2
 
                 //更新全局记录
                 runtime.ModifyEvent(scene, eventId, interactiveEventId, useItemEventId, enterEventId);
-
-                if (p7 != -2)
-                {
-                    runtime.SetMapPic(scene, eventId, p7);
-                }
-
+                
                 //刷新当前场景中的事件
                 LevelMaster.Instance.RefreshGameEvents();
                 if (interactiveEventId == -1 && evt != null)
@@ -182,7 +166,7 @@ namespace Jyx2
                     selectionContent.Add(ops);
                 }
                 storyEngine.BlockPlayerControl = true;
-                await UIManager.Instance.ShowUIAsync(nameof(ChatUIPanel), ChatType.Selection, "0", selectMessage, selectionContent, new Action<int>((index) =>
+                await UIManager.Instance.ShowUIAsync(nameof(ChatUIPanel), ChatType.Selection, "0", selectMessage, selectionContent,GameRuntimeData.Instance.Player.Name, new Action<int>((index) =>
                 {
                     _selectResult = index;
                     storyEngine.BlockPlayerControl = false;
@@ -248,7 +232,7 @@ namespace Jyx2
         public static void Dead()
         {
             //防止死亡后传送到enterTrigger再次触发事件。临时处理办法
-            ModifyEvent(-2, -2, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1);
+            ModifyEvent(-2, -2, -1, -1, -1);
 
             async void Run()
             {
@@ -287,19 +271,8 @@ namespace Jyx2
             });
             Wait();
         }
-
-        public static void ZeroAllMP()
-        {
-            RunInMainThread(() => {
-                foreach (var r in runtime.GetTeam())
-                {
-                    r.Mp = 0;
-                }
-                Next();
-            });
-            Wait();
-        }
-
+        
+        //todo
         //修改这个接口逻辑为在当前trigger对应事件序号基础上加上v1,v2,v3 (只对大于0的进行相加，-2保留原事件序号，-1为直接设置)
         // modified by eaphone at 2021/6/12
         public static void Add3EventNum(int scene, int eventId,int v1,int v2,int v3)
@@ -369,38 +342,6 @@ namespace Jyx2
             Wait();
         }
         
-        //targetEvent:0-interactiveEvent, 1-useItemEvent, 2-enterEvent
-        public static int jyx2_CheckEventCount(int scene, int eventId, int targetEvent)
-        {
-            int result=0;
-            RunInMainThread(() =>
-            {
-                //场景ID
-                if (scene == -2) //当前场景
-                {
-                    scene = LevelMaster.GetCurrentGameMap().Id;
-                }
-
-                //事件ID
-                if (eventId == -2)
-                {
-                    var evt=GameEvent.GetCurrentGameEvent();
-                    if (evt == null)
-                    {
-                        Debug.LogError("内部错误：当前的eventId为空，但是指定修改当前event");
-                        Next();
-                        return;
-                    }
-                    eventId = int.Parse(evt.name); //当前事件
-                }
-                
-                result= runtime.GetEventCount(scene,eventId,targetEvent);
-                Next();
-            });
-            Wait();
-            return result;
-        }
-
         public static bool InTeam(int roleId)
         {
             return runtime.GetRoleInTeam(roleId) != null;
@@ -423,7 +364,8 @@ namespace Jyx2
             return ret;
         }
         
-        public static void LearnMagic2(int roleId,int magicId,int noDisplay)
+        //学习一个技能，或使技能升一级
+        public static void LearnMagic(int roleId,int magicId,int noDisplay,int level = 1)
         {
             RunInMainThread(() => {
                 var role = runtime.GetRoleInTeam(roleId);
@@ -448,38 +390,6 @@ namespace Jyx2
                     var skill = GameConfigDatabase.Instance.Get<ConfigSkill>(magicId);
                     storyEngine.DisplayPopInfo(role.Name + "习得武学" + skill.Name);
                 }
-                Next();
-            });
-            Wait();
-        }
-        
-        public static void SetOneMagic(int roleId,int magicIndexRole,int magicId, int level)
-        {
-            RunInMainThread(() =>
-            {
-                var role = runtime.GetRoleInTeam(roleId);
-
-                if (role == null)
-                {
-                    role = runtime.AllRoles[roleId];
-                }
-
-                if (role == null)
-                {
-                    Debug.LogError("调用了不存在的角色,roleId =" + roleId);
-                    Next();
-                    return;
-                }
-
-                if(magicIndexRole >= role.skills.Count)
-                {
-                    Debug.LogError("SetOneMagic调用错误，index越界");
-                    Next();
-                    return;
-                }
-
-                role.skills[magicIndexRole].Key = magicId;
-                role.skills[magicIndexRole].Level = level;
                 Next();
             });
             Wait();
@@ -522,48 +432,6 @@ namespace Jyx2
             Wait();
             return result;
         }
-
-        //打开所有场景
-        public static void OpenAllScene()
-        {
-            foreach(var map in GameConfigDatabase.Instance.GetAll<ConfigMap>())
-            {
-                runtime.SetSceneEntraceCondition(map.Id, 0);
-            }
-            runtime.SetSceneEntraceCondition(2, 2); //云鹤崖 需要轻功大于75
-            runtime.SetSceneEntraceCondition(38, 2); //摩天崖 需要轻功大于75
-            runtime.SetSceneEntraceCondition(75, 1); //桃花岛
-            runtime.SetSceneEntraceCondition(80, 1); //绝情谷底
-        }
-        
-        //判断场景贴图。ModifyEvent里如果p7!=-2时，会更新对应{场景}_{事件}的贴图信息，可以用此方法JudegeScenePic检查对应的贴图信息
-        public static bool JudgeScenePic(int scene, int eventId, int pic)
-        {
-            bool result = false;
-            RunInMainThread(() => {
-                //场景ID
-                if(scene == -2) //当前场景
-                {
-                    scene = LevelMaster.GetCurrentGameMap().Id;
-                }
-
-                //事件ID
-                if(eventId == -2)
-                {
-                    var evt = GameEvent.GetCurrentGameEvent();
-                    if (evt != null)
-                    {
-                        eventId = int.Parse(evt.name); //当前事件
-                    }
-                }
-                var _target=runtime.GetMapPic(scene, eventId);
-                //Debug.LogError(_target);
-                result = _target==pic;
-                Next();
-            });
-            Wait();
-            return result;
-        }
         
         public static void PlayMusic(int id)
         {
@@ -578,19 +446,7 @@ namespace Jyx2
         {
             runtime.SetSceneEntraceCondition(sceneId, 0);
         }
-
-        // modify by eaphone at 2021/6/5
-        public static void SetRoleFace(int dir)
-        {
-            RunInMainThread(() =>
-            {
-                var levelMaster = GameObject.FindObjectOfType<LevelMaster>();
-                levelMaster.SetRotation(dir);
-                Next();
-            });
-            Wait();
-        }
-
+        
         /// 为角色添加非装备
         public static void NPCGetItem(int roleId,int itemId,int count)
         {

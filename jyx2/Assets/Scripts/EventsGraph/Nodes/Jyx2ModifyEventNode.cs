@@ -36,6 +36,6 @@ public class Jyx2ModifyEventNode : SimpleNode
 
     protected override void DoExecute()
     {
-        LuaBridge.ModifyEvent(SceneId, EventId, 0,0,InteractiveEventId, UseItemEventId, EnterEventId, 0, 0,0,0,0, 0);
+        LuaBridge.ModifyEvent(SceneId, EventId, InteractiveEventId, UseItemEventId, EnterEventId);
     }
 }

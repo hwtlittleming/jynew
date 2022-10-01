@@ -63,11 +63,7 @@ public class GlobalAssetConfig : ScriptableObject
     
     [BoxGroup("地图设置")] [LabelText("默认主角居名字")] 
     public string defaultHomeName;
-
-    [InfoBox("某些角色名与人物ID不严格对应，在此修正。用于对话中正确显示名字")] [BoxGroup("对话人物ID修正")] [TableList] 
-    [HideLabel]
-    public List<StoryIdNameFix> StoryIdNameFixes;
-
+    
     [BoxGroup("预缓存Prefab")]
     [HideLabel]
     public List<GameObject> CachedPrefabs;

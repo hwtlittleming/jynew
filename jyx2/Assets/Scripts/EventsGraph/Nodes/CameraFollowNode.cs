@@ -9,7 +9,7 @@ using XNode;
 
 [CreateNodeMenu("场景/摄像机锁定到")]
 [NodeWidth(300)]
-public class Jyx2CameraFollowNode : SimpleNode
+public class CameraFollowNode : SimpleNode
 {
     private void Reset() {
         name = "摄像机锁定到";

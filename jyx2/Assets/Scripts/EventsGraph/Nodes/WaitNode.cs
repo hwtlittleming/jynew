@@ -9,7 +9,7 @@ using XNode;
 
 [CreateNodeMenu("场景/等待")]
 [NodeWidth(150)]
-public class Jyx2WaitNode : SimpleNode
+public class WaitNode : SimpleNode
 {
 	private void Reset() {
 		name = "等待";

@@ -9,7 +9,7 @@ using XNode;
 
 [CreateNodeMenu("游戏数据/增减道具")]
 [NodeWidth(200)]
-public class Jyx2AddItemNode : SimpleNode
+public class AddItemNode : SimpleNode
 {
 	private void Reset() {
 		name = "增减道具";

@@ -8,28 +8,31 @@ using UnityEngine;
 using XNodeEditor;
 
 
-[CustomNodeEditor(typeof(Jyx2AddItemNode))]
-public class Jyx2AddItemNodeEditor : NodeEditor
+[CustomNodeEditor(typeof(LearnMagicNode))]
+public class LearnMagicNodeEditor : NodeEditor
 {
-    private NodeEditorHelperItem _itemDrawer;
-
+    private NodeEditorHelperRole _roleDrawer;
+    private NodeEditorHelperSkill _skillDrawer;
     public override void OnCreate()
     {
         base.OnCreate();
-        _itemDrawer = new NodeEditorHelperItem(this);
+        _roleDrawer = new NodeEditorHelperRole(this);
+        _skillDrawer = new NodeEditorHelperSkill(this);
     }
 
-    public override void OnBodyGUI()
-    {
+    public override void OnBodyGUI() 
+    {    
         // Update serialized object's representation
         serializedObject.Update();
-
+        
         NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("prev"));
+        _roleDrawer.DrawAll();
+        _skillDrawer.DrawField();
+        _skillDrawer.DrawPopup();
+        NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("visible"));
         NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("next"));
-        _itemDrawer.DrawAll();
-        NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("count"));
-        NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("isHint"));
         // Apply property modifications
         serializedObject.ApplyModifiedProperties();
     }
+
 }

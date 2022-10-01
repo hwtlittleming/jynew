@@ -12,6 +12,7 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.EventSystems;
 using Jyx2.MOD;
 using NUnit.Framework;
+using Sirenix.Utilities;
 
 public enum ChatType
 {
@@ -56,10 +57,10 @@ public partial class ChatUIPanel : UIBase, IUIAnimator
 		switch (_type)
 		{
 			case ChatType.RoleId:
-				Show((int)allParams[1], (string)allParams[2], (int)allParams[3], (Action)allParams[4]);
+				Show((int)allParams[1], (string)allParams[2], allParams[3].ToString(), (Action)allParams[4]);
 				break;
 			case ChatType.Selection:
-				ShowSelection((string)allParams[1], (string)allParams[2], (List<string>)allParams[3], (Action<int>)allParams[4]);
+				ShowSelection((string)allParams[1], (string)allParams[2], (List<string>)allParams[3],allParams[4].ToString(), (Action<int>)allParams[5]);
 				break;
 		}
 
@@ -75,6 +76,7 @@ public partial class ChatUIPanel : UIBase, IUIAnimator
 	protected override void OnHidePanel()
 	{
 		base.OnHidePanel();
+		MainContent_Text.text = "";
 	}
 
 
@@ -82,19 +84,80 @@ public partial class ChatUIPanel : UIBase, IUIAnimator
 	private Action<int> selectionCallback;
 	private int selectionContentCount = 0;
 
-	private async UniTask ShowCharacter(int headId)
+	//展示人物图片,姓名
+	private async UniTask ShowCharacter(String headId,String talker = null)
 	{
-		ChangePosition(headId);
+		if (!talker.IsNullOrWhitespace())
+		{  //传了 talker  无图片的对话格式
+			NameTxt_Text.text =  talker;
+			kuang_RectTransform.gameObject.SetActive(false);
+			RoleHeadImage_Image.gameObject.SetActive(false);
+			Name_RectTransform.gameObject.SetActive(true);
+			
+			//姓名居左
+			Name_RectTransform.anchorMax = new Vector2(1, 0); 
+			Name_RectTransform.anchorMin = new Vector2(1, 0); 
+			Name_RectTransform.pivot = new Vector2(1, 0); 
+			Name_RectTransform.anchoredPosition = new Vector2(-1600, 280); 
+			
+			//框占整行
+			Content_RectTransform.sizeDelta = new Vector2(0,280); 
+			Content_RectTransform.offsetMax = new Vector2(0,280);
+			Content_RectTransform.offsetMin = new Vector2(0,0);
+		}
+		else 
+		{
+			// 有图片 且根据角色ID修改左右位置
+			Name_RectTransform.gameObject.SetActive(true);
+			kuang_RectTransform.gameObject.SetActive(true);
+		
+			//主角名
+			if (headId == "0" && GameRuntimeData.Instance.Player != null)
+			{
+				NameTxt_Text.text =  GameRuntimeData.Instance.Player.Name;
+			}
+			//从人物库找
+			var role = GameConfigDatabase.Instance.Get<ConfigCharacter>(headId);
+			NameTxt_Text.text =  role.Name;
+			
 
-		var url = $"Assets/BuildSource/head/{headId}.png";
+			Content_RectTransform.anchoredPosition = headId == "0"  ? Vector3.zero : new Vector3(400, 0, 0);
 
-		RoleHeadImage_Image.gameObject.SetActive(false);
-		RoleHeadImage_Image.sprite = await MODLoader.LoadAsset<Sprite>(url);
-		RoleHeadImage_Image.gameObject.SetActive(true);
+			Content_RectTransform.sizeDelta = new Vector2(-400, 280);
+
+
+			HeadAvataPre_RectTransform.anchorMax = headId == "0" ? Vector2.right : Vector2.zero;
+			HeadAvataPre_RectTransform.anchorMin = headId == "0" ? Vector2.right : Vector2.zero;
+			HeadAvataPre_RectTransform.pivot = headId == "0" ? Vector2.right : Vector2.zero;
+			HeadAvataPre_RectTransform.anchoredPosition = Vector3.zero;
+
+			kuang_RectTransform.anchorMax = headId == "0" ? Vector2.right : Vector2.zero;
+			kuang_RectTransform.anchorMin = headId == "0" ? Vector2.right : Vector2.zero;
+			kuang_RectTransform.pivot = headId == "0" ? Vector2.right : Vector2.zero;
+			kuang_RectTransform.anchoredPosition = Vector3.zero;
+
+			Name_RectTransform.anchorMax = headId == "0" ? Vector2.right : Vector2.zero;
+			Name_RectTransform.anchorMin = headId == "0" ? Vector2.right : Vector2.zero;
+			Name_RectTransform.pivot = headId == "0" ? Vector2.right : Vector2.zero;
+			Name_RectTransform.anchoredPosition = new Vector2(headId == "0" ? -400 : 400, 280);
+		
+
+			var url = $"Assets/BuildSource/head/{headId}.png";
+			RoleHeadImage_Image.gameObject.SetActive(true);
+			if (headId == "0")
+			{
+				RoleHeadImage_Image.LoadAsyncForget(role.GetPic());
+			}
+			else
+			{
+				RoleHeadImage_Image.sprite = await MODLoader.LoadAsset<Sprite>(url);
+			}
+		}
+		
 	}
 
 	//根据对话框最大显示字符以及标点断句分段显示对话 by eaphone at 2021/6/12
-	void ShowText()
+	async void ShowText(String NameText = "")
 	{
 		if (_currentShowIndex >= _currentText.Length - 1)
 		{
@@ -134,90 +197,28 @@ public partial class ChatUIPanel : UIBase, IUIAnimator
 		{
 			_currentShowIndex = _currentText.Length;
 		}
-		
+
+		finalS = finalS + NameText;
 		//打字机效果
 		foreach (var cha in finalS.ToCharArray())
 		{
-			MainContent_Text.text += finalS;
-			UniTask.Delay(100);
+			MainContent_Text.text += cha;
+			await  UniTask.Delay(30);
 		}
 		
 	}
 	
 
-	public void Show(int headId, string msg, int type, Action callback)
+	public void Show(int headId, string msg, String talker, Action callback)
 	{
 		_currentText = $"{msg}";
 		_callback = callback;
 		SelectionPanel_RectTransform.gameObject.SetActive(false);
 
-		HeadAvataPre_RectTransform.gameObject.SetActive(!(type == 2 || type == 3));
-
-		//不显示人物
-		if (type == 2 || type == 3)
-		{
-			ChangePosition(1, false);
-			RoleHeadImage_Image.gameObject.SetActive(false);
-		}
-		else
-		{
-			ShowCharacter(headId).Forget();
-		}
-		ShowText();
-	}
-
-	string GetRoleName(int headId)
-	{
-		//主角名定制
-		if (headId == 0 && GameRuntimeData.Instance.Player != null)
-		{
-			return GameRuntimeData.Instance.Player.Name;
-		}
-
-		//先找替换修正的
-		if (GlobalAssetConfig.Instance.StoryIdNameFixes != null)
-		{
-			var find = GlobalAssetConfig.Instance.StoryIdNameFixes.SingleOrDefault(p => p.Id == headId);
-			if (find != null)
-			{
-				return find.Name;
-			}
-		}
-
-		//再从人物库找
-		var role = GameConfigDatabase.Instance.Get<ConfigCharacter>(headId);
-		return role.Name;
-	}
-
-	//根据角色ID修改左右位置
-	public void ChangePosition(int headId, bool ShowName = true)
-	{
-		Name_RectTransform.gameObject.SetActive(ShowName);
-		kuang_RectTransform.gameObject.SetActive(ShowName);
-		if (ShowName)
-		{
-			NameTxt_Text.text = GetRoleName(headId);
-		}
-
-		Content_RectTransform.anchoredPosition = headId == 0 || !ShowName ? Vector3.zero : new Vector3(400, 0, 0);
-
-		Content_RectTransform.sizeDelta = ShowName ? new Vector2(-400, 280) : new Vector2(0, 280);
-
-
-		HeadAvataPre_RectTransform.anchorMax = headId == 0 ? Vector2.right : Vector2.zero;
-		HeadAvataPre_RectTransform.anchorMin = headId == 0 ? Vector2.right : Vector2.zero;
-		HeadAvataPre_RectTransform.pivot = headId == 0 ? Vector2.right : Vector2.zero;
-		HeadAvataPre_RectTransform.anchoredPosition = Vector3.zero;
-
-		kuang_RectTransform.anchorMax = headId == 0 ? Vector2.right : Vector2.zero;
-		kuang_RectTransform.anchorMin = headId == 0 ? Vector2.right : Vector2.zero;
-		kuang_RectTransform.pivot = headId == 0 ? Vector2.right : Vector2.zero;
-		kuang_RectTransform.anchoredPosition = Vector3.zero;
-
-		Name_RectTransform.anchorMax = headId == 0 ? Vector2.right : Vector2.zero;
-		Name_RectTransform.anchorMin = headId == 0 ? Vector2.right : Vector2.zero;
-		Name_RectTransform.pivot = headId == 0 ? Vector2.right : Vector2.zero;
-		Name_RectTransform.anchoredPosition = new Vector2(headId == 0 ? -400 : 400, 280);
+		HeadAvataPre_RectTransform.gameObject.SetActive( headId != -1);
+		ShowCharacter(headId.ToString(),talker).Forget();
+		
+        ShowText(); //talker有值则显示名称
 	}
 
 	protected override void handleGamepadButtons()
@@ -247,9 +248,9 @@ public partial class ChatUIPanel : UIBase, IUIAnimator
 				OnMainBgClick();
 	}
 
-	public void ShowSelection(string roleId, string msg, List<string> selectionContent, Action<int> callback)
+	public void ShowSelection(string roleId, string msg, List<string> selectionContent,String talker, Action<int> callback)
 	{
-		ShowCharacter(int.Parse(roleId)).Forget();
+		ShowCharacter(roleId,talker).Forget();
 		MainContent_Text.text = $"{msg}";
 
 		selectionCallback = callback;

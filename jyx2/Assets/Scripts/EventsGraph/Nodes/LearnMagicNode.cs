@@ -9,20 +9,20 @@ using XNode;
 
 [CreateNodeMenu("游戏数据/学会武功")]
 [NodeWidth(200)]
-public class Jyx2LearnMagic2Node : SimpleNode
+public class LearnMagicNode : SimpleNode
 {
     private void Reset() {
         name = "学会武功";
     }
     [Header("角色id")]
     public int roleId;
-    [Header("武功id")]
+    [Header("技能id")]
     public int skillId;
     [Header("是否显示(0:不显示,1:显示)")]
     public int visible;
     
     protected override void DoExecute()
 	{   
-		LuaBridge.LearnMagic2(roleId, skillId, visible);
+		LuaBridge.LearnMagic(roleId, skillId, visible);
 	}
 }
