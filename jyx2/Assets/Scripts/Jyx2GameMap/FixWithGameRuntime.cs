@@ -2,7 +2,7 @@
 using Jyx2;
 using UnityEngine;
 
-/// 随着游戏存档进行调整
+/// 随着游戏存档进行调整  todo 有问题 待改
 public class FixWithGameRuntime : MonoBehaviour
 {
 	public string Flag;

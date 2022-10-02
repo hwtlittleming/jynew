@@ -35,9 +35,8 @@ namespace Jyx2
         [SerializeField] public SubMapSaveData SubMapData; //当前所处子地图存储数据
         [SerializeField] public WorldMapSaveData WorldData; //世界地图信息
          
-        [SerializeField] public Dictionary<string, string> KeyValues = new Dictionary<string, string>(); //宝箱状态,地图打开状态,天数
+        [SerializeField] public Dictionary<string, string> KeyValues = new Dictionary<string, string>(); //宝箱状态,地图打开状态,场景物体的变更,变更了的事件,天数
         [SerializeField] public Dictionary<string, int> ShopItems= new Dictionary<string, int>(); //小宝商店物品，{ID，数量}
-        [SerializeField] public Dictionary<string, int> EventCounter = new Dictionary<string, int>();
         #endregion
         
         //入口:新游戏的开始
@@ -286,7 +285,7 @@ namespace Jyx2
         }
         
         //改变事件
-        public void ModifyEvent(String scene, String eventId, int interactiveEventId, int useItemEventId, int directEventId)
+        public void ModifyEvent(String scene, String eventId, String interactiveEventId, String useItemEventId, String directEventId)
         {
             string key = "evt_" + scene + "_" + eventId;
             KeyValues[key] = string.Format("{0}_{1}_{2}", interactiveEventId, useItemEventId, directEventId);
@@ -300,17 +299,7 @@ namespace Jyx2
             return null;
         }
         
-        public void AddEventCount(String scene, String eventNPC, int eventName, int num)
-        {
-            string key=(string.Format("{0}_{1}_{2}", scene, eventNPC, eventName));
-            if(EventCounter.ContainsKey(key)){
-                EventCounter[key]+=num;
-            }else{
-                EventCounter[key]=num;
-            }
-        }
-        
-        //JYX2场景相关记录
+        //场景物体位置等变更 记录存档
         public Dictionary<string,string> GetSceneInfo(string scene)
         {
             string key = "scene_" + scene;
@@ -323,7 +312,8 @@ namespace Jyx2
                 
             return null;
         }
-
+        
+        //场景物体位置等变更 记录存档
         public void SetSceneInfo(string scene, Dictionary<string, string> info)
         {
             if (info == null)

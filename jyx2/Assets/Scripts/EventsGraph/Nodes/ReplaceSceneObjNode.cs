@@ -6,7 +6,7 @@ using UnityEngine;
 
 [CreateNodeMenu("场景/显示隐藏物体")]
 [NodeWidth(200)]
-public class Jyx2ReplaceSceneObjNode : SimpleNode
+public class ReplaceSceneObjNode : SimpleNode
 {
     private void Reset() {
         name = "显示隐藏物体";

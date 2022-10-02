@@ -53,92 +53,47 @@ namespace Jyx2
         }
         
         /// 修改事件
-        /// <param name="scene">场景，-2为当前场景</param>
-        /// <param name="eventNPC">事件触发点NPC或物体id，-2为保留</param>
-        /// <param name="interactiveEventId">交互事件ID</param>
-        /// <param name="useItemEventId">使用道具事件ID</param>
-        /// <param name="enterEventId">直接触发事件ID</param>
+        /// <param name="scene">场景id，this为当前场景</param>
+        /// <param name="eventObject">事件触发点NPC或物体名，this为当前物体</param>
+        /// <param name="interactiveEventId">交互事件ID(0为不变更)</param>
+        /// <param name="useItemEventId">使用道具事件ID(0为不变更)</param>
+        /// <param name="enterEventId">直接触发事件ID(0为不变更)</param>
         public static void ModifyEvent(
             String scene,
-            String eventNPC,
-            int interactiveEventId,
-            int useItemEventId,
-            int enterEventId)
+            String eventObject,
+            String interactiveEventId,
+            String useItemEventId,
+            String enterEventId)
         {
             RunInMainThread(() =>
             {
-                
-                bool isCurrentScene = false;
                 //场景ID
-                if (scene == "-2") //当前场景
+                if (scene == "this") //当前场景
                 {
                     scene = LevelMaster.GetCurrentGameMap().Id.ToString();
-                    isCurrentScene = true;
                 }
 
-                var evt = GameEventManager.GetGameEventByID(GameEventManager._currentEvt);
+                var curEvent = GameEventManager.GetGameEventByID(GameEventManager._currentEvt);//当前场景 当前触发的事件
                 //事件ID
-                if (eventNPC == "-2")
+                if (eventObject == "this")
                 {
-                    if (evt == null)
-                    {
-                        Debug.LogError("内部错误：当前的eventId为空，但是指定修改当前event");
-                        Next();
-                        return;
-                    }
-                    eventNPC = evt.name; //当前事件
+                    eventObject = curEvent.name; //当前碰触的物体
                 }
                 else
                 {
-                    evt = GameEventManager.GetGameEventByID(eventNPC.ToString());
-                }
-
-                if (isCurrentScene && evt != null) //当前场景
-                {
-                    if (interactiveEventId == -2)
-                    {
-                        interactiveEventId = evt.m_InteractiveEventId;
-                    }
-
-                    if (useItemEventId == -2)
-                    {
-                        useItemEventId = evt.m_UseItemEventId;
-                    }
-
-                    if (enterEventId == -2)
-                    {
-                        enterEventId = evt.m_HitEventId;
-                    }
-                }
-                // 非当前场景事件如何获取
-                else
-                {
-                    if (interactiveEventId == -2)
-                    {
-                        interactiveEventId = -1;
-                    }
-
-                    if (useItemEventId == -2)
-                    {
-                        useItemEventId = -1;
-                    }
-
-                    if (enterEventId == -2)
-                    {
-                        enterEventId = -1;
-                    }
+                    curEvent = GameEventManager.GetGameEventByID(eventObject.ToString());
                 }
 
                 //更新全局记录
-                runtime.ModifyEvent(scene, eventNPC, interactiveEventId, useItemEventId, enterEventId);
+                runtime.ModifyEvent(scene, eventObject, interactiveEventId, useItemEventId, enterEventId);
                 
                 //刷新当前场景中的事件
                 LevelMaster.Instance.RefreshGameEvents();
-                if (interactiveEventId == -1 && evt != null)
+                if (interactiveEventId == "-1" && curEvent != null)
                 {
                     async UniTask ExecuteCurEvent()
                     {
-                        await evt.MarkChest();
+                        await curEvent.MarkChest();
                     }
 
                     ExecuteCurEvent().Forget();
@@ -263,75 +218,6 @@ namespace Jyx2
                     storyEngine.DisplayPopInfo(role.Name + "离队。");
                 }
                 
-                Next();
-            });
-            Wait();
-        }
-        
-        //修改这个接口逻辑为在当前trigger对应事件序号基础上加上v1,v2,v3 (只对大于0的进行相加，-2保留原事件序号，-1为直接设置)
-        // modified by eaphone at 2021/6/12
-        public static void AlterEventNode(String scene, String eventNPC,int v1,int v2,int v3)
-        {
-            RunInMainThread(() =>
-            {
-                bool isCurrentScene=false;
-                //场景ID
-                if (scene == "-2") //当前场景
-                {
-                    scene = LevelMaster.GetCurrentGameMap().Id.ToString();
-                    isCurrentScene=true;
-                }
-
-                var evt=GameEventManager.GetGameEventByID(GameEventManager._currentEvt);
-                //事件ID
-                if (eventNPC == "-2")
-                {
-                    if (evt == null)
-                    {
-                        Debug.LogError("内部错误：当前的eventId为空，但是指定修改当前event");
-                        Next();
-                        return;
-                    }
-                    eventNPC = evt.name; //当前事件
-                }else{
-                    evt=GameEventManager.GetGameEventByID(eventNPC.ToString());
-                }
-
-                if(isCurrentScene && evt!=null)//非当前场景事件如何获取
-                {
-                    if(v1==-2){//值为-2时，取当前值
-                        v1=evt.m_InteractiveEventId;
-                    }else if(v1>-1){
-                        v1+=evt.m_InteractiveEventId;
-                    }
-                    if(v2==-2){
-                        v2=evt.m_UseItemEventId;
-                    }else if(v2>-1){
-                        v2+=evt.m_UseItemEventId;
-                    }
-                    if(v3==-2){
-                        v3=evt.m_HitEventId;
-                    }else if(v3>-1){
-                        v3+=evt.m_HitEventId;
-                    }
-                    
-                    runtime.ModifyEvent(scene, eventNPC, v1, v2, v3);
-
-                    //刷新当前场景中的事件
-                    LevelMaster.Instance.RefreshGameEvents();
-                }else{
-                    if(v1>0){
-                        runtime.AddEventCount(scene,eventNPC,0,v1);
-                    }
-                    if(v2>0){
-                        runtime.AddEventCount(scene,eventNPC,1,v2);
-                    }
-                    if(v3>0){
-                        runtime.AddEventCount(scene,eventNPC,2,v3);
-                    }
-                }
-
-                //下一条指令
                 Next();
             });
             Wait();
@@ -548,7 +434,7 @@ namespace Jyx2
             RunInMainThread(() =>
             {
                 LevelMasterBooster level = GameObject.FindObjectOfType<LevelMasterBooster>();
-                level.ReplaceSceneObject(scene, path, replace);
+                level.SetSceneInfo(path, replace, scene);
                 Next();
             });
             Wait();
@@ -824,22 +710,22 @@ namespace Jyx2
         
         /// 切换角色动作
         /// 调用样例（胡斐居）
-        /// jyx2_SwitchRoleAnimation("Level/NPC/胡斐", "Assets/BuildSource/AnimationControllers/打坐.controller")
-        public static void jyx2_SwitchRoleAnimation(string rolePath, string animationControllerPath, string scene = "")
+        /// SwitchRoleAnimation("Level/NPC/胡斐", "Assets/BuildSource/AnimationControllers/打坐.controller")
+        public static void SwitchRoleAnimation(string rolePath, string animationControllerPath, string scene = "")
         {
-            Debug.Log("jyx2_SwitchRoleAnimation called");
+            Debug.Log("SwitchRoleAnimation called");
 
             RunInMainThread(() =>
             {
                 LevelMasterBooster level = GameObject.FindObjectOfType<LevelMasterBooster>();
                 if (level == null)
                 {
-                    Debug.LogError("jyx2_SwitchRoleAnimation调用错误，找不到LevelMaster");
+                    Debug.LogError("SwitchRoleAnimation调用错误，找不到LevelMaster");
                     Next();
                     return;
                 }
 
-                level.ReplaceNpcAnimatorController(scene, rolePath, animationControllerPath);
+                level.SetSceneInfo(rolePath, "controller:" + animationControllerPath, scene);
                 Next();
             });
             Wait();

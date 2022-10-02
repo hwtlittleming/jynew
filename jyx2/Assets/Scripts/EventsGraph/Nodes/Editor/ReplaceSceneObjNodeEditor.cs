@@ -8,8 +8,8 @@ using UnityEngine;
 using XNodeEditor;
 
 
-[CustomNodeEditor(typeof(Jyx2ReplaceSceneObjNode))]
-public class Jyx2ReplaceSceneObjNodeEditor : NodeEditor
+[CustomNodeEditor(typeof(ReplaceSceneObjNode))]
+public class ReplaceSceneObjNodeEditor : NodeEditor
 {
     private NodeEditorHelperScene _sceneDrawer;
 

@@ -100,6 +100,7 @@ public class GameEventManager : MonoBehaviour
         }),null);
     }
     
+    //所有触发入口
     public  bool TryTrigger(GameEvent evt)
     {
         //如果已有事件进行
@@ -121,7 +122,7 @@ public class GameEventManager : MonoBehaviour
             && !evt.m_EventType.Contains("偷袭)")) return false;
         if (evt.m_EventTargets == null || evt.m_EventTargets.Length == 0) return false;
 
-        //显示交互面板
+        //显示交互面板，选择事件
         ShowInteractUIPanel(evt);
 
         UnityTools.HighLightObjects(evt.m_EventTargets, Color.red);
@@ -129,18 +130,15 @@ public class GameEventManager : MonoBehaviour
         return true;
     }
 
-    public void ExecuteEvent(int eventId, EventContext context = null)
+    //执行eventgraph
+    public void ExecuteEvent(String eventId, EventContext context = null)
     {
-        if (eventId < 0)
-        {
-            //Debug.LogError("执行错误的luaEvent，id=" + eventId);
-            return;
-        }
-
+        if (eventId == "-1") return; 
+            
         //停止导航
         var levelMaster = LevelMaster.Instance;
 
-        if (levelMaster != null && eventId != 911)
+        if (levelMaster != null)
         {
             levelMaster.SetPlayerCanController(false);
             levelMaster.StopPlayerNavigation();
@@ -156,8 +154,7 @@ public class GameEventManager : MonoBehaviour
             //if (curEvent != null)
             //    await curEvent.MarkChest();
             
-            //先判断是否有蓝图类
-            //如果有则执行蓝图，否则执行lua
+            //先判断是否有蓝图类，有则执行蓝图，否则执行lua
             var graph = await Jyx2ResourceHelper.LoadEventGraph(eventId);
             if (graph != null)
             {

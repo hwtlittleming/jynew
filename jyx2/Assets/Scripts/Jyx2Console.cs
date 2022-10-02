@@ -30,7 +30,7 @@ public static class Jyx2Console
             {
                 string eventId = paras[1];
                 var eventManager = GameObject.FindObjectOfType<GameEventManager>();
-                eventManager.ExecuteEvent(int.Parse(eventId));
+                eventManager.ExecuteEvent(eventId);
                 break;
             }
             case "item":
@@ -107,7 +107,7 @@ public static class Jyx2Console
                 foreach (var obj in evt.m_EventTargets)
                 {
                     if (obj == null) continue;
-                    isTalkedToWei = evt.m_InteractiveEventId == 938;
+                    isTalkedToWei = evt.m_InteractiveEventId == "938";
                     /*var o = obj.GetComponent<InteractiveObj>();
                     if (o != null && "韦小宝" == o.name)
                     {
@@ -121,11 +121,11 @@ public static class Jyx2Console
             {
                 var curTriggerId = GameConfigDatabase.Instance.Get<ConfigShop>(cur.Id).Trigger.ToString();
                 Debug.Log("transport Wei to " + hotelList[index].Id);
-                level.ReplaceSceneObject(cur.Id.ToString(), weiPath, "0");
-                level.ReplaceSceneObject(hotelList[index].Id.ToString(), weiPath, "1");
-                GameRuntimeData.Instance.ModifyEvent(cur.Id.ToString(), curTriggerId, -1, -1, -1);
-                GameRuntimeData.Instance.ModifyEvent(hotelList[index].Id.ToString(), hotelList[index].Trigger.ToString(), 938, -1,
-                    -1);
+                level.SetSceneInfo(weiPath, "0", cur.Id.ToString());
+                level.SetSceneInfo(weiPath, "1", hotelList[index].Id.ToString());
+                GameRuntimeData.Instance.ModifyEvent(cur.Id.ToString(), curTriggerId, "-1", "-1", "-1");
+                GameRuntimeData.Instance.ModifyEvent(hotelList[index].Id.ToString(), hotelList[index].Trigger.ToString(), "938", "-1",
+                    "-1");
                 LevelMaster.Instance.RefreshGameEvents();
             }
         }

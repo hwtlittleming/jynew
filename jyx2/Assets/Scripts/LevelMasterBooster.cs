@@ -73,32 +73,17 @@ public class LevelMasterBooster : MonoBehaviour
         
         await UIManager.Instance.ShowMainUI();
     }
-
-    public void ReplaceSceneObject(string scene, string path, string replace)
-    {
-        SetSceneInfo(path, replace, scene);
-    }
-
+    
     private const string CONTROLLER_SCENE_INFO_PRFIX = "controller:";
-    public void ReplaceNpcAnimatorController(string scene,string npc, string controllerPath)
-    {
-        SetSceneInfo(npc, CONTROLLER_SCENE_INFO_PRFIX + controllerPath, scene);
-    }
-
-
-    /// <summary>
-    /// 设置场景数据
-    /// </summary>
-    /// <param name="key"></param>
-    /// <param name="value"></param>
-    /// <param name="scene">如果为空，则是当前场景</param>
-    void SetSceneInfo(string key, string value, string scene = "")
+    
+    /// 设置场景数据,某物体是否隐藏，更换Npc动作控制器
+    /// <param name="scene">this:当前场景</param>
+    public void SetSceneInfo(string key, string value, string scene = "this")
     {
         string sceneName = "";
         //当前场景
-        if (string.IsNullOrEmpty(scene))
+        if (scene == "this")
         {
-            //sceneName = SceneManager.GetActiveScene().name;
             sceneName = LevelMaster.GetCurrentGameMap().Id.ToString();
         }
         else
@@ -106,9 +91,7 @@ public class LevelMasterBooster : MonoBehaviour
             sceneName = scene;
         }
         
-        var dict = runtime.GetSceneInfo(sceneName);
-        if (dict == null)
-            dict = new Dictionary<string, string>();
+        var dict = new Dictionary<string, string>();
         dict[key] = value;
         runtime.SetSceneInfo(sceneName, dict);
 
@@ -150,7 +133,6 @@ public class LevelMasterBooster : MonoBehaviour
                 Debug.LogError("RefreshSceneObjects错误：找不到对象:" + objPath);
                 continue;
             }
-
             
             //设置是否可见
             if (string.IsNullOrEmpty(kv.Value) || kv.Value.Equals("0"))

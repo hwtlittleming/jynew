@@ -94,24 +94,17 @@ public class LevelMaster : MonoBehaviour
 	{
 		get { return GameRuntimeData.Instance; }
 	}
-
-	/// <summary>
+	
 	/// 获取当前所在地图
-	/// </summary>
-	/// <returns></returns>
 	public static ConfigMap GetCurrentGameMap()
 	{
 		return _currentMap;
 	}
-
-	/// <summary>
+	
 	/// 当前是否在战斗中
-	/// </summary>
 	public static bool IsInBattle = false;
-
-	/// <summary>
+	
 	/// 当前是否在大地图，统一判断方式
-	/// </summary>
 	public bool IsInWorldMap
 	{
 		get { return _currentMap?.Tags.Contains("WORLDMAP") ?? false; }
@@ -855,9 +848,10 @@ public class LevelMaster : MonoBehaviour
 			if (!string.IsNullOrEmpty(modify))
 			{
 				string[] tmp = modify.Split('_');
-				evt.m_InteractiveEventId = int.Parse(tmp[0]);
-				evt.m_UseItemEventId = int.Parse(tmp[1]);
-				evt.m_HitEventId = int.Parse(tmp[2]);
+				//为0则事件没有被改变，不用刷新
+				if(tmp[0] != "0") evt.m_InteractiveEventId = tmp[0];
+				if(tmp[1] != "0") evt.m_UseItemEventId = tmp[1];
+				if(tmp[2] != "0") evt.m_HitEventId = tmp[2];
 			}
 				
 		}

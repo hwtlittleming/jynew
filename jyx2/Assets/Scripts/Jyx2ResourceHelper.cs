@@ -114,7 +114,7 @@ public static class Jyx2ResourceHelper
         return Serializer.Deserialize<SceneCoordDataSet>(memory);
     }
 
-    public static async UniTask<Jyx2NodeGraph> LoadEventGraph(int id)
+    public static async UniTask<Jyx2NodeGraph> LoadEventGraph(String id)
     {
         string url = $"Assets/BuildSource/EventsGraph/{id}.asset";
         var rst = await Addressables.LoadResourceLocationsAsync(url).Task;

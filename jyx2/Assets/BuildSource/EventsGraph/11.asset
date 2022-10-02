@@ -161,9 +161,6 @@ MonoBehaviour:
       - fieldName: prev
         node: {fileID: -8371594034694148066}
         reroutePoints: []
-      - fieldName: prev
-        node: {fileID: 4560308674031990555}
-        reroutePoints: []
       _direction: 1
       _connectionType: 0
       _typeConstraint: 0
@@ -241,7 +238,49 @@ MonoBehaviour:
   - {fileID: -449425855900361751}
   - {fileID: -8371594034694148066}
   - {fileID: -5344655541177879697}
-  - {fileID: 4560308674031990555}
+  - {fileID: 2565581208339042850}
+--- !u!114 &2565581208339042850
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5666755e291eb474f9dab5a2eaad2d76, type: 3}
+  m_Name: "\u4E8B\u4EF6\u4FEE\u6539"
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: 521.9, y: -157.5}
+  ports:
+    keys:
+    - next
+    - prev
+    values:
+    - _fieldName: next
+      _node: {fileID: 2565581208339042850}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: prev
+      _node: {fileID: 2565581208339042850}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  prev: {fileID: 0}
+  next: {fileID: 0}
+  SceneId: this
+  EventId: this
+  InteractiveEventId: -1
+  UseItemEventId: -1
+  EnterEventId: -1
 --- !u!114 &3294803637074545503
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -282,6 +321,48 @@ MonoBehaviour:
       _dynamic: 0
   prev: {fileID: 0}
   next: {fileID: 0}
+--- !u!114 &3495071407912850188
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3811cd3301ac16f45bcfdab740ed83cd, type: 3}
+  m_Name: "\u4FEE\u6539\u89E6\u53D1\u5668\u4E8B\u4EF6"
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: 408, y: -456}
+  ports:
+    keys:
+    - next
+    - prev
+    values:
+    - _fieldName: next
+      _node: {fileID: 3495071407912850188}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: prev
+      _node: {fileID: 3495071407912850188}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  prev: {fileID: 0}
+  next: {fileID: 0}
+  sceneId: 
+  eventId: 
+  v1: 0
+  v2: 0
+  v3: 0
 --- !u!114 &4560308674031990555
 MonoBehaviour:
   m_ObjectHideFlags: 0

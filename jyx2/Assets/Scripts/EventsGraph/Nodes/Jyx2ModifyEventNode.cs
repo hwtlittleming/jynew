@@ -16,23 +16,17 @@ public class Jyx2ModifyEventNode : SimpleNode
         name = "事件修改";
     }
     
-    public String SceneId = "-2";
-    public String EventId = "-2";
-
-    /// <summary>
+    public String SceneId = "this";
+    public String EventId = "this";
+    
     /// 交互事件ID
-    /// </summary>
-    public int InteractiveEventId = -1;
+    public String InteractiveEventId = "-1";
     
-    /// <summary> 
     /// 使用道具ID
-    /// </summary>
-    public int UseItemEventId = -1;
+    public String UseItemEventId = "-1";
     
-    /// <summary>
-    /// 进入事件ID
-    /// </summary>
-    public int EnterEventId = -1;
+    /// 进入直接触发事件ID
+    public String EnterEventId = "-1";
 
     protected override void DoExecute()
     {
