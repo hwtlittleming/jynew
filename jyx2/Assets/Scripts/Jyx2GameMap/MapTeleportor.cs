@@ -122,7 +122,7 @@ public class MapTeleportor : MonoBehaviour
 		//记录当前世界位置
 		if (curMap.IsWorldMap())
 		{
-			Jyx2Player.GetPlayer().RecordWorldInfo();
+			Player.GetPlayer().RecordWorldInfo();
 		}
 
 		LevelMaster.LevelLoadPara para = new LevelMaster.LevelLoadPara();

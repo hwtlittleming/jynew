@@ -10,7 +10,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Serialization;
 
-public class Jyx2Player : MonoBehaviour
+public class Player : MonoBehaviour
 {
     /// <summary>
     /// 交互的视野范围
@@ -30,7 +30,7 @@ public class Jyx2Player : MonoBehaviour
 
     private bool canControl = true;
     
-    public static Jyx2Player GetPlayer()
+    public static Player GetPlayer()
     {
         if (LevelMaster.Instance == null)
             return null;
@@ -234,14 +234,9 @@ public class Jyx2Player : MonoBehaviour
         }
     }
     
-    #region 事件交互
-    
     private Collider[] targets = new Collider[10];
     
-    /// <summary>
     /// 在交互视野范围内寻找第一个可被交互物体
-    /// </summary>
-    /// <returns></returns>
     GameEvent DetectInteractiveGameEvent()
     {
         int count = Physics.OverlapSphereNonAlloc(transform.position, PLAYER_INTERACTIVE_RANGE, targets, LayerMask.GetMask("GameEvent"));
@@ -251,8 +246,8 @@ public class Jyx2Player : MonoBehaviour
             var target = targets[i];
             var evt = target.GetComponent<GameEvent>();
             if (evt == null) return null;
-            if (evt.m_EventType.Contains("1") || evt.m_EventType.Contains("2") || evt.m_EventType.Contains("3") ||
-                evt.m_EventType.Contains("4"))
+            if (evt.m_EventType.Contains("交互") || evt.m_EventType.Contains("观察") || evt.m_EventType.Contains("使用物品") 
+                || evt.m_EventType.Contains("偷袭)"))
             {
                 //找到第一个可交互的物体，则结束
                 return target.GetComponent<GameEvent>();
@@ -261,64 +256,6 @@ public class Jyx2Player : MonoBehaviour
         return null;
     }
 
-    bool CanSee(Collider target)
-    {
-
-        //判断是否在视野角度内
-        var isInViewField = Vector3.Angle(transform.forward, target.transform.position - transform.position) <= PLAYER_INTERACTIVE_ANGLE / 2;
-        if(isInViewField) {
-
-            var targetDirection = (target.transform.position - transform.position).normalized;
-
-            //判断主角的NavMesh Agent是否在目标trigger范围內
-            var isInTrigger = target.bounds.Contains(transform.position + targetDirection * _navMeshAgent.radius);
-            if(isInTrigger) 
-            {
-                Debug.DrawLine(transform.position, target.transform.position, Color.green);
-                //Debug.Log("Inside trigger: " + target.transform.name);
-
-                return true;
-            }
-            else
-            {
-                //判断主角与目标之间有无其他collider遮挡。忽略trigger。
-                RaycastHit hit;
-                if(Physics.Raycast(transform.position, targetDirection, out hit, Mathf.Infinity, Physics.AllLayers, QueryTriggerInteraction.Ignore)) {
-                    //Debug.Log("Hit. hit: " + hit.transform.name + " target:" + target.transform.name);
-                    if(hit.transform.GetInstanceID() != target.transform.GetInstanceID())
-                    {
-                        Debug.DrawLine(transform.position, hit.point, Color.red);
-                        return false;
-                    }
-                }
-                //Debug.Log("Outside trigger: " + target.transform.name);
-                Debug.DrawLine(transform.position, target.transform.position, Color.green);
-                return true;
-
-            }
-        }
-
-
-        return false;
-    }
-
-    bool SetInteractiveGameEvent(Collider c)
-    {
-        var evt = c.GetComponent<GameEvent>();
-        if (evt == null)
-            return false;
-
-        //有非直接触发事件(需弹出UI按钮的事件)
-        if (evt.m_EventType.Contains("1") || evt.m_EventType.Contains("2")  || evt.m_EventType.Contains("3")  || evt.m_EventType.Contains("4"))
-            return true;
-
-        return false;
-    }
-    
-
-
-    #endregion
-    
     //保存世界信息
     public void RecordWorldInfo()
     {

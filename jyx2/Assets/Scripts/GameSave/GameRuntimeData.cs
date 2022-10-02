@@ -34,7 +34,7 @@ namespace Jyx2
         [SerializeField] public List<int> TeamId = new List<int>();
         [SerializeField] public SubMapSaveData SubMapData; //当前所处子地图存储数据
         [SerializeField] public WorldMapSaveData WorldData; //世界地图信息
-        
+         
         [SerializeField] public Dictionary<string, string> KeyValues = new Dictionary<string, string>(); //宝箱状态,地图打开状态,天数
         [SerializeField] public Dictionary<string, int> ShopItems= new Dictionary<string, int>(); //小宝商店物品，{ID，数量}
         [SerializeField] public Dictionary<string, int> EventCounter = new Dictionary<string, int>();
@@ -75,17 +75,6 @@ namespace Jyx2
 
             string path = string.Format(ARCHIVE_FILE_NAME, index);
            ES3.Save(nameof(GameRuntimeData), this, path);
-           
-           /* 序列化方式存储 BinaryFormatter bf0=new BinaryFormatter();
-           FileStream  fs0=File.Create(Application.persistentDataPath+"/Data.yj");
-           bf0.Serialize(fs0,new SkillInstance());
-           //将Save对象转化为字节
-           fs0.Close();
-           
-           BinaryFormatter bf=new BinaryFormatter();
-           FileStream fs=File.Open(Application.persistentDataPath+"/Data.yj",FileMode.Open);//打开文件
-           SkillInstance save=bf.Deserialize(fs) as SkillInstance;
-           fs.Close();*/
            
             Debug.Log("存档结束");
 
@@ -297,13 +286,13 @@ namespace Jyx2
         }
         
         //改变事件
-        public void ModifyEvent(int scene, int eventId, int interactiveEventId, int useItemEventId, int enterEventId)
+        public void ModifyEvent(String scene, String eventId, int interactiveEventId, int useItemEventId, int directEventId)
         {
             string key = "evt_" + scene + "_" + eventId;
-            KeyValues[key] = string.Format("{0}_{1}_{2}", interactiveEventId, useItemEventId, enterEventId);
+            KeyValues[key] = string.Format("{0}_{1}_{2}", interactiveEventId, useItemEventId, directEventId);
         }
 
-        public string GetModifiedEvent(int scene,int eventId)
+        public string GetModifiedEvent(String scene,String eventId)
         {
             string key = "evt_" + scene + "_" + eventId;
             if (KeyValues.ContainsKey(key))
@@ -311,9 +300,9 @@ namespace Jyx2
             return null;
         }
         
-        public void AddEventCount(int scene, int eventId, int eventName, int num)
+        public void AddEventCount(String scene, String eventNPC, int eventName, int num)
         {
-            string key=(string.Format("{0}_{1}_{2}", scene, eventId, eventName));
+            string key=(string.Format("{0}_{1}_{2}", scene, eventNPC, eventName));
             if(EventCounter.ContainsKey(key)){
                 EventCounter[key]+=num;
             }else{

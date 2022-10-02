@@ -45,22 +45,8 @@ public class MapChest : MonoBehaviour
         RefreshOpenStates();
     }
 
-    public async UniTask MarkAsOpened()
-    {
-		if(!isLock){
-			runtime.SetKeyValues(GetRuntimeKey(), "1");
-			//播放动画
-            if (m_MapChestInteract != null)
-            {
-                await m_MapChestInteract.Open();
-            }
-            RefreshOpenStates();
-        }
-    }
-
-    /// <summary>
+    
     /// 刷新宝箱状态
-    /// </summary>
     void RefreshOpenStates()
     {
         int state = GetState();
@@ -123,5 +109,14 @@ public class MapChest : MonoBehaviour
 	
 	public void ChangeLockStatus(bool status){
 		isLock=status;
+        if(!isLock){
+            runtime.SetKeyValues(GetRuntimeKey(), "1");
+            //播放动画
+            if (m_MapChestInteract != null)
+            {
+                m_MapChestInteract.Open();
+            }
+            RefreshOpenStates();
+        }
 	}
 }

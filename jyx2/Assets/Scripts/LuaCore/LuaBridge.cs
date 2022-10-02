@@ -52,18 +52,15 @@ namespace Jyx2
             Wait();
         }
         
-
-        /// <summary>
         /// 修改事件
-        /// </summary>
         /// <param name="scene">场景，-2为当前场景</param>
-        /// <param name="eventId">事件ID，-2为保留</param>
+        /// <param name="eventNPC">事件触发点NPC或物体id，-2为保留</param>
         /// <param name="interactiveEventId">交互事件ID</param>
         /// <param name="useItemEventId">使用道具事件ID</param>
-        /// <param name="enterEventId">进入事件ID</param>
+        /// <param name="enterEventId">直接触发事件ID</param>
         public static void ModifyEvent(
-            int scene,
-            int eventId,
+            String scene,
+            String eventNPC,
             int interactiveEventId,
             int useItemEventId,
             int enterEventId)
@@ -73,15 +70,15 @@ namespace Jyx2
                 
                 bool isCurrentScene = false;
                 //场景ID
-                if (scene == -2) //当前场景
+                if (scene == "-2") //当前场景
                 {
-                    scene = LevelMaster.GetCurrentGameMap().Id;
+                    scene = LevelMaster.GetCurrentGameMap().Id.ToString();
                     isCurrentScene = true;
                 }
 
-                var evt = GameEvent.GetCurrentGameEvent();
+                var evt = GameEventManager.GetGameEventByID(GameEventManager._currentEvt);
                 //事件ID
-                if (eventId == -2)
+                if (eventNPC == "-2")
                 {
                     if (evt == null)
                     {
@@ -89,15 +86,14 @@ namespace Jyx2
                         Next();
                         return;
                     }
-
-                    eventId = int.Parse(evt.name); //当前事件
+                    eventNPC = evt.name; //当前事件
                 }
                 else
                 {
-                    evt = GameEventManager.GetGameEventByID(eventId.ToString());
+                    evt = GameEventManager.GetGameEventByID(eventNPC.ToString());
                 }
 
-                if (isCurrentScene && evt != null) //当前场景事件如何获取
+                if (isCurrentScene && evt != null) //当前场景
                 {
                     if (interactiveEventId == -2)
                     {
@@ -134,7 +130,7 @@ namespace Jyx2
                 }
 
                 //更新全局记录
-                runtime.ModifyEvent(scene, eventId, interactiveEventId, useItemEventId, enterEventId);
+                runtime.ModifyEvent(scene, eventNPC, interactiveEventId, useItemEventId, enterEventId);
                 
                 //刷新当前场景中的事件
                 LevelMaster.Instance.RefreshGameEvents();
@@ -232,7 +228,7 @@ namespace Jyx2
         public static void Dead()
         {
             //防止死亡后传送到enterTrigger再次触发事件。临时处理办法
-            ModifyEvent(-2, -2, -1, -1, -1);
+            //ModifyEvent(-2, -2, -1, -1, -1);
 
             async void Run()
             {
@@ -272,24 +268,23 @@ namespace Jyx2
             Wait();
         }
         
-        //todo
         //修改这个接口逻辑为在当前trigger对应事件序号基础上加上v1,v2,v3 (只对大于0的进行相加，-2保留原事件序号，-1为直接设置)
         // modified by eaphone at 2021/6/12
-        public static void Add3EventNum(int scene, int eventId,int v1,int v2,int v3)
+        public static void AlterEventNode(String scene, String eventNPC,int v1,int v2,int v3)
         {
             RunInMainThread(() =>
             {
                 bool isCurrentScene=false;
                 //场景ID
-                if (scene == -2) //当前场景
+                if (scene == "-2") //当前场景
                 {
-                    scene = LevelMaster.GetCurrentGameMap().Id;
+                    scene = LevelMaster.GetCurrentGameMap().Id.ToString();
                     isCurrentScene=true;
                 }
 
-                var evt=GameEvent.GetCurrentGameEvent();
+                var evt=GameEventManager.GetGameEventByID(GameEventManager._currentEvt);
                 //事件ID
-                if (eventId == -2)
+                if (eventNPC == "-2")
                 {
                     if (evt == null)
                     {
@@ -297,9 +292,9 @@ namespace Jyx2
                         Next();
                         return;
                     }
-                    eventId = int.Parse(evt.name); //当前事件
+                    eventNPC = evt.name; //当前事件
                 }else{
-                    evt=GameEventManager.GetGameEventByID(eventId.ToString());
+                    evt=GameEventManager.GetGameEventByID(eventNPC.ToString());
                 }
 
                 if(isCurrentScene && evt!=null)//非当前场景事件如何获取
@@ -320,19 +315,19 @@ namespace Jyx2
                         v3+=evt.m_HitEventId;
                     }
                     
-                    runtime.ModifyEvent(scene, eventId, v1, v2, v3);
+                    runtime.ModifyEvent(scene, eventNPC, v1, v2, v3);
 
                     //刷新当前场景中的事件
                     LevelMaster.Instance.RefreshGameEvents();
                 }else{
                     if(v1>0){
-                        runtime.AddEventCount(scene,eventId,0,v1);
+                        runtime.AddEventCount(scene,eventNPC,0,v1);
                     }
                     if(v2>0){
-                        runtime.AddEventCount(scene,eventId,1,v2);
+                        runtime.AddEventCount(scene,eventNPC,1,v2);
                     }
                     if(v3>0){
-                        runtime.AddEventCount(scene,eventId,2,v3);
+                        runtime.AddEventCount(scene,eventNPC,2,v3);
                     }
                 }
 
@@ -416,21 +411,6 @@ namespace Jyx2
                 MessageBox.Create("你现在的品德指数为" + runtime.Player.Moral, Next);
             });
             Wait();
-        }
-
-        public static bool JudgeEventNum(int eventIndex, int value)
-        {
-            bool result = false;
-            RunInMainThread(() => {
-                var evt = GameEvent.GetCurrentSceneEvent(eventIndex.ToString());
-                if(evt != null)
-                {
-                    result = (evt.m_InteractiveEventId == value);
-                }
-                Next();
-            });
-            Wait();
-            return result;
         }
         
         public static void PlayMusic(int id)

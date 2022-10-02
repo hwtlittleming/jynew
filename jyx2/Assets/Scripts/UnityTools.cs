@@ -63,10 +63,8 @@ namespace Jyx2
                 outline.SetOutlineProperty(color, 0.04f);
             }
         }
-
-        /// <summary>
+        
         /// 高亮显示所有交互物体
-        /// </summary>
         static public void HighLightObjects(GameObject[] objs, Color color)
         {
             if (objs == null || objs.Length == 0) return;
@@ -90,9 +88,7 @@ namespace Jyx2
             }
         }
 
-        /// <summary>
         /// 清除高亮所有交互物体
-        /// </summary>
         static public void DisHighLightObjects(GameObject[] objs)
         {
             if (objs == null || objs.Length == 0) return;
@@ -106,12 +102,9 @@ namespace Jyx2
             }
         }
 
-        /// <summary>
         /// 遍历寻找所有子节点
-        /// </summary>
         /// <param name="root"></param>
         /// <param name="childName"></param>
-        /// <returns></returns>
         static public Transform DeepFindChild(Transform root, string childName)
         {
             Transform result = null;

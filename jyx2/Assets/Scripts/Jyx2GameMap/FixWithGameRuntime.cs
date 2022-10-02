@@ -1,21 +1,11 @@
 
-using System.Collections;
-using System.Collections.Generic;
 using Jyx2;
 using UnityEngine;
 
-/// <summary>
 /// 随着游戏存档进行调整
-/// </summary>
 public class FixWithGameRuntime : MonoBehaviour
 {
-    public enum FixTypeEnum
-    {
-        Move,
-    }
-
-    public FixTypeEnum FixType = FixTypeEnum.Move;
-    public string Flag;
+	public string Flag;
     public Transform MoveTo;
 	private Vector3 storeP;//记录原始位置，清除flag之后复位。
 	private Quaternion storeR;

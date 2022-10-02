@@ -16,8 +16,8 @@ public class Jyx2ModifyEventNode : SimpleNode
         name = "事件修改";
     }
     
-    public int SceneId = -2;
-    public int EventId = -2;
+    public String SceneId = "-2";
+    public String EventId = "-2";
 
     /// <summary>
     /// 交互事件ID

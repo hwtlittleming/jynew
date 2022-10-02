@@ -336,10 +336,10 @@ public class LevelMaster : MonoBehaviour
 		_playerNavAgent.acceleration = GameConst.MapAcceleration;
 		_playerNavAgent.autoBraking = false;
 
-		var playerCom = _player.GetComponent<Jyx2Player>();
+		var playerCom = _player.GetComponent<Player>();
 		if (playerCom == null)
 		{
-			var player = _player.gameObject.AddComponent<Jyx2Player>();
+			var player = _player.gameObject.AddComponent<Player>();
 			player.Init();
 		}
 
@@ -826,19 +826,18 @@ public class LevelMaster : MonoBehaviour
 
 	// handle player null exception
 	// modified by eaphone at 2021/05/31
-	public Jyx2Player GetPlayer()
+	public Player GetPlayer()
 	{
-		var player = _player.GetComponent<Jyx2Player>();
+		var player = _player.GetComponent<Player>();
 		if (player == null)
 		{
-			player = _player.gameObject.AddComponent<Jyx2Player>();
+			player = _player.gameObject.AddComponent<Player>();
 			player.Init();
 		}
 		return player;
 	}
 
 	//刷新本场景内的所有事件
-	//事件执行和更改结果存储在runtime里，需要结合当前场景进行调整
 	public void RefreshGameEvents()
 	{
 		var gameMap = GetCurrentGameMap();
@@ -851,25 +850,16 @@ public class LevelMaster : MonoBehaviour
 		{
 			var evt = obj.GetComponent<GameEvent>();
 			if (evt == null) continue;
-			string eventId = obj.name;
-
-			try
+			
+			string modify = runtime.GetModifiedEvent(gameMap.Id.ToString(), obj.name);
+			if (!string.IsNullOrEmpty(modify))
 			{
-				string modify = runtime.GetModifiedEvent(gameMap.Id, int.Parse(eventId));
-				if (!string.IsNullOrEmpty(modify))
-				{
-					string[] tmp = modify.Split('_');
-					evt.m_InteractiveEventId = int.Parse(tmp[0]);
-					evt.m_UseItemEventId = int.Parse(tmp[1]);
-					evt.m_HitEventId = int.Parse(tmp[2]);
-				}
-
-				evt.Init();
+				string[] tmp = modify.Split('_');
+				evt.m_InteractiveEventId = int.Parse(tmp[0]);
+				evt.m_UseItemEventId = int.Parse(tmp[1]);
+				evt.m_HitEventId = int.Parse(tmp[2]);
 			}
-			catch (Exception e)
-			{
-				Debug.LogError("事件解析错误,事件ID必须是数字,eventId=" + eventId);
-			}
+				
 		}
 	}
 

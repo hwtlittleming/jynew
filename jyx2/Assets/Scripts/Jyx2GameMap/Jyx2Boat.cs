@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 public class Jyx2Boat : MonoBehaviour
 {
-    Jyx2Player player
+    Player player
     {
         get
         {
@@ -21,7 +21,7 @@ public class Jyx2Boat : MonoBehaviour
         }
     }
 
-    Jyx2Player _player;
+    Player _player;
 
     bool showingGetInBoat = false;
 

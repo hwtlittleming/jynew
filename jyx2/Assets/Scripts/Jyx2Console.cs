@@ -29,20 +29,8 @@ public static class Jyx2Console
             case "event":
             {
                 string eventId = paras[1];
-                /*
-                var eventLuaPath = "jygame/ka" + eventId;
-                Jyx2.LuaExecutor.Execute(eventLuaPath);
-                */
-
                 var eventManager = GameObject.FindObjectOfType<GameEventManager>();
-                eventManager.ExecuteJyx2Event(int.Parse(eventId));
-
-                //停止导航
-                /*var levelMaster = LevelMaster.Instance;
-                if (levelMaster != null)
-                {
-                    levelMaster.StopPlayerNavigation();
-                }*/
+                eventManager.ExecuteEvent(int.Parse(eventId));
                 break;
             }
             case "item":
@@ -119,23 +107,24 @@ public static class Jyx2Console
                 foreach (var obj in evt.m_EventTargets)
                 {
                     if (obj == null) continue;
-                    var o = obj.GetComponent<InteractiveObj>();
+                    isTalkedToWei = evt.m_InteractiveEventId == 938;
+                    /*var o = obj.GetComponent<InteractiveObj>();
                     if (o != null && "韦小宝" == o.name)
                     {
                         isTalkedToWei = evt.m_InteractiveEventId == 938;
 
-                    }
+                    }*/
                 }
             }
 
             if (isTalkedToWei)
             {
-                var curTriggerId = GameConfigDatabase.Instance.Get<ConfigShop>(cur.Id).Trigger;
+                var curTriggerId = GameConfigDatabase.Instance.Get<ConfigShop>(cur.Id).Trigger.ToString();
                 Debug.Log("transport Wei to " + hotelList[index].Id);
                 level.ReplaceSceneObject(cur.Id.ToString(), weiPath, "0");
                 level.ReplaceSceneObject(hotelList[index].Id.ToString(), weiPath, "1");
-                GameRuntimeData.Instance.ModifyEvent(cur.Id, curTriggerId, -1, -1, -1);
-                GameRuntimeData.Instance.ModifyEvent(hotelList[index].Id, hotelList[index].Trigger, 938, -1,
+                GameRuntimeData.Instance.ModifyEvent(cur.Id.ToString(), curTriggerId, -1, -1, -1);
+                GameRuntimeData.Instance.ModifyEvent(hotelList[index].Id.ToString(), hotelList[index].Trigger.ToString(), 938, -1,
                     -1);
                 LevelMaster.Instance.RefreshGameEvents();
             }

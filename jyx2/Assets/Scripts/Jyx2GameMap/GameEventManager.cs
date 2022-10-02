@@ -2,53 +2,15 @@
 using Jyx2;
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-using UnityEngine.UI;
 
-/// <summary>
 /// 统一管理所有的事件触发
-/// </summary>
 public class GameEventManager : MonoBehaviour
 {
     GameEvent curEvent = null;
-    const int NO_EVENT = -1;
     
-    public bool OnTriggerEvent(GameEvent evt)
-    {
-        if (evt == curEvent)
-            return false;
-
-        //如果已有交互事件进行，并且自己事件不是立刻触发事件，则让一下优先级 
-        if ( curEvent !=null && (curEvent.m_EventType.Contains("1") || curEvent.m_EventType.Contains("3") ) && ! evt.m_EventType.Contains("0") )
-            return false;
-
-        //关闭之前的事件
-        if (curEvent != null && curEvent != evt)
-        {
-            OnExitEvent(curEvent);
-        }
-
-        //设置当前事件
-        curEvent = evt;
-        return TryTrigger(evt);
-    }
-
-    public void OnExitEvent(GameEvent evt)
-    {
-        if (evt == curEvent)
-        {
-            curEvent = null;
-        }
-
-        UnityTools.DisHighLightObjects(evt.m_EventTargets);
-        UIManager.Instance.HideUI(nameof(InteractUIPanel));
-    }
-
     public void OnExitAllEvents()
     {
         if (curEvent == null)
@@ -59,28 +21,25 @@ public class GameEventManager : MonoBehaviour
         curEvent = null;
     }
     
-
-    /// <summary>
     /// 显示交互面板
-    /// </summary>
     async void ShowInteractUIPanel(GameEvent evt)
     {
         var uiParams = new List<object>();
         int buttonCount = 0;
         
-        //交谈
-        if (evt.m_EventType.Contains("1"))
+        //交互
+        if (evt.m_EventType.Contains("交互"))
         {
             uiParams.Add("交互");
             uiParams.Add(new Action(() =>
             {
-                ExecuteJyx2Event(curEvent.m_InteractiveEventId);
+                ExecuteEvent(curEvent.m_InteractiveEventId);
             }));
             buttonCount++;
         }
         
         //观察
-        if (evt.m_EventType.Contains("2"))
+        if (evt.m_EventType.Contains("观察"))
         {
             uiParams.Add("观察");
             uiParams.Add(new Action(() =>
@@ -91,7 +50,7 @@ public class GameEventManager : MonoBehaviour
         }
 
         //使用道具
-        if (evt.m_EventType.Contains("3"))
+        if (evt.m_EventType.Contains("使用物品"))
         {
             uiParams.Add("使用物品");
             uiParams.Add(new Action(() =>
@@ -102,7 +61,7 @@ public class GameEventManager : MonoBehaviour
         }
         
         //偷袭 todo 改点击事件内容
-        if (evt.m_EventType.Contains("4"))
+        if (evt.m_EventType.Contains("偷袭"))
         {
             uiParams.Add("偷袭");
             uiParams.Add(new Action(() =>
@@ -130,14 +89,6 @@ public class GameEventManager : MonoBehaviour
         }
     }
 
-    Button GetUseItemButton()
-    {
-        var root = GameObject.Find("LevelMaster/UI");
-        var btn = root.transform.Find("UseItemButton").GetComponent<Button>();
-        return btn;
-    }
-
-
     async void OnClickedUseItemButton()
     {
         await UIManager.Instance.ShowUIAsync(nameof(BagUIPanel), GameRuntimeData.Instance.Player.Items, new Action<String>((itemId) =>
@@ -145,22 +96,29 @@ public class GameEventManager : MonoBehaviour
             if (itemId == null) //取消使用
                 return;
             //使用道具
-            ExecuteJyx2Event(curEvent.m_UseItemEventId, new EventContext() { currentItemId = int.Parse(itemId) });
+            ExecuteEvent(curEvent.m_UseItemEventId, new EventContext() { currentItemId = int.Parse(itemId) });
         }),null);
     }
     
-    bool TryTrigger(GameEvent evt)
+    public  bool TryTrigger(GameEvent evt)
     {
+        //如果已有事件进行
+        if ( curEvent !=null )
+            return false;
+        
+        //设置当前事件
+        curEvent = evt;
+        
         //直接触发
         if (evt.m_EventType.Contains("0") && !LuaExecutor.isExcutling())
         {
-            ExecuteJyx2Event(evt.m_InteractiveEventId);
+            ExecuteEvent(evt.m_InteractiveEventId);
             return true;
         }
 
         //事件类型填写格式判断
-        if (!evt.m_EventType.Contains("1") && !evt.m_EventType.Contains("2") && !evt.m_EventType.Contains("3") 
-            && !evt.m_EventType.Contains("4")) return false;
+        if (!evt.m_EventType.Contains("交互") && !evt.m_EventType.Contains("观察") && !evt.m_EventType.Contains("使用物品") 
+            && !evt.m_EventType.Contains("偷袭)")) return false;
         if (evt.m_EventTargets == null || evt.m_EventTargets.Length == 0) return false;
 
         //显示交互面板
@@ -171,7 +129,7 @@ public class GameEventManager : MonoBehaviour
         return true;
     }
 
-    public void ExecuteJyx2Event(int eventId, EventContext context = null)
+    public void ExecuteEvent(int eventId, EventContext context = null)
     {
         if (eventId < 0)
         {
@@ -182,11 +140,8 @@ public class GameEventManager : MonoBehaviour
         //停止导航
         var levelMaster = LevelMaster.Instance;
 
-        //fix player stop moving after interaction UI confirm
         if (levelMaster != null && eventId != 911)
         {
-            // fix drag motion continuous move the player when scene is playing
-            // modified by eaphone at 2021/05/31
             levelMaster.SetPlayerCanController(false);
             levelMaster.StopPlayerNavigation();
         }
@@ -239,7 +194,7 @@ public class GameEventManager : MonoBehaviour
         curEvent = null;
     }
 
-    static string _currentEvt;
+    public static string _currentEvt;
     public static void SetCurrentGameEvent(GameEvent evt)
     {
         if (evt == null)
@@ -251,12 +206,8 @@ public class GameEventManager : MonoBehaviour
             _currentEvt = evt.name;
         }
     }
-    public static GameEvent GetCurrentGameEvent()
-    {
-        return GetGameEventByID(_currentEvt);
-    }
-	
-	public static GameEvent GetGameEventByID(string id)
+
+    public static GameEvent GetGameEventByID(string id)
 	{
         if (string.IsNullOrEmpty(id))
             return null;
