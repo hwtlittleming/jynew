@@ -382,8 +382,8 @@ namespace Jyx2
         {
             RunInMainThread(() =>
             {
-                var item = runtime.Player.GetItem(itemId.ToString(),quality); 
-                runtime.Player.AlterItem(itemId.ToString(),count,item.Quality);
+                var item = GameConfigDatabase.Instance.Get<ConfigItem>(itemId); //从配置表取物品名称
+                runtime.Player.AlterItem(itemId.ToString(),count,quality);
                 
                 if (isHint)
                 {

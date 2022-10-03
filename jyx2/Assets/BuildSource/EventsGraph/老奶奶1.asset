@@ -87,7 +87,7 @@ MonoBehaviour:
   d: {fileID: 0}
   e: {fileID: 0}
   roleId: 1
-  talker_overwrite: 
+  talker_overwrite: "\u8001\u5976\u5976"
   content: "\u4F60\u80FD\u5E2E\u6211\u6253\u626B\u4E00\u4E0B\u8349\u576A\u5417"
   options:
   - "\u662F"
@@ -231,7 +231,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f28a9dc828792b74b9569b0acac5f5ad, type: 3}
-  m_Name: 11
+  m_Name: "\u8001\u5976\u59761"
   m_EditorClassIdentifier: 
   nodes:
   - {fileID: -3613092312603867552}

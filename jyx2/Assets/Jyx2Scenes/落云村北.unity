@@ -10030,7 +10030,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 4
-  m_FollowOffset: {x: 5.4769998, y: 7.97, z: 5.664}
+  m_FollowOffset: {x: 7, y: 10, z: 8}
   m_XDamping: 1
   m_YDamping: 1
   m_ZDamping: 1
@@ -23469,7 +23469,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_EventTargets:
   - {fileID: 2092511269}
-  m_EventType: -1
+  m_EventType: "\u4EA4\u4E92"
   m_InteractiveEventId: 858
   m_UseItemEventId: -1
   m_HitEventId: 0
@@ -29802,7 +29802,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1373338658}
   m_LocalRotation: {x: 0.1390497, y: -0.8611806, z: 0.35686484, w: 0.33418667}
-  m_LocalPosition: {x: 11.697, y: 7.97, z: 26.454}
+  m_LocalPosition: {x: 13.219999, y: 10, z: 28.79}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -46834,7 +46834,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2069203298}
   m_LocalRotation: {x: 0.1390497, y: -0.8611806, z: 0.35686484, w: 0.33418667}
-  m_LocalPosition: {x: 11.697, y: 7.97, z: 26.454}
+  m_LocalPosition: {x: 13.219999, y: 10, z: 28.79}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -46901,7 +46901,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 2.1459143, y: 1}
+    m_SensorSize: {x: 1.6004229, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0

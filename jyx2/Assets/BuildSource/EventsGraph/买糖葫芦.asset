@@ -59,10 +59,7 @@ MonoBehaviour:
     - _fieldName: c
       _node: {fileID: -6209076852853278769}
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: prev
-        node: {fileID: 7486690623496507593}
-        reroutePoints: []
+      connections: []
       _direction: 1
       _connectionType: 0
       _typeConstraint: 0
@@ -89,6 +86,8 @@ MonoBehaviour:
   c: {fileID: 0}
   d: {fileID: 0}
   e: {fileID: 0}
+  roleId: 0
+  talker_overwrite: 
   content: "\u4E70\u4E00\u4E32\u7CD6\u846B\u82A6\u5417\uFF1F"
   options:
   - "\u4E70"
@@ -106,7 +105,7 @@ MonoBehaviour:
   m_Name: "\u5BF9\u8BDD"
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 56, y: 40}
+  position: {x: 264, y: 56}
   ports:
     keys:
     - next
@@ -134,6 +133,7 @@ MonoBehaviour:
   prev: {fileID: 0}
   next: {fileID: 0}
   roleId: 0
+  talkerName: 
   content: "\u94F6\u4E24\u4E0D\u591F"
 --- !u!114 &-3613092312603867552
 MonoBehaviour:
@@ -175,7 +175,8 @@ MonoBehaviour:
       _dynamic: 0
   prev: {fileID: 0}
   next: {fileID: 0}
-  roleId: 6
+  roleId: -1
+  talkerName: "\u7CD6\u846B\u82A6\u8001\u5934"
   content: "\u7CD6\u846B\u82A610\u4E24\u4E00\u4E32\uFF0C\u8981\u4E70\u4E00\u4E32\u5417\uFF1F"
 --- !u!114 &-1809552343876790126
 MonoBehaviour:
@@ -217,7 +218,7 @@ MonoBehaviour:
       _dynamic: 0
   prev: {fileID: 0}
   next: {fileID: 0}
-  itemId: 174
+  itemId: 0
   count: -10
   isHint: 1
 --- !u!114 &11400000
@@ -230,7 +231,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f28a9dc828792b74b9569b0acac5f5ad, type: 3}
-  m_Name: 2
+  m_Name: "\u4E70\u7CD6\u846B\u82A6"
   m_EditorClassIdentifier: 
   nodes:
   - {fileID: -3613092312603867552}
@@ -283,7 +284,7 @@ MonoBehaviour:
       _dynamic: 0
   prev: {fileID: 0}
   next: {fileID: 0}
-  itemId: 29
+  itemId: 23
   count: 1
   isHint: 1
 --- !u!114 &6255597884029723012
@@ -299,7 +300,7 @@ MonoBehaviour:
   m_Name: "\u5BF9\u8BDD"
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: -280, y: 24}
+  position: {x: -168, y: 24}
   ports:
     keys:
     - next
@@ -327,7 +328,8 @@ MonoBehaviour:
   prev: {fileID: 0}
   next: {fileID: 0}
   roleId: 0
-  content: "\u9009\u62E9\u4E0D\u4E70"
+  talkerName: 
+  content: "\u8FD8\u662F\u4E0D\u4E86"
 --- !u!114 &7486690623496507593
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -374,9 +376,6 @@ MonoBehaviour:
       _node: {fileID: 7486690623496507593}
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
-      - fieldName: c
-        node: {fileID: -6209076852853278769}
-        reroutePoints: []
       - fieldName: a
         node: {fileID: -6209076852853278769}
         reroutePoints: []
