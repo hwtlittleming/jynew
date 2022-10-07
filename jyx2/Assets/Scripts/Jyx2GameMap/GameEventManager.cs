@@ -9,7 +9,7 @@ using UnityEngine;
 /// 统一管理所有的事件触发
 public class GameEventManager : MonoBehaviour
 {
-    GameEvent curEvent = null;
+    public  static GameEvent curEvent;
     
     public void OnExitAllEvents()
     {
@@ -33,7 +33,7 @@ public class GameEventManager : MonoBehaviour
             uiParams.Add("交互");
             uiParams.Add(new Action(() =>
             {
-                ExecuteEvent(curEvent.m_InteractiveEventId);
+                ExecuteEvent(evt.m_InteractiveEventId);
             }));
             buttonCount++;
         }

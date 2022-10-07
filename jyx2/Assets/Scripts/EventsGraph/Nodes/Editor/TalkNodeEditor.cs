@@ -28,8 +28,8 @@ public class TalkNodeEditor : NodeEditor
         NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("next"));
         
         _roleDrawer.DrawField();
-        _roleDrawer.DrawPopup();
-        NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("talkerName"), new GUIContent("说话者名称(覆盖)"));
+        //_roleDrawer.DrawPopup();
+        NodeEditorGUILayout.PropertyField(serializedObject.FindProperty("talkerName"), new GUIContent("姓名(无图覆盖)"));
         //角色头像
         var roleHeadContent = new GUIContent(_roleDrawer.GetTexture());
         

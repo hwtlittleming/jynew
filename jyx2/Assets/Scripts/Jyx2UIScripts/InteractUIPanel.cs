@@ -29,12 +29,13 @@ public partial class InteractUIPanel : UIBase
 		base.OnShowPanel(allParams);
 
 		if (allParams == null) return;
-
+		
 		//后改更灵活的写法
 		if (allParams.Length == 2)
 		{
 			MainText_Text1.text = allParams[0] as string;
 			m_callback1 = allParams[1] as Action;
+			MainBg_Button1.gameObject.SetActive(true);
 			MainBg_Button2.gameObject.SetActive(false);
 			MainBg_Button3.gameObject.SetActive(false);
 			MainBg_Button4.gameObject.SetActive(false);
@@ -43,6 +44,7 @@ public partial class InteractUIPanel : UIBase
 		{
 			MainText_Text1.text = allParams[0] as string;
 			m_callback1 = allParams[1] as Action;
+			MainBg_Button1.gameObject.SetActive(true);
 			MainBg_Button2.gameObject.SetActive(true);
 			MainBg_Button3.gameObject.SetActive(false);
 			MainBg_Button4.gameObject.SetActive(false);
@@ -53,6 +55,7 @@ public partial class InteractUIPanel : UIBase
 		{
 			MainText_Text1.text = allParams[0] as string;
 			m_callback1 = allParams[1] as Action;
+			MainBg_Button1.gameObject.SetActive(true);
 			MainBg_Button2.gameObject.SetActive(true);
 			MainText_Text2.text = allParams[2] as string;
 			m_callback2 = allParams[3] as Action;
@@ -65,6 +68,7 @@ public partial class InteractUIPanel : UIBase
 		{
 			MainText_Text1.text = allParams[0] as string;
 			m_callback1 = allParams[1] as Action;
+			MainBg_Button1.gameObject.SetActive(true);
 			MainBg_Button2.gameObject.SetActive(true);
 			MainText_Text2.text = allParams[2] as string;
 			m_callback2 = allParams[3] as Action;
